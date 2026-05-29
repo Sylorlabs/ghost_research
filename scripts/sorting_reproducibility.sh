@@ -7,6 +7,18 @@ ITERS="${2:-50000}"
 BASE_SEED_HEX="${3:-0xC0FFEE0000000000}"
 
 cd "$(dirname "$0")/.."
+
+# After the repo was split into standalone projects, each binary lives in
+# <project>/zig-out/bin. Resolve a binary by name across all of them.
+bin() {
+    local n="$1" d
+    for d in */zig-out/bin; do
+        [ -x "$d/$n" ] && { printf '%s\n' "$d/$n"; return 0; }
+    done
+    echo "error: '$n' not found in any */zig-out/bin (build the projects first)" >&2
+    return 1
+}
+
 mkdir -p results/sorting_reproducibility
 
 agg="results/sorting_reproducibility/aggregate.csv"
@@ -21,10 +33,10 @@ for i in $(seq 1 "$N"); do
     champ="results/sorting_reproducibility/champion_${i}.csv"
     grade="results/sorting_reproducibility/grade_${i}.csv"
 
-    ./zig-out/bin/sorting_inventor --iters="$ITERS" --seed="$seed_hex" \
+    "$(bin sorting_inventor)" --iters="$ITERS" --seed="$seed_hex" \
         --csv="$champ" >/dev/null
 
-    ./zig-out/bin/sorting_reachability_tester --champion="$champ" >/dev/null
+    "$(bin sorting_reachability_tester)" --champion="$champ" >/dev/null
     # The tester writes results/sorting_reachability.csv each call;
     # copy the loaded_champion row.
     line=$(grep "^loaded_champion," results/sorting_reachability.csv || true)

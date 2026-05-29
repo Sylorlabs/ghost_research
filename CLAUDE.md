@@ -1,8 +1,18 @@
 # Ghost Sovereign — Agent Onboarding
 
+> **Repository reorganized.** This is no longer one monolithic `build.zig` over
+> a single `src/`. The code is now split into standalone per-project folders
+> (`core/`, `ghost_engines/`, `01_reservoir_engines/` … `05_meta_stack/`), each
+> with its own `build.zig` depending on the shared `core/` library. **Read
+> [`README.md`](README.md) for the current layout and how to build.** Paths in
+> this document that reference `src/...` or `docs/...` describe the old monolith;
+> shared engines now live in `core/src/`, leaf executables in
+> `<project>/src/`, and docs in `<project>/docs/`. `results/`, `state/`,
+> `corpus/`, and `scripts/` remain shared roots at the repository top level.
+
 Read this before touching anything. It will save you from wasting the entire session.
 
-Also read `docs/AGENT_REALITY_CHECK.md` if you are deciding whether the new architectures are real or fake.
+Also read `ghost_engines/docs/architecture/AGENT_REALITY_CHECK.md` if you are deciding whether the new architectures are real or fake.
 
 ---
 

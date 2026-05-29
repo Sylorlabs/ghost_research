@@ -8,7 +8,16 @@ set -uo pipefail
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_ROOT"
 
-BIN=./zig-out/bin
+# After the repo was split into standalone projects, each binary lives in
+# <project>/zig-out/bin. Resolve a binary by name across all of them.
+bin() {
+    local n="$1" d
+    for d in */zig-out/bin; do
+        [ -x "$d/$n" ] && { printf '%s\n' "$d/$n"; return 0; }
+    done
+    echo "error: '$n' not found in any */zig-out/bin (build the projects first)" >&2
+    return 1
+}
 RNG_TEST=/home/micah/.local/bin/RNG_test
 
 OUT=results/falsifier
@@ -34,7 +43,7 @@ MMM_TIER0_INNER=120
 
 run_mmm_worker() {
   local label="$1"
-  "$BIN/mmm_holdout_hillclimb_mulfree_l24" \
+  "$(bin mmm_holdout_hillclimb_mulfree_l24)" \
     --seed=$label \
     --iters=$MMM_ITERS \
     --tier0-inner-steps=$MMM_TIER0_INNER \
@@ -51,7 +60,7 @@ run_mmm_export() {
   local meta_csv="results/falsifier/mmm_${label}/BEST_champion_meta.csv"
   local mixer_csv="$OUT/champions/mmm_${label}.csv"
   if [[ -f "$meta_csv" ]]; then
-    "$BIN/meta_mixer_export_mulfree_l24" \
+    "$(bin meta_mixer_export_mulfree_l24)" \
       --meta="$meta_csv" \
       --out="$mixer_csv" \
       --seed=$label \
@@ -105,27 +114,27 @@ gate_champion() {
   local log_w64="$OUT/oracles/${tag}_w64.log"
   local log_pr="$OUT/oracles/${tag}_practrand.log"
 
-  "$BIN/mulfree_per_bit_avalanche" --program="$csv" --samples=10000 --min=0.45 > "$log_sac" 2>&1
+  "$(bin mulfree_per_bit_avalanche)" --program="$csv" --samples=10000 --min=0.45 > "$log_sac" 2>&1
   local sac_exit=$?
   local sac_min sac_max sac_mean
   sac_min=$(extract_sac "$log_sac" sac_min); sac_min=${sac_min:-NA}
   sac_max=$(extract_sac "$log_sac" sac_max); sac_max=${sac_max:-NA}
   sac_mean=$(extract_sac "$log_sac" sac_mean); sac_mean=${sac_mean:-NA}
 
-  "$BIN/verify_cli" --domain=mixer --csv="$csv" --bits=8 --timeout-ms=10000 > "$log_w8" 2>&1 || true
+  "$(bin verify_cli)" --domain=mixer --csv="$csv" --bits=8 --timeout-ms=10000 > "$log_w8" 2>&1 || true
   local v_w8
   v_w8=$(verify_stdout_to_token "$log_w8")
 
   local v_w64="SKIP" v_w64_ms="NA"
   if [[ "$sac_exit" == "0" && "$v_w8" == "VERIFIED" ]]; then
-    timeout 75 "$BIN/verify_cli" --domain=mixer --csv="$csv" --bits=64 --timeout-ms=60000 > "$log_w64" 2>&1 || true
+    timeout 75 "$(bin verify_cli)" --domain=mixer --csv="$csv" --bits=64 --timeout-ms=60000 > "$log_w64" 2>&1 || true
     v_w64=$(verify_stdout_to_token "$log_w64")
     v_w64_ms=$(verify_elapsed_ms "$log_w64")
   fi
 
   local pr_verdict="SKIP" pr_first="NONE"
   if [[ "$sac_exit" == "0" && "$v_w8" == "VERIFIED" && ( "$v_w64" == "VERIFIED" || "$v_w64" == "UNKNOWN" ) ]]; then
-    "$BIN/practrand_emit_mulfree" --program="$csv" --mode=mul_free --bytes=256M 2>/dev/null \
+    "$(bin practrand_emit_mulfree)" --program="$csv" --mode=mul_free --bytes=256M 2>/dev/null \
       | "$RNG_TEST" stdin64 -tlmax 256MB > "$log_pr" 2>&1 || true
     pr_verdict=$(practrand_verdict_from "$log_pr")
     pr_first=$(practrand_first_fail_from "$log_pr")

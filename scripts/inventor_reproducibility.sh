@@ -11,6 +11,18 @@ SEEDS="${3:-128}"
 BASE_SEED_HEX="${4:-0xC0FFEE0000000000}"
 
 cd "$(dirname "$0")/.."
+
+# After the repo was split into standalone projects, each binary lives in
+# <project>/zig-out/bin. Resolve a binary by name across all of them.
+bin() {
+    local n="$1" d
+    for d in */zig-out/bin; do
+        [ -x "$d/$n" ] && { printf '%s\n' "$d/$n"; return 0; }
+    done
+    echo "error: '$n' not found in any */zig-out/bin (build the projects first)" >&2
+    return 1
+}
+
 mkdir -p results/reproducibility
 
 agg="results/reproducibility/aggregate.csv"
@@ -25,11 +37,11 @@ for i in $(seq 1 "$N"); do
     champ="results/reproducibility/champion_${i}.csv"
     grade="results/reproducibility/grade_${i}.csv"
 
-    ./zig-out/bin/program_synthesis_inventor \
+    "$(bin program_synthesis_inventor)" \
         --iters="$ITERS" --seeds="$SEEDS" --seed="$seed_hex" >/dev/null
     cp results/program_synthesis_champion.csv "$champ"
 
-    ./zig-out/bin/reachability_tester \
+    "$(bin reachability_tester)" \
         --champion="$champ" --csv="$grade" --quiet >/dev/null
 
     verdict_line=$(grep "^loaded_champion_csv," "$grade" || true)

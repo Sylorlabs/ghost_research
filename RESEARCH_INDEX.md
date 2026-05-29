@@ -15,6 +15,13 @@ those experiments ran vs what was later revised. The research evolved
 fast — findings from 05 directly contradict assumptions made in 01–03.
 Don't mix results across threads without checking the disclaimer.
 
+> **Doc locations (post-reorg).** The repository was split into standalone
+> project folders. Each thread's markdown now lives under its project's
+> `docs/`: threads 01–04 in `<project>/docs/`, and threads 05/06/07 together
+> under `05_meta_stack/docs/{05,06,07}/`. Source/build targets referenced below
+> live in the matching project's `src/` (built via that project's `zig build`),
+> with shared engines factored into `core/`.
+
 ---
 
 ## Thread 01 — Reservoir Engines (VSA era)
@@ -115,7 +122,7 @@ program synthesis on this project.
 
 ## Thread 05 — Meta-Engine Stack
 
-**Folder:** `05_meta_engine_stack/`  
+**Folder:** `05_meta_stack/docs/05/`  
 **Period:** 2026-05-20 to 2026-05-22  
 **Status:** ACTIVE foundation — Tier-1 is the validated engine;
 Tier-2 is research-only; monotone+parallel is the escape mechanism  
@@ -145,7 +152,7 @@ baselines overfit; always use equal-budget, anchor-protected comparison.
 
 ## Thread 06 — Mega Research Round (2026-05-23)
 
-**Folder:** `06_mega_research_round/`  
+**Folder:** `05_meta_stack/docs/06/`  
 **Period:** 2026-05-23 (single day, 9 parallel experiments)  
 **Status:** COMPLETE AND VERIFIED — all 9 experiments ran to full 24-iter
 completion on 3 seeds each; Z3 and PractRand run on all champions  
@@ -174,12 +181,12 @@ result (47.3244).
 
 ## Thread 07 — Affine-Closure Tier-A Proof (2026-05-28)
 
-**Folder:** `07_affine_closure/`  
+**Folder:** `05_meta_stack/docs/07/`  
 **Period:** 2026-05-28 (single session)  
 **Status:** COMPLETE — AFFINE_CONFIRMED on all 6 committed constrained
 champions. First thread to convert an empirical MUL-free result into a
 theorem.  
-**What it was:** an analyzer (`src/adapters/affine_closure.zig`, `zig build`
+**What it was:** an analyzer (`05_meta_stack/src/affine_closure.zig`, `zig build`
 target `affine_closure`) that proves each thread-06 constrained champion is an
 exact affine map `P(x) = M·x + c` over GF(2)^64 — via a constructive GF(2)
 matrix tracker plus a deterministic affine-basis proof (65 points ⇒ exact over
