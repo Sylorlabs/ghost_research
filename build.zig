@@ -940,6 +940,22 @@ pub fn build(b: *std.Build) void {
     verify_qflia_smoke.root_module.linkSystemLibrary("c", .{});
     b.installArtifact(verify_qflia_smoke);
 
+    // affine_closure: Tier-A of the MUL-necessity proof program. Proves a
+    // linear-opset (L_lin) mixer is an affine map P(x)=M·x+c via a GF(2) matrix
+    // tracker, a deterministic affine-basis proof (exact over all 2^64 inputs),
+    // and an optional real-Z3 cross-check (--z3). Links system libz3.
+    const affine_closure = b.addExecutable(.{
+        .name = "affine_closure",
+        .root_source_file = b.path("src/adapters/affine_closure.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    affine_closure.root_module.addSystemIncludePath(.{ .cwd_relative = "/usr/include" });
+    affine_closure.root_module.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
+    affine_closure.root_module.linkSystemLibrary("z3", .{});
+    affine_closure.root_module.linkSystemLibrary("c", .{});
+    b.installArtifact(affine_closure);
+
     const understanding_bench_tests = b.addTest(.{
         .root_source_file = b.path("src/adapters/understanding_bench.zig"),
         .target = target,

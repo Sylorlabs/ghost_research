@@ -1,0 +1,16 @@
+affine_closure  csv=results/phaseF_mul_free_challenge_full_run_20260523/root_1111/champion_full_no_carry_seed1.csv  used=6
+
+[W1] tracker: all 6 ops linear (L_lin). rank(M) over GF(2) = 64/64  (invertible — affine bijection as a linear map)
+     constant c = 0x0000000000000000
+[W2] numerical: M·x+c == runtime execute(x) on 1000000 random + 7 edge inputs — MATCH
+[W2b] affine-basis: model == runtime on all 65 basis points {0, e_0..e_63} — PROVEN EXACT over all 2^64 inputs (P affine ⇒ basis determines P)
+[W3] Z3: skipped (--z3=0). All-inputs proof already established by W1+W2b.
+
+VERDICT: AFFINE_CONFIRMED.
+  P(x) = M·x + c with rank(M) = 64/64, proven exact over all 2^64 inputs (W1+W2b).
+  An affine recurrence x_{n+1} = M·x_n + c obeys a GF(2) linear recurrence
+  of order ≤ 64 (Cayley–Hamilton), so the iterated output stream has binary
+  rank bounded by ~64 — the structural cause of the BRank(12) failure logged
+  for this champion. The "MUL-free fails BRank" result is, for this program,
+  a THEOREM about the affine subspace the search collapsed into, not a search
+  outcome.

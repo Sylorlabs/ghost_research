@@ -1,9 +1,10 @@
 # Ghost Sovereign — Research Index
 
-Six research threads, written in chronological order. Each thread
+Seven research threads, written in chronological order. Each thread
 supersedes the previous one in the program synthesis line. The reservoir
 computer thread (01) is a parallel track that informed but did not
-produce the synthesis results.
+produce the synthesis results. Thread 07 is the first that *proves* a
+property of the search output rather than measuring it externally.
 
 ---
 
@@ -171,6 +172,35 @@ result (47.3244).
 
 ---
 
+## Thread 07 — Affine-Closure Tier-A Proof (2026-05-28)
+
+**Folder:** `07_affine_closure/`  
+**Period:** 2026-05-28 (single session)  
+**Status:** COMPLETE — AFFINE_CONFIRMED on all 6 committed constrained
+champions. First thread to convert an empirical MUL-free result into a
+theorem.  
+**What it was:** an analyzer (`src/adapters/affine_closure.zig`, `zig build`
+target `affine_closure`) that proves each thread-06 constrained champion is an
+exact affine map `P(x) = M·x + c` over GF(2)^64 — via a constructive GF(2)
+matrix tracker plus a deterministic affine-basis proof (65 points ⇒ exact over
+all 2^64 inputs), with real Z3 as a redundant cross-check (tractable on 2/6).
+Affinity ⇒ bounded GF(2) stream rank (Cayley–Hamilton) ⇒ the logged BRank
+failure.  
+**Key finding:** the proximate, *provable* cause of MUL-free failure is "the
+search never left the GF(2)-affine subspace," not "no multiplication."
+Bijectivity is irrelevant — every champion is a perfect affine bijection
+(`rank 64/64`) and still fails BRank. The search was offered nonlinear ops
+(`AND_NOT`/`OR_SHIFT`/`ADD*`) and used none.
+
+**Start from here:** `affine_closure_tierA_2026_05_28.md`
+
+| File | What it covers | Verdict |
+|------|----------------|---------|
+| `affine_closure_tierA_2026_05_28.md` | Method (3 witnesses), 6/6 results, reproduction, Tier B | AFFINE_CONFIRMED |
+| `DISCLAIMER.md` | What is/isn't proven; W1+W2-is-the-proof; smt_verify shift audit note | — |
+
+---
+
 ## Cross-thread claims to be careful about
 
 | Claim | Where it appears | Status |
@@ -181,4 +211,5 @@ result (47.3244).
 | "SMT_VERIFIED_FOUNDATIONAL_TRUTH" | Thread 04 | Hardcoded lie — replaced by real Z3 via verify_cli |
 | "Tier-2 MMMP works" | Thread 05 | Approaches Tier-1 but does NOT beat it at single-machine budgets |
 | "44.30 ceiling" | Thread 05 | Broken by monotone+parallel to 47.16, then 47.32 with LMG |
-| "MUL-necessity" | Thread 05–06 | Supported by 7 independent conditions across both threads |
+| "MUL-necessity" | Thread 05–06 | Supported by 7 independent conditions across both threads. **Thread 07 sharpens the mechanism:** for the linear opset the search collapses into, failure is *proven* (affine maps fail BRank); the open part is whether *nonlinear* MUL-free programs can pass (Tier B, unproven). Do not state "MUL is necessary" as proven — it is not. |
+| "affine bijection passes BRank" | implicit assumption | FALSE. Thread 07: all 6 constrained champions are full-rank affine bijections (zero collisions) and all fail BRank. Bijectivity ⊥ PractRand quality. |
