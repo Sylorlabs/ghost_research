@@ -1,0 +1,14 @@
+.{
+    .name = .program_synthesis,
+    .version = "0.0.0",
+    .fingerprint = 0xf0ef569015c54d9,
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
