@@ -1,5 +1,5 @@
 const std = @import("std");
-const verify = @import("smt_verify.zig");
+const verify = @import("smt_verify");
 
 // Read a champion CSV and run the real-Z3 verifier. Replaces the
 // hardcoded SMT_VERIFIED_FOUNDATIONAL_TRUTH string in invent_cli with

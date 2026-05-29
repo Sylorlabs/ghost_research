@@ -1,5 +1,5 @@
 const std = @import("std");
-const mixer = @import("domain_u64_mixer.zig");
+const mixer = @import("domain_u64_mixer");
 
 fn parseByteCount(text: []const u8) !u64 {
     if (text.len == 0) return error.InvalidByteCount;

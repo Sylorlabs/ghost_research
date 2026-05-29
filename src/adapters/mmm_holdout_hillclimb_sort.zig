@@ -1,7 +1,7 @@
 const std = @import("std");
-const mmm = @import("domain_meta_meta_meta_engine_sort.zig");
-const mm = @import("domain_meta_meta_engine_sort.zig");
-const tier0 = @import("domain_meta_engine_sort.zig");
+const mmm = @import("domain_meta_meta_meta_engine_sort");
+const mm = @import("domain_meta_meta_engine_sort");
+const tier0 = @import("domain_meta_engine_sort");
 
 // Exp6: 3-tier MMP/MMMP meta-engine hillclimber for the sort-net-N8 domain.
 // Holdout is measured by running the champion MetaProgram on held-out RNG

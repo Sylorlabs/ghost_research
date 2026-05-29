@@ -1,8 +1,8 @@
 const std = @import("std");
-const mmm = @import("domain_meta_meta_meta_engine_dual.zig");
-const mm = @import("domain_meta_meta_engine_dual.zig");
-const tier0 = @import("domain_meta_engine_dual.zig");
-const mixer = @import("domain_u64_mixer_dual.zig");
+const mmm = @import("domain_meta_meta_meta_engine_dual");
+const mm = @import("domain_meta_meta_engine_dual");
+const tier0 = @import("domain_meta_engine_dual");
+const mixer = @import("domain_u64_mixer_dual");
 
 const anchor_seeds = [_]u64{
     0xC0C0_C0C0_F00D_0001,

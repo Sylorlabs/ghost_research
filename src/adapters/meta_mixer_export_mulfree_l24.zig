@@ -1,6 +1,6 @@
 const std = @import("std");
-const tier0 = @import("domain_meta_engine_mulfree_l24.zig");
-const mixer = @import("domain_u64_mixer_mulfree_compat_l24.zig");
+const tier0 = @import("domain_meta_engine_mulfree_l24");
+const mixer = @import("domain_u64_mixer_mulfree_compat_l24");
 
 fn loadMetaProgramCsv(allocator: std.mem.Allocator, path: []const u8) !tier0.MetaProgram {
     const file = try std.fs.cwd().openFile(path, .{});

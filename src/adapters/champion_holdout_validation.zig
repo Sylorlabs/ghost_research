@@ -1,5 +1,5 @@
 const std = @import("std");
-const tier0 = @import("domain_meta_engine.zig");
+const tier0 = @import("domain_meta_engine");
 
 // --- LARGE HELD-OUT VALIDATION ---
 //

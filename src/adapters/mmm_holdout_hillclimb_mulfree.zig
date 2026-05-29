@@ -1,8 +1,8 @@
 const std = @import("std");
-const mmm = @import("domain_meta_meta_meta_engine_mulfree.zig");
-const mm = @import("domain_meta_meta_engine_mulfree.zig");
-const tier0 = @import("domain_meta_engine_mulfree.zig");
-const mixer = @import("domain_u64_mixer_mulfree_compat.zig");
+const mmm = @import("domain_meta_meta_meta_engine_mulfree");
+const mm = @import("domain_meta_meta_engine_mulfree");
+const tier0 = @import("domain_meta_engine_mulfree");
+const mixer = @import("domain_u64_mixer_mulfree_compat");
 
 const anchor_seeds = [_]u64{
     0xC0C0_C0C0_F00D_0001,

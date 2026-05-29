@@ -1,6 +1,6 @@
 const std = @import("std");
-const engine = @import("invention_engine.zig");
-const u64_mixer = @import("domain_u64_mixer.zig");
+const engine = @import("invention_engine");
+const u64_mixer = @import("domain_u64_mixer");
 
 // --- INVENTION CHAIN RUNNER (u64-mixer domain) ---
 //

@@ -1,8 +1,8 @@
 const std = @import("std");
-const engine = @import("invention_engine.zig");
-const u64_mixer = @import("domain_u64_mixer.zig");
-const sort_net = @import("domain_sort_net.zig");
-const boolean = @import("domain_boolean.zig");
+const engine = @import("invention_engine");
+const u64_mixer = @import("domain_u64_mixer");
+const sort_net = @import("domain_sort_net");
+const boolean = @import("domain_boolean");
 
 // --- GENERAL INVENTOR ---
 //

@@ -1,5 +1,5 @@
 const std = @import("std");
-const mixer = @import("domain_u64_mixer_mulfree.zig");
+const mixer = @import("domain_u64_mixer_mulfree");
 
 const Args = struct {
     program: ?[]const u8 = null,

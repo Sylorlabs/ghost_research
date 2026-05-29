@@ -1,6 +1,6 @@
 const std = @import("std");
-const mm = @import("domain_meta_meta_engine.zig");
-const tier0 = @import("domain_meta_engine.zig");
+const mm = @import("domain_meta_meta_engine");
+const tier0 = @import("domain_meta_engine");
 
 // --- Load MetaProgram CSV into a tier0.MetaProgram value ---
 fn loadMetaProgramCsv(allocator: std.mem.Allocator, path: []const u8) !tier0.MetaProgram {

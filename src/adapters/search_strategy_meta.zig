@@ -1,6 +1,6 @@
 const std = @import("std");
-const engine = @import("invention_engine.zig");
-const strategy = @import("domain_search_strategy.zig");
+const engine = @import("invention_engine");
+const strategy = @import("domain_search_strategy");
 
 const BootstrapIters: usize = 2_000;
 

@@ -1,8 +1,8 @@
 const std = @import("std");
-const mmmm = @import("domain_meta_meta_meta_meta_engine.zig");
-const mmm = @import("domain_meta_meta_meta_engine.zig");
-const mm = @import("domain_meta_meta_engine.zig");
-const tier0 = @import("domain_meta_engine.zig");
+const mmmm = @import("domain_meta_meta_meta_meta_engine");
+const mmm = @import("domain_meta_meta_meta_engine");
+const mm = @import("domain_meta_meta_engine");
+const tier0 = @import("domain_meta_engine");
 
 const anchor_seeds = [_]u64{
     0xD0D0_D0D0_F00D_0001,

@@ -1,5 +1,5 @@
 const std = @import("std");
-const meta = @import("domain_meta_engine_sort.zig");
+const meta = @import("domain_meta_engine_sort");
 
 // Baseline: hand-written reference meta-program that performs simple
 // hill-climb SA. Used to validate whether outer-search-discovered

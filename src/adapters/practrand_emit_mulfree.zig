@@ -1,5 +1,5 @@
 const std = @import("std");
-const mixer = @import("domain_u64_mixer_mulfree.zig");
+const mixer = @import("domain_u64_mixer_mulfree");
 
 fn parseHexOrDecimal(text: []const u8) !u64 {
     if (std.mem.startsWith(u8, text, "0x") or std.mem.startsWith(u8, text, "0X")) {

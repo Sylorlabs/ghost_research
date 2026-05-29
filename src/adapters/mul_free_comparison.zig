@@ -1,7 +1,7 @@
 const std = @import("std");
-const engine = @import("invention_engine.zig");
-const mixer = @import("domain_u64_mixer_mulfree.zig");
-const challenge = @import("mul_free_challenge.zig");
+const engine = @import("invention_engine");
+const mixer = @import("domain_u64_mixer_mulfree");
+const challenge = @import("mul_free_challenge");
 
 const Tier = struct {
     label: []const u8,

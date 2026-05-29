@@ -1,6 +1,6 @@
 const std = @import("std");
-const domain = @import("domain_u64_mixer_mulfree.zig");
-const verify = @import("smt_verify.zig");
+const domain = @import("domain_u64_mixer_mulfree");
+const verify = @import("smt_verify");
 
 // ─────────────────────────────────────────────────────────────────────────
 // AFFINE-CLOSURE ANALYZER  (Tier-A of the MUL-necessity proof program)

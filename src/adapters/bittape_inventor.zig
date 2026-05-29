@@ -1,5 +1,5 @@
 const std = @import("std");
-const bt = @import("domain_bittape.zig");
+const bt = @import("domain_bittape");
 
 // --- BIT-TAPE INVENTOR — pure evolutionary search (2026-05-22) ---
 //

@@ -1,5 +1,5 @@
 const std = @import("std");
-const bt = @import("domain_bittape.zig");
+const bt = @import("domain_bittape");
 
 // Verification tool for bit-tape inventor outputs.
 //

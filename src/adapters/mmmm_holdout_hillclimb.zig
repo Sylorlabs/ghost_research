@@ -1,9 +1,9 @@
 const std = @import("std");
-const mmmm = @import("domain_meta_meta_meta_meta_engine.zig");
-const mmm = @import("domain_meta_meta_meta_engine.zig");
-const mm = @import("domain_meta_meta_engine.zig");
-const tier0 = @import("domain_meta_engine.zig");
-const mixer = @import("domain_u64_mixer.zig");
+const mmmm = @import("domain_meta_meta_meta_meta_engine");
+const mmm = @import("domain_meta_meta_meta_engine");
+const mm = @import("domain_meta_meta_engine");
+const tier0 = @import("domain_meta_engine");
+const mixer = @import("domain_u64_mixer");
 
 // Direct Engine-4 analog of mmm_holdout_hillclimb.zig.
 // Pattern: load (or randomize) an MMMMP, evaluate it on a fixed anchor set

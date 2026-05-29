@@ -1,6 +1,6 @@
 const std = @import("std");
 const absolute = @import("absolute_final");
-const ar = @import("anchor_readout.zig");
+const ar = @import("anchor_readout");
 
 const trials_per_class: usize = 100;
 const smoothing_alpha: f64 = 0.5;

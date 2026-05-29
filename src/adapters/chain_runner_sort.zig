@@ -1,6 +1,6 @@
 const std = @import("std");
-const engine = @import("invention_engine.zig");
-const sort_net = @import("domain_sort_net.zig");
+const engine = @import("invention_engine");
+const sort_net = @import("domain_sort_net");
 
 // --- INVENTION CHAIN RUNNER (sort-net N=8 domain) ---
 //
