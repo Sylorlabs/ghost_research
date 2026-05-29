@@ -1,0 +1,14 @@
+.{
+    .name = .early_invention,
+    .version = "0.0.0",
+    .fingerprint = 0xa22e04d4d732d27f,
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

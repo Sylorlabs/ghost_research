@@ -1,0 +1,14 @@
+.{
+    .name = .meta_stack,
+    .version = "0.0.0",
+    .fingerprint = 0xaeeecd33d61cb78a,
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

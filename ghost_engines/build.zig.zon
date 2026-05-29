@@ -1,0 +1,14 @@
+.{
+    .name = .ghost_engines,
+    .version = "0.0.0",
+    .fingerprint = 0xb832e856d6d63ad9,
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

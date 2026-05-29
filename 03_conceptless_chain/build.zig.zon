@@ -1,0 +1,14 @@
+.{
+    .name = .conceptless_chain,
+    .version = "0.0.0",
+    .fingerprint = 0xd02f0003a1b39c2b,
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

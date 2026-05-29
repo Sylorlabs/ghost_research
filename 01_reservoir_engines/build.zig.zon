@@ -1,0 +1,14 @@
+.{
+    .name = .reservoir_engines,
+    .version = "0.0.0",
+    .fingerprint = 0x9df1435dd72ca010,
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
