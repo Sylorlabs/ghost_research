@@ -1,5 +1,7 @@
 const std = @import("std");
 const absolute = @import("absolute_final");
+const void_eng = @import("void");
+const CompilerLoop = @import("ghost_compiler_loop").CompilerLoop;
 
 pub const default_manifold_bytes: usize = absolute.AbsoluteCore.ManifoldSize * @sizeOf(u64);
 
@@ -436,50 +438,63 @@ pub fn emitHuman(writer: anytype, snap: Snapshot) !void {
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
-    const allocator = gpa.allocator();
+    var arena = std.heap.ArenaAllocator.init(gpa.allocator());
+    defer arena.deinit();
+    const allocator = arena.allocator();
 
     var args = try std.process.argsWithAllocator(allocator);
     defer args.deinit();
 
-    var options = Options{};
-    var message: []const u8 = "";
-    var json = false;
-
-    _ = args.next();
+    var message: []const u8 = "Generate default structures";
+    
+    // Parse arguments
+    _ = args.next(); // Skip executable name
     while (args.next()) |arg| {
         if (std.mem.startsWith(u8, arg, "--message=")) {
             message = arg["--message=".len..];
         } else if (std.mem.eql(u8, arg, "--message")) {
             message = args.next() orelse return error.MissingMessage;
-        } else if (std.mem.startsWith(u8, arg, "--state=")) {
-            options.state_path = arg["--state=".len..];
-        } else if (std.mem.eql(u8, arg, "--state")) {
-            options.state_path = args.next() orelse return error.MissingStatePath;
-        } else if (std.mem.startsWith(u8, arg, "--bytes=")) {
-            options.size_bytes = try std.fmt.parseInt(usize, arg["--bytes=".len..], 10);
-        } else if (std.mem.eql(u8, arg, "--json")) {
-            json = true;
         } else if (std.mem.eql(u8, arg, "--help")) {
             try std.io.getStdOut().writer().writeAll(
-                \\usage: sovereign_interface [--message text] [--state path] [--bytes n] [--json]
+                \\usage: sovereign_interface [--message text]
                 \\
-                \\Runs the local AbsoluteCore mirror once and emits the real measured peak,
-                \\density, neologism, and spectral path derived from the mmap field.
+                \\Runs the verified Compiler Loop to mathematically generate and test
+                \\syntactically valid Zig AST structures from geometric tension.
                 \\
             );
             return;
-        } else {
-            return error.UnknownArgument;
         }
     }
 
-    var core = try SovereignCore.init(options);
-    defer core.deinit();
-    const snap = core.ingestSlice(message);
-    if (json) {
-        try emitJson(std.io.getStdOut().writer(), snap);
+    const stdout = std.io.getStdOut().writer();
+    try stdout.print("### SOVEREIGN INTERFACE: VERIFIED COMPILER LOOP ###\n", .{});
+    try stdout.print("User Intent: {s}\n\n", .{message});
+
+    // 1. Initialize the Void Engine
+    var engine = void_eng.VoidEngine.init(0x1337_C0DE_CAFE_BABE);
+    engine.ingestTextSequence(0x99887766, message, message.len);
+
+    // 2. Initialize the Compiler Loop
+    var loop = try CompilerLoop.init(allocator, &engine);
+    defer loop.deinit();
+
+    try stdout.writeAll("[System] Void Engine initialized. Resolving mathematical tension...\n");
+
+    // 3. Solve and Verify
+    const result_opt = try loop.solveAndVerify(message, 10);
+
+    if (result_opt) |success_res| {
+        try stdout.writeAll("\n### INVENTION SUCCESS ###\n");
+        try stdout.writeAll("=== GENERATED ZIG SOURCE ===\n");
+        try stdout.writeAll(success_res.generated_code);
+        try stdout.writeAll("============================\n");
+        try stdout.print("Exit Code: {d}\n", .{success_res.sandbox_res.exit_code});
+        if (success_res.sandbox_res.stdout.len > 0) {
+            try stdout.print("Output:\n{s}\n", .{success_res.sandbox_res.stdout});
+        }
     } else {
-        try emitHuman(std.io.getStdOut().writer(), snap);
+        try stdout.writeAll("\n### INVENTION FAILURE ###\n");
+        try stdout.writeAll("The Void Engine could not resolve geometric tension into compiling code.\n");
     }
 }
 

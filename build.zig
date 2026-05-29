@@ -498,6 +498,14 @@ pub fn build(b: *std.Build) void {
     });
     b.installArtifact(practrand_emit_mulfree);
 
+    const mulfree_per_bit_avalanche = b.addExecutable(.{
+        .name = "mulfree_per_bit_avalanche",
+        .root_source_file = b.path("src/adapters/mulfree_per_bit_avalanche.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(mulfree_per_bit_avalanche);
+
     const mul_free_comparison = b.addExecutable(.{
         .name = "mul_free_comparison",
         .root_source_file = b.path("src/adapters/mul_free_comparison.zig"),
@@ -959,6 +967,11 @@ const GhostModules = struct {
     grounded_core: *std.Build.Module,
     infinity_core: *std.Build.Module,
     null_core: *std.Build.Module,
+    ghost_codebook: *std.Build.Module,
+    ghost_topology: *std.Build.Module,
+    ghost_ast_emitter: *std.Build.Module,
+    ghost_compiler_loop: *std.Build.Module,
+    ghost_grounding: *std.Build.Module,
 };
 
 fn makeGhostModules(
@@ -983,6 +996,11 @@ fn makeGhostModules(
         .grounded_core = b.createModule(.{ .root_source_file = b.path("src/archived_cores/grounded_core.zig"), .target = target, .optimize = optimize }),
         .infinity_core = b.createModule(.{ .root_source_file = b.path("src/archived_cores/infinity.zig"), .target = target, .optimize = optimize }),
         .null_core = b.createModule(.{ .root_source_file = b.path("src/archived_cores/null_core.zig"), .target = target, .optimize = optimize }),
+        .ghost_codebook = b.createModule(.{ .root_source_file = b.path("src/semantics/concept_codebook.zig"), .target = target, .optimize = optimize }),
+        .ghost_topology = b.createModule(.{ .root_source_file = b.path("src/semantics/topology.zig"), .target = target, .optimize = optimize }),
+        .ghost_ast_emitter = b.createModule(.{ .root_source_file = b.path("src/compiler/ast_emitter.zig"), .target = target, .optimize = optimize }),
+        .ghost_compiler_loop = b.createModule(.{ .root_source_file = b.path("src/oracle/compiler_loop.zig"), .target = target, .optimize = optimize }),
+        .ghost_grounding = b.createModule(.{ .root_source_file = b.path("src/semantics/intent_grounding.zig"), .target = target, .optimize = optimize }),
     };
 
     addGhostImports(modules.flame, modules);
@@ -1001,6 +1019,11 @@ fn makeGhostModules(
     addGhostImports(modules.grounded_core, modules);
     addGhostImports(modules.infinity_core, modules);
     addGhostImports(modules.null_core, modules);
+    addGhostImports(modules.ghost_codebook, modules);
+    addGhostImports(modules.ghost_topology, modules);
+    addGhostImports(modules.ghost_ast_emitter, modules);
+    addGhostImports(modules.ghost_compiler_loop, modules);
+    addGhostImports(modules.ghost_grounding, modules);
     return modules;
 }
 
@@ -1021,4 +1044,9 @@ fn addGhostImports(module: *std.Build.Module, modules: GhostModules) void {
     module.addImport("grounded_core", modules.grounded_core);
     module.addImport("infinity_core", modules.infinity_core);
     module.addImport("null_core", modules.null_core);
+    module.addImport("ghost_codebook", modules.ghost_codebook);
+    module.addImport("ghost_topology", modules.ghost_topology);
+    module.addImport("ghost_ast_emitter", modules.ghost_ast_emitter);
+    module.addImport("ghost_compiler_loop", modules.ghost_compiler_loop);
+    module.addImport("ghost_grounding", modules.ghost_grounding);
 }

@@ -1,0 +1,8 @@
+verify_cli  domain=mixer  csv=results/falsifier/champions/mmm_1111222233334444.csv  bits=8  timeout_ms=10000
+loaded 17 instructions
+
+verdict: COUNTER-EXAMPLE (SAT — property fails)
+elapsed: 26 ms
+detail:
+sat
+

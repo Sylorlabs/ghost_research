@@ -1,0 +1,1 @@
+sac_min=0.000000 sac_max=0.998800 sac_mean=0.396688 min_pair=(i=50,j=37) samples=10000 threshold=0.450000 program=results/falsifier/champions/mmm_1111222233334444.csv

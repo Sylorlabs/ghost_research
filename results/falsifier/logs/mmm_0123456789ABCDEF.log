@@ -1,0 +1,68 @@
+=== MMMP HOLDOUT HILLCLIMB ===
+iters=64 seed=0x123456789ABCDEF start=(random) mmm_outer=6 tier1_outer=8 tier0_inner=120 shaped=false constrained=false constrained_meta=false constrained_mm=false wide_meta=false wide_mm=false restart_every=0
+iter 0: anchor=-212.2836 holdout=-1000000.0000 BEST
+iter 1/64: anchor=-212.2836 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 2/64: anchor=-212.2836 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 3/64: anchor=-212.2836 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 4/64: anchor=-2887.4316 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 ACCEPT BEST
+iter 5/64: anchor=-2839.6911 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 ACCEPT 
+iter 6/64: anchor=-2896.4523 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 7/64: anchor=-2839.6911 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 8/64: anchor=-2825.3659 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 ACCEPT 
+iter 9/64: anchor=-2825.3659 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 10/64: anchor=-250818.3828 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 11/64: anchor=-2825.3659 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 12/64: anchor=-750051.2974 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 13/64: anchor=-2872.1827 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 14/64: anchor=-5467.9937 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 15/64: anchor=-198.4003 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 ACCEPT 
+iter 16/64: anchor=-209.4698 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 17/64: anchor=-5467.9937 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 18/64: anchor=-198.4003 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 19/64: anchor=-2837.8106 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 20/64: anchor=-2837.8106 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 21/64: anchor=-252791.2046 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 22/64: anchor=-250193.4667 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 23/64: anchor=-250160.0059 holdout=-227.9357 current=-227.9357 best=-227.9357 ACCEPT BEST
+iter 24/64: anchor=-500107.9107 holdout=-1000000.0000 current=-227.9357 best=-227.9357 
+iter 25/64: anchor=-500115.1830 holdout=-1000000.0000 current=-227.9357 best=-227.9357 
+iter 26/64: anchor=-198.4003 holdout=-10765.8125 current=-227.9357 best=-227.9357 
+iter 27/64: anchor=-250160.0059 holdout=-227.9357 current=-227.9357 best=-227.9357 
+iter 28/64: anchor=-232.4793 holdout=-240.5025 current=-227.9357 best=-227.9357 
+iter 29/64: anchor=-250160.0059 holdout=-227.9357 current=-227.9357 best=-227.9357 
+iter 30/64: anchor=-250178.1459 holdout=-1000000.0000 current=-227.9357 best=-227.9357 
+iter 31/64: anchor=-250160.0059 holdout=-227.9357 current=-227.9357 best=-227.9357 
+iter 32/64: anchor=-750056.0948 holdout=-1000000.0000 current=-227.9357 best=-227.9357 
+iter 33/64: anchor=-250160.0059 holdout=-227.9357 current=-227.9357 best=-227.9357 
+iter 34/64: anchor=-500107.9107 holdout=-1000000.0000 current=-227.9357 best=-227.9357 
+iter 35/64: anchor=-250170.6687 holdout=-1000000.0000 current=-227.9357 best=-227.9357 
+iter 36/64: anchor=-2865.0077 holdout=-10765.8125 current=-227.9357 best=-227.9357 
+iter 37/64: anchor=-250160.0059 holdout=-227.9357 current=-227.9357 best=-227.9357 
+iter 38/64: anchor=-250160.0059 holdout=-227.9357 current=-227.9357 best=-227.9357 
+iter 39/64: anchor=-252791.2046 holdout=-10765.8125 current=-227.9357 best=-227.9357 
+iter 40/64: anchor=-252791.2046 holdout=-10765.8125 current=-227.9357 best=-227.9357 
+iter 41/64: anchor=-250160.0059 holdout=-227.9357 current=-227.9357 best=-227.9357 
+iter 42/64: anchor=-2846.9240 holdout=-226.8593 current=-226.8593 best=-226.8593 ACCEPT BEST
+iter 43/64: anchor=-250160.0059 holdout=-227.9357 current=-226.8593 best=-226.8593 
+iter 44/64: anchor=-8173.7975 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 45/64: anchor=-3877.7662 holdout=-10765.8125 current=-226.8593 best=-226.8593 
+iter 46/64: anchor=-250139.8704 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 47/64: anchor=-2905.5695 holdout=-5480.0559 current=-226.8593 best=-226.8593 
+iter 48/64: anchor=-2891.3819 holdout=-10765.8125 current=-226.8593 best=-226.8593 
+iter 49/64: anchor=-2846.9240 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 50/64: anchor=-2846.9240 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 51/64: anchor=-250155.5592 holdout=-227.9357 current=-226.8593 best=-226.8593 
+iter 52/64: anchor=-2846.9240 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 53/64: anchor=-750052.5541 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 54/64: anchor=-250163.2178 holdout=-227.9357 current=-226.8593 best=-226.8593 
+iter 55/64: anchor=-250147.0112 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 56/64: anchor=-250160.0059 holdout=-227.9357 current=-226.8593 best=-226.8593 
+iter 57/64: anchor=-250139.8704 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 58/64: anchor=-250160.0059 holdout=-227.9357 current=-226.8593 best=-226.8593 
+iter 59/64: anchor=-252817.3184 holdout=-227.9357 current=-226.8593 best=-226.8593 
+iter 60/64: anchor=-253161.3058 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 61/64: anchor=-250192.6484 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 62/64: anchor=-2867.9981 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 63/64: anchor=-2846.9240 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 64/64: anchor=-250160.0059 holdout=-227.9357 current=-226.8593 best=-226.8593 
+BEST_HOLDOUT = -226.8593 iter=42 anchor=-2846.9240

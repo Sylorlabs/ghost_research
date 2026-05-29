@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+# MMMP-only rerun: completes the falsifier batch after the SA track succeeded.
+# Reads the same seed list, runs Phase B + export + oracle gate, APPENDS to
+# the existing verdicts.csv (preserving SA rows).
+
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$PROJECT_ROOT"
+
+BIN=./zig-out/bin
+RNG_TEST=/home/micah/.local/bin/RNG_test
+
+OUT=results/falsifier
+mkdir -p "$OUT/champions" "$OUT/oracles" "$OUT/logs"
+VERDICTS=$OUT/verdicts.csv
+[[ ! -f "$VERDICTS" ]] && { echo "missing $VERDICTS — run falsifier.sh first"; exit 1; }
+
+SEEDS=(
+  "1111222233334444"
+  "F00DCAFE12345678"
+  "DEADBEEFBADF00D0"
+  "ACEF00DBEEFCAFE0"
+  "0123456789ABCDEF"
+  "CAFEBABEC0DE0001"
+  "ABCDEF0123456789"
+  "BEEFDEADC0FFEE00"
+)
+
+MMM_ITERS=64
+MMM_TIER0_INNER=120
+
+# ───── workers ───────────────────────────────────────────────────────
+
+run_mmm_worker() {
+  local label="$1"
+  "$BIN/mmm_holdout_hillclimb_mulfree_l24" \
+    --seed=$label \
+    --iters=$MMM_ITERS \
+    --tier0-inner-steps=$MMM_TIER0_INNER \
+    --out-subdir="falsifier/mmm_${label}" \
+    --live-macro-graduation \
+    > "$OUT/logs/mmm_${label}.log" 2>&1
+  local rc=$?
+  [[ $rc -ne 0 ]] && echo "[mmm_${label}] FAILED rc=$rc"
+  return $rc
+}
+
+run_mmm_export() {
+  local label="$1"
+  local meta_csv="results/falsifier/mmm_${label}/BEST_champion_meta.csv"
+  local mixer_csv="$OUT/champions/mmm_${label}.csv"
+  if [[ -f "$meta_csv" ]]; then
+    "$BIN/meta_mixer_export_mulfree_l24" \
+      --meta="$meta_csv" \
+      --out="$mixer_csv" \
+      --seed=$label \
+      --steps=120 \
+      > "$OUT/logs/mmm_export_${label}.log" 2>&1
+  fi
+}
+
+# ───── oracle helpers (same parsing convention as falsifier.sh) ──────
+
+verify_stdout_to_token() {
+  local f="$1"
+  if grep -q "verdict: VERIFIED" "$f" 2>/dev/null; then echo "VERIFIED"
+  elif grep -q "verdict: COUNTER-EXAMPLE" "$f" 2>/dev/null; then echo "COUNTEREXAMPLE"
+  elif grep -q "verdict: UNKNOWN" "$f" 2>/dev/null; then echo "UNKNOWN"
+  elif grep -q "verdict: ERROR" "$f" 2>/dev/null; then echo "ERROR"
+  else echo "PARSE_FAIL"; fi
+}
+
+verify_elapsed_ms() {
+  local v
+  v=$(grep -oE "elapsed: [0-9]+ ms" "$1" 2>/dev/null | head -1 | awk '{print $2}')
+  echo "${v:-NA}"
+}
+
+practrand_verdict_from() {
+  if grep -q "FAIL" "$1" 2>/dev/null; then echo "FAIL"
+  elif grep -q "anomalies" "$1" 2>/dev/null; then echo "PASS"
+  else echo "PARSE_FAIL"; fi
+}
+
+practrand_first_fail_from() {
+  local line
+  line=$(grep "FAIL" "$1" 2>/dev/null | head -1 | awk '{print $1}')
+  echo "${line:-NONE}"
+}
+
+extract_sac() {
+  grep -oE "$2=[0-9.]+" "$1" 2>/dev/null | head -1 | awk -F= '{print $2}'
+}
+
+extract_mmm_best_holdout() {
+  grep -oE "BEST_HOLDOUT = [0-9.+-eE]+" "$1" 2>/dev/null | tail -1 | awk '{print $3}'
+}
+
+gate_champion() {
+  local arch="$1" seed="$2" csv="$3" fitness="$4"
+  local tag="${arch}_${seed}"
+  local log_sac="$OUT/oracles/${tag}_sac.log"
+  local log_w8="$OUT/oracles/${tag}_w8.log"
+  local log_w64="$OUT/oracles/${tag}_w64.log"
+  local log_pr="$OUT/oracles/${tag}_practrand.log"
+
+  "$BIN/mulfree_per_bit_avalanche" --program="$csv" --samples=10000 --min=0.45 > "$log_sac" 2>&1
+  local sac_exit=$?
+  local sac_min sac_max sac_mean
+  sac_min=$(extract_sac "$log_sac" sac_min); sac_min=${sac_min:-NA}
+  sac_max=$(extract_sac "$log_sac" sac_max); sac_max=${sac_max:-NA}
+  sac_mean=$(extract_sac "$log_sac" sac_mean); sac_mean=${sac_mean:-NA}
+
+  "$BIN/verify_cli" --domain=mixer --csv="$csv" --bits=8 --timeout-ms=10000 > "$log_w8" 2>&1 || true
+  local v_w8
+  v_w8=$(verify_stdout_to_token "$log_w8")
+
+  local v_w64="SKIP" v_w64_ms="NA"
+  if [[ "$sac_exit" == "0" && "$v_w8" == "VERIFIED" ]]; then
+    timeout 75 "$BIN/verify_cli" --domain=mixer --csv="$csv" --bits=64 --timeout-ms=60000 > "$log_w64" 2>&1 || true
+    v_w64=$(verify_stdout_to_token "$log_w64")
+    v_w64_ms=$(verify_elapsed_ms "$log_w64")
+  fi
+
+  local pr_verdict="SKIP" pr_first="NONE"
+  if [[ "$sac_exit" == "0" && "$v_w8" == "VERIFIED" && ( "$v_w64" == "VERIFIED" || "$v_w64" == "UNKNOWN" ) ]]; then
+    "$BIN/practrand_emit_mulfree" --program="$csv" --mode=mul_free --bytes=256M 2>/dev/null \
+      | "$RNG_TEST" stdin64 -tlmax 256MB > "$log_pr" 2>&1 || true
+    pr_verdict=$(practrand_verdict_from "$log_pr")
+    pr_first=$(practrand_first_fail_from "$log_pr")
+  fi
+
+  local gates=0
+  [[ "$sac_exit" == "0" ]] && gates=$((gates+1))
+  [[ "$v_w8" == "VERIFIED" ]] && gates=$((gates+1))
+  [[ "$v_w64" == "VERIFIED" ]] && gates=$((gates+1))
+  [[ "$pr_verdict" == "PASS" ]] && gates=$((gates+1))
+
+  printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d\n" \
+    "$seed" "$arch" "$fitness" "$sac_min" "$sac_max" "$sac_mean" \
+    "$v_w8" "$v_w64" "$v_w64_ms" "$pr_verdict" "$pr_first" "$gates" \
+    >> "$VERDICTS"
+  echo "[$tag] sac_min=$sac_min w8=$v_w8 w64=$v_w64 practrand=$pr_verdict first_fail=$pr_first gates=$gates/4"
+}
+
+# ───── orchestration ─────────────────────────────────────────────────
+
+# Strip prior mmm rows from verdicts.csv so a rerun doesn't double-count.
+TMP=$(mktemp)
+awk -F, 'NR==1 || $2 != "mmm"' "$VERDICTS" > "$TMP" && mv "$TMP" "$VERDICTS"
+
+# Also clear any stale partial mmm artifacts from the failed run.
+rm -rf results/falsifier/mmm_* "$OUT/champions/mmm_"*.csv 2>/dev/null
+mkdir -p "$OUT/champions"
+
+START=$(date +%s)
+
+echo "=== PHASE B: MMMP-L24 searches in parallel (${#SEEDS[@]} jobs, iters=$MMM_ITERS, tier0_inner=$MMM_TIER0_INNER) ==="
+PIDS=()
+for label in "${SEEDS[@]}"; do
+  run_mmm_worker "$label" &
+  PIDS+=($!)
+done
+FAILED=0
+for pid in "${PIDS[@]}"; do
+  if ! wait "$pid"; then FAILED=$((FAILED+1)); fi
+done
+echo "Phase B done in $(($(date +%s) - START))s   failed_jobs=$FAILED"
+
+echo ""
+echo "=== PHASE B.2: MMMP exports ==="
+for label in "${SEEDS[@]}"; do
+  run_mmm_export "$label"
+done
+
+echo ""
+echo "=== PHASE C: Oracle gate on MMMP champions ==="
+GATE_START=$(date +%s)
+for label in "${SEEDS[@]}"; do
+  mmm_csv="$OUT/champions/mmm_${label}.csv"
+  if [[ -f "$mmm_csv" ]]; then
+    mmm_fit=$(extract_mmm_best_holdout "$OUT/logs/mmm_${label}.log"); mmm_fit=${mmm_fit:-NA}
+    gate_champion "mmm" "$label" "$mmm_csv" "$mmm_fit"
+  else
+    echo "[mmm_${label}] MISSING champion CSV"
+  fi
+done
+echo "Phase C done in $(($(date +%s) - GATE_START))s"
+
+END=$(date +%s)
+echo ""
+echo "=== MMMP-ONLY RERUN COMPLETE ==="
+echo "total elapsed: $((END - START))s"
+echo ""
+echo "=== verdicts.csv (full, both arches) ==="
+cat "$VERDICTS"
+echo ""
+echo "=== combined gate-pass histogram ==="
+awk -F, 'NR>1 {h[$12]++} END {for (k in h) printf "gates_passed=%s  count=%d\n", k, h[k]}' "$VERDICTS" | sort
+
+CRACKERS=$(awk -F, 'NR>1 && $12==4 {print}' "$VERDICTS")
+if [[ -n "$CRACKERS" ]]; then
+  echo ""
+  echo "*** MUL-NECESSITY CONJECTURE CRACKED ***"
+  echo "$CRACKERS"
+else
+  TOTAL=$(awk -F, 'NR>1' "$VERDICTS" | wc -l)
+  echo ""
+  echo "MUL-necessity conjecture HARDENED: 0/$TOTAL champions cleared all four oracles"
+fi

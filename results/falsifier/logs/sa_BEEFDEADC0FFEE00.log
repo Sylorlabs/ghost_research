@@ -1,0 +1,15 @@
+=== MUL-FREE MIXER CHALLENGE ===
+mode=mul_free seed=0xBEEFDEADC0FFEE00 sa_steps=100000 hill_iters=200 max_prog_len=24
+best_outer_iter=74 evaluated=20000201 accepted=3753298 elapsed_ms=8182027
+best: composite=46.436523 avalanche=32.000488 balance=31.988281 period=4096 chisq=231.750000 len=7 hash=0x9AF22117DF0AEF09
+champion_csv=results/falsifier/sa/champion_BEEFDEADC0FFEE00.csv
+search_log=results/falsifier/sa/search_log_BEEFDEADC0FFEE00.csv
+[mul_free] used=7 hash=0x9AF22117DF0AEF09
+  [0] r2 = SHR_XOR(r0, r2, imm=0x3FDD187DA4865F8A)
+  [1] r5 = SHL_XOR(r2, r7, imm=0x2DD4959029C6236D)
+  [2] r7 = SHL_XOR(r5, r3, imm=0x3A7C7E4832A849F3)
+  [3] r5 = SHL_XOR(r7, r6, imm=0x0460631B51B927E6)
+  [4] r6 = SHR_XOR(r5, r1, imm=0x1333D328EFFA8072)
+  [5] r4 = SHL_XOR(r6, r1, imm=0xCA2E1085E044B874)
+  [6] r7 = ADD_ROT(r5, r4, imm=0xDAC9746BC1E2F6A9)
+  output = r7

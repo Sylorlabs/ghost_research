@@ -1,0 +1,34 @@
+=== PHASE A: SA searches in parallel (8 jobs, sa_steps=100000, hill_iters=200) ===
+Phase A done in 8599s
+
+=== PHASE B: MMMP-L24 searches in parallel (8 jobs, iters=64) ===
+Phase B (search) done in 0s
+=== PHASE B.2: MMMP exports (serial, cheap) ===
+
+=== PHASE C: Oracle gate per champion (sequential, short-circuit) ===
+[sa_1111222233334444] sac_min=0.000000 w8=COUNTEREXAMPLE w64=SKIP practrand=SKIP first_fail=NONE gates=0/4
+[mmm_1111222233334444] MISSING champion CSV (export failed?)
+[sa_F00DCAFE12345678] sac_min=0.000000 w8=COUNTEREXAMPLE w64=SKIP practrand=SKIP first_fail=NONE gates=0/4
+[mmm_F00DCAFE12345678] MISSING champion CSV (export failed?)
+[sa_DEADBEEFBADF00D0] sac_min=0.000000 w8=COUNTEREXAMPLE w64=SKIP practrand=SKIP first_fail=NONE gates=0/4
+[mmm_DEADBEEFBADF00D0] MISSING champion CSV (export failed?)
+[sa_ACEF00DBEEFCAFE0] sac_min=0.000000 w8=COUNTEREXAMPLE w64=SKIP practrand=SKIP first_fail=NONE gates=0/4
+[mmm_ACEF00DBEEFCAFE0] MISSING champion CSV (export failed?)
+[sa_0123456789ABCDEF] sac_min=0.000000 w8=COUNTEREXAMPLE w64=SKIP practrand=SKIP first_fail=NONE gates=0/4
+[mmm_0123456789ABCDEF] MISSING champion CSV (export failed?)
+[sa_CAFEBABEC0DE0001] sac_min=0.000000 w8=COUNTEREXAMPLE w64=SKIP practrand=SKIP first_fail=NONE gates=0/4
+[mmm_CAFEBABEC0DE0001] MISSING champion CSV (export failed?)
+[sa_ABCDEF0123456789] sac_min=0.000000 w8=COUNTEREXAMPLE w64=SKIP practrand=SKIP first_fail=NONE gates=0/4
+[mmm_ABCDEF0123456789] MISSING champion CSV (export failed?)
+[sa_BEEFDEADC0FFEE00] sac_min=0.000000 w8=COUNTEREXAMPLE w64=SKIP practrand=SKIP first_fail=NONE gates=0/4
+[mmm_BEEFDEADC0FFEE00] MISSING champion CSV (export failed?)
+Phase C done in 1s
+
+=== FALSIFIER BATCH COMPLETE ===
+total elapsed: 8600s
+verdicts:      results/falsifier/verdicts.csv
+
+=== gate-pass histogram ===
+gates_passed=0  count=8
+
+MUL-necessity conjecture HARDENED: 0 of 16 (seeds x arches) cleared all four oracles

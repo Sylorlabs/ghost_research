@@ -1,0 +1,68 @@
+=== MMMP HOLDOUT HILLCLIMB ===
+iters=64 seed=0xABCDEF0123456789 start=(random) mmm_outer=6 tier1_outer=8 tier0_inner=120 shaped=false constrained=false constrained_meta=false constrained_mm=false wide_meta=false wide_mm=false restart_every=0
+iter 0: anchor=-1000000.0000 holdout=-1000000.0000 BEST
+iter 1/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 2/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 3/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 4/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 5/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 6/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 7/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 8/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 9/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 10/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 11/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 12/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 13/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 14/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 15/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 16/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 17/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 18/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 19/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 20/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 21/64: anchor=-750055.0460 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 ACCEPT 
+iter 22/64: anchor=-750055.0460 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 23/64: anchor=-750055.0460 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 24/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 25/64: anchor=-750055.0460 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 26/64: anchor=-750055.0460 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 27/64: anchor=-750055.0460 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 28/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 29/64: anchor=-750055.0460 holdout=-1000000.0000 current=-1000000.0000 best=-1000000.0000 
+iter 30/64: anchor=-243.6310 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 ACCEPT BEST
+iter 31/64: anchor=-500119.6604 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 32/64: anchor=-243.6310 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 33/64: anchor=-243.6310 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 34/64: anchor=-750055.0460 holdout=-1000000.0000 current=-10765.8125 best=-10765.8125 
+iter 35/64: anchor=-243.6310 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 36/64: anchor=-243.6310 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 37/64: anchor=-243.6310 holdout=-10765.8125 current=-10765.8125 best=-10765.8125 
+iter 38/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 ACCEPT BEST
+iter 39/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 40/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 41/64: anchor=-250261.3817 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 42/64: anchor=-243.6310 holdout=-10765.8125 current=-226.8593 best=-226.8593 
+iter 43/64: anchor=-500100.8680 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 44/64: anchor=-243.6310 holdout=-10765.8125 current=-226.8593 best=-226.8593 
+iter 45/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 46/64: anchor=-750044.3668 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 47/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 48/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 49/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 50/64: anchor=-500105.5522 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 51/64: anchor=-1000000.0000 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 52/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 53/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 54/64: anchor=-500100.8680 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 55/64: anchor=-750055.0460 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 56/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 57/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 58/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+iter 59/64: anchor=-500105.5522 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 60/64: anchor=-750055.0460 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 61/64: anchor=-750055.0460 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 62/64: anchor=-750066.2961 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 63/64: anchor=-8109.1450 holdout=-1000000.0000 current=-226.8593 best=-226.8593 
+iter 64/64: anchor=-252765.6792 holdout=-226.8593 current=-226.8593 best=-226.8593 
+BEST_HOLDOUT = -226.8593 iter=38 anchor=-252765.6792

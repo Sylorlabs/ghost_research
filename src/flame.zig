@@ -40,6 +40,8 @@ pub const InventionCandidate = struct {
 
 pub const FlameState = struct {
     chamber: [ChamberCount]i128,
+    locked_low: [ChamberCount]bool = [_]bool{false} ** ChamberCount,
+    locked_high: [ChamberCount]bool = [_]bool{false} ** ChamberCount,
     scar_bank: [ScarCount]u64,
     kernel: u64,
     closure_error: u128,
@@ -47,6 +49,8 @@ pub const FlameState = struct {
     pub fn init(seed: u64) FlameState {
         var state = FlameState{
             .chamber = [_]i128{0} ** ChamberCount,
+            .locked_low = [_]bool{false} ** ChamberCount,
+            .locked_high = [_]bool{false} ** ChamberCount,
             .scar_bank = [_]u64{0} ** ScarCount,
             .kernel = Kernel,
             .closure_error = 0,
@@ -124,8 +128,15 @@ pub fn splitMix64(x: u64) u64 {
 pub fn closureError(state: *const FlameState) u128 {
     var sum: u128 = 0;
     for (Laws) |law| {
-        const got = law.ca * state.chamber[law.a] + law.cb * state.chamber[law.b];
-        sum += @abs(got - law.t);
+        const low_a: i64 = @truncate(state.chamber[law.a]);
+        const high_a: i64 = @as(i64, @truncate(state.chamber[law.a] >> 64));
+        const low_b: i64 = @truncate(state.chamber[law.b]);
+        const high_b: i64 = @as(i64, @truncate(state.chamber[law.b] >> 64));
+
+        const got_low = law.ca * @as(i128, low_a) + law.cb * @as(i128, low_b);
+        const got_high = law.ca * @as(i128, high_a) + law.cb * @as(i128, high_b);
+        sum += @abs(got_low - law.t);
+        sum += @abs(got_high - law.t);
     }
     return sum;
 }
@@ -133,14 +144,42 @@ pub fn closureError(state: *const FlameState) u128 {
 pub fn relax(state: *FlameState, passes: usize) void {
     for (0..passes) |_| {
         for (Laws) |law| {
-            const got = law.ca * state.chamber[law.a] + law.cb * state.chamber[law.b];
-            const err = law.t - got;
-            if (err == 0) continue;
+            var low_a: i64 = @truncate(state.chamber[law.a]);
+            var high_a: i64 = @as(i64, @truncate(state.chamber[law.a] >> 64));
+            var low_b: i64 = @truncate(state.chamber[law.b]);
+            var high_b: i64 = @as(i64, @truncate(state.chamber[law.b] >> 64));
+
+            const got_low = law.ca * @as(i128, low_a) + law.cb * @as(i128, low_b);
+            const err_low = law.t - got_low;
+
+            const got_high = law.ca * @as(i128, high_a) + law.cb * @as(i128, high_b);
+            const err_high = law.t - got_high;
+
             const denom = law.ca * law.ca + law.cb * law.cb;
-            const da = @divTrunc(err * law.ca, denom);
-            const db = @divTrunc(err * law.cb, denom);
-            state.chamber[law.a] += @as(i128, @intCast(@max(-512, @min(512, da))));
-            state.chamber[law.b] += @as(i128, @intCast(@max(-512, @min(512, db))));
+            
+            if (denom != 0) {
+                if (err_low != 0) {
+                    const da_low = @divTrunc(err_low * law.ca, denom);
+                    const db_low = @divTrunc(err_low * law.cb, denom);
+                    if (!state.locked_low[law.a]) low_a +|= @as(i64, @intCast(@max(-512, @min(512, da_low))));
+                    if (!state.locked_low[law.b]) low_b +|= @as(i64, @intCast(@max(-512, @min(512, db_low))));
+                }
+
+                if (err_high != 0) {
+                    const da_high = @divTrunc(err_high * law.ca, denom);
+                    const db_high = @divTrunc(err_high * law.cb, denom);
+                    if (!state.locked_high[law.a]) high_a +|= @as(i64, @intCast(@max(-512, @min(512, da_high))));
+                    if (!state.locked_high[law.b]) high_b +|= @as(i64, @intCast(@max(-512, @min(512, db_high))));
+                }
+            }
+
+            const u_low_a: u64 = @bitCast(low_a);
+            const u_high_a: u64 = @bitCast(high_a);
+            state.chamber[law.a] = @bitCast((@as(u128, u_high_a) << 64) | @as(u128, u_low_a));
+
+            const u_low_b: u64 = @bitCast(low_b);
+            const u_high_b: u64 = @bitCast(high_b);
+            state.chamber[law.b] = @bitCast((@as(u128, u_high_b) << 64) | @as(u128, u_low_b));
         }
     }
     state.closure_error = closureError(state);

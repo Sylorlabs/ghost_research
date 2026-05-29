@@ -1,0 +1,5 @@
+verify_cli  domain=mixer  csv=results/falsifier/champions/mmm_CAFEBABEC0DE0001.csv  bits=8  timeout_ms=10000
+loaded 12 instructions
+
+verdict: VERIFIED (UNSAT — property holds)
+elapsed: 21 ms

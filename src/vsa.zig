@@ -39,6 +39,11 @@ pub const Hypervector = struct {
         return res;
     }
 
+    // UNBIND: Inverse of Bind (XOR is its own inverse)
+    pub fn unbind(self: Hypervector, other: Hypervector) Hypervector {
+        return self.bind(other);
+    }
+
     // BUNDLE: Superposition (Majority vote emulation via addition)
     pub fn bundle(self: Hypervector, other: Hypervector) Hypervector {
         var res = Hypervector.initEmpty();

@@ -45,12 +45,21 @@ pub const VoidEngine = struct {
 
     pub fn shapeTextPressure(self: *VoidEngine, seed: u64, text: []const u8) void {
         const h = flame.textHash(text) ^ flame.splitMix64(seed);
-        const base_magnitude = @as(i128, @intCast(12_600_000_000 + (h % 24_200_000_000)));
+        const base_magnitude = @as(i64, @intCast(12_600_000_000 + (h % 24_200_000_000)));
         for (0..flame.ChamberCount) |i| {
             const phase = (h >> @as(u6, @intCast(i % 60))) & 1;
-            const sign: i128 = if (phase == 0) 1 else -1;
-            const mag = @divTrunc(base_magnitude, @as(i128, @intCast(i + 1)));
-            self.state.chamber[i] += mag * sign;
+            const sign: i64 = if (phase == 0) 1 else -1;
+            const mag = @divTrunc(base_magnitude, @as(i64, @intCast(i + 1)));
+            
+            var low: i64 = @truncate(self.state.chamber[i]);
+            var high: i64 = @as(i64, @truncate(self.state.chamber[i] >> 64));
+
+            low +|= mag * sign;
+            high +|= mag * sign;
+
+            const u_low: u64 = @bitCast(low);
+            const u_high: u64 = @bitCast(high);
+            self.state.chamber[i] = @bitCast((@as(u128, u_high) << 64) | @as(u128, u_low));
         }
         self.state.scar_bank[h % flame.ScarCount] ^= flame.splitMix64(h ^ 0x0DE7E4B4E9B4D825);
         self.state.closure_error = flame.closureError(&self.state);
@@ -63,34 +72,75 @@ pub const VoidEngine = struct {
         const context_hash = flame.textHash(text);
         const state_fingerprint = residualFingerprint(&self.state) ^ context_hash;
         const NullScar: u64 = 0x3563447E3EBAEF14;
-        const median = calculateMedian(&self.state);
+        const medians = calculateMedians(&self.state);
         const VoidBranches = 256; 
         for (0..VoidBranches) |branch| {
             var trial = self.state;
+            // Clear or reset masks to self.state's masks to ensure no leak
+            trial.locked_low = self.state.locked_low;
+            trial.locked_high = self.state.locked_high;
+            
             const branch_seed = flame.splitMix64(state_fingerprint ^ branch ^ generation);
             for (0..flame.ChamberCount) |i| {
-                const gradient = trial.chamber[i] - median;
-                const scar_mix = @as(i128, @intCast((NullScar >> @as(u6, @intCast(i * 6 % 60))) & 0xFFFFFFFF));
-                const branch_mix = @as(i128, @intCast((branch_seed >> @as(u6, @intCast(i * 5 % 60))) & 0xFFFFFFFF));
-                trial.chamber[i] = median - @divTrunc(gradient * 2, 1) + scar_mix ^ branch_mix;
+                var low: i64 = @truncate(trial.chamber[i]);
+                var high: i64 = @as(i64, @truncate(trial.chamber[i] >> 64));
+
+                const gradient_low = low - medians.low;
+                const gradient_high = high - medians.high;
+
+                const scar_mix = @as(i64, @intCast((NullScar >> @as(u6, @intCast(i * 6 % 60))) & 0xFFFFFFFF));
+                const branch_mix = @as(i64, @intCast((branch_seed >> @as(u6, @intCast(i * 5 % 60))) & 0xFFFFFFFF));
+                
+                if (!trial.locked_low[i]) {
+                    low = medians.low - @divTrunc(gradient_low * 2, 1) + scar_mix ^ branch_mix;
+                }
+                if (!trial.locked_high[i]) {
+                    high = medians.high - @divTrunc(gradient_high * 2, 1) + scar_mix ^ branch_mix;
+                }
+
+                const u_low: u64 = @bitCast(low);
+                const u_high: u64 = @bitCast(high);
+                trial.chamber[i] = @bitCast((@as(u128, u_high) << 64) | @as(u128, u_low));
             }
             for (0..500) |pass| {
                 for (flame.Laws) |law| {
-                    const got = law.ca * trial.chamber[law.a] + law.cb * trial.chamber[law.b];
-                    const err = law.t - got;
-                    if (err == 0) continue;
+                    var low_a: i64 = @truncate(trial.chamber[law.a]);
+                    var high_a: i64 = @as(i64, @truncate(trial.chamber[law.a] >> 64));
+                    var low_b: i64 = @truncate(trial.chamber[law.b]);
+                    var high_b: i64 = @as(i64, @truncate(trial.chamber[law.b] >> 64));
+
+                    const got_low = law.ca * @as(i128, low_a) + law.cb * @as(i128, low_b);
+                    const err_low = law.t - got_low;
+
+                    const got_high = law.ca * @as(i128, high_a) + law.cb * @as(i128, high_b);
+                    const err_high = law.t - got_high;
+
                     const denom = law.ca * law.ca + law.cb * law.cb;
-                    if (denom == 0) continue;
                     
-                    // ASYMPTOTIC DAMPENING: Mark 0x250E9228E4F5F2DB
-                    // We reduce the update magnitude as passes increase to ensure convergence.
-                    const dampener = @as(i128, @intCast(1 + (pass / 10)));
-                    const da = @divTrunc(err * law.ca, denom * dampener);
-                    const db = @divTrunc(err * law.cb, denom * dampener);
-                    
-                    // SAFETY CLAMPS: Prevent integer overflow panics
-                    trial.chamber[law.a] += @max(-1_000_000_000_000, @min(1_000_000_000_000, da));
-                    trial.chamber[law.b] += @max(-1_000_000_000_000, @min(1_000_000_000_000, db));
+                    if (denom != 0) {
+                        const dampener = @as(i128, @intCast(1 + (pass / 10)));
+                        if (err_low != 0) {
+                            const da_low = @divTrunc(err_low * law.ca, denom * dampener);
+                            const db_low = @divTrunc(err_low * law.cb, denom * dampener);
+                            if (!trial.locked_low[law.a]) low_a +|= @as(i64, @intCast(@max(-1_000_000_000_000, @min(1_000_000_000_000, da_low))));
+                            if (!trial.locked_low[law.b]) low_b +|= @as(i64, @intCast(@max(-1_000_000_000_000, @min(1_000_000_000_000, db_low))));
+                        }
+
+                        if (err_high != 0) {
+                            const da_high = @divTrunc(err_high * law.ca, denom * dampener);
+                            const db_high = @divTrunc(err_high * law.cb, denom * dampener);
+                            if (!trial.locked_high[law.a]) high_a +|= @as(i64, @intCast(@max(-1_000_000_000_000, @min(1_000_000_000_000, da_high))));
+                            if (!trial.locked_high[law.b]) high_b +|= @as(i64, @intCast(@max(-1_000_000_000_000, @min(1_000_000_000_000, db_high))));
+                        }
+                    }
+
+                    const u_low_a: u64 = @bitCast(low_a);
+                    const u_high_a: u64 = @bitCast(high_a);
+                    trial.chamber[law.a] = @bitCast((@as(u128, u_high_a) << 64) | @as(u128, u_low_a));
+
+                    const u_low_b: u64 = @bitCast(low_b);
+                    const u_high_b: u64 = @bitCast(high_b);
+                    trial.chamber[law.b] = @bitCast((@as(u128, u_high_b) << 64) | @as(u128, u_low_b));
                 }
             }
             const closure_after = flame.closureError(&trial);
@@ -115,18 +165,43 @@ pub const VoidEngine = struct {
     }
 };
 
-fn calculateMedian(state: *const flame.FlameState) i128 {
-    var sorted: [flame.ChamberCount]i128 = state.chamber;
+const Medians = struct { low: i64, high: i64 };
+
+fn calculateMedians(state: *const flame.FlameState) Medians {
+    var sorted_low: [flame.ChamberCount]i64 = undefined;
+    var sorted_high: [flame.ChamberCount]i64 = undefined;
+
+    for (0..flame.ChamberCount) |i| {
+        sorted_low[i] = @truncate(state.chamber[i]);
+        sorted_high[i] = @as(i64, @truncate(state.chamber[i] >> 64));
+    }
+
+    // Sort low
     for (0..flame.ChamberCount - 1) |i| {
         for (i + 1..flame.ChamberCount) |j| {
-            if (sorted[j] < sorted[i]) {
-                const temp = sorted[i];
-                sorted[i] = sorted[j];
-                sorted[j] = temp;
+            if (sorted_low[j] < sorted_low[i]) {
+                const temp = sorted_low[i];
+                sorted_low[i] = sorted_low[j];
+                sorted_low[j] = temp;
             }
         }
     }
-    return sorted[flame.ChamberCount / 2];
+
+    // Sort high
+    for (0..flame.ChamberCount - 1) |i| {
+        for (i + 1..flame.ChamberCount) |j| {
+            if (sorted_high[j] < sorted_high[i]) {
+                const temp = sorted_high[i];
+                sorted_high[i] = sorted_high[j];
+                sorted_high[j] = temp;
+            }
+        }
+    }
+
+    return .{
+        .low = sorted_low[flame.ChamberCount / 2],
+        .high = sorted_high[flame.ChamberCount / 2],
+    };
 }
 
 pub fn splitMix64(x: u64) u64 {
