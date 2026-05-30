@@ -1,6 +1,6 @@
 const std = @import("std");
-const flame = @import("flame");
-const void_eng = @import("void");
+const flame = @import("linear");
+const void_eng = @import("state");
 
 pub const FluxEngine = struct {
     state: struct {

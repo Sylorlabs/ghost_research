@@ -1,5 +1,5 @@
 const std = @import("std");
-const flame = @import("flame");
+const flame = @import("linear");
 const absolute = @import("absolute_archived");
 const lore_eng = @import("lore");
 

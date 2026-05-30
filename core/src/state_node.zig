@@ -1,5 +1,5 @@
 const std = @import("std");
-const flame = @import("flame");
+const flame = @import("linear");
 
 pub const VoidEngine = struct {
     state: flame.FlameState,

@@ -1,6 +1,6 @@
 const std = @import("std");
 const sovereign = @import("sovereign");
-const void_eng = @import("void");
+const void_eng = @import("state");
 
 // --- GHOST CHAT: THE STEERING WHEEL ---
 

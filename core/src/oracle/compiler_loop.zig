@@ -4,7 +4,7 @@ const Sandbox = @import("sandbox").Sandbox;
 const SandboxResult = @import("sandbox").SandboxResult;
 const topology = @import("ghost_topology");
 const AstEmitter = @import("ghost_ast_emitter").AstEmitter;
-const void_eng = @import("void");
+const void_eng = @import("state");
 const grounding = @import("ghost_grounding");
 const codebook = @import("ghost_codebook");
 

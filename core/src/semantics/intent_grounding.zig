@@ -1,7 +1,7 @@
 const std = @import("std");
 const codebook = @import("ghost_codebook");
 const vsa = @import("vsa");
-const flame = @import("flame");
+const flame = @import("linear");
 
 // Maps keywords to specific concept primitives
 const KeywordMap = struct {

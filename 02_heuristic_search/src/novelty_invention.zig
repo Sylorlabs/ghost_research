@@ -1,7 +1,7 @@
 const std = @import("std");
-const flame = @import("flame");
+const flame = @import("linear");
 const vsa = @import("vsa");
-const void_eng = @import("void");
+const void_eng = @import("state");
 
 // --- NOVELTY INVENTION ENGINE ---
 //

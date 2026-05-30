@@ -1,6 +1,6 @@
 const std = @import("std");
-const void_eng = @import("void");
-const flame = @import("flame");
+const void_eng = @import("state");
+const flame = @import("linear");
 
 // --- Void Translator ---
 // Calibrates the engine's response to 8 canonical labeled prompts, then

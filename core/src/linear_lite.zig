@@ -1,5 +1,5 @@
 const std = @import("std");
-const flame = @import("flame");
+const flame = @import("linear");
 
 // --- GHOST FLARE (Suite 2: Mark 0xA17CABB1) ---
 // Proposed intent: "One law with largest variance, single-flare collapse."

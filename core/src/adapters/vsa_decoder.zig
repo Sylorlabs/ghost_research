@@ -1,6 +1,6 @@
 const std = @import("std");
 const vsa = @import("vsa");
-const void_eng = @import("void");
+const void_eng = @import("state");
 
 // --- GHOST VSA DECODER: LATTICE TO AST ---
 // Principle: Sequential Hamming Unbinding.

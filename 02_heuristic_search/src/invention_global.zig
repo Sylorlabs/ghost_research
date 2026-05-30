@@ -1,7 +1,7 @@
 const std = @import("std");
-const flame = @import("flame");
+const flame = @import("linear");
 const vsa = @import("vsa");
-const void_eng = @import("void");
+const void_eng = @import("state");
 
 // --- GLOBAL INVENTION SEARCH ---
 // Generates N random chamber states, relaxes each against the law lattice,

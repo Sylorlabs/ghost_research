@@ -1,6 +1,6 @@
 const std = @import("std");
-const flame = @import("flame");
-const void_eng = @import("void");
+const flame = @import("linear");
+const void_eng = @import("state");
 
 // --- GHOST ABSOLUTE: THE ALIGNED RESERVOIR ---
 // Principle: 64-byte Aligned Harmonic Interdiction.
