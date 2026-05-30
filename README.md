@@ -1,24 +1,18 @@
-# ghost_research
+# BitForge
 
-A collection of standalone research projects exploring automatic invention /
-program synthesis in Zig. The repository was originally one monolithic build of
-~128 executables sharing a single `src/`; it has been split so the top level is
-**project folders**, each independently buildable, all sharing one engine
-library (`core/`).
+A collection of standalone research projects exploring **automated bit-vector synthesis** and **verified kernel discovery** in Zig. The repository focuses on high-performance program synthesis, leveraging SMT solvers (Z3) and statistical testing (PractRand) to discover optimal hash mixers and sorting networks.
 
-> Open `ghost_research`, pick a project folder, step in, `zig build`.
+## Core Architecture
 
-## Layout
-
-| Folder | What it is | Build target count |
-|--------|------------|-----|
-| [`core/`](core/) | Shared engine library — every reusable engine/module (flame, void, flux, vsa, the invention/domain engines, the meta-engine family, oracle/compiler). Exposed as public Zig modules; the projects depend on it. | 3 dual-role exes |
-| [`ghost_engines/`](ghost_engines/) | The "ghost engine" line: Ghost Core, synthesis probes, consultation probes, void/absolute/infinity/null adapters. Architecture docs live here. | 54 |
-| [`01_reservoir_engines/`](01_reservoir_engines/) | Reservoir / VSA-era engine benchmarks (Flare/Flame/Flux/Fractal/Frost vs VSA baseline). | 6 |
-| [`02_early_invention/`](02_early_invention/) | Early geometry / "alien" invention engines and novelty probes. | 13 |
-| [`03_conceptless_chain/`](03_conceptless_chain/) | Conceptless std-only invention chain (Gen0/1/2, no VSA). | 6 |
-| [`04_program_synthesis/`](04_program_synthesis/) | DomainSpec program synthesis + the Z3 verification pipeline. | 9 |
-| [`05_meta_stack/`](05_meta_stack/) | The meta-engine stack — research threads 05 (meta-engine stack), 06 (mega research round) and 07 (affine-closure proof) as `docs/{05,06,07}/`. | 37 |
+| Folder | Name | Description |
+|--------|------|-------------|
+| [`core/`](core/) | **BitForge Core** | Shared engine library — reusable synthesis modules (Linear, State, Flux, VSA-Baseline). Exposed as public Zig modules. |
+| [`synthesis_probes/`](synthesis_probes/) | **Synthesis Probes** | The primary synthesis line: Core synthesis, consultation probes, and adapter modules. |
+| [`01_baseline_engines/`](01_baseline_engines/) | **Baselines** | Linear / VSA-era engine benchmarks (Linear/State/Flux vs VSA baseline). |
+| [`02_heuristic_search/`](02_heuristic_search/) | **Heuristic Search** | Early experiments in geometry-mapped search and novelty-pressure probes. |
+| [`03_standard_synthesis/`](03_standard_synthesis/) | **Standard Synth** | Direct synthesis using Zig stdlib only (Gen0/1/2, no VSA). |
+| [`04_verified_synthesis/`](04_verified_synthesis/) | **Verified Synth** | DomainSpec program synthesis + the Z3 formal verification pipeline. |
+| [`05_meta_synthesis/`](05_meta_synthesis/) | **Meta-Synthesis** | The hierarchical synthesis stack — research on multi-tier optimization and affine-closure proofs. |
 
 Each project folder contains its own `build.zig`, `build.zig.zon` (a path
 dependency on `../core`), `src/` (its leaf executable sources), and `docs/`.
