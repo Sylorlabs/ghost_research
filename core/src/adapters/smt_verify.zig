@@ -425,7 +425,7 @@ pub fn runSmtLib(allocator: std.mem.Allocator, smt_text: []const u8, timeout_ms:
             .elapsed_ms = elapsed,
         };
     }
-    const out = std.mem.span(out_z);
+    const out = try allocator.dupe(u8, std.mem.span(out_z));
 
     // First non-empty line is the (check-sat) verdict
     var lines = std.mem.tokenizeAny(u8, out, "\n\r");
