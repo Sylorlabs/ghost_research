@@ -36,9 +36,88 @@ pub fn main() !void {
         try phase2(al, out, seed);
     } else if (std.mem.eql(u8, phase, "phase3")) {
         try phase3(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "phase4")) {
+        try phase4(al, out, seed);
     } else {
-        try out.print("unknown phase '{s}'. try: phase0 | phase1 | phase2 | phase3\n", .{phase});
+        try out.print("unknown phase '{s}'. try: phase0 | phase1 | phase2 | phase3 | phase4\n", .{phase});
     }
+}
+
+/// Count calls to a specific macro index across a champion's predict+learn.
+fn callsTo(prog: *const sub.Program, macro_idx: usize) usize {
+    var n: usize = 0;
+    for (prog.predict.slice()) |ins| if (ins.op == .call and @as(usize, @intFromFloat(ins.imm)) == macro_idx) {
+        n += 1;
+    };
+    for (prog.learn.slice()) |ins| if (ins.op == .call and @as(usize, @intFromFloat(ins.imm)) == macro_idx) {
+        n += 1;
+    };
+    return n;
+}
+
+/// Phase 4 — THE TOWER. Phase 3 showed a single primitive (C0) does NOT buy
+/// compositional reach: K=2 was 0/4. Here we add the SECOND level — C1 = a
+/// composition macro (sum of two products) built ON TOP OF C0 — and ask: does the
+/// next abstraction collapse the next task? Expected honest shape:
+///   K=1 collapses via C0 (1 call); K=2 collapses via C1 (1 call) — LIFTING the
+///   Phase-3 wall; K=4 re-hits the composition trap (it needs 2 C1s + a combine),
+///   showing the trap recurs one level up and the tower must be climbed level by
+///   level. C0/C1 are verified-by-hand (like C0 in Phase 3); DISCOVERING C1
+///   autonomously is blocked by that same per-level trap — the frontier.
+fn phase4(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== PHASE 4: the tower — does the next abstraction collapse the next task? ===\n\n");
+
+    // C0 = product (level 1), C1 = sum-of-two-products built on C0 (level 2)
+    var library = [_]sub.Macro{ lib.referenceProductMacro(), lib.referenceComposeMacro() };
+    const c0_label = try lib.decode(&library[0], al);
+    try out.print("Library: C0 = {s}\n", .{c0_label});
+    try out.writeAll("         C1 = sum of two products  v0[p0]·v0[p1] + v0[p2]·v0[p3]  (CALLS C0 twice — the tower)\n\n");
+
+    const cfg = tasks.Config{ .n_train = 50, .n_test = 120, .n_seeds = 4 };
+    const p = evo.Params{ .max_evals = 250_000, .pop_size = 1000, .tournament = 8, .target = 0.95, .lambda = 1e-4, .immigrant_rate = 0.18 };
+    const cell_seeds: usize = 4;
+
+    const sweep = [_]struct { name: []const u8, t: tasks.Task, need: []const u8 }{
+        .{ .name = "K=1 (1 product) ", .t = tasks.gate(2, 0, 1), .need = "1 C0 call" },
+        .{ .name = "K=2 (2 products)", .t = tasks.multiGate(4, &.{ .{ 0, 1 }, .{ 2, 3 } }), .need = "1 C1 call" },
+        .{ .name = "K=4 (4 products)", .t = tasks.multiGate(8, &.{ .{ 0, 1 }, .{ 2, 3 }, .{ 4, 5 }, .{ 6, 7 } }), .need = "2 C1 + add" },
+    };
+
+    try out.print("Tower reach sweep | budget {d} evals | {d} seeds/cell | C0+C1 available\n\n", .{ p.max_evals, cell_seeds });
+    try out.writeAll("  task             | min solution | solves | best e→t | champion uses\n");
+    try out.writeAll("  -----------------+--------------+--------+----------+---------------\n");
+
+    for (sweep) |sw| {
+        var hits: usize = 0;
+        var best: ?usize = null;
+        var best_c0: usize = 0;
+        var best_c1: usize = 0;
+        for (0..cell_seeds) |c| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% 0x77 +% hashName(sw.name) +% c *% 0x9E3779B1);
+            const r = try evo.runEvolution(al, prng.random(), sw.t, cfg, p, &library, &.{});
+            if (r.evals_to_target) |e| {
+                hits += 1;
+                if (best == null or e < best.?) {
+                    best = e;
+                    best_c0 = callsTo(&r.best, 0);
+                    best_c1 = callsTo(&r.best, 1);
+                }
+            }
+        }
+        try out.print("  {s} | {s:<12} |  {d}/{d}   | ", .{ sw.name, sw.need, hits, cell_seeds });
+        try printEvals(out, best, 8);
+        if (best != null) {
+            try out.print(" | {d}×C0, {d}×C1\n", .{ best_c0, best_c1 });
+        } else {
+            try out.writeAll(" | —\n");
+        }
+    }
+
+    try out.writeAll("\n[READING] Phase 3 showed C0 alone gives K=2 = 0/4. If C1 now solves K=2 with a\n");
+    try out.writeAll("single CALL, the SECOND abstraction collapsed the task C0 could not reach — the\n");
+    try out.writeAll("tower compounds. If K=4 then stalls, the composition trap has simply moved up a\n");
+    try out.writeAll("level (it needs C2 = sum-of-two-C1s): reach compounds, but one rung at a time,\n");
+    try out.writeAll("and escaping each rung's trap to DISCOVER the next macro is the open frontier.\n");
 }
 
 /// Phase 3 — TIER-3 BRICK: does compounding give REACH? Two separable questions,
