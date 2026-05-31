@@ -39,6 +39,7 @@ const core_modules = [_]CoreModule{
     .{ .name = "domain_opset", .path = "src/adapters/domain_opset.zig" },
     .{ .name = "domain_search_strategy", .path = "src/adapters/domain_search_strategy.zig" },
     .{ .name = "domain_128_arx", .path = "src/adapters/domain_128_arx.zig" },
+    .{ .name = "domain_128_tier4", .path = "src/adapters/domain_128_tier4.zig" },
     .{ .name = "domain_sort_net", .path = "src/adapters/domain_sort_net.zig" },
     .{ .name = "domain_u64_bijective", .path = "src/adapters/domain_u64_bijective.zig" },
     .{ .name = "domain_u64_mixer_dual", .path = "src/adapters/domain_u64_mixer_dual.zig" },
