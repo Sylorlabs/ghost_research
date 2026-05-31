@@ -69,6 +69,7 @@ pub const World = struct {
     gate_x: usize = 0,
     gate_y: usize = 0,
     gate_open: bool = false,
+    gate_momentary: bool = false, // true: gate open == on-button (for law sampling); false: latching
 
     pub fn init(seed: u64) World {
         var w = World{
@@ -196,11 +197,17 @@ pub const World = struct {
             else => unreachable,
         }
 
-        // Pressing the button latches the gate open, permanently unlocking the
-        // far half of the room. The agent must reach the button to expand its
-        // accessible world — a structure that *increases* its future options.
-        if (self.has_affordance and self.ax == self.button_x and self.ay == self.button_y) {
-            self.gate_open = true;
+        // Pressing the button controls the gate. Latching (default): once
+        // pressed it stays open, unlocking the far half. Momentary: the gate is
+        // open exactly while the agent stands on the button — used to richly
+        // sample the gate's law for the law-discovery experiment.
+        if (self.has_affordance) {
+            const on = self.ax == self.button_x and self.ay == self.button_y;
+            if (self.gate_momentary) {
+                self.gate_open = on;
+            } else if (on) {
+                self.gate_open = true;
+            }
         }
 
         return Event{

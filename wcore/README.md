@@ -181,6 +181,61 @@ it still uses a hand-given positional state and tabular model. Two upgrades were
 both necessary, each forced by an observed failure (state aliasing; myopic
 exploration) — see [TESTING.md](TESTING.md) §11.
 
+### Law discovery (Stage 3): closing the symbolic↔embodied loop
+
+```sh
+zig build run-agent -- 0xC0FFEE 30000 law
+```
+
+The two halves of the project meet here. The agent lives, records
+`(position, gate-state)` experience, and a sleep phase distils the shortest rule
+explaining the dynamics — by the *same* "shortest description" objective that
+invents ℕ:
+
+```
+discovered rule:  gate is open  <=>  x == 2 AND y == 2   (errors: 0/30000)
+description length: rule = 11 bits  vs  per-cell table ~ 1024 bits
+>> ENGINE DISCOVERED THE CAUSAL LAW OF ITS WORLD FROM EXPERIENCE <<
+```
+
+`(2,2)` is the button — found purely by compression, never told. Embodied
+experience in, a compact symbolic law out. Honest scope: one law, one mechanism,
+a small hand-chosen rule language — not open-ended physics. See
+[TESTING.md](TESTING.md) §12.
+
+## Primitive-inventing engine: `wcore-invent` ([PLAN_INVENTION_ENGINE.md](PLAN_INVENTION_ENGINE.md))
+
+The same method (search + MDL + **execute-to-verify** + compounding library) with
+a real body: it searches over **primitive math operations** (add, mul, dot, get,
+tanh, …) assembled into 3-part programs (`Setup`/`Predict`/`Learn`, the
+AutoML-Zero shape — so it invents the *learning rule* too). The PRIME DIRECTIVE:
+**every candidate is scored only by running it on data and measuring held-out
+accuracy — never by plausibility.** No LLM in the loop, no menu of known layers,
+no proxy fitness.
+
+```sh
+zig build run-invent -- phase0   # verifier sanity gate: correct prog 1.0, garbage ~chance
+zig build run-invent -- phase1   # evolution beats random; rediscovers the multiplicative gate
+zig build run-invent -- phase2   # the ratchet: a reused library macro slashes evals-to-solve
+```
+
+* **Phase 1** (reproduction, ~AutoML-Zero): on `y = sign(x0·x1)`, evolution beats
+  random search (4/5 vs 2/5 solves; ~1.4× faster) and rediscovers the gate in
+  forms a human wouldn't write — a *division* gate `x0/x1` (sign-equiv to the
+  product) and a *vector-scaling* gate. All verified by execution at 1.0000.
+* **Phase 2** (the compounding library — the bet): the engine abstracts its
+  discovered gate into one callable macro `C0(i,j)`, generalised over the index
+  pair. Reusing it on **new** gate tasks collapses each to a single `CALL`, solved
+  in **a few hundred** evaluations vs **~90k+** for flat evolution — a **100–200×+
+  speedup**, and it solves tasks flat evolution misses entirely. The compositional
+  *double-gate* is the honest next frontier (it needs a second level of
+  abstraction — the tower). See [TESTING.md](TESTING.md) §13 for exact numbers.
+
+Honest scope: this is Tier-1 (reproduction) plus a confirmed library-acceleration
+result on a gate family — **not** a discovered primitive that beats attention.
+Task A is a gradient-free needle, so the win is real but bounded; the value is the
+clean, ablated, execution-grounded measurement.
+
 ## Run it
 
 ```sh
@@ -194,7 +249,11 @@ zig build run-pure -- 0xC0FFEE learn       # cumulative learning (growing librar
 zig build run-agent                        # curiosity sensorimotor agent (Stage 1)
 zig build run-agent -- 0 6000 compare      # curiosity vs empowerment (Stage 2)
 zig build run-agent -- 0 12000 affordance  # goal-directed affordance use (Stage 2.5)
-zig build test                             # 43 tests across all engines
+zig build run-agent -- 0 30000 law         # discover the world's causal law from experience (Stage 3)
+zig build run-invent -- phase0             # primitive-inventing engine: verifier sanity gate
+zig build run-invent -- phase1             # evolution vs random search (rediscovers the gate)
+zig build run-invent -- phase2             # the compounding library (the ratchet)
+zig build test                             # all tests across all engines
 ```
 
 Requires Zig 0.14.1. Standalone; no dependency on sibling projects.
@@ -244,7 +303,8 @@ Example output:
 | `agent.zig` | **wcore-agent:** online sensor-stream model + curiosity action selection + code-length telemetry |
 | `empower.zig` | **wcore-agent:** learned transition model + empowerment `I(A;S')` planner (Stage 2) |
 | `affordance.zig` | **wcore-agent:** value-iteration empowerment + R-max exploration; goal-directed affordance use (Stage 2.5) |
-| `agent_main.zig` | **wcore-agent:** sensorimotor loop (curiosity / empower / compare / affordance modes) |
+| `law.zig` | **wcore-agent:** induces the world's causal law from experience by MDL (Stage 3) |
+| `agent_main.zig` | **wcore-agent:** sensorimotor loop (curiosity / empower / compare / affordance / law modes) |
 
 ## Status
 

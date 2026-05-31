@@ -46,8 +46,29 @@ pub fn build(b: *std.Build) void {
     const run_agent_step = b.step("run-agent", "Run the compression-driven sensorimotor agent");
     run_agent_step.dependOn(&run_agent.step);
 
+    // ---- wcore-invent: the primitive-inventing engine (PLAN_INVENTION) ----
+    const invent = b.addExecutable(.{
+        .name = "wcore-invent",
+        .root_source_file = b.path("src/inv_main.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(invent);
+
+    const run_invent = b.addRunArtifact(invent);
+    if (b.args) |args| run_invent.addArgs(args);
+    const run_invent_step = b.step("run-invent", "Run the primitive-inventing engine");
+    run_invent_step.dependOn(&run_invent.step);
+
     // ---- tests (all engines) ----------------------------------------------
     const test_step = b.step("test", "Run all wcore tests");
+
+    const invent_tests = b.addTest(.{
+        .root_source_file = b.path("src/inv_main.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    test_step.dependOn(&b.addRunArtifact(invent_tests).step);
 
     const tests = b.addTest(.{
         .root_source_file = b.path("src/main.zig"),

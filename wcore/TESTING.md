@@ -463,3 +463,313 @@ time in unlocked half: random=49.3%   local=0.0%   positional=60.0%
 the positional empowerment+VI agent presses the button and spends >5% of its
 time in the unlocked half. `world.zig`: pressing latches the gate open and shows
 in `obs10`; the gate blocks passage until pressed.
+
+---
+
+## 12. `wcore-agent` law mode — discovering a causal law from experience
+
+This closes the loop between the two halves of the project: the symbolic
+compression engine (which invents ℕ and SK combinators) and the embodied agent
+(which acts in a world). Here the agent *lives*, records what happens, and a
+sleep phase distils the **shortest rule** that explains its world's dynamics —
+embodied experience in, a symbolic causal law out, by the same "shortest
+description" objective.
+
+```sh
+zig build run-agent -- 0xC0FFEE 30000 law
+```
+
+The agent wanders a room with a button and a gate (momentary, so the gate's law
+is richly sampled) and records `(position, gate-state)` pairs. The sleep phase
+then blindly searches a small predicate language — `ALWAYS`, `NEVER`, `x == v`,
+`y == v`, `x == vx AND y == vy` — and keeps the rule with the lowest description
+length (rule bits + mispredictions). Real output, reproduced across seeds:
+
+```
+[LAW] searched 99 predicates over 30000 samples.
+[LAW] discovered rule:  gate is open  <=>  x == 2 AND y == 2   (errors: 0/30000)
+[LAW] description length: rule = 11 bits  vs  per-cell table ~ 1024 bits
+>> ENGINE DISCOVERED THE CAUSAL LAW OF ITS WORLD FROM EXPERIENCE <<
+```
+
+`(2,2)` is the button's location — found purely by compressing raw experience;
+the engine is never told where the button is. The rule (11 bits) is a ~90×
+compression of memorising the gate per cell (~1024 bits), and predicts the gate
+with zero errors. Across seeds {0xC0FFEE, 7, 42, 1} it always recovers the exact
+law. The `induce` engine never checks "is this the button" — it only minimises
+description length; the button falls out because it is the minimal description
+of the gate's behaviour.
+
+### Honest scope
+
+* It IS: a genuine causal law (`gate ⟺ on button`) induced from raw `(position,
+  outcome)` experience by pure MDL, unifying the embodied and symbolic halves.
+* It is NOT: deep physics. The rule language is small (positional equality with
+  and/or) and hand-chosen — general enough to express the law, not open-ended.
+  This is the same kind of bounded hypothesis space as the W-type enumeration,
+  and is stated as such.
+* It is one law over one mechanism. A system that learned an *open-ended* rule
+  language and chained discovered laws into theories is the real frontier.
+
+### Tests
+
+`law.zig`: from 40k samples of a momentary-gate room, `induce` returns the exact
+`x==bx AND y==by` rule with zero errors and recovers the true button location.
+
+---
+
+## 13. `wcore-invent` — the primitive-inventing engine (PLAN_INVENTION_ENGINE)
+
+This is the same wcore method (search + MDL + **execute-to-verify** + compounding
+library) given a *real body*: instead of SK terms it searches over **primitive
+math operations** (add, mul, dot, get, tanh, …) assembled into 3-part programs
+(`Setup` / `Predict` / `Learn`, the AutoML-Zero shape, so the engine invents the
+*learning rule* too). The PRIME DIRECTIVE: **every candidate is scored only by
+running it on data and measuring held-out accuracy — never by plausibility.** No
+LLM, no menu of known layers, no proxy fitness. Build and run:
+
+```sh
+zig build run-invent -- phase0      # the verifier sanity gate
+zig build run-invent -- phase1      # flat evolution vs random search
+zig build run-invent -- phase2      # the compounding library (the ratchet)
+```
+
+### Phase 0 — the verifier sanity gate (scaffolding)
+
+Before searching, prove the verifier is sound: a hand-written known-good program
+must score high and garbage low. Task A is `y = sign(x0·x1)` — provably **not**
+linearly separable, so success *requires* a multiplicative gate. Real output:
+
+```
+  hand-written gate+gradient : held-out acc = 1.0000
+  linear model (no product)  : held-out acc = 0.5084
+  empty/garbage program      : held-out acc = 0.4831
+[GATE] correct >> chance, gate is load-bearing: PASS
+```
+
+The correct program scores 1.0; a linear model and an empty program sit at
+chance. The gate is genuinely load-bearing, and the fitness function rewards it.
+**If this had failed, everything downstream would be meaningless** — so it is the
+first thing checked. (One verifier bug *was* caught this way and fixed: an early
+champion read the label register `s1` inside `Predict`; the harness now zeroes
+the label before every prediction so it is visible only to `Learn`.)
+
+### Phase 1 — evolution vs random search (reproduction; ~AutoML-Zero)
+
+Regularized (aging) evolution with tournament selection + mutation, vs i.i.d.
+random search, both judged purely by execution. Real output, 5 runs × 300k evals:
+
+```
+  run | evolution evals→target | random evals→target | evo best | rand best
+    0  |                  46507 |               40537 | 1.0000   | 1.0000
+    1  |                 185283 |          — (miss)   | 1.0000   | 0.7853
+    2  |             — (miss)   |              248711 | 0.7520   | 1.0000
+    3  |                 125501 |          — (miss)   | 1.0000   | 0.7853
+    4  |                  44497 |          — (miss)   | 1.0000   | 0.7853
+  evolution: 4/5 runs hit target, mean 100447 evals→target
+  random   : 2/5 runs hit target, mean 144624 evals→target
+```
+
+Evolution is **more reliable (4/5 vs 2/5) and faster on average (100k vs 144k
+evals)**, and it rediscovers the multiplicative gate — verified at 1.0000 on 12
+fresh held-out seeds. Strikingly, it invents the gate in **forms a human wouldn't
+write**, each found purely by execute-and-measure:
+
+* `s0 = x0 / x1` — a *division* gate (sign-equivalent to the product, since
+  `sign(a/b) = sign(a·b)`).
+* `v0 = x1 · v0 ; s0 = v0[0]` — scale the whole input vector by its own component
+  `x1` to get `[x0·x1, x1²]`, then read element 0. A *vector-scaling* gate.
+
+**The honest caveat.** Task A is a gradient-free *needle*: every non-gate program
+scores ~chance, so there is no smooth path to climb. Evolution's only edge is
+incremental assembly in a persistent population (neutral drift accumulates
+building blocks; one mutation completes the gate). That is a real but *modest*
+advantage — a ~1.4× speedup plus higher reliability, not a blowout. Selection on
+a low-fidelity signal can even chase deceptive ~0.75 optima; raising the
+held-out fidelity (more seeds × examples) collapses those traps back toward
+chance and is what made evolution win cleanly. This is Tier-1 (reproduction): the
+engine works and beats random, exactly as AutoML-Zero predicts — no more.
+
+### Phase 2 — the compounding library (THE CORE HYPOTHESIS; the ratchet)
+
+The bet of the whole plan (§4.5): a library of discovered primitives that become
+reusable building blocks should make search *compound* — later discoveries built
+on earlier ones — instead of restarting. We test it ruthlessly with an ablation.
+
+**Build the library by abstraction.** Solve the gate family's pair `(0,1)` a few
+times, pool the top elites, and run the MDL common-subexpression extractor
+(`inv_library.zig`, the direct port of `sk_compress.zig`) to find the fragment
+whose abstraction into one macro most reduces total description length:
+
+```
+  2/5 bootstrap solves succeeded; corpus = 48 elite programs.
+[ABSTRACT] discovered C0: occurs 24x, length 3, saves 45 description nodes
+           C0 decoded behaviourally as: ratio gate  v0[p1]/v0[p0]  (sign-equiv to product)
+           C0 takes 2 params (the element indices), 3 local registers
+```
+
+The engine abstracts its own discovered 3-instruction gate into a single op
+`C0(i,j)`, **generalised over the index pair** (the `v_get` element indices become
+the macro's two parameters). This is the same tower mechanism the SK engine shows
+(§8), now over executable tensor programs.
+
+**Measure reuse acceleration** on *new* family members the library never saw —
+flat evolution vs evolution with `C0` available as a `call` op, same budget:
+
+```
+  task        | random e→t | flat-evo e→t | LIB-evo e→t | lib speedup | calls in champ
+  ------------+------------+--------------+-------------+-------------+---------------
+  gate(2,3)   | — (miss)   |        91633 |         421 |     217.7x  | 1
+  gate(1,3)   | — (miss)   |   — (miss)   |         575 |        n/a  | 1
+  gate(0,3)   | — (miss)   |   — (miss)   |         351 |        n/a  | 1
+  dbl(01,23)  | — (miss)   |   — (miss)   |  — (miss)   |        n/a  | 1
+  [SOLVE RATE over 4 tasks]  random 0/4  |  flat-evo 1/4  |  LIB-evo 3/4
+  [RATCHET] both solved: flat 91633 e→t, LIB 421 e→t  ⇒  217.7x fewer evals
+```
+
+**The ratchet is real.** With the library, every single-gate task collapses to a
+**single `CALL`** (the champion uses exactly 1 call) and is solved in **a few
+hundred** evaluations. Flat evolution at the same 250k budget solved only **1 of
+3** single-gate tasks (the needle is unreliable; the other two hit deceptive
+optima), and random search solved **0**. On the one task both methods solved, the
+library used **217× fewer** evaluations. This is the Reasoned-Speculation
+contribution of the plan, measured cleanly against ablations: **a discovered,
+reused primitive measurably and dramatically accelerates discovery.**
+
+### The honest, sharp negative — verifier-underdetermined abstraction
+
+The compositional `double-gate` `y = sign(x0·x1 + x2·x3)` is **not** solved by the
+library, and the reason is the most interesting result here — it is *not* merely a
+budget shortfall:
+
+The abstracted macro is the **ratio** gate `x_b/x_a`, not the product. On
+*single*-gate tasks the two are indistinguishable to the verifier, because
+`sign(x_b/x_a) = sign(x_a·x_b)` — so execution-as-truth correctly accepted it
+(both score 1.0). But ratios and products **diverge under summation**:
+`sign(x1/x0 + x3/x2) ≠ sign(x0·x1 + x2·x3)` in general (e.g.
+`x=[0.1,0.1,1,−0.5]`: products sum to −0.49, ratios sum to +0.5 — opposite signs).
+So composing two `C0` calls and adding them cannot solve the double-gate, and
+`C0` gives no leverage there — both flat and library miss.
+
+The lesson is precise and generalises beyond this toy: **execute-to-verify makes
+abstraction sound only up to what the training tasks can distinguish.** A single
+task family under-determines the primitive; the engine banked a shortcut that is
+correct *there* and wrong under composition. The fix is a §8-flavoured curriculum
+result — to abstract the *true* product (which does compose), the bootstrap must
+include a task where ratio and product disagree (a compositional task), forcing
+the verifier to separate them. That is the natural next experiment and the honest
+edge of this result.
+
+### Tier-honest status
+
+* Phase 0–1: **Tier 1** (reproduction) — solid, not the prize.
+* Phase 2: **the library-acceleration contribution, confirmed** with ablations
+  (random vs flat vs library): 100–200×+ fewer evals on reused tasks, and it
+  solves tasks flat evolution misses. This is exactly the "Reasoned Speculation"
+  the plan stakes the project on — and it comes with a sharp, honest boundary
+  (verifier-underdetermined abstraction breaks compositional reuse).
+* **Not** Tier 3: nothing here is a discovered primitive that beats attention at
+  matched budget. Task A/B are gradient-free needles on a toy family; the wins are
+  real but bounded, and every number above is reproducible from
+  `zig build run-invent -- phaseN`.
+
+### Tests
+
+`inv_substrate.zig`: scalar/vector ops execute and persist; the multiply-gate
+computes `x0·x1`; protected divide/recip never produce NaN/inf. `inv_tasks.zig`:
+the sanity gate (correct program > 0.95, linear model & empty program at chance),
+off-axis gate. `inv_evolve.zig`: evolution runs end-to-end and never emits an
+out-of-bounds program. `inv_library.zig`: two gate elites with *different* index
+pairs share one template; the extracted macro generalises over the pair when
+called; a div-gate elite decodes as a ratio gate; no-recurrence → no extraction.
+
+---
+
+## 14. Phase 3 — does compounding buy REACH? (the Tier-3 fork)
+
+The whole question behind "an engine that out-invents humans" is **reach**: can a
+discovered primitive let search reach territory it otherwise can't? Phase 2 showed
+a library accelerates *reuse* of a primitive at the same task arity. Phase 3 asks
+the harder thing — does reuse **compound** to reach *compositional* tasks (sums of
+K products) that flat search cannot? Run with `zig build run-invent -- phase3`.
+
+Two separable questions, reported separately and honestly.
+
+### (1) Can it reliably DISCOVER a *composable* primitive? — open sub-problem
+
+The Phase-2 macro was the *ratio* gate, which doesn't compose. To force the true
+product I added a **regression grading mode** (fitness = held-out correlation with
+the continuous target), which separates product from ratio (`corr(x/y, x·y) < 1`).
+But the regression bootstrap is a *harder* needle than classification — removing
+the ratio basin and the partial-product plateau:
+
+```
+DISCOVERY probe — regression-graded, 4 seeds x 150k evals:
+  0/4 reached corr≥0.95 (best 0.944); abstractable PRODUCT found: no
+```
+
+Reliable discovery of the composable form is genuinely hard at single-machine
+budget: classification prefers the non-composing ratio, and the engine's favourite
+*product* construction is the **vector-scaling** form (`v0 *= x1; read v0[0]`),
+which writes a vector and so falls outside the v1 scalar-only macro language. So
+the reach test below uses a **verified product macro** (decode-checked, and shown
+to compose additively in a unit test) to isolate the reach question from this one.
+
+### (2) Given a composable primitive, does reuse buy reach? — the result
+
+`C0 = v0[p0]·v0[p1]` (verified product), `dim = 2K`, 4 seeds/cell, 300k budget:
+
+```
+  task              | raw min_ops | flat solves | flat best e→t | C0-lib solves | C0-lib best e→t
+  ------------------+-------------+-------------+---------------+---------------+----------------
+  K=1  (1 product)  |      3      |     3/4     |       26037   |     4/4       |          18
+  K=2  (2 products) |      7      |     0/4     |     — (miss)  |     0/4       |     — (miss)
+  K=3  (3 products) |     11      |     0/4     |     — (miss)  |     0/4       |     — (miss)
+```
+
+**The honest finding — a single primitive does NOT automatically buy compositional
+reach.** At K=1 the reused primitive is transformative: `C0-lib` solves **4/4 in
+~18 evaluations** (one `CALL`) versus flat's 3/4 at ~26k — a ~1400× acceleration,
+reliably. But at **K≥2 even the macro-equipped search fails completely (0/4)**, the
+same as flat. Two reasons, both real:
+
+1. **Composition is a fresh needle.** With `C0`, a K-product task still needs K
+   correctly-parameterised `CALL`s plus K−1 combiners assembled and wired to the
+   output — an assembly whose difficulty grows with K. One macro shortens each
+   product to one op; it does nothing to make the *assembly* easier.
+2. **A genuine partial-credit deceptive trap.** A single product already predicts
+   the sign of a sum of products ~70% of the time, so the search parks on that
+   plateau (the champion uses exactly **1 call** at every arity) and never assembles
+   the rest. This is not sampling noise — it is a real local optimum, and higher
+   fidelity does not remove it.
+
+### What this means for the Tier-3 path (the precise §8 wall)
+
+This is the cleanest result of the whole investigation, and it is a **negative that
+locates the wall exactly** (§2.4: negative results are wins). The compounding
+ratchet gives reach *within an arity* but **not across composition from a single
+abstraction level.** Compositional reach requires one of:
+
+* **the tower** — abstract the *composition* itself into a higher macro
+  (`C1 = sum of two C0`s), so K=2 collapses to one call to `C1` and K=4 to two.
+  This is the DreamCoder library-growth mechanism the SK engine already shows
+  (`false → identity → duplicator`); here it needs the macro language to support
+  **nested calls and >2 parameters** (the current v1 ABI passes 2). That is the
+  next engineering brick.
+* **a fundamentally broader proposer** that can leap past the partial-credit trap
+  (the deepest §8 problem: grounded, non-hallucinating, neural-grade reach).
+
+Tier-honest status: Phase 3 is **not** a Tier-3 result and does not claim to be. It
+is a clean, ablated measurement of *where and why* single-level compounding stops
+buying reach — which is precisely the problem statement an invention engine must
+solve next, stated with numbers rather than hope.
+
+### Tests
+
+`inv_tasks.zig`: regression grading scores the product gate ~1 and a linear model
+~0 (so it separates product from ratio); the double-gate target is the sum of two
+products. `inv_library.zig`: the verified product macro decodes as a product and
+composes additively (`C0(0,1)+C0(2,3)` gives the sign of the sum of products);
+`allExtractions`/`bestProductExtraction` select the composable abstraction by an
+execution test, not a heuristic.
+

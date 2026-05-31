@@ -13,6 +13,7 @@ const world = @import("world.zig");
 const agent = @import("agent.zig");
 const empower = @import("empower.zig");
 const affordance = @import("affordance.zig");
+const law = @import("law.zig");
 const Logger = @import("logger.zig").Logger;
 
 const DEFAULT_SEED: u64 = 0xC0FFEE;
@@ -22,7 +23,7 @@ const JITTER_EVERY: usize = 5;
 const REPORT_EVERY: usize = 1000;
 const ROOM_SIZE: usize = 14;
 
-const Mode = enum { curiosity, empower, compare, affordance };
+const Mode = enum { curiosity, empower, compare, affordance, law };
 
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
@@ -102,6 +103,36 @@ pub fn main() !void {
             try log.writeAll("     (2) R-max optimistic exploration — so value iteration PLANS toward the\n");
             try log.writeAll("         unknown instead of relying on a lucky random walk to find the button.\n");
         },
+        .law => {
+            try log.writeAll("\n##### LAW DISCOVERY: distil the world's causal rule from experience #####\n");
+            var grid = freshRoom(seed);
+            grid.gate_momentary = true; // so the gate's law is richly sampled
+            const data = try law.collect(a, &grid, @max(steps, 30000));
+            const discovered = try law.induce(a, data, &log);
+
+            try log.writeAll("[LAW] discovered rule:  gate is open  <=>  ");
+            try discovered.pred.write(&log);
+            try log.print("   (errors: {d}/{d})\n", .{ discovered.errors, data.len });
+
+            // honest compression check: the rule vs. memorising the gate per cell
+            const cells = world.Size * world.Size;
+            try log.print("[LAW] description length: rule = {d:.0} bits  vs  per-cell table ~ {d} bits\n", .{ discovered.bits, cells });
+            switch (discovered.pred) {
+                .conj => |c| {
+                    const correct = c.vx == grid.button_x and c.vy == grid.button_y and discovered.errors == 0;
+                    if (correct) {
+                        try log.print("[LAW] the rule's location ({d},{d}) IS the button — found purely by\n", .{ c.vx, c.vy });
+                        try log.writeAll("      compressing raw experience; the engine was never told where it is.\n");
+                        try log.writeAll(">> ENGINE DISCOVERED THE CAUSAL LAW OF ITS WORLD FROM EXPERIENCE <<\n");
+                    } else {
+                        try log.writeAll("[LAW] rule did not match the true button cleanly (reported honestly).\n");
+                    }
+                },
+                else => try log.writeAll("[LAW] minimal rule was not a position conjunction (reported honestly).\n"),
+            }
+            try log.writeAll("[NOTE] this unifies the two halves of wcore: embodied experience in,\n");
+            try log.writeAll("[NOTE] a compact SYMBOLIC law out — discovered by the same 'shortest description' rule.\n");
+        },
     }
 
     try log.print("\n[SANDBOX] complete. Full log: {s}\n", .{path});
@@ -136,6 +167,7 @@ fn parseMode(s: []const u8) Mode {
     if (std.mem.eql(u8, s, "empower")) return .empower;
     if (std.mem.eql(u8, s, "compare")) return .compare;
     if (std.mem.eql(u8, s, "affordance")) return .affordance;
+    if (std.mem.eql(u8, s, "law")) return .law;
     return .curiosity;
 }
 
@@ -148,5 +180,6 @@ test {
     _ = @import("agent.zig");
     _ = @import("empower.zig");
     _ = @import("affordance.zig");
+    _ = @import("law.zig");
     _ = @import("world.zig");
 }

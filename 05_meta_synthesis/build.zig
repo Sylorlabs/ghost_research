@@ -35,9 +35,11 @@ const core_module_names = [_][]const u8{
     "domain_opset",
     "domain_search_strategy",
     "domain_sort_net",
+    "domain_u64_bijective",
     "domain_u64_mixer",
     "domain_u64_mixer_dual",
     "domain_u64_mixer_mulfree",
+    "domain_u64_mixer_nonlinear",
     "domain_u64_mixer_mulfree_compat",
     "domain_u64_mixer_mulfree_compat_l24",
     "echo",
@@ -72,6 +74,9 @@ const core_module_names = [_][]const u8{
 const Exe = struct { name: []const u8, path: []const u8, z3: bool = false };
 
 const exes = [_]Exe{
+    .{ .name = "arx_search", .path = "src/arx_search.zig", .z3 = false },
+    .{ .name = "arx_practrand_emit", .path = "src/arx_practrand_emit.zig", .z3 = false },
+    .{ .name = "nonlinear_escape_search", .path = "src/nonlinear_escape_search.zig", .z3 = false },
     .{ .name = "affine_closure", .path = "src/affine_closure.zig", .z3 = true },
     .{ .name = "bittape_inspect", .path = "src/bittape_inspect.zig" },
     .{ .name = "bittape_inventor", .path = "src/bittape_inventor.zig" },
