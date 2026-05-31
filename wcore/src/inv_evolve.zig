@@ -27,6 +27,11 @@ pub const Params = struct {
     init_setup_max: usize = 3,
     init_predict_max: usize = 8,
     init_learn_max: usize = 8,
+    // CURRICULUM: stepping-stone programs seeded into a quarter of the initial
+    // population (cycled). Lets a harder task warm-start from an easier task's
+    // solution instead of assembling from scratch — the probe for whether the
+    // per-rung composition trap is escapable (Phase 5 / the frontier).
+    seed_progs: []const Program = &.{},
 };
 
 pub const Result = struct {
@@ -183,9 +188,11 @@ pub fn runEvolution(
         }
     }.f;
 
-    // seed the population with random programs
-    for (pop) |*ind| {
-        ind.prog = randProgram(rng, lib.len, p);
+    // seed the population: a quarter from the curriculum stepping-stones (if any),
+    // the rest fresh-random
+    const n_seeded = if (p.seed_progs.len > 0) p.pop_size / 4 else 0;
+    for (pop, 0..) |*ind, i| {
+        ind.prog = if (i < n_seeded) p.seed_progs[i % p.seed_progs.len] else randProgram(rng, lib.len, p);
         ind.perf = tasks.evaluate(&ind.prog, lib, task, cfg);
         ind.adj = tasks.adjusted(ind.perf, ind.prog.len(), p.lambda);
         evals += 1;
@@ -280,6 +287,113 @@ pub fn runRandomSearch(
     };
 }
 
+// ---- MAP-Elites (quality-diversity) ----------------------------------------
+//
+// Regularized evolution follows fitness greedily, so on a DECEPTIVE landscape it
+// collapses onto a partial-solution peak (one product ⇒ ~70% on a two-product
+// task) and never makes the fitness-neutral structural jump to the full solution.
+// MAP-Elites instead keeps the best individual PER BEHAVIOURAL NICHE, so a
+// "two-calls-present-but-not-yet-wired" program survives in its own niche rather
+// than being out-competed by the one-call peak — then a single mutation can wire
+// it. The niche descriptor here is (number of library calls × program-length
+// bucket): exactly the axis the composition trap hides along.
+
+const NC: usize = 5; // call-count niches: 0,1,2,3,4+
+const NL: usize = 5; // length-bucket niches
+const NICHES: usize = NC * NL;
+
+fn descriptor(prog: *const Program) usize {
+    const nc = @min(countCalls(prog), NC - 1);
+    const nl = @min(prog.len() / 4, NL - 1); // buckets of 4 instructions
+    return nc * NL + nl;
+}
+
+pub fn runMapElites(
+    al: std.mem.Allocator,
+    rng: std.Random,
+    task: tasks.Task,
+    cfg: tasks.Config,
+    p: Params,
+    lib: []const Macro,
+) !Result {
+    const archive = try al.alloc(?Indiv, NICHES);
+    defer al.free(archive);
+    @memset(archive, null);
+    var occupied = std.ArrayList(usize).init(al);
+    defer occupied.deinit();
+
+    var best_perf: f64 = -1;
+    var best_adj: f64 = -1e9;
+    var best: Program = .{};
+    var evals: usize = 0;
+    var evals_to_target: ?usize = null;
+
+    const place = struct {
+        fn f(arch: []?Indiv, occ: *std.ArrayList(usize), prog: *const Program, perf: f64, adj: f64) !void {
+            const n = descriptor(prog);
+            if (arch[n] == null) {
+                arch[n] = .{ .prog = prog.*, .perf = perf, .adj = adj };
+                try occ.append(n);
+            } else if (adj > arch[n].?.adj) {
+                arch[n] = .{ .prog = prog.*, .perf = perf, .adj = adj };
+            }
+        }
+    }.f;
+
+    const consider = struct {
+        fn f(prog: *const Program, perf: f64, adj: f64, bp: *f64, ba: *f64, bb: *Program) void {
+            if (adj > ba.*) {
+                ba.* = adj;
+                bp.* = perf;
+                bb.* = prog.*;
+            }
+        }
+    }.f;
+
+    // initial fill: curriculum stepping-stones (if any) + random programs
+    const init_count = p.pop_size;
+    for (0..init_count) |i| {
+        var prog: Program = undefined;
+        if (p.seed_progs.len > 0 and i < init_count / 4) {
+            prog = p.seed_progs[i % p.seed_progs.len];
+        } else {
+            prog = randProgram(rng, lib.len, p);
+        }
+        const perf = tasks.evaluate(&prog, lib, task, cfg);
+        const adj = tasks.adjusted(perf, prog.len(), p.lambda);
+        evals += 1;
+        try place(archive, &occupied, &prog, perf, adj);
+        consider(&prog, perf, adj, &best_perf, &best_adj, &best);
+        if (evals_to_target == null and perf >= p.target) evals_to_target = evals;
+    }
+
+    while (evals < p.max_evals) {
+        var child: Program = undefined;
+        if (occupied.items.len == 0 or rng.float(f64) < p.immigrant_rate) {
+            child = randProgram(rng, lib.len, p);
+        } else {
+            const niche = occupied.items[rng.uintLessThan(usize, occupied.items.len)];
+            child = archive[niche].?.prog;
+            for (0..p.mutations_per_child) |_| mutate(rng, &child, lib.len);
+        }
+        const perf = tasks.evaluate(&child, lib, task, cfg);
+        const adj = tasks.adjusted(perf, child.len(), p.lambda);
+        evals += 1;
+        try place(archive, &occupied, &child, perf, adj);
+        consider(&child, perf, adj, &best_perf, &best_adj, &best);
+        if (evals_to_target == null and perf >= p.target) evals_to_target = evals;
+    }
+
+    return .{
+        .best = best,
+        .best_perf = best_perf,
+        .best_adj = best_adj,
+        .evals_to_target = evals_to_target,
+        .total_evals = evals,
+        .lib_calls_in_best = countCalls(&best),
+    };
+}
+
 // ---- tests -----------------------------------------------------------------
 
 test "evolution runs end-to-end and returns a valid champion (smoke test)" {
@@ -297,6 +411,21 @@ test "evolution runs end-to-end and returns a valid champion (smoke test)" {
     const p = Params{ .max_evals = 3000, .pop_size = 80 };
 
     const r = try runEvolution(al, prng.random(), task, cfg, p, &.{}, &.{});
+    try std.testing.expect(r.best_perf >= 0.0 and r.best_perf <= 1.0);
+    try std.testing.expectEqual(@as(usize, 3000), r.total_evals);
+}
+
+test "MAP-Elites runs end-to-end and keeps a diverse archive (smoke test)" {
+    var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena.deinit();
+    const al = arena.allocator();
+
+    var prng = std.Random.DefaultPrng.init(0xC0FFEE);
+    const task = tasks.gate(2, 0, 1);
+    const cfg = tasks.Config{ .n_train = 40, .n_test = 60, .n_seeds = 2 };
+    const p = Params{ .max_evals = 3000, .pop_size = 80 };
+
+    const r = try runMapElites(al, prng.random(), task, cfg, p, &.{});
     try std.testing.expect(r.best_perf >= 0.0 and r.best_perf <= 1.0);
     try std.testing.expectEqual(@as(usize, 3000), r.total_evals);
 }

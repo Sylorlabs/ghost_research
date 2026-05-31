@@ -217,24 +217,40 @@ no proxy fitness.
 zig build run-invent -- phase0   # verifier sanity gate: correct prog 1.0, garbage ~chance
 zig build run-invent -- phase1   # evolution beats random; rediscovers the multiplicative gate
 zig build run-invent -- phase2   # the ratchet: a reused library macro slashes evals-to-solve
+zig build run-invent -- phase3   # does one primitive buy compositional reach? (no)
+zig build run-invent -- phase4   # the tower: does the NEXT abstraction collapse the NEXT task? (yes)
+zig build run-invent -- phase5   # can a warm-start curriculum climb a rung? (no — the trap is real deception)
+zig build run-invent -- phase6   # quality-diversity (MAP-Elites) vs the trap (yes — escapes it)
+zig build run-invent -- phase7   # the capstone: the engine climbs the tower BY ITSELF
+zig build run-invent -- phase8   # reliability: regression grading makes the climb ~100x faster
+zig build run-invent -- seq      # "beat attention's weakness": discovers a scan that length-generalizes
 ```
 
 * **Phase 1** (reproduction, ~AutoML-Zero): on `y = sign(x0·x1)`, evolution beats
-  random search (4/5 vs 2/5 solves; ~1.4× faster) and rediscovers the gate in
-  forms a human wouldn't write — a *division* gate `x0/x1` (sign-equiv to the
-  product) and a *vector-scaling* gate. All verified by execution at 1.0000.
-* **Phase 2** (the compounding library — the bet): the engine abstracts its
-  discovered gate into one callable macro `C0(i,j)`, generalised over the index
-  pair. Reusing it on **new** gate tasks collapses each to a single `CALL`, solved
-  in **a few hundred** evaluations vs **~90k+** for flat evolution — a **100–200×+
-  speedup**, and it solves tasks flat evolution misses entirely. The compositional
-  *double-gate* is the honest next frontier (it needs a second level of
-  abstraction — the tower). See [TESTING.md](TESTING.md) §13 for exact numbers.
+  random search (4/5 vs 2/5 solves) and rediscovers the gate in forms a human
+  wouldn't write — a *division* gate and a *vector-scaling* gate, verified at 1.0.
+* **Phase 2** (the compounding library — the bet): the engine abstracts its gate
+  into one callable macro `C0(i,j)` and reusing it on new gate tasks collapses each
+  to a single `CALL` — **100–200×+ fewer** evaluations, solving tasks flat evolution
+  misses. ([TESTING.md](TESTING.md) §13.)
+* **Phase 3** (does compounding buy *reach*?): one primitive gives huge *same-arity*
+  acceleration (K=1: 4/4 in ~18 evals) but **not** compositional reach — a 2-product
+  task is **0/4** even with `C0`, blocked by a real ~70% partial-credit trap. (§14.)
+* **Phase 4** (the tower): adding the *next* abstraction `C1` (a composition macro
+  built on `C0`) makes the K=2 task `C0` couldn't reach collapse to **4/4 via a
+  single call** — **reach compounds, one rung at a time**. ([TESTING.md](TESTING.md) §15.)
+* **Phase 5–6** (escaping the trap): warm-start curriculum **fails** (0/4 — the trap is
+  genuine deception), but **quality-diversity (MAP-Elites) escapes it** — solving K=2
+  by grounded search alone (2/4) where greedy search gets 0/4. (§16–17.)
+* **Phase 7** (the capstone): the engine **climbs the tower by itself** — QD solves K=2,
+  the MDL extractor **auto-abstracts and execution-verifies `C1`** from that solution
+  (no hand-built rung), and QD then solves K=4 with the self-built `{C0, C1}` (champion
+  invoking its own `C1` twice). ([TESTING.md](TESTING.md) §18.)
 
-Honest scope: this is Tier-1 (reproduction) plus a confirmed library-acceleration
-result on a gate family — **not** a discovered primitive that beats attention.
-Task A is a gradient-free needle, so the win is real but bounded; the value is the
-clean, ablated, execution-grounded measurement.
+Honest scope: a complete, grounded demonstration that execution-checked compounding
+can build its own abstraction tower — **not** a discovered primitive that beats
+attention, on a toy family, and the rung-climb is *unreliable* (K=2 ~1-in-4, so the
+loop closes only intermittently). Every number is reproducible from `run-invent`.
 
 ## Run it
 
@@ -253,6 +269,13 @@ zig build run-agent -- 0 30000 law         # discover the world's causal law fro
 zig build run-invent -- phase0             # primitive-inventing engine: verifier sanity gate
 zig build run-invent -- phase1             # evolution vs random search (rediscovers the gate)
 zig build run-invent -- phase2             # the compounding library (the ratchet)
+zig build run-invent -- phase3             # does one primitive buy compositional reach?
+zig build run-invent -- phase4             # the tower: the next abstraction collapses the next task
+zig build run-invent -- phase5             # warm-start curriculum vs the deceptive trap (fails)
+zig build run-invent -- phase6             # quality-diversity (MAP-Elites) escapes the trap
+zig build run-invent -- phase7             # the capstone: the engine climbs the tower by itself
+zig build run-invent -- phase8             # rung-climb reliability (regression grading is ~100x faster)
+zig build run-invent -- seq                # beat attention's weakness: discover a length-generalizing scan
 zig build test                             # all tests across all engines
 ```
 

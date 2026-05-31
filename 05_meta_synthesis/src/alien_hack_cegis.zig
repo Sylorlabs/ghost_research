@@ -15,18 +15,37 @@ fn nextRand(rng: *u64) u64 {
     return rng.*;
 }
 
+fn evaluateHybrid(p: domain.Program) f64 {
+    const hits = domain.evaluateQuality(p);
+
+    // Tier 4: Topological Guidance
+    // Expected skeleton for safe average: 
+    // Bit i should depend on bits 0..i of X and Y (carry propagation).
+    // And because of the SHR(1) in the hack, bit i depends on bit i+1.
+    const matrix = p.executeSymbolic();
+    var topo_score: f64 = 0;
+    for (matrix, 0..) |dep, b| {
+        const target_mask = (@as(u64, 1) << @as(u6, @intCast(@min(63, b + 1)))) | (@as(u64, 1) << @as(u6, @intCast(b)));
+        // Reward if bit b depends on both its source bits
+        if ((dep.x & target_mask) != 0) topo_score += 0.5;
+        if ((dep.y & target_mask) != 0) topo_score += 0.5;
+    }
+
+    return hits + (topo_score / 64.0) * 10.0; // Give structural guidance a significant weight
+}
+
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
-    var prng = std.Random.DefaultPrng.init(0x1337_ABCD_0008);
+    var prng = std.Random.DefaultPrng.init(0x1337_ABCD_0009);
     var seed = prng.random().int(u64);
 
     const out = std.io.getStdOut().writer();
-    try out.print("=== Automated CEGIS: Alien Hack Invention ===\n", .{});
+    try out.print("=== Tier 4 CEGIS: Structural Alien Hack ===\n", .{});
     try out.print("Domain: {s}\n", .{domain.DOMAIN_NAME});
-    try out.print("Inventor: Hill-Climber (Stochastic)\n", .{});
+    try out.print("Inventor: Hill-Climber w/ Topological Guidance\n", .{});
     try out.print("Verifier: Z3 SMT Solver (Formal)\n\n", .{});
 
     try domain.initTests(allocator);
@@ -35,25 +54,24 @@ pub fn main() !void {
     var generation: usize = 1;
     while (generation < 20) : (generation += 1) {
         try out.print(">>> CEGIS GENERATION {d} (Test Cases: {d})\n", .{ generation, domain.test_cases.items.len });
-        
-        // 1. WAKE PHASE: Hill-Climber invents a candidate to pass current tests
+
         var best = domain.randomProgram(&seed);
-        var best_q = domain.evaluateQuality(best);
+        var best_q = evaluateHybrid(best);
         const target_hits = @as(f64, @floatFromInt(domain.test_cases.items.len));
 
         var iters: usize = 0;
         var temp: f64 = 1.0;
         while (best_q < target_hits + 90.0 and iters < 50000000) : (iters += 1) {
             const cand = domain.mutate(best, &seed);
-            const q = domain.evaluateQuality(cand);
-            
+            const q = evaluateHybrid(cand);
+
             if (q >= best_q or @as(f64, @floatFromInt(nextRand(&seed) % 10000)) / 10000.0 < std.math.exp((q - best_q) / temp)) {
                 best = cand;
                 best_q = q;
             }
             if (iters % 1000000 == 0) {
-                try out.print("      Iter {d:8}: Q={d:.2} (Temp={d:.3})\n", .{ iters, best_q, temp });
-                temp *= 0.99; // Cool down
+                try out.print("      Iter {d:8}: Q={d:.2} (Hits={d:.1} Temp={d:.3})\n", .{ iters, best_q, domain.evaluateQuality(best), temp });
+                temp *= 0.99;
             }
         }
 

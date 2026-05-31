@@ -35,9 +35,11 @@ const core_module_names = [_][]const u8{
     "domain_opset",
     "domain_search_strategy",
     "domain_symbolic_arx",
+    "native_prover",
     "domain_128_arx",
     "domain_128_tier4",
     "domain_alien_hack",
+    "domain_graph_alien",
     "domain_general",
     "domain_sort_net",
     "domain_u64_bijective",
@@ -70,6 +72,7 @@ const core_module_names = [_][]const u8{
     "sandbox",
     "smt_verify",
     "smt_alien_hack",
+    "smt_graph_alien",
     "sovereign",
     "sovereign_interface",
     "state",
@@ -80,6 +83,8 @@ const core_module_names = [_][]const u8{
 const Exe = struct { name: []const u8, path: []const u8, z3: bool = false };
 
 const exes = [_]Exe{
+    .{ .name = "native_prover_bench", .path = "src/native_prover_bench.zig", .z3 = false },
+    .{ .name = "graph_architect_search", .path = "src/graph_architect_search.zig", .z3 = true },
     .{ .name = "alien_hack_cegis", .path = "src/alien_hack_cegis.zig", .z3 = true },
     .{ .name = "symbolic_tracing_search", .path = "src/symbolic_tracing_search.zig", .z3 = false },
     .{ .name = "pure_tier4_fuzzer", .path = "src/pure_tier4_fuzzer.zig", .z3 = false },

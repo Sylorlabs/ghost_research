@@ -52,9 +52,13 @@ pub const Canon = struct {
 };
 
 /// Canonicalise a contiguous window into a dataflow signature + a ready-to-run
-/// macro, or null if it violates the v1 scope. Registers are remapped to local
+/// macro, or null if it violates the scope. Registers are remapped to local
 /// scratch slots (by order of first appearance); varying literals become params.
-pub fn canonicalize(window: []const Instr) ?Canon {
+/// A `.call` to an EARLIER library macro is abstractable too — its element-index
+/// arguments generalise into parameters and it stays a nested call in the body —
+/// which is how the engine abstracts a composition (C1 = two C0 calls + combine)
+/// from a solution it found, climbing the tower with no hand-built rungs.
+pub fn canonicalize(window: []const Instr, lib: []const Macro) ?Canon {
     if (window.len < 2 or window.len > sub.MAX_MACRO_LEN) return null;
 
     var key = Key{};
@@ -84,6 +88,40 @@ pub fn canonicalize(window: []const Instr) ?Canon {
     }.f;
 
     for (window, 0..) |ins, wi| {
+        // A call to an earlier macro: its imm (macro index) is fixed structure; the
+        // macro's element-index arguments (a,b,c,d, as many as the macro takes)
+        // generalise into parameters; it writes a scalar value.
+        if (ins.op == .call) {
+            const midx: usize = @intFromFloat(ins.imm);
+            if (midx >= lib.len) return null; // only abstract calls to existing macros
+            const np = lib[midx].params.len;
+            key.append(@intFromEnum(Op.call)) catch return null;
+            key.append(@intCast(midx)) catch return null;
+            var cbody = ins;
+            cbody.a = 0;
+            cbody.b = 0;
+            cbody.c = 0;
+            cbody.d = 0; // args filled by params at call time
+            for (0..np) |k| {
+                if (n_params >= sub.MAX_PARAMS) return null;
+                key.append(0xC0 | n_params) catch return null;
+                const field: @TypeOf(macro.params.buffer[0].field) = switch (k) {
+                    0 => .a,
+                    1 => .b,
+                    2 => .c,
+                    else => .d,
+                };
+                macro.params.append(.{ .instr = @intCast(wi), .field = field }) catch return null;
+                n_params += 1;
+            }
+            val_of[@as(usize, ins.out) % sub.PUB_S] = next_val;
+            key.append(0xA0 | (next_val & 0x1F)) catch return null;
+            next_val += 1;
+            cbody.out = localFor(ins.out, &local_of, &n_local) orelse return null;
+            macro.body.append(cbody) catch return null;
+            continue;
+        }
+
         const cls = classify(ins.op);
         if (cls == .reject) return null;
 
@@ -174,23 +212,23 @@ pub const Extraction = struct {
 const Cand = struct { key: Key, macro: Macro, occ: usize, len: usize };
 
 /// Count how many contiguous windows across the corpus canonicalise to `key`.
-pub fn countTemplate(corpus: []const Program, key: Key) usize {
+pub fn countTemplate(corpus: []const Program, key: Key, lib: []const Macro) usize {
     var total: usize = 0;
     for (corpus) |*prog| {
-        total += countInComponent(prog.predict.slice(), key);
-        total += countInComponent(prog.learn.slice(), key);
+        total += countInComponent(prog.predict.slice(), key, lib);
+        total += countInComponent(prog.learn.slice(), key, lib);
     }
     return total;
 }
 
-fn countInComponent(instrs: []const Instr, key: Key) usize {
+fn countInComponent(instrs: []const Instr, key: Key, lib: []const Macro) usize {
     var n: usize = 0;
     var len: usize = 2;
     while (len <= sub.MAX_MACRO_LEN) : (len += 1) {
         if (instrs.len < len) break;
         var start: usize = 0;
         while (start + len <= instrs.len) : (start += 1) {
-            if (canonicalize(instrs[start .. start + len])) |c| {
+            if (canonicalize(instrs[start .. start + len], lib)) |c| {
                 if (keyEql(c.key, key)) n += 1;
             }
         }
@@ -201,14 +239,14 @@ fn countInComponent(instrs: []const Instr, key: Key) usize {
 /// The single highest-MDL-saving abstraction over `corpus` (§4.5), or null if
 /// none recurs (≥2) with a net saving. Saving of a length-`L` fragment occurring
 /// `occ` times: occ inlined copies (occ·L) → occ refs + one stored body (occ + L).
-pub fn bestExtraction(al: std.mem.Allocator, corpus: []const Program) !?Extraction {
+pub fn bestExtraction(al: std.mem.Allocator, corpus: []const Program, lib: []const Macro) !?Extraction {
     var cands = std.ArrayList(Cand).init(al);
     defer cands.deinit();
 
     // collect every admissible window's canonical form, tallying occurrences
     for (corpus) |*prog| {
-        try collectWindows(prog.predict.slice(), &cands);
-        try collectWindows(prog.learn.slice(), &cands);
+        try collectWindows(prog.predict.slice(), &cands, lib);
+        try collectWindows(prog.learn.slice(), &cands, lib);
     }
 
     var best: ?Extraction = null;
@@ -229,12 +267,12 @@ pub fn bestExtraction(al: std.mem.Allocator, corpus: []const Program) !?Extracti
 /// Lets a caller select not just the most-compressive macro but the most
 /// compressive one that *passes a behavioural test* (e.g. decodes as a product),
 /// which is how we pick the composable primitive over a single-task shortcut.
-pub fn allExtractions(al: std.mem.Allocator, corpus: []const Program) ![]Extraction {
+pub fn allExtractions(al: std.mem.Allocator, corpus: []const Program, lib: []const Macro) ![]Extraction {
     var cands = std.ArrayList(Cand).init(al);
     defer cands.deinit();
     for (corpus) |*prog| {
-        try collectWindows(prog.predict.slice(), &cands);
-        try collectWindows(prog.learn.slice(), &cands);
+        try collectWindows(prog.predict.slice(), &cands, lib);
+        try collectWindows(prog.learn.slice(), &cands, lib);
     }
     var out = std.ArrayList(Extraction).init(al);
     for (cands.items) |c| {
@@ -256,8 +294,8 @@ pub fn allExtractions(al: std.mem.Allocator, corpus: []const Program) ![]Extract
 /// The best-saving abstraction that decodes as a genuine PRODUCT gate (so it
 /// composes correctly under summation), or null. Behavioural test is execution —
 /// never a heuristic. This is the grounded selector for the composable primitive.
-pub fn bestProductExtraction(al: std.mem.Allocator, corpus: []const Program) !?Extraction {
-    const all = try allExtractions(al, corpus);
+pub fn bestProductExtraction(al: std.mem.Allocator, corpus: []const Program, lib: []const Macro) !?Extraction {
+    const all = try allExtractions(al, corpus, lib);
     defer al.free(all);
     for (all) |e| {
         var macro = e.macro;
@@ -268,13 +306,13 @@ pub fn bestProductExtraction(al: std.mem.Allocator, corpus: []const Program) !?E
     return null;
 }
 
-fn collectWindows(instrs: []const Instr, cands: *std.ArrayList(Cand)) !void {
+fn collectWindows(instrs: []const Instr, cands: *std.ArrayList(Cand), lib: []const Macro) !void {
     var len: usize = 2;
     while (len <= sub.MAX_MACRO_LEN) : (len += 1) {
         if (instrs.len < len) break;
         var start: usize = 0;
         while (start + len <= instrs.len) : (start += 1) {
-            const c = canonicalize(instrs[start .. start + len]) orelse continue;
+            const c = canonicalize(instrs[start .. start + len], lib) orelse continue;
             var found = false;
             for (cands.items) |*existing| {
                 if (existing.len == len and keyEql(existing.key, c.key)) {
@@ -315,6 +353,57 @@ pub fn decode(macro: *const Macro, al: std.mem.Allocator) ![]const u8 {
 
 fn approx(x: f64, y: f64) bool {
     return @abs(x - y) < 1e-6;
+}
+
+/// Abstract a composition macro from a corpus WITHOUT requiring MDL recurrence:
+/// scan every canonicalisable window and return the first whose macro is verified
+/// (by execution) to compute a sum of two products. A solution the engine FOUND by
+/// grounded search is self-evidently worth banking — recurrence is one heuristic
+/// for *what* to abstract, but a verified-composable subroutine is reason enough.
+/// This is how the tower climbs from even a single hard-won K=2 solution.
+pub fn firstComposingMacro(al: std.mem.Allocator, corpus: []const Program, base: []const Macro) !?Macro {
+    for (corpus) |*prog| {
+        for ([_][]const Instr{ prog.predict.slice(), prog.learn.slice() }) |instrs| {
+            var len: usize = 2;
+            while (len <= sub.MAX_MACRO_LEN) : (len += 1) {
+                if (instrs.len < len) break;
+                var start: usize = 0;
+                while (start + len <= instrs.len) : (start += 1) {
+                    const c = canonicalize(instrs[start .. start + len], base) orelse continue;
+                    if (try verifyComposition(al, base, c.macro)) return c.macro;
+                }
+            }
+        }
+    }
+    return null;
+}
+
+/// Grounded check (by EXECUTION, never a label) that `candidate`, run in the
+/// context of base library `base` (so its nested calls resolve), computes a sum of
+/// two products: candidate(a,b,c,d) == v0[a]·v0[b] + v0[c]·v0[d]. This is how the
+/// engine confirms an auto-abstracted composition macro actually composes before
+/// banking it — the Prime Directive applied to the library itself.
+pub fn verifyComposition(al: std.mem.Allocator, base: []const Macro, candidate: Macro) !bool {
+    const full = try al.alloc(Macro, base.len + 1);
+    defer al.free(full);
+    @memcpy(full[0..base.len], base);
+    full[base.len] = candidate;
+    const idx: f64 = @floatFromInt(base.len);
+
+    var prng = std.Random.DefaultPrng.init(0x5151);
+    const rng = prng.random();
+    for (0..16) |_| {
+        var m = sub.Machine{};
+        m.zero(4);
+        var x: [4]f64 = undefined;
+        for (&x) |*xi| xi.* = rng.float(f64) * 2 - 1;
+        m.loadInput(&x);
+        sub.run(&m, &.{.{ .op = .call, .imm = idx, .a = 0, .b = 1, .c = 2, .d = 3, .out = 0 }}, full);
+        if (m.bad) return false;
+        const want = x[0] * x[1] + x[2] * x[3];
+        if (@abs(m.s[0] - want) > 1e-6) return false;
+    }
+    return true;
 }
 
 /// A VERIFIED product macro `C0(i,j) = v0[i]·v0[j]`, the composable primitive.
@@ -370,7 +459,7 @@ test "two gate elites with DIFFERENT index pairs share one template" {
     const al = arena.allocator();
 
     const corpus = [_]Program{ gateProg(0, 1, .s_mul), gateProg(2, 3, .s_mul) };
-    const ext = (try bestExtraction(al, &corpus)).?;
+    const ext = (try bestExtraction(al, &corpus, &.{})).?;
     // the 3-instruction gate recurs twice (once per elite), generalising the pair
     try std.testing.expectEqual(@as(usize, 2), ext.occurrences);
     try std.testing.expectEqual(@as(usize, 3), ext.length);
@@ -383,7 +472,7 @@ test "extracted gate macro generalises over the index pair when called" {
     const al = arena.allocator();
 
     const corpus = [_]Program{ gateProg(0, 1, .s_mul), gateProg(2, 3, .s_mul) };
-    const ext = (try bestExtraction(al, &corpus)).?;
+    const ext = (try bestExtraction(al, &corpus, &.{})).?;
     const lib = [_]Macro{ext.macro};
 
     var m = sub.Machine{};
@@ -402,7 +491,7 @@ test "a div-gate elite is abstracted and decodes as a ratio gate" {
     defer arena.deinit();
     const al = arena.allocator();
     const corpus = [_]Program{ gateProg(0, 1, .s_div), gateProg(2, 3, .s_div) };
-    const ext = (try bestExtraction(al, &corpus)).?;
+    const ext = (try bestExtraction(al, &corpus, &.{})).?;
     const label = try decode(&ext.macro, al);
     try std.testing.expect(std.mem.indexOf(u8, label, "ratio gate") != null);
 }
@@ -444,6 +533,33 @@ test "the tower: C1 built on C0 computes a sum of two products (nested calls)" {
     try std.testing.expectEqual(@as(f64, 2), m.s[0]);
 }
 
+fn k2Solution(i: u8, j: u8, k: u8, l: u8) Program {
+    var p = Program{};
+    p.predict.appendAssumeCapacity(.{ .op = .call, .imm = 0, .a = i, .b = j, .out = 2 }); // C0(i,j)→s2
+    p.predict.appendAssumeCapacity(.{ .op = .call, .imm = 0, .a = k, .b = l, .out = 3 }); // C0(k,l)→s3
+    p.predict.appendAssumeCapacity(.{ .op = .s_add, .a = 2, .b = 3, .out = 0 }); // s0 = s2+s3
+    return p;
+}
+
+test "auto-abstract C1 from solutions that CALL C0 — the tower by extraction" {
+    var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena.deinit();
+    const al = arena.allocator();
+
+    const base = [_]Macro{referenceProductMacro()}; // C0 already known
+    // two K=2 solutions over DIFFERENT index pairs, each = two C0 calls + a sum
+    const corpus = [_]Program{ k2Solution(0, 1, 2, 3), k2Solution(0, 2, 1, 3) };
+    const ext = (try bestExtraction(al, &corpus, &base)).?;
+
+    // the recurring abstraction is the 3-instruction composition, generalised over
+    // its four element indices (the two C0 calls)
+    try std.testing.expectEqual(@as(usize, 2), ext.occurrences);
+    try std.testing.expectEqual(@as(usize, 3), ext.length);
+    try std.testing.expectEqual(@as(usize, 4), ext.macro.params.len);
+    // and — verified by EXECUTION — it actually computes a sum of two products
+    try std.testing.expect(try verifyComposition(al, &base, ext.macro));
+}
+
 test "no recurring template → no extraction (honest negative)" {
     var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
     defer arena.deinit();
@@ -453,5 +569,5 @@ test "no recurring template → no extraction (honest negative)" {
     p.predict.appendAssumeCapacity(.{ .op = .v_get, .a = 0, .b = 0, .out = 3 });
     p.predict.appendAssumeCapacity(.{ .op = .s_relu, .a = 3, .out = 0 });
     const corpus = [_]Program{p};
-    try std.testing.expect((try bestExtraction(al, &corpus)) == null);
+    try std.testing.expect((try bestExtraction(al, &corpus, &.{})) == null);
 }

@@ -22,8 +22,17 @@ pub const Instruction = struct {
     imm: u6,
 };
 
+pub const Dependency = struct {
+    x: u64,
+    y: u64,
+};
+
 pub const State = struct {
     r: [8]u64,
+};
+
+pub const SymbolicState = struct {
+    r: [8]Dependency,
 };
 
 pub const Program = struct {
@@ -49,9 +58,71 @@ pub const Program = struct {
         }
         return state.r[0]; // Result always in r0
     }
-};
 
-fn smix(x: u64) u64 {
+    pub fn executeSymbolic(self: Program) [64]Dependency {
+        var state: SymbolicState = undefined;
+        // Init: r0 depends on x, r1 depends on y
+        var k: usize = 0;
+        while (k < 8) : (k += 1) {
+            state.r[k] = .{ .x = 0, .y = 0 };
+        }
+        // This is a bit-level trace, but to keep it fast, we track "word-level" dependency first.
+        // For a more granular Tier 4, we'd need a 64x128 matrix per register.
+        // Let's do the full bit-level matrix for the output register r0.
+
+        var matrix: [64]Dependency = undefined;
+        for (&matrix, 0..) |*d, b| {
+            d.* = .{ .x = @as(u64, 1) << @as(u6, @intCast(b)), .y = @as(u64, 1) << @as(u6, @intCast(b)) };
+        }
+        // Actually, for the Alien Hack, we need to track how r0/r1 bits propagate.
+        // Let's simplify: every bit of r0_in depends on x_i, r1_in depends on y_i.
+
+        var reg_matrix: [8][64]Dependency = undefined;
+        for (&reg_matrix) |*rm| {
+            for (rm) |*d| d.* = .{ .x = 0, .y = 0 };
+        }
+        for (&reg_matrix[0], 0..) |*d, b| d.x = @as(u64, 1) << @as(u6, @intCast(b));
+        for (&reg_matrix[1], 0..) |*d, b| d.y = @as(u64, 1) << @as(u6, @intCast(b));
+
+        var i: usize = 0;
+        while (i < self.used) : (i += 1) {
+            const inst = self.instructions[i];
+            const d = inst.dst;
+            const s = inst.src;
+            const imm = inst.imm;
+
+            switch (inst.op) {
+                .XOR, .AND, .OR => {
+                    for (0..64) |b| {
+                        reg_matrix[d][b].x |= reg_matrix[s][b].x;
+                        reg_matrix[d][b].y |= reg_matrix[s][b].y;
+                    }
+                },
+                .SHR => {
+                    for (0..64) |b| {
+                        if (b + imm < 64) {
+                            reg_matrix[d][b] = reg_matrix[s][b + imm];
+                        } else {
+                            reg_matrix[d][b] = .{ .x = 0, .y = 0 };
+                        }
+                    }
+                },
+                .ADD, .SUB => {
+                    var acc_x: u64 = 0;
+                    var acc_y: u64 = 0;
+                    for (0..64) |b| {
+                        acc_x |= reg_matrix[d][b].x | reg_matrix[s][b].x;
+                        acc_y |= reg_matrix[d][b].y | reg_matrix[s][b].y;
+                        reg_matrix[d][b].x = acc_x;
+                        reg_matrix[d][b].y = acc_y;
+                    }
+                },
+            }
+        }
+        return reg_matrix[0];
+    }
+};
+pub fn smix(x: u64) u64 {
     var z = x +% 0x9E3779B97F4A7C15;
     z = (z ^ (z >> 30)) *% 0xBF58476D1CE4E5B9;
     z = (z ^ (z >> 27)) *% 0x94D049BB133111EB;

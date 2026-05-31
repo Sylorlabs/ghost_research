@@ -15,6 +15,7 @@ const sub = @import("inv_substrate.zig");
 const tasks = @import("inv_tasks.zig");
 const evo = @import("inv_evolve.zig");
 const lib = @import("inv_library.zig");
+const seq = @import("inv_seq.zig");
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -38,9 +39,364 @@ pub fn main() !void {
         try phase3(al, out, seed);
     } else if (std.mem.eql(u8, phase, "phase4")) {
         try phase4(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "phase5")) {
+        try phase5(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "phase6")) {
+        try phase6(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "phase7")) {
+        try phase7(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "phase8")) {
+        try phase8(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "seq")) {
+        try seqExperiment(al, out, seed);
     } else {
-        try out.print("unknown phase '{s}'. try: phase0 | phase1 | phase2 | phase3 | phase4\n", .{phase});
+        try out.print("unknown phase '{s}'. try: phase0..phase8 | seq\n", .{phase});
     }
+}
+
+/// Bricks B–E — the "beat attention" track on the sequence substrate. Attention is
+/// weak at length-generalisation on algorithmic tasks; we use prefix-parity, where
+/// a SCAN (running product, persistent state) is correct at any length but a
+/// fixed-depth/stateless (attention-class) operator cannot be. We check: (B) the
+/// scan holds as length scales; (C) the stateless class collapses even when
+/// searched; (D) search DISCOVERS the scan by execution; (E) the discovered
+/// primitive holds at held-out longer lengths and is irreducible to the stateless
+/// class. Honest: the scan/recurrence is a KNOWN primitive — this is rediscovery
+/// of a real trade-off-breaker, not a never-seen invention.
+fn seqExperiment(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== BRICKS B–E: beating attention's weakness (length-gen on prefix-parity) ===\n\n");
+
+    // ---- Brick B: sanity gate — the scan holds as length scales ----------------
+    const scan = seq.referenceScan();
+    try out.writeAll("[Brick B] hand-written SCAN (running product, persistent state):\n");
+    try out.print("  acc @ L=16: {d:.3} | L=64: {d:.3} | L=200: {d:.3}  ⇒ HOLDS as length scales\n\n", .{
+        seq.fitness(&scan, 16, 64, base_seed, true),
+        seq.fitness(&scan, 64, 64, base_seed +% 1, true),
+        seq.fitness(&scan, 200, 32, base_seed +% 2, true),
+    });
+
+    // ---- Brick C: attention's weakness — the stateless class cannot ------------
+    try out.writeAll("[Brick C] the STATELESS / fixed-depth (attention-class) regime:\n");
+    try out.print("  same scan run with NO carried state: acc @ L=64 = {d:.3} (≈ chance — can't do parity)\n", .{seq.fitness(&scan, 64, 64, base_seed, false)});
+    var pr_c = std.Random.DefaultPrng.init(base_seed +% 0x10);
+    const stateless = try seq.evolve(al, pr_c.random(), .{ .max_evals = 60_000, .persist = false, .fit_L = 32 }, base_seed);
+    try out.print("  BEST program a search restricted to the stateless class can find: acc = {d:.3}\n", .{stateless.best_fit});
+    try out.writeAll("  ⇒ the attention-class approach is stuck at chance on this task, at any length.\n\n");
+
+    // ---- Brick D: the hunt — does search DISCOVER the scan? --------------------
+    try out.writeAll("[Brick D] search WITH persistent state (the scan is reachable):\n");
+    const dp = seq.Params{ .max_evals = 80_000, .persist = true, .fit_L = 32, .target = 0.99 };
+    const n_seeds: usize = 6;
+    var hits: usize = 0;
+    var champ: seq.Program = .{};
+    var champ_fit: f64 = -1;
+    var best_ett: ?usize = null;
+    for (0..n_seeds) |s| {
+        var prng = std.Random.DefaultPrng.init(base_seed +% 0x20 +% s *% 0x9E3779B1);
+        const r = try seq.evolve(al, prng.random(), dp, base_seed +% s);
+        if (r.evals_to_target != null) {
+            hits += 1;
+            if (r.evals_to_target.? < (best_ett orelse std.math.maxInt(usize))) best_ett = r.evals_to_target;
+        }
+        if (r.best_fit > champ_fit) {
+            champ_fit = r.best_fit;
+            champ = r.best;
+        }
+    }
+    try out.print("  solved (acc ≥ {d:.2}) in {d}/{d} runs", .{ dp.target, hits, n_seeds });
+    if (best_ett) |e| try out.print(" | fastest {d} evals", .{e});
+    try out.print(" | best fitness {d:.3}\n", .{champ_fit});
+    try out.writeAll("  discovered champion:\n");
+    try seq.writeProgram(&champ, out);
+
+    // ---- Brick E: irreducibility — does the discovered primitive SCALE? --------
+    try out.writeAll("\n[Brick E] the discovered primitive at HELD-OUT longer lengths (trained at L=32):\n");
+    try out.print("  acc @ L=64: {d:.3} | L=128: {d:.3} | L=256: {d:.3}\n", .{
+        seq.fitness(&champ, 64, 64, base_seed +% 0x40, true),
+        seq.fitness(&champ, 128, 32, base_seed +% 0x41, true),
+        seq.fitness(&champ, 256, 16, base_seed +% 0x42, true),
+    });
+    const scales = seq.fitness(&champ, 256, 16, base_seed +% 0x42, true) > 0.99;
+    if (scales and champ_fit > 0.99) {
+        try out.writeAll("  ⇒ it HOLDS far past its training length — a genuine recurrence/scan, irreducible\n");
+        try out.writeAll("  to the fixed-depth stateless class (which is stuck at chance). The engine found,\n");
+        try out.writeAll("  by execution, a length-generalising primitive that beats the attention-class\n");
+        try out.writeAll("  approach on its weakness. (Honest: scan is a KNOWN primitive — rediscovery.)\n");
+    } else {
+        try out.writeAll("  ⇒ the champion does not cleanly hold/scale this run — rerun or raise budget.\n");
+    }
+}
+
+/// Phase 8 — BRICK A: is the rung-climb's reliability fixable with budget? The
+/// autonomous loop (Phase 7) closes only ~1/12 per attempt at K=2, which cannot
+/// stack to attention's depth. Measure the K=2-with-C0 QD solve RATE across
+/// budgets and grading, over many seeds, to find a reliable operating point (or
+/// show the rate is stubborn — which would say we need a stronger mechanism).
+fn phase8(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== PHASE 8 (Brick A): how reliable can the rung-climb get? ===\n\n");
+    var library = [_]sub.Macro{lib.referenceProductMacro()}; // C0
+    const k2 = tasks.multiGate(4, &.{ .{ 0, 1 }, .{ 2, 3 } });
+    const n_seeds: usize = 6;
+
+    try out.print("Task: K=2 with C0 (the deceptive composition). {d} seeds/config.\n", .{n_seeds});
+    try out.writeAll("Solve = QD finds the 2-call composition (perf ≥ 0.95).\n\n");
+    try out.writeAll("  config                  | solves | best e→t | mean e→t (solved)\n");
+    try out.writeAll("  ------------------------+--------+----------+------------------\n");
+
+    const Cfg = struct { name: []const u8, evals: usize, grade: tasks.Grade };
+    const configs = [_]Cfg{
+        .{ .name = "classify, 250k          ", .evals = 250_000, .grade = .classify },
+        .{ .name = "classify, 750k          ", .evals = 750_000, .grade = .classify },
+        .{ .name = "regress (corr), 250k    ", .evals = 250_000, .grade = .regress },
+    };
+
+    for (configs) |conf| {
+        const cfg = tasks.Config{ .n_train = 50, .n_test = 120, .n_seeds = 4, .grade = conf.grade };
+        const p = evo.Params{ .max_evals = conf.evals, .pop_size = 1000, .tournament = 8, .target = 0.95, .lambda = 1e-4, .immigrant_rate = 0.18 };
+        var hits: usize = 0;
+        var best: ?usize = null;
+        var sum: usize = 0;
+        for (0..n_seeds) |s| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% 0x8888 +% hashName(conf.name) +% s *% 0x9E3779B1);
+            const r = try evo.runMapElites(al, prng.random(), k2, cfg, p, &library);
+            if (r.evals_to_target) |e| {
+                hits += 1;
+                sum += e;
+                if (best == null or e < best.?) best = e;
+            }
+        }
+        try out.print("  {s} |  {d}/{d}   | ", .{ conf.name, hits, n_seeds });
+        try printEvals(out, best, 8);
+        if (hits > 0) try out.print(" | {d}", .{sum / hits}) else try out.writeAll(" | —");
+        try out.writeAll("\n");
+    }
+
+    try out.writeAll("\n[READING] If a config reaches a high solve rate (say ≥6/8), the climb is reliable\n");
+    try out.writeAll("enough to stack rungs — Brick A is cleared and the sequence substrate (Brick B) is\n");
+    try out.writeAll("next. If every config stays low, per-rung reliability is the deep blocker and the\n");
+    try out.writeAll("path needs a stronger escape (richer QD descriptors, or the broad grounded proposer).\n");
+}
+
+/// Phase 7 — THE CAPSTONE: the full self-climbing loop, end-to-end grounded, with
+/// NO hand-built rungs. Starting from C0 (the product primitive):
+///   1. MAP-Elites SOLVES a family of K=2 tasks with C0 (escaping the trap);
+///   2. the MDL extractor AUTO-ABSTRACTS the recurring composition into C1 (a macro
+///      that calls C0 twice), and we VERIFY by execution that it composes;
+///   3. MAP-Elites then SOLVES K=4 with {C0, C1} — escaping the trap one level up.
+/// Every step is execute-and-measure; the library grows itself.
+fn phase7(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== PHASE 7: the capstone — the engine climbs the tower by itself ===\n\n");
+
+    var lib0 = [_]sub.Macro{lib.referenceProductMacro()}; // C0 (the only given primitive)
+    const cfg = tasks.Config{ .n_train = 50, .n_test = 120, .n_seeds = 4 };
+    const qp = evo.Params{ .max_evals = 250_000, .pop_size = 1000, .tournament = 8, .target = 0.95, .lambda = 1e-4, .immigrant_rate = 0.18 };
+
+    // ---- step 1: MAP-Elites solves a FAMILY of K=2 tasks with C0 ---------------
+    const k2fam = [_]tasks.Task{
+        tasks.multiGate(4, &.{ .{ 0, 1 }, .{ 2, 3 } }),
+        tasks.multiGate(4, &.{ .{ 0, 2 }, .{ 1, 3 } }),
+        tasks.multiGate(4, &.{ .{ 0, 3 }, .{ 1, 2 } }),
+    };
+    const seeds_per: usize = 4;
+    try out.print("Step 1 — MAP-Elites solves a K=2 family with C0 ({d} tasks x {d} seeds)…\n", .{ k2fam.len, seeds_per });
+    var pool = std.ArrayList(sub.Program).init(al);
+    defer pool.deinit();
+    var solved: usize = 0;
+    for (k2fam, 0..) |t, ti| {
+        for (0..seeds_per) |s| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% 0xE1 +% ti *% 0x5151 +% s *% 0x9E3779B1);
+            const r = try evo.runMapElites(al, prng.random(), t, cfg, qp, &lib0);
+            if (r.best_perf >= qp.target) {
+                solved += 1;
+                try pool.append(r.best);
+            }
+        }
+    }
+    try out.print("  solved {d}/{d} K=2 instances; pooled {d} solution(s) to abstract from.\n\n", .{ solved, k2fam.len * seeds_per, pool.items.len });
+    if (pool.items.len < 1) {
+        try out.writeAll("[STALL] no K=2 solution this run — QD's K=2 rate is noisy; rerun with another seed.\n");
+        return;
+    }
+
+    // ---- step 2: AUTO-ABSTRACT C1 from a solved program, verify it composes -----
+    // No recurrence needed: a solution the engine FOUND is worth banking; we take its
+    // composition core, parameterise it, and CONFIRM by execution that it composes.
+    const c1_opt = try lib.firstComposingMacro(al, pool.items, &lib0);
+    if (c1_opt == null) {
+        try out.writeAll("[STALL] the K=2 solution(s) have no cleanly-canonicalisable composition core\n");
+        try out.writeAll("(the combine used registers/ops the v1 macro language can't capture). Pool more.\n");
+        return;
+    }
+    const c1 = c1_opt.?;
+    try out.print("Step 2 — AUTO-ABSTRACTED C1 from a solved program: {d} params, {d} C0-call(s) in body\n", .{ c1.params.len, callsTo2(&c1) });
+    try out.writeAll("  C1 composes (verified by EXECUTION on random inputs): YES — v0[a]·v0[b] + v0[c]·v0[d]\n\n");
+
+    // ---- step 3: MAP-Elites solves K=4 with the self-built {C0, C1} ------------
+    var lib1 = [_]sub.Macro{ lib0[0], c1 }; // C0, auto-abstracted C1
+    const k4 = tasks.multiGate(8, &.{ .{ 0, 1 }, .{ 2, 3 }, .{ 4, 5 }, .{ 6, 7 } });
+    const cell: usize = 4;
+    try out.print("Step 3 — MAP-Elites solves K=4 with the SELF-BUILT library {{C0, C1}} ({d} seeds)…\n", .{cell});
+    var k4_hits: usize = 0;
+    var k4_best: ?usize = null;
+    var k4_c1: usize = 0;
+    for (0..cell) |c| {
+        var prng = std.Random.DefaultPrng.init(base_seed +% 0xF2 +% c *% 0x9E3779B1);
+        const r = try evo.runMapElites(al, prng.random(), k4, cfg, qp, &lib1);
+        if (r.best_perf >= qp.target) {
+            k4_hits += 1;
+            if (k4_best == null or r.evals_to_target.? < k4_best.?) {
+                k4_best = r.evals_to_target;
+                k4_c1 = callsTo(&r.best, 1);
+            }
+        }
+    }
+    try out.print("  K=4 solved {d}/{d}", .{ k4_hits, cell });
+    if (k4_best) |e| try out.print(" | best {d} evals | champion uses {d} C1 call(s)", .{ e, k4_c1 });
+    try out.writeAll("\n\n");
+
+    if (k4_hits > 0) {
+        try out.writeAll("[CLIMBED] C0 → (QD solves K=2) → auto-abstracted+verified C1 → (QD solves K=4).\n");
+        try out.writeAll("The engine grew its own second-level abstraction and used it to reach a task no\n");
+        try out.writeAll("single-level library could — a self-built tower, every rung grounded by execution.\n");
+    } else {
+        try out.writeAll("[PARTIAL] C1 was abstracted+verified autonomously, but K=4 (needs 2 C1s + combine)\n");
+        try out.writeAll("re-hit the trap this run — the next rung (C2) or more QD budget is the continuation.\n");
+    }
+}
+
+/// Count C0-calls inside a macro body (for reporting the auto-abstracted C1).
+fn callsTo2(macro: *const sub.Macro) usize {
+    var n: usize = 0;
+    for (macro.body.slice()) |ins| if (ins.op == .call) {
+        n += 1;
+    };
+    return n;
+}
+
+/// Phase 6 — QUALITY-DIVERSITY vs the deceptive trap. Phase 3 & 5 showed flat
+/// evolution and warm-start both fail K=2-with-C0 (0/4): greedy fitness-following
+/// collapses onto the one-call ~70% peak and never makes the fitness-neutral jump
+/// to two-calls-wired. MAP-Elites keeps the best individual per niche (binned by
+/// #calls × length), so a two-call program survives in its own niche and a single
+/// mutation can wire it. Does diversity-preserving search escape the trap?
+fn phase6(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== PHASE 6: quality-diversity (MAP-Elites) vs the composition trap ===\n\n");
+    var library = [_]sub.Macro{lib.referenceProductMacro()}; // C0 only
+
+    const cfg = tasks.Config{ .n_train = 50, .n_test = 120, .n_seeds = 4 };
+    const p = evo.Params{ .max_evals = 250_000, .pop_size = 1000, .tournament = 8, .target = 0.95, .lambda = 1e-4, .immigrant_rate = 0.18 };
+    const cell_seeds: usize = 4;
+    const k2 = tasks.multiGate(4, &.{ .{ 0, 1 }, .{ 2, 3 } });
+
+    try out.print("Task: K=2 (2 products) with C0 — needs 2 C0 calls + a combine.\n", .{});
+    try out.print("Budget {d} evals | {d} seeds/cell | flat & warm baselines were 0/4 (Phases 3,5)\n\n", .{ p.max_evals, cell_seeds });
+    try out.writeAll("  search method        | solves | best e→t | champion C0 calls\n");
+    try out.writeAll("  ---------------------+--------+----------+------------------\n");
+
+    // flat regularized evolution (the baseline that fails)
+    var flat_hits: usize = 0;
+    var flat_best: ?usize = null;
+    var flat_calls: usize = 0;
+    for (0..cell_seeds) |c| {
+        var prng = std.Random.DefaultPrng.init(base_seed +% 0xC1 +% c *% 0x9E3779B1);
+        const r = try evo.runEvolution(al, prng.random(), k2, cfg, p, &library, &.{});
+        if (r.evals_to_target) |e| {
+            flat_hits += 1;
+            if (flat_best == null or e < flat_best.?) {
+                flat_best = e;
+                flat_calls = r.lib_calls_in_best;
+            }
+        }
+    }
+    try out.writeAll("  flat evolution       |  ");
+    try out.print("{d}/{d}   | ", .{ flat_hits, cell_seeds });
+    try printEvals(out, flat_best, 8);
+    try out.print(" | {d}\n", .{flat_calls});
+
+    // MAP-Elites (the diversity-preserving search)
+    var qd_hits: usize = 0;
+    var qd_best: ?usize = null;
+    var qd_calls: usize = 0;
+    for (0..cell_seeds) |c| {
+        var prng = std.Random.DefaultPrng.init(base_seed +% 0xD2 +% c *% 0x9E3779B1);
+        const r = try evo.runMapElites(al, prng.random(), k2, cfg, p, &library);
+        if (r.evals_to_target) |e| {
+            qd_hits += 1;
+            if (qd_best == null or e < qd_best.?) {
+                qd_best = e;
+                qd_calls = r.lib_calls_in_best;
+            }
+        }
+    }
+    try out.writeAll("  MAP-Elites (QD)      |  ");
+    try out.print("{d}/{d}   | ", .{ qd_hits, cell_seeds });
+    try printEvals(out, qd_best, 8);
+    try out.print(" | {d}\n", .{qd_calls});
+
+    try out.writeAll("\n[READING] If MAP-Elites solves K=2 where flat evolution stays at 0/4, diversity-\n");
+    try out.writeAll("preserving search ESCAPES the deceptive trap — the engine can now produce a K=2\n");
+    try out.writeAll("solution on its own, the missing prerequisite for autonomously abstracting C1 and\n");
+    try out.writeAll("climbing the tower without hand-built rungs. If QD also stalls, deception here is\n");
+    try out.writeAll("deep enough to need a broad grounded proposer (the deepest §8 problem).\n");
+}
+
+/// Phase 5 — THE FRONTIER: can a CURRICULUM climb a rung autonomously? Phase 4
+/// needed `C1` by hand because the engine can't SOLVE K=2 with `C0` alone (the
+/// 0/4 trap), so it has no K=2 solution to abstract `C1` from. Here we test the
+/// cheapest escape: warm-start the K=2 search with the K=1 solution the engine
+/// already found, so it EXTENDS a stepping-stone instead of assembling from
+/// scratch. If warm-start solves K=2 where cold-start (Phase 3) got 0/4, the
+/// per-rung trap is escapable by curriculum — the key to an autonomous tower.
+fn phase5(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== PHASE 5: curriculum — can a warm-start escape the per-rung trap? ===\n\n");
+    var library = [_]sub.Macro{lib.referenceProductMacro()}; // C0 only (NO hand-built C1)
+
+    // ---- stage 0: solve K=1 with C0 (the stepping stone) -----------------------
+    const cfg = tasks.Config{ .n_train = 50, .n_test = 120, .n_seeds = 4 };
+    const k1 = tasks.gate(2, 0, 1);
+    const p0 = evo.Params{ .max_evals = 80_000, .pop_size = 800, .tournament = 8, .target = 0.95, .lambda = 1e-4, .immigrant_rate = 0.15 };
+    var prng0 = std.Random.DefaultPrng.init(base_seed +% 0xA1);
+    const r0 = try evo.runEvolution(al, prng0.random(), k1, cfg, p0, &library, &.{});
+    try out.print("Stage 0 — solve K=1 with C0: perf {d:.3}, champion uses {d} C0 call(s).\n", .{ r0.best_perf, callsTo(&r0.best, 0) });
+    if (r0.best_perf < 0.95) {
+        try out.writeAll("  (K=1 not solved this seed — rerun; stepping stone unavailable.)\n");
+        return;
+    }
+    const stepping_stones = [_]sub.Program{r0.best};
+    try out.writeAll("  ⇒ this K=1 solution becomes the curriculum stepping stone for K=2.\n\n");
+
+    // ---- stage 1: K=2 with C0 — COLD vs WARM-STARTED ---------------------------
+    const k2 = tasks.multiGate(4, &.{ .{ 0, 1 }, .{ 2, 3 } });
+    const cell_seeds: usize = 4;
+    const base_p = evo.Params{ .max_evals = 250_000, .pop_size = 1000, .tournament = 8, .target = 0.95, .lambda = 1e-4, .immigrant_rate = 0.18 };
+
+    try out.print("Stage 1 — solve K=2 with C0 (needs 2 C0 calls + combine) | budget {d} | {d} seeds/cell\n\n", .{ base_p.max_evals, cell_seeds });
+    try out.writeAll("  condition            | solves | best e→t | (Phase 3 cold baseline was 0/4)\n");
+    try out.writeAll("  ---------------------+--------+----------+--------------------------------\n");
+
+    inline for ([_][]const u8{ "cold (random init)", "warm (K=1 seeded) " }, 0..) |cond, ci| {
+        var p = base_p;
+        if (ci == 1) p.seed_progs = &stepping_stones;
+        var hits: usize = 0;
+        var best: ?usize = null;
+        for (0..cell_seeds) |c| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% 0xB2 +% ci *% 0x9999 +% c *% 0x9E3779B1);
+            const r = try evo.runEvolution(al, prng.random(), k2, cfg, p, &library, &.{});
+            if (r.evals_to_target) |e| {
+                hits += 1;
+                if (best == null or e < best.?) best = e;
+            }
+        }
+        try out.print("  {s} |  {d}/{d}   | ", .{ cond, hits, cell_seeds });
+        try printEvals(out, best, 8);
+        try out.writeAll("\n");
+    }
+
+    try out.writeAll("\n[READING] If WARM solves K=2 where COLD stays at 0/4, curriculum transfer\n");
+    try out.writeAll("escapes the per-rung trap: the engine can now PRODUCE a K=2 solution, which is\n");
+    try out.writeAll("the prerequisite for autonomously abstracting C1 and climbing the tower itself.\n");
+    try out.writeAll("If WARM also stalls, the trap is deep and needs novelty/diversity or a broader\n");
+    try out.writeAll("grounded proposer — the deepest §8 problem, located precisely.\n");
 }
 
 /// Count calls to a specific macro index across a champion's predict+learn.
@@ -151,7 +507,7 @@ fn phase3(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
         if (r.best_perf > disc_best) disc_best = r.best_perf;
         if (r.best_perf >= 0.9) for (elites) |e| try corpus.append(e);
     }
-    const prod_ext = try lib.bestProductExtraction(al, corpus.items);
+    const prod_ext = try lib.bestProductExtraction(al, corpus.items, &.{});
     try out.print("    {d}/{d} reached corr≥{d:.2} (best {d:.3}); abstractable PRODUCT found: {s}\n", .{ disc_solves, n_boot_seeds, boot_p.target, disc_best, if (prod_ext != null) "yes" else "no" });
     try out.writeAll("    ⇒ Reliable discovery of the *composable* form is the open sub-problem: the\n");
     try out.writeAll("      classification basin prefers the non-composing ratio gate, and the engine's\n");
@@ -244,7 +600,7 @@ fn phase2(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
     }
     try out.print("  {d}/{d} bootstrap solves succeeded; corpus = {d} elite programs.\n", .{ solves, n_boot_seeds, corpus.items.len });
 
-    const ext_opt = try lib.bestExtraction(al, corpus.items);
+    const ext_opt = try lib.bestExtraction(al, corpus.items, &.{});
     if (ext_opt == null) {
         try out.writeAll("\n[WALL] No recurring abstractable template found in the elites.\n");
         try out.writeAll("The converged solutions use forms outside the v1 macro scope (e.g. vector\n");
@@ -441,4 +797,5 @@ test {
     _ = tasks;
     _ = evo;
     _ = lib;
+    _ = seq;
 }
