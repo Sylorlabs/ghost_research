@@ -75,6 +75,7 @@ const core_module_names = [_][]const u8{
 const Exe = struct { name: []const u8, path: []const u8, z3: bool = false };
 
 const exes = [_]Exe{
+    .{ .name = "tier4_benchmark", .path = "src/tier4_benchmark.zig", .z3 = false },
     .{ .name = "arx_128_search", .path = "src/arx_128_search.zig", .z3 = false },
     .{ .name = "arx_128_practrand_emit", .path = "src/arx_128_practrand_emit.zig", .z3 = false },
     .{ .name = "arx_search", .path = "src/arx_search.zig", .z3 = false },
