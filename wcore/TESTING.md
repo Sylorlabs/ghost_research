@@ -1287,6 +1287,49 @@ can't even reach it — a reliability wall, not novelty. (The recall↔length-ge
 scoped to those two axes and would mislabel an RMW counter "novel" since the counter is
 not an anchor — a known limitation, not evidence of invention.)
 
+### Phase 9 — getting recall reliably (`getrecall`). The reliability fix.
+
+Recall is reachable-but-rare; the rarity is dominated by **register-coordination
+combinatorics** — the load and store must independently pick the same address register
+(plus the right value/output registers) out of R=12. Two principled levers that raise the
+hit-rate *without prescribing the mechanism*: shrink the register file, and bias the
+proposer toward memory ops. Solve-rate over 8 seeds × 150k evals:
+
+```
+  config                          | hit-rate | best  | fastest e→solve
+  baseline  R=12  no bias   K=8   |   0/8    | 0.516 | —      (the old wall)
+  smaller   R=8   no bias   K=8   |   0/8    | 0.641 | —
+  smaller   R=6   no bias   K=8   |   3/8    | 1.000 | 33120  (shrink alone: 0 → 37%)
+  R=6 + memory-biased proposer K=8|   8/8    | 1.000 |   894  ← reliable
+  R=6 + bias  AT THE K=20 DEAD PT |   6/8    | 1.000 |   141  ← Phase 3 called K=20 dead
+  champion (K=20): step r3=mem[r0]; mem[r0]=r5  → held-out K=48 = 1.000 (genuine addressing)
+```
+
+**Finding:** recall's wall was register-coordination combinatorics, exactly as predicted.
+A smaller register file + a memory-biased proposer turns recall from ~1/8 (often 0/8) into
+**8/8 reliable** at K=8, and the previously-"dead" K=20 into **6/8**. The mechanism found is
+the same hash-table — we made it far likelier to *assemble*, not different. A reliability
+win (the Brick-A thesis), still rediscovery of the known mechanism.
+
+### Phase 10 — the corner, closed (`corner`). The Phase-3 0/4, resolved.
+
+Phase 3's joint QD hunt reached the top-right 0/4 because recall never appeared in the
+archive. Re-run with the reliability levers (R=6 + memory-biased proposer):
+
+```
+Niche occupancy (last run): ALL 25 niches filled, including the high-recall column.
+Top-right corner reached 4/4 runs (Phase 3 without levers: 0/4).
+Corner program: step  r1=mem[r0]; r2=xor(r2,r0); mem[r0]=r5; r3=and(r1,r1)
+  held-out: length-gen L=256 = 1.000 | recall K=48 = 1.000 | accumulator ops 1, memory ops 2
+```
+
+**Finding:** pure QD search now reaches the top-right reliably — the Phase-3 0/4 was a
+**reliability artefact** (recall never got sampled), not a reachability limit. The corner
+program holds at held-out scale and still **decomposes into accumulator ⊕ hashed memory**:
+load `mem[key]`→r1, XOR-accumulate parity into r2, store the value, copy r1→r3. We got the
+corner — by fixing reliability — and it is exactly what claim C predicts: a hybrid of two
+rediscovered known mechanisms (the scan and the hash-table), not a novel primitive.
+
 ### Tier-honest scope — what this arc is and is NOT (and the sobering meta-finding)
 
 * It **is**: a working, verified research apparatus — a frontier *map*, a novelty
@@ -1298,18 +1341,190 @@ not an anchor — a known limitation, not evidence of invention.)
   SAME known mechanisms.** Search rediscovered the scan (XOR-accumulate = running parity)
   and the hash table (load-before-store = content addressing) because those are the
   **minimal-complexity solutions even in a bit-mixing op-space**. Making the primitives
-  weird did not make the *solutions* novel. The top-right, when reached, is the union of
-  two rediscoveries — a bolted hybrid, not a unified novel primitive. Forcing genuine
-  novelty would require *forbidding* the convergent known mechanisms (prescribing what
-  you don't want), which is a far harder and more dubious proposition. This is the honest
-  answer to "can we invent something new, not rediscover existing architectures": with
-  execution-only search, known mechanisms are convergent attractors — novelty does not
-  fall out of an alien substrate alone.
+  weird did not make the *solutions* novel. Pure QD search reaches the top-right **4/4**
+  once reliability is fixed (Phase 10), and it is the union of two rediscoveries — a bolted
+  hybrid, not a unified novel primitive. Forcing genuine novelty would require *forbidding*
+  the convergent known mechanisms (prescribing what you don't want) — and Phases 7–8 show
+  that even forbidding/insufficiency only yields re-spellings, neighbouring known
+  mechanisms, walls, or known fusions, never a new primitive. This is the honest answer to
+  "can we invent something new, not rediscover existing architectures": with execution-only
+  search, known mechanisms are convergent attractors — novelty does not fall out of an
+  alien substrate alone. What we CAN do reliably: discover, re-spell, and assemble known
+  mechanisms (recall went from 0/8 to 8/8; the corner from 0/4 to 4/4 — Phases 9–10).
 
 ### Tests
 
 `inv_frontier.zig` (4) — Phase-0 opposite-corners kill-test, bounded-scan recall decay,
-Phase-1 disguised-scan kill-test, anchor separation. `inv_alien.zig` (6) — three
+Phase-1 disguised-scan kill-test, anchor separation. `inv_alien.zig` (9) — three
 corner-reachability kill-tests (XOR-scan, hash-table, union→top-right), union-novelty,
-no-state baseline ≈ chance, hunt smoke. All green (`zig build test`).
+no-state baseline ≈ chance, hunt smoke, the insufficiency task (RMW solves / known
+mechanisms fail), op-masking, and the active-regs reliability lever. All green
+(`zig build test`).
+
+## 21. The pivot — open-ended (novelty) search (`openended`)
+
+§20 diagnosed the cause of rediscovery: *fixed-task performance fitness collapses onto the
+minimal-complexity known mechanism.* The literature-indicated treatment for exactly that
+diagnosis is **novelty search** (Lehman & Stanley): drop the task objective and reward
+**behavioural novelty** — a program scores by how far its behaviour is from everything seen.
+Elegantly, the **fingerprint that *audited* rediscovery in §20 becomes the *selection
+pressure*** (`inv_open.zig`). Minimal criterion: a program must be input-sensitive (behave
+unlike a no-op) to enter the archive, so noise can't farm cheap novelty.
+
+```
+Archive: 70 distinct behaviours (pop 100 × 60 gens, k=12)
+coverage (std-dev/axis) = [0.24 0.22 0.07 0.05 0.33 0.09]   (parity & sensitivity spread; recall barely explored)
+
+[a] rediscovery under PURE novelty pressure (no task told):
+    XOR-scan (parity)  dist 0.000 → REDISCOVERED      hash-table (recall) 0.947 → not reached
+    union (corner)     0.918      → not reached        RMW counter         0.000 → "reached" (artefact)
+[b] far-from-every-known archive members: 41 | of those that NEAR-SOLVE any task: 0
+```
+
+**Two findings:**
+
+1. **Convergence, confirmed from a third independent angle.** With *no task objective at
+   all*, novelty search **rediscovered the accumulator** (XOR-scan, dist ~0) — it is the
+   sparse functional point novelty is driven toward (the chance region is dense with
+   garbage, so novelty pressure pushes *out* of it onto the functional mechanisms). Recall
+   was not reached (a rare conjunction novelty seldom stumbles into). Every far-from-anchor
+   member that does anything is a *degraded/noisy* known mechanism (e.g. partial parity +
+   junk), not a novel one — **0** candidates near-solve a task off the known attractors.
+
+2. **The descriptor is the NEW bottleneck (the real contribution of the pivot).** Novelty
+   search is only as novel as its behaviour metric. Ours measures *known-task* behaviour
+   (parity / recall / sensitivity), so it can only surface **recombinations of known
+   capabilities — never a capability it cannot measure.** A genuinely new mechanism is
+   *invisible* in this space — the tell is the **RMW counter reading as dist ~0**: the
+   descriptor literally can't see counting, so it mislabels the counter as "rediscovered."
+   So the pivot **relocates** the novelty problem from the SUBSTRATE (§20) to the
+   DESCRIPTOR: *you cannot get out novelty your behaviour metric cannot represent.*
+
+**Honest scope:** the pivot did not mint a novel useful primitive — but it was the right
+experiment, and it converts "weird substrate didn't give novelty" into a sharper, more
+general statement: **novelty is bounded by what you can measure.** The genuinely open
+frontier is now a *descriptor* problem — a behaviour metric that can represent capabilities
+nobody anticipated (generic/information-theoretic: compression, prediction, surprise), or
+coevolving tasks so the behaviour space is generated rather than fixed. Both are deep, and
+neither is a tweak. `inv_open.zig` test: novelty search runs and yields a spread archive
+(diversity kill-test).
+
+## 22. The information-theoretic descriptor — and the deepest wall (`infodesc`)
+
+§21 located the bottleneck at the descriptor. The fix: a BLACK-BOX, task-AGNOSTIC
+behaviour metric (`inv_open.infoDescriptor`) — output entropy, local responsiveness,
+memory depth, richness, determinism on a canonical stream — *no reference to any correct
+answer*. It can represent capabilities the task descriptor can't.
+
+```
+[1] counter vs no-op:  TASK descriptor dist 0.208 (BLIND) → INFO descriptor dist 1.543 (SEES it)
+    info fingerprints = [outP-ent outR-ent local-resp mem-depth richness determinism]
+      no-op   [0.00 0.00 0.00 0.00 0.25 1.00]   XOR-scan [0.96 0.00 0.00 0.00 0.25 1.00]
+      hash-tbl[0.00 0.96 0.25 0.00 1.00 0.47]    RMW-cnt  [0.00 1.00 0.50 0.54 1.00 0.47]
+[2] novelty search in INFO space: 116 behaviours; coverage [0.39 0.32 0.30 0.37 0.25 0.20]
+    (broad on ALL axes — vs §21's task space that was flat on recall)
+[3] 37/116 members show long-range temporal structure (mem-depth>0.5) — new territory.
+    best task capability in the archive: parity 1.00 | recall 0.32 | counting 0.32
+```
+
+**KILL-TEST passes:** the info descriptor sees the counter (dist 0.21→1.54) the task
+descriptor was blind to, and distinguishes all four mechanisms by signature (the counter's
+mem-depth 0.54 is unique). So §21's descriptor bottleneck is real and **movable**.
+
+**But the payoff is still not novelty-that-works**, and that is the finding: parity 1.00 is
+just the accumulator **rediscovered yet again**; recall and counting were **not reached**
+even though the descriptor now *sees* them (they are rare conjunctions — the reliability
+wall); and the diverse, memory-deep behaviours novelty *did* find **solve nothing**.
+
+**The deepest wall, named:** it is neither the substrate (§20) nor the descriptor (§21) —
+it is the **NOVELTY ↔ USEFULNESS TENSION.** A task-agnostic metric yields diverse-but-
+useless novelty; pinning *usefulness* requires a task signal, which reintroduces the
+convergent attractor (§20). **One fitness gives you open-ended novelty OR task-grounded
+usefulness — not both.** The only known way to couple them is to *coevolve tasks with
+solutions* (POET-style), so "useful" keeps moving and never settles onto a single
+attractor. That is the genuine remaining frontier — and it is a different architecture, not
+a tweak. `inv_open.zig` kill-test: the info descriptor sees the counter the task descriptor
+misses.
+
+## 23. Coevolution with transfer — the first POSITIVE result (`coevo`)
+
+§22 said the only way to couple novelty and usefulness is to coevolve *tasks* with
+solvers (POET). `inv_coevo.zig` builds the minimal version and tests its sharpest,
+most falsifiable consequence: **does cross-task TRANSFER assemble a conjunction direct
+search can't?** The target is `pk_add` — per-key counting, a 3-op read-modify-write —
+the exact mechanism §20's `fuse` *never found in 16M evals*.
+
+Task family (single symbol stream): `g_xor`, `g_add` (global accumulator — easy), `pk_xor`
+(per-key RMW, no constant — a harder conjunction), `pk_add` (per-key counter, RMW + a
+constant — the hardest). All graded by output-agreement; solve = ≥ 0.95.
+
+```
+[INDEPENDENT] each task evolved alone (4 seeds × 200k):
+  g_xor 4/4 | g_add 4/4 | pk_xor 4/4 | pk_add 0/4 (best 0.492)   ← the counter is unreachable directly
+[COEVOLUTION] one solver/task; each round self-improve + TRANSFER (seed task k from every
+              other task's best solver, adopt if it helps):
+  g_xor yes | g_add yes | pk_xor yes | pk_add yes  ← reached VIA TRANSFER
+```
+
+**Reproduced across seeds:** independent `pk_add` solves 0/4, 0/4, 0/4, 1/4 (rare/never);
+coevolution solves `pk_add` in **all** seeds tried.
+
+**Finding — the first lever in the whole arc to beat fixed-task search on the hard
+mechanism.** The bridge: `pk_xor` (a per-key RMW with no constant) *is* findable by direct
+search; transferring its `load → op → store` shape to `pk_add` and mutating it (swap the op,
+add the constant) **assembles the counter that direct search couldn't**. The §22 coupling —
+*novelty* supplied by the moving task population, *usefulness* by per-task optimisation —
+pays off for **reach**. This is exactly what POET predicts: shared building blocks
+discovered on one task bootstrap another.
+
+**Honest scope:** the assembled mechanism is still the **known** counter (RMW). So
+coevolution buys **reach / reliability**, not a novel primitive — it beats the conjunction
+*reliability wall* (§20, §22) but does **not repeal claim C** (search still rediscovers and
+assembles *known* mechanisms; it did not invent a new one). The arc's final shape:
+fixed-task search rediscovers and can't assemble hard conjunctions (§20); novelty/descriptor
+pivots give diverse-but-useless novelty (§21–22); **coevolution couples the two and
+genuinely extends reach — the first positive — while novelty itself remains the open
+frontier.** `inv_coevo.zig` test: reference solvers solve their own task; a global
+accumulator fails per-key counting (the conjunction is real).
+
+## 24. The open-ended composition ladder — pushing it to the limit (`oecoevo`)
+
+§23's positive (transfer assembles mechanisms direct search can't) suggested one real shot
+at novelty: make it **open-ended** — *generate* tasks by composing stages without bound, let
+mutation deepen them and transfer carry solvers up, and ask whether deep-composition solvers
+become **unrecognisable**. Tasks are now genomes over stages `{X=gxor A=gadd k=pkxor c=pkcount
+>=shift}`; difficulty = composition depth; the solver must match the composed target.
+
+```
+Reproduced across seeds (depth = composition depth solved):
+  seed C0FFEE: depth 1:4  2:4  3:2  4:1  → ratcheted to DEPTH 4 (11 rungs)
+  seed 1234  : depth 1:3  2:4  3:2  4:1  → DEPTH 4 (10 rungs)
+  seed BEEF  : depth 1:3  2:8  3:3        → DEPTH 3 (14 rungs)
+deepest task C0FFEE = [>X>>] (delayed running parity), solver:
+  step: r3=mem[0]; mem[0]=r6; r6=sel(r2); r2 = xor(sym, r2)
+  ⇒ an XOR-ACCUMULATOR (r2) + MEMORY-AS-DELAY (mem[0]) — accumulator ops 1, memory ops 2
+```
+
+**Finding 1 — big REACH.** The ratchet climbs to depth 3–4 reliably: transfer *chains*,
+carrying solvers far past anything fixed-task search reached (which couldn't assemble even
+the depth-1 RMW alone, §20 `fuse`). Open-ended coevolution genuinely extends the reachable
+set — the strongest reach result of the arc.
+
+**Finding 2 — but it's COMPOSITION, not new ATOMS.** 5–9 deep solvers per run read as
+"novel" to the task-agnostic certifier — but that only means *not identical to any single
+known atom*, which any deep composition trivially satisfies. **This is the §22 certifier
+blind spot: it cannot distinguish a new ATOM from a new COMPOSITION of known atoms.**
+Hand-decomposition of the deepest solver confirms it every time: an accumulator stacked with
+addressed memory (above, memory used as a one-step delay to make a *delayed* parity). A
+**novel composition of known atoms — not a new primitive.**
+
+**Verdict / arc capstone.** Even an open-ended ratchet — the actual state-of-the-art recipe
+for open-endedness — **composes the same known atoms ever more deeply and never mints a new
+one.** Claim C holds, now against the strongest attack available, and we see precisely *why*:
+novelty-by-search is novelty of *composition*, bounded by the atom set the substrate provides.
+The one instrument the arc still lacks, and the honest next step, is an **irreducibility
+test** — a way to certify that a solver does *not* decompose into known atoms — without which
+"novel" can only ever mean "a composition we don't recognise." `inv_coevo.zig` test: a
+single `pk_add` stage equals the standalone counting target, and a depth-2 genome differs
+from either stage alone (composition is real).
 

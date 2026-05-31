@@ -233,6 +233,12 @@ zig build run-invent -- curriculum # research §20: K-ladder REVISES it — addr
 zig build run-invent -- gamble   # research §20: gambling reaches the corner — but it's a UNION of two rediscoveries, not novel
 zig build run-invent -- forbid   # research §20: forbid a known mechanism → re-spelled/known/wall, never novel
 zig build run-invent -- fuse     # research §20: insufficiency task forces a known FUSION (RMW) search can't even reach
+zig build run-invent -- getrecall # research §20: GET RECALL — smaller reg-file + biased proposer → 0/8 to 8/8 reliable
+zig build run-invent -- corner   # research §20: the corner CLOSED — pure QD reaches top-right 4/4 (was 0/4), still the union
+zig build run-invent -- openended # research §21: the pivot — novelty search rediscovers the accumulator; novelty bottleneck moves to the DESCRIPTOR
+zig build run-invent -- infodesc # research §22: task-agnostic descriptor SEES more, but exposes the NOVELTY↔USEFULNESS tension (the deepest wall)
+zig build run-invent -- coevo    # research §23: coevolution+transfer — FIRST POSITIVE: assembles the RMW counter direct search couldn't (reach, not novelty)
+zig build run-invent -- oecoevo  # research §24: open-ended composition ladder ratchets to depth 3-4 — but deep solvers are novel COMPOSITIONS of known atoms, not new atoms
 ```
 
 > Research note on the novelty limit: `docs/research/alien_novelty_limit.md` —
@@ -301,6 +307,12 @@ zig build run-invent -- curriculum         # §20 alien arc: K-ladder — addres
 zig build run-invent -- gamble             # §20 alien arc: gambling reaches the corner but it's a union of rediscoveries
 zig build run-invent -- forbid             # §20 alien arc: forbid a known mechanism → re-spelled/known/wall, never novel
 zig build run-invent -- fuse               # §20 alien arc: insufficiency task forces a known fusion search can't reach
+zig build run-invent -- getrecall          # §20 alien arc: get recall reliably (reg-file + biased proposer): 0/8 → 8/8
+zig build run-invent -- corner             # §20 alien arc: corner closed — pure QD reaches top-right 4/4 (was 0/4)
+zig build run-invent -- openended          # §21 the pivot: novelty search rediscovers the accumulator; bottleneck → the descriptor
+zig build run-invent -- infodesc           # §22 task-agnostic descriptor sees more, but exposes the novelty↔usefulness tension
+zig build run-invent -- coevo              # §23 coevolution+transfer: FIRST POSITIVE — assembles the RMW counter direct search couldn't (reach)
+zig build run-invent -- oecoevo            # §24 open-ended composition ladder: ratchets to depth 3-4; novel COMPOSITIONS of known atoms, not new atoms
 zig build test                             # all tests across all engines
 ```
 

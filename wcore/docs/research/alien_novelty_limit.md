@@ -54,6 +54,8 @@ known mechanisms — i.e. a structurally distinct solution that gambling surface
 | `probe` | parity solves 4/4 (838 evals); recall sparse 0/4 (0.55); **dense grading made it worse** (0.34) | recall is an all-or-nothing conjunction; the Brick-A density fix is **refuted** |
 | `curriculum` | cold recall hit-rate ~1/8 (K-independent at K≤6); champion `mem[key]` load/store holds at **held-out K=48 = 1.000** | **P1 ✓** — addressing is *discoverable & generalizing*. "Unreachable" (Phase 3) was wrong: it's reachable-but-**rare** = a reliability problem. K-ladder warm-start does **not** ease the hard jump. |
 | `gamble` | recall hit after **14 restarts**; seeded joint search reaches corner (min=1.000); corner program = `r2 = r2 + r0; r3 = mem[r0]; mem[r0] = r5` (accumulator ⊕ hash-table); scan rediscovered via **ADD** this run, XOR before | **P2 ✓, P3 ✓** |
+| `getrecall` | recall solve-rate 0/8 (R=12) → 3/8 (R=6) → **8/8 (R=6 + memory-biased proposer)**; the "dead" K=20 → **6/8**; champion is the same `mem[key]` hash-table, held-out K=48 = 1.000 | reliability is **fixable** — register-coordination combinatorics, not a gradient |
+| `corner` | with the levers, pure QD search reaches the top-right **4/4** (Phase 3: 0/4); corner holds held-out (parity L=256=1.000, recall K=48=1.000) and decomposes accumulator ⊕ hash-table | Phase-3 0/4 was a reliability artefact; corner = the union (P3 ✓ again) |
 
 ## Verdict
 
@@ -67,11 +69,16 @@ The sharp, useful conclusions:
 
 1. **The engine genuinely discovers real, generalizing mechanisms by execution alone**
    (content addressing, the scan) — that part is not theatre.
-2. **It is gated by reliability, not reachability.** A known mechanism is a low-complexity
-   conjunction; you hit it ~1/8 per restart, and more restarts hit it more reliably. This
-   is the Brick-A lesson, not a gradient problem.
-3. **Gambling buys reliability, not novelty.** More dice → the *same* minimal-complexity
-   attractor, faster. The corner you reach is the union of rediscoveries.
+2. **It is gated by reliability, not reachability — and the reliability is FIXABLE.** A
+   known mechanism is a low-complexity conjunction whose rarity is dominated by
+   register-coordination combinatorics. Shrinking the register file (R=12→6) and biasing
+   the proposer toward memory ops took recall from 0/8 to **8/8** (`getrecall`), and pure
+   QD search from 0/4 to **4/4** on the top-right corner (`corner`) — closing the Phase-3
+   negative as a reliability artefact. This is the Brick-A lesson, made concrete and fixed.
+3. **Gambling/reliability buys the known answer, not novelty.** The reliable recall is the
+   *same* hash-table; the reliably-reached corner is the *same* bolted union of the scan
+   and the hash-table. Fixing reliability got us the corner — and confirmed it is a hybrid
+   of two rediscoveries, exactly as C predicts.
 4. **"Make the primitives weird" did not make the *solutions* novel.** Known mechanisms
    are convergent under execution-only search.
 
@@ -107,17 +114,91 @@ tasks demand known *fusions* that are merely harder-to-reach conjunctions. Acros
 whole arc, execution-only search over the alien substrate **rediscovers, re-spells, and
 (in principle) composes KNOWN mechanisms — it does not mint a new one.**
 
-## What this would take to refute (the genuinely open question)
+## The pivot — a non-performance objective (`openended`), run
 
-C predicts no novelty under *execution-only search that rewards task performance*. The
-remaining ways it could still be false — none yet tested, each a real project:
-- A task whose optimal solution is provably *not* any known mechanism or a composition of
-  them (hard to construct; most computable tasks decompose into known building blocks).
-- A *non-performance* selection pressure (reward structural novelty itself, then test
-  whether the novel thing is also useful) — but that risks rewarding noise.
-- Vastly more compute on the conjunction-assembly reliability problem, to see whether
-  *composing* enough known building blocks ever crosses into something a human wouldn't
-  have written — i.e. emergent novelty from scale, not from the substrate.
+C was stated for *performance* fitness. The strongest test is to drop performance
+entirely and reward **behavioural novelty** (Lehman & Stanley novelty search), with the
+§20 fingerprint as the selection pressure. Result (TESTING.md §21):
+
+- With **no task objective**, novelty search **rediscovered the accumulator** (XOR-scan,
+  dist ~0) — the sparse functional point novelty is driven toward. Recall not reached;
+  **0** of 41 far-from-anchor members near-solve any task. Convergence confirmed from a
+  *third* independent angle (after forbidding and insufficiency).
+- **The novelty problem RELOCATED from the substrate to the DESCRIPTOR.** Novelty search
+  is only as novel as its behaviour metric. A descriptor built from known-task behaviour
+  can only surface *recombinations* of known capabilities; a genuinely new mechanism is
+  invisible to it (tell: the RMW counter reads as dist ~0 — the metric can't see counting).
+  **You cannot get out novelty your behaviour metric cannot represent.**
+
+## The information-theoretic descriptor (`infodesc`), run — and the deepest wall
+
+§21 said novelty is bounded by the descriptor. So we built a black-box, task-AGNOSTIC
+descriptor (entropy / memory-depth / richness / determinism on a canonical stream — no
+"correct answer") and re-ran novelty search in it. Result (TESTING.md §22):
+
+- **It sees what the task descriptor couldn't:** the counter, dist 0.21 (task, blind) →
+  1.54 (info, visible). Novelty search now explores long-range temporal structure
+  (37/116 archive members). §21's descriptor bottleneck is real and **movable.**
+- **Yet still no novelty-that-works:** parity 1.00 is the accumulator rediscovered *again*;
+  recall and counting were not reached even though the descriptor sees them (rare
+  conjunctions — reliability); the diverse, memory-deep behaviours it found solve nothing.
+- **The deepest wall, named — the NOVELTY ↔ USEFULNESS TENSION.** A task-agnostic metric
+  gives diverse-but-useless novelty; pinning usefulness needs a task, which reintroduces
+  the convergent attractor. **One fitness gives open-ended novelty OR task-grounded
+  usefulness — not both.**
+
+The arc's structure is now a clean three-level descent: the novelty problem is not the
+**substrate** (§20), not the **descriptor** (§21), but the **objective itself** (§22) — you
+cannot simultaneously reward "be different" and "be useful" from one signal.
+
+## Coevolution with transfer (`coevo`) — the first POSITIVE, run
+
+The §22 frontier (couple novelty + usefulness via a coevolving task population, POET-style)
+was built and tested on its sharpest consequence: does cross-task **transfer assemble a
+conjunction direct search can't?** Target = `pk_add`, the per-key counter (3-op RMW) that
+§20's `fuse` never found in 16M evals. Result (TESTING.md §23):
+
+- **Independent search:** `pk_add` solved 0/4 (reproduced 0/4, 0/4, 0/4, 1/4 across seeds).
+- **Coevolution:** `pk_add` solved **via transfer**, reliably across all seeds.
+- **The bridge:** `pk_xor` (a per-key RMW with no constant) *is* findable; transferring its
+  `load→op→store` shape to `pk_add` assembles the counter direct search couldn't reach.
+
+**This is the first lever in the whole arc to beat fixed-task search on a hard mechanism.**
+The §22 coupling pays off — for **reach**. Honest: the assembled mechanism is the *known*
+counter, so coevolution buys reach / reliability, **not** a novel primitive. It beats the
+conjunction reliability wall; it does **not repeal C**.
+
+## Open-ended composition ladder (`oecoevo`) — the strongest attack, run
+
+The one avenue the `coevo` positive made plausible — emergent novelty from an ever-moving
+task distribution — was built and pushed hard: tasks *generated* by composing stages without
+bound, mutation deepening them, transfer carrying solvers up the ladder. Result (TESTING.md §24):
+
+- **Big reach.** The ratchet climbs to **depth 3–4 reliably** (10–14 solved rungs across
+  seeds) — transfer *chains*, far past anything fixed-task search reached.
+- **But composition, not new atoms.** 5–9 deep solvers per run read "novel" to the
+  certifier — but that only means *not a single known atom*, which any composition satisfies
+  (the §22 blind spot). Hand-decomposition of the deepest solver confirms it every time: an
+  accumulator stacked with addressed memory (e.g. memory used as a delay to make a *delayed*
+  parity). A **novel composition of known atoms — not a new primitive.**
+
+**Capstone:** even the open-ended ratchet — the SOTA recipe for open-endedness — composes
+the same atoms ever more deeply and never mints a new one. **C holds against the strongest
+attack available.** Novelty-by-search is novelty of *composition*, bounded by the atom set
+the substrate provides.
+
+## What this would take to refute C (still open)
+
+C is about a new *atom*, and it stands against fixed-task search, forbidding, insufficiency
+tasks, novelty search, a task-agnostic descriptor, coevolution, and an open-ended ladder.
+The remaining genuinely-open avenues:
+- An **irreducibility test** — a way to certify a solver does *not* decompose into known
+  atoms. The arc never built one; without it, "novel" can only mean "a composition we don't
+  recognise." This is the honest next instrument, and the precondition for any real novelty claim.
+- A task whose optimal solution is provably *not* any known mechanism or composition of them
+  (hard to construct; most computable tasks decompose into known building blocks).
+- A substrate whose atom set is itself open-ended (atoms that can be invented, not a fixed
+  opcode list) — pushing the novelty question down one more level, where it may simply recur.
 
 This note's contribution is the method (map + certifier + alien substrate + the
 reliability-vs-novelty distinction) and the honest, experimentally-defended negative:

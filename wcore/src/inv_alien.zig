@@ -323,6 +323,54 @@ pub fn fingerprint(prog: *const Program, seed: u64) fr.Fingerprint {
     return fp;
 }
 
+pub const CANON_BASE: usize = 4; // output alphabet for the task-agnostic descriptor
+
+/// Run a program on a canonical symbol stream and record its two output channels
+/// (OUT_P, OUT_R) mod CANON_BASE — the raw material for a BLACK-BOX, task-agnostic
+/// behaviour descriptor (no "correct answer" anywhere). Each symbol is presented in
+/// the token, type, and value channels so memory/counting mechanisms have inputs.
+pub fn runCanonical(prog: *const Program, syms: []const u8, out2: []u8, out3: []u8) void {
+    var m = Machine{};
+    m.exec(prog.setup.slice());
+    for (syms, 0..) |s, i| {
+        m.reg[REG_TOK] = @as(u64, s) + 1;
+        m.reg[REG_TYP] = 0;
+        m.reg[5] = @as(u64, s) + 1;
+        m.exec(prog.step.slice());
+        out2[i] = @intCast(m.reg[ri(OUT_P)] % @as(u64, CANON_BASE));
+        out3[i] = @intCast(m.reg[ri(OUT_R)] % @as(u64, CANON_BASE));
+    }
+}
+
+/// Run a program on a symbol stream (symbols presented directly in token/value
+/// channels), reading OUT_R mod CANON_BASE each position. The execution substrate for
+/// the coevolution task family (§23).
+pub fn runStream(prog: *const Program, syms: []const u8, out: []u8) void {
+    var m = Machine{};
+    m.exec(prog.setup.slice());
+    for (syms, 0..) |s, i| {
+        m.reg[REG_TOK] = s;
+        m.reg[REG_TYP] = 0;
+        m.reg[5] = s;
+        m.exec(prog.step.slice());
+        out[i] = @intCast(m.reg[ri(OUT_R)] % @as(u64, CANON_BASE));
+    }
+}
+
+/// A cheaper 6-feature behavioural descriptor (smaller sample sizes) for the inner
+/// loop of open-ended/novelty search, where thousands of programs are characterised.
+/// Same axes as `fingerprint`, so it shares the space with the known mechanisms.
+pub fn descriptorLite(prog: *const Program, seed: u64) fr.Fingerprint {
+    var fp: fr.Fingerprint = undefined;
+    fp[0] = parityAcc(prog, 16, 12, seed, true);
+    fp[1] = parityAcc(prog, 96, 6, seed +% 1, true);
+    fp[2] = recallAcc(prog, 4, 48, seed +% 2, true);
+    fp[3] = recallAcc(prog, 24, 48, seed +% 3, true);
+    fp[4] = x0Sensitivity(prog, seed +% 4);
+    fp[5] = localAgreement(prog, seed +% 5);
+    return fp;
+}
+
 fn x0Sensitivity(prog: *const Program, seed: u64) f64 {
     const L: usize = 64;
     const n: usize = 64;
@@ -491,7 +539,7 @@ pub fn hunt(al: std.mem.Allocator, rng: std.Random, p: Params, seed: u64) !HuntR
     // seed the grid with random programs
     const n_init = @min(p.max_evals / 4, 2000);
     for (0..n_init) |_| {
-        const prog = randProg(rng, p.allowed_ops);
+        const prog = randProg(rng, &p);
         const s = score(&prog, p, seed);
         evals += 1;
         consider(grid, n, prog, s, p.lambda, &res);
@@ -500,17 +548,17 @@ pub fn hunt(al: std.mem.Allocator, rng: std.Random, p: Params, seed: u64) !HuntR
     while (evals < p.max_evals) {
         var child: Program = undefined;
         if (rng.float(f64) < p.init_rate) {
-            child = randProg(rng, p.allowed_ops);
+            child = randProg(rng, &p);
         } else {
             // pick a random occupied cell, mutate its elite
             var tries: usize = 0;
             var ci = rng.uintLessThan(usize, cells);
             while (grid[ci] == null and tries < 8) : (tries += 1) ci = rng.uintLessThan(usize, cells);
             if (grid[ci] == null) {
-                child = randProg(rng, p.allowed_ops);
+                child = randProg(rng, &p);
             } else {
                 child = grid[ci].?.prog;
-                mutate(rng, &child, p.allowed_ops);
+                mutate(rng, &child, &p);
             }
         }
         const s = score(&child, p, seed);
@@ -580,9 +628,9 @@ pub fn evolveAxis(al: std.mem.Allocator, rng: std.Random, p: Params, seed: u64, 
             // keep one exact copy of the stepping-stone, mutate the rest of the seeded quarter
             if (i < pop_size / 4) {
                 ind.prog = sp.*;
-                if (i > 0) mutate(rng, &ind.prog, p.allowed_ops);
-            } else ind.prog = randProg(rng, p.allowed_ops);
-        } else ind.prog = randProg(rng, p.allowed_ops);
+                if (i > 0) mutate(rng, &ind.prog, &p);
+            } else ind.prog = randProg(rng, &p);
+        } else ind.prog = randProg(rng, &p);
         const raw = evalAxis(&ind.prog, p, seed, axis);
         ind.fit = raw - p.lambda * @as(f64, @floatFromInt(ind.prog.len()));
         evals += 1;
@@ -597,7 +645,7 @@ pub fn evolveAxis(al: std.mem.Allocator, rng: std.Random, p: Params, seed: u64, 
     while (evals < p.max_evals) {
         var child: Program = undefined;
         if (rng.float(f64) < p.init_rate) {
-            child = randProg(rng, p.allowed_ops);
+            child = randProg(rng, &p);
         } else {
             var par = rng.uintLessThan(usize, pop_size);
             for (0..7) |_| {
@@ -605,7 +653,7 @@ pub fn evolveAxis(al: std.mem.Allocator, rng: std.Random, p: Params, seed: u64, 
                 if (pop[c].fit > pop[par].fit) par = c;
             }
             child = pop[par].prog;
-            mutate(rng, &child, p.allowed_ops);
+            mutate(rng, &child, &p);
         }
         const raw = evalAxis(&child, p, seed, axis);
         const adj = raw - p.lambda * @as(f64, @floatFromInt(child.len()));
@@ -628,34 +676,40 @@ fn randImm(rng: std.Random) u64 {
     const c = [_]u64{ 0, 1, 2, 3, 4, 5, 8, 16, 29, 32, 48, 63, MUM_C };
     return c[rng.uintLessThan(usize, c.len)];
 }
-fn pickOp(rng: std.Random, allowed: ?[]const Op) Op {
-    if (allowed) |set| return set[rng.uintLessThan(usize, set.len)];
+fn randReg(rng: std.Random, p: *const Params) u8 {
+    return @intCast(rng.uintLessThan(usize, p.active_regs));
+}
+fn pickOp(rng: std.Random, p: *const Params) Op {
+    if (p.mem_bias > 0 and rng.float(f64) < p.mem_bias) {
+        return if (rng.boolean()) .a_load else .a_store; // biased proposer toward memory ops
+    }
+    if (p.allowed_ops) |set| return set[rng.uintLessThan(usize, set.len)];
     return @enumFromInt(rng.uintLessThan(usize, Op.count()));
 }
-fn randInstr(rng: std.Random, allowed: ?[]const Op) Instr {
+fn randInstr(rng: std.Random, p: *const Params) Instr {
     return .{
-        .op = pickOp(rng, allowed),
-        .a = @intCast(rng.uintLessThan(usize, R)),
-        .b = @intCast(rng.uintLessThan(usize, R)),
-        .c = @intCast(rng.uintLessThan(usize, R)),
-        .out = @intCast(rng.uintLessThan(usize, R)),
+        .op = pickOp(rng, p),
+        .a = randReg(rng, p),
+        .b = randReg(rng, p),
+        .c = randReg(rng, p),
+        .out = randReg(rng, p),
         .imm = randImm(rng),
     };
 }
-fn randComp(rng: std.Random, max: usize, allowed: ?[]const Op) Component {
+fn randComp(rng: std.Random, max: usize, p: *const Params) Component {
     var comp = Component{};
     const k = rng.uintLessThan(usize, max + 1);
-    for (0..k) |_| comp.appendAssumeCapacity(randInstr(rng, allowed));
+    for (0..k) |_| comp.appendAssumeCapacity(randInstr(rng, p));
     return comp;
 }
-fn randProg(rng: std.Random, allowed: ?[]const Op) Program {
-    return .{ .setup = randComp(rng, 3, allowed), .step = randComp(rng, 8, allowed) };
+pub fn randProg(rng: std.Random, p: *const Params) Program {
+    return .{ .setup = randComp(rng, 3, p), .step = randComp(rng, 8, p) };
 }
-fn mutate(rng: std.Random, prog: *Program, allowed: ?[]const Op) void {
+pub fn mutate(rng: std.Random, prog: *Program, p: *const Params) void {
     const comp = if (rng.boolean()) &prog.setup else &prog.step;
     switch (rng.uintLessThan(usize, 3)) {
         0 => if (comp.len < MAX_INSTR) {
-            comp.insert(rng.uintLessThan(usize, comp.len + 1), randInstr(rng, allowed)) catch {};
+            comp.insert(rng.uintLessThan(usize, comp.len + 1), randInstr(rng, p)) catch {};
         },
         1 => if (comp.len > 0) {
             _ = comp.orderedRemove(rng.uintLessThan(usize, comp.len));
@@ -664,13 +718,13 @@ fn mutate(rng: std.Random, prog: *Program, allowed: ?[]const Op) void {
             const i = rng.uintLessThan(usize, comp.len);
             const ins = &comp.slice()[i];
             switch (rng.uintLessThan(usize, 5)) {
-                0 => ins.op = pickOp(rng, allowed),
-                1 => ins.a = @intCast(rng.uintLessThan(usize, R)),
-                2 => ins.b = @intCast(rng.uintLessThan(usize, R)),
-                3 => ins.out = @intCast(rng.uintLessThan(usize, R)),
+                0 => ins.op = pickOp(rng, p),
+                1 => ins.a = randReg(rng, p),
+                2 => ins.b = randReg(rng, p),
+                3 => ins.out = randReg(rng, p),
                 else => ins.imm = randImm(rng),
             }
-        } else comp.appendAssumeCapacity(randInstr(rng, allowed)),
+        } else comp.appendAssumeCapacity(randInstr(rng, p)),
     }
 }
 
@@ -752,12 +806,25 @@ test "INSUFFICIENCY: per-key counting needs a fused RMW — known mechanisms FAI
 test "op-masking: forbidding load/store removes them from generated programs" {
     var buf: [Op.count()]Op = undefined;
     const allowed = opsExcept(&buf, &.{ .a_load, .a_store });
+    const p: Params = .{ .allowed_ops = allowed };
     var p2 = std.Random.DefaultPrng.init(0x1357);
     const rng = p2.random();
     for (0..200) |_| {
-        const prog = randProg(rng, allowed);
+        const prog = randProg(rng, &p);
         for (prog.setup.slice()) |ins| try std.testing.expect(ins.op != .a_load and ins.op != .a_store);
         for (prog.step.slice()) |ins| try std.testing.expect(ins.op != .a_load and ins.op != .a_store);
+    }
+}
+
+test "reliability lever: active_regs confines generated programs to regs 0..active_regs" {
+    const p: Params = .{ .active_regs = 6 };
+    var prng = std.Random.DefaultPrng.init(0x2468);
+    const rng = prng.random();
+    for (0..200) |_| {
+        const prog = randProg(rng, &p);
+        for (prog.step.slice()) |ins| {
+            try std.testing.expect(ins.a < 6 and ins.b < 6 and ins.c < 6 and ins.out < 6);
+        }
     }
 }
 
