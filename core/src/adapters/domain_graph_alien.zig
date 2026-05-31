@@ -13,9 +13,32 @@ pub const Node = struct {
     imm: u6,
 };
 
+pub const Telemetry = struct {
+    stagnation: u32,
+    topo_velocity: f64,
+    z3_bottleneck: bool,
+    entropy_rate: f64,
+};
+
 pub const GraphProgram = struct {
     nodes: [MaxNodes]Node,
     used: u8,
+    last_matrix: ?[64]domain_base.Dependency = null,
+
+    pub fn getTopoVelocity(self: *GraphProgram) f64 {
+        const current = self.executeSymbolic();
+        if (self.last_matrix) |prev| {
+            var diff: usize = 0;
+            for (0..64) |i| {
+                diff += @popCount(current[i].x ^ prev[i].x);
+                diff += @popCount(current[i].y ^ prev[i].y);
+            }
+            self.last_matrix = current;
+            return @as(f64, @floatFromInt(diff)) / 8192.0; // Normalized velocity
+        }
+        self.last_matrix = current;
+        return 1.0;
+    }
 
     pub fn execute(self: GraphProgram, x: u64, y: u64) u64 {
         var values = [_]u64{0} ** (MaxNodes + 2);

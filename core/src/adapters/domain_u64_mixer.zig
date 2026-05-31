@@ -169,6 +169,29 @@ const Instruction = struct {
 pub const Program = struct {
     instructions: [MaxProgLen]Instruction,
     used: u8,
+    last_y: ?[FitSamples]u64 = null,
+
+    pub fn getTopoVelocity(self: *Program) f64 {
+        var rng: u64 = 0xACE_F00D_BEEF_CAFE;
+        var diff: usize = 0;
+        var current_y: [FitSamples]u64 = undefined;
+        
+        for (0..FitSamples) |s| {
+            rng = engine.smix(rng);
+            current_y[s] = self.execute(rng);
+            if (self.last_y) |prev| {
+                diff += @popCount(current_y[s] ^ prev[s]);
+            }
+        }
+        
+        const velocity = if (self.last_y != null) 
+            @as(f64, @floatFromInt(diff)) / @as(f64, @floatFromInt(FitSamples * 64))
+        else 
+            1.0;
+            
+        self.last_y = current_y;
+        return velocity;
+    }
 
     pub fn execute(self: Program, input: u64) u64 {
         var regs = [_]u64{0} ** NumRegs;

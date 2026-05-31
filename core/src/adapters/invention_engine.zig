@@ -27,6 +27,7 @@ const std = @import("std");
 //   pub fn isReachable(r: ReachabilityResult) bool
 //   pub fn printProgram(p: Program, writer: anytype) !void
 //   pub fn programToCsv(p: Program, writer: anytype) !void
+//   pub fn getTopoVelocity(p: *Program) f64     // OPTIONAL: Support for Alien Law
 //
 // The engine never inspects Program internals — it only calls Spec ops.
 //
@@ -331,22 +332,24 @@ pub fn Engine(comptime Spec: type) type {
         pub fn searchWithConfig(self: *Self, iterations: usize, config: SearchConfig, progress_writer: ?std.fs.File.Writer) !SearchResult {
             var accepted: usize = 0;
             var i: usize = 0;
+            var stagnation: u32 = 0;
             const mutation_rate = clamp01(config.mutation_rate);
             const crossover_rate = clamp01(config.crossover_rate);
+            
             while (i < iterations) : (i += 1) {
                 const t = temperature(config, i, iterations);
 
                 const parent_idx = self.parentIdx(config.parent_selection);
-                const parent = self.pool[parent_idx].program;
+                const parent = &self.pool[parent_idx].program;
 
                 const draw = self.unitDraw();
                 const candidate: Spec.Program = if (draw < crossover_rate and self.count > 1) blk: {
                     self.rng = smix(self.rng);
                     const other_idx = self.rng % self.count;
-                    break :blk Spec.crossover(parent, self.pool[other_idx].program, &self.rng);
+                    break :blk Spec.crossover(parent.*, self.pool[other_idx].program, &self.rng);
                 } else if (draw < crossover_rate + mutation_rate or self.count <= 1) blk: {
-                    break :blk Spec.mutate(parent, &self.rng);
-                } else parent;
+                    break :blk Spec.mutate(parent.*, &self.rng);
+                } else parent.*;
 
                 const cand_q = Spec.evaluateQuality(candidate);
                 if (!Spec.isFinite(cand_q)) continue;
@@ -358,6 +361,33 @@ pub fn Engine(comptime Spec: type) type {
                 if (accept) {
                     self.pool[w] = .{ .program = candidate, .quality = cand_q, .score = cand_score };
                     accepted += 1;
+                    if (delta > 0.0001) stagnation = 0; // Reset stagnation on real improvement
+                } else {
+                    stagnation += 1;
+                }
+
+                // --- ALIEN LAW OF ESCAPE ---
+                const velocity = if (@hasDecl(Spec, "getTopoVelocity")) 
+                    Spec.getTopoVelocity(&self.pool[self.bestIdx()].program) 
+                else 
+                    0.01; // Mock velocity for standard domains
+
+                const stag_f = @as(f64, @floatFromInt(stagnation));
+                const part1 = (stag_f + velocity) / 59.85;
+                const part2 = (1.2 / @max(0.000001, velocity)) + 1.0;
+                const alien_trigger = @log(@max(0.000001, @abs(part1))) * @log(@max(0.000001, @abs(part2)));
+
+                if (alien_trigger > 1.0) {
+                    const restarts = @max(self.count / 4, 1);
+                    var r: usize = 0;
+                    while (r < restarts) : (r += 1) {
+                        const rp = Spec.randomProgram(&self.rng);
+                        const rq = Spec.evaluateQuality(rp);
+                        if (!Spec.isFinite(rq)) continue;
+                        const rw = self.worstIdx();
+                        self.pool[rw] = .{ .program = rp, .quality = rq, .score = Spec.qualityScalar(rq) };
+                    }
+                    stagnation = 0;
                 }
 
                 if (config.restart_period != 0 and (i + 1) % config.restart_period == 0) {

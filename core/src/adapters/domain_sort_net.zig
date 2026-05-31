@@ -55,6 +55,37 @@ pub fn getDepthMode() DepthMode { return depth_mode; }
 pub const Program = struct {
     comps: [MaxLen]Comparator,
     used: u8,
+    last_out: ?[256][N]u8 = null,
+
+    pub fn getTopoVelocity(self: *Program) f64 {
+        var rng: u64 = 0xA1B2C3D4E5F60718;
+        var diff: usize = 0;
+        var current_out: [256][N]u8 = undefined;
+        
+        for (0..256) |s| {
+            var arr = [_]u8{ 0, 1, 2, 3, 4, 5, 6, 7 };
+            var k: usize = N - 1;
+            while (k > 0) : (k -= 1) {
+                rng = engine.smix(rng);
+                const swap_idx: usize = rng % (k + 1);
+                const t = arr[k]; arr[k] = arr[swap_idx]; arr[swap_idx] = t;
+            }
+            current_out[s] = self.sort(arr);
+            if (self.last_out) |prev| {
+                for (0..N) |wire| {
+                    if (current_out[s][wire] != prev[s][wire]) diff += 1;
+                }
+            }
+        }
+        
+        const velocity = if (self.last_out != null) 
+            @as(f64, @floatFromInt(diff)) / @as(f64, @floatFromInt(256 * N))
+        else 
+            1.0;
+            
+        self.last_out = current_out;
+        return velocity;
+    }
 
     pub fn sort(self: Program, input: [N]u8) [N]u8 {
         var a = input;

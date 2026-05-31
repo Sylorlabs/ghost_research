@@ -44,6 +44,7 @@ const core_modules = [_]CoreModule{
     .{ .name = "domain_associative_memory", .path = "src/adapters/domain_associative_memory.zig" },
     .{ .name = "domain_graph_alien", .path = "src/adapters/domain_graph_alien.zig" },
     .{ .name = "domain_graph_attention", .path = "src/adapters/domain_graph_attention.zig" },
+    .{ .name = "heuristic_gp", .path = "src/adapters/heuristic_gp.zig" },
     .{ .name = "domain_general", .path = "src/adapters/domain_general.zig" },
     .{ .name = "domain_symbolic_arx", .path = "src/adapters/domain_symbolic_arx.zig" },
     .{ .name = "domain_superoptimizer", .path = "src/adapters/domain_superoptimizer.zig" },

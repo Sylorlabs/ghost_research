@@ -1,0 +1,13 @@
+.{
+    .fingerprint = 0x2d4a1a1e96ba4b73,
+    .name = .self_evolution,
+    .version = "0.1.0",
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{
+        "src",
+        "build.zig",
+        "build.zig.zon",
+    },
+}
