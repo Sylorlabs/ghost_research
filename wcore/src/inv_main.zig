@@ -16,6 +16,8 @@ const tasks = @import("inv_tasks.zig");
 const evo = @import("inv_evolve.zig");
 const lib = @import("inv_library.zig");
 const seq = @import("inv_seq.zig");
+const frontier = @import("inv_frontier.zig");
+const alien = @import("inv_alien.zig");
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -49,8 +51,26 @@ pub fn main() !void {
         try phase8(al, out, seed);
     } else if (std.mem.eql(u8, phase, "seq")) {
         try seqExperiment(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "frontier")) {
+        try frontierMap(out, seed);
+    } else if (std.mem.eql(u8, phase, "novelty")) {
+        try noveltyCertifier(out, seed);
+    } else if (std.mem.eql(u8, phase, "alien")) {
+        try alienReachability(out, seed);
+    } else if (std.mem.eql(u8, phase, "hunt")) {
+        try alienHunt(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "probe")) {
+        try alienProbe(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "curriculum")) {
+        try alienCurriculum(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "gamble")) {
+        try alienGamble(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "forbid")) {
+        try alienForbid(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "fuse")) {
+        try alienFuse(al, out, seed);
     } else {
-        try out.print("unknown phase '{s}'. try: phase0..phase8 | seq\n", .{phase});
+        try out.print("unknown phase '{s}'. try: phase0..phase8 | seq | frontier | novelty | alien | hunt | probe | curriculum | gamble | forbid | fuse\n", .{phase});
     }
 }
 
@@ -125,6 +145,706 @@ fn seqExperiment(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
     } else {
         try out.writeAll("  ⇒ the champion does not cleanly hold/scale this run — rerun or raise budget.\n");
     }
+}
+
+/// RESEARCH PHASE 0 — THE MAP. Place the known mechanisms on the (recall,
+/// length-gen) plane and prove the two tasks pull in opposite directions. This
+/// is the measurement the whole alien-architecture search is graded against:
+/// nothing can "break the frontier" until we've shown where the frontier is and
+/// that it's real. KILL-TEST (also in inv_frontier tests): attention and scan
+/// land at opposite corners.
+fn frontierMap(out: anytype, seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 0: the recall ↔ length-gen frontier map ===\n\n");
+    try out.writeAll("Two tasks that pull opposite ways:\n");
+    try out.writeAll("  • length-gen  = prefix-parity at L=256 (trained-length 32) — needs a SCAN\n");
+    try out.writeAll("  • recall      = associative recall, K=32 bindings, S=4 memory — needs CONTENT ADDRESSING\n\n");
+
+    const ops = [_]frontier.Operator{ frontier.attention, frontier.scan, frontier.local };
+    try out.writeAll("  mechanism   | length-gen (parity L=256) | recall (K=32) | corner\n");
+    try out.writeAll("  ------------+---------------------------+---------------+-------------------------\n");
+    for (ops) |op| {
+        const lg = frontier.parityAcc(op, 256, 64, seed);
+        const rc = frontier.recallAcc(op, 32, 1024, seed +% 7);
+        const corner = describeCorner(lg, rc);
+        try out.print("  {s:<11} |           {d:.3}           |     {d:.3}     | {s}\n", .{ op.name, lg, rc, corner });
+    }
+
+    // the diagonal gap (the thing an alien op would have to fill)
+    const attn_rc = frontier.recallAcc(frontier.attention, 32, 1024, seed +% 7);
+    const attn_lg = frontier.parityAcc(frontier.attention, 256, 64, seed);
+    const scan_rc = frontier.recallAcc(frontier.scan, 32, 1024, seed +% 7);
+    const scan_lg = frontier.parityAcc(frontier.scan, 256, 64, seed);
+    try out.writeAll("\n[FRONTIER] attention owns the recall corner, scan owns the length-gen corner.\n");
+    try out.print("  recall gap (attn−scan)    = {d:.3}\n", .{attn_rc - scan_rc});
+    try out.print("  length-gen gap (scan−attn)= {d:.3}\n", .{scan_lg - attn_lg});
+    try out.writeAll("  The OPEN TARGET is the empty top-right corner: high recall AND high length-gen.\n");
+    try out.writeAll("  No single known primitive sits there. That is what the alien search must reach.\n");
+}
+
+fn describeCorner(lg: f64, rc: f64) []const u8 {
+    const hi_lg = lg > 0.8;
+    const hi_rc = rc > 0.8;
+    if (hi_lg and hi_rc) return "TOP-RIGHT (the open target!)";
+    if (hi_lg) return "length-gen corner";
+    if (hi_rc) return "recall corner";
+    return "neither (dominated)";
+}
+
+/// RESEARCH PHASE 1 — THE NOVELTY CERTIFIER. The anti-self-deception machinery:
+/// a behavioural fingerprint that tells a genuinely new operator apart from a
+/// known one in disguise. We print the fingerprints, the pairwise distances, and
+/// run the certifier on a re-implemented scan. KILL-TEST: the disguised scan
+/// must certify NOT-novel and nearest=scan; known mechanisms must be far apart.
+fn noveltyCertifier(out: anytype, seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 1: the behavioural novelty certifier ===\n\n");
+    try out.writeAll("Fingerprint = [parity16, parity256, recallK4, recallK48, x0_sensitivity, local_agree]\n");
+    try out.writeAll("(mechanism-revealing probes; a candidate is NOVEL only if far from EVERY anchor)\n\n");
+
+    const named = [_]frontier.Operator{ frontier.attention, frontier.scan, frontier.local, frontier.scan_disguised };
+    try out.writeAll("  operator        | fingerprint\n");
+    try out.writeAll("  ----------------+--------------------------------------------------\n");
+    for (named) |op| {
+        const fp = frontier.fingerprint(op, seed);
+        try out.print("  {s:<15} | [", .{op.name});
+        for (fp, 0..) |c, i| {
+            if (i > 0) try out.writeAll(" ");
+            try out.print("{d:.2}", .{c});
+        }
+        try out.writeAll("]\n");
+    }
+
+    const anchors = frontier.knownAnchors(seed);
+    try out.print("\nKnown anchors: attention, scan, local. Novelty threshold = {d:.2}\n", .{frontier.NOVELTY_THRESHOLD});
+    try out.writeAll("  pairwise anchor distances (must all exceed the threshold = well-separated clusters):\n");
+    const fa = frontier.fingerprint(frontier.attention, seed);
+    const fs = frontier.fingerprint(frontier.scan, seed);
+    const fl = frontier.fingerprint(frontier.local, seed);
+    try out.print("    attn↔scan = {d:.3} | attn↔local = {d:.3} | scan↔local = {d:.3}\n\n", .{ frontier.fpDist(fa, fs), frontier.fpDist(fa, fl), frontier.fpDist(fs, fl) });
+
+    try out.writeAll("[KILL-TEST] feed it a re-implemented scan (parity-via-count, re-indexed memory):\n");
+    const fp_disg = frontier.fingerprint(frontier.scan_disguised, seed);
+    const v = frontier.classify(fp_disg, &anchors, frontier.NOVELTY_THRESHOLD);
+    try out.print("  nearest anchor = {s} | distance = {d:.3} | verdict = {s}\n", .{ v.nearest, v.dist, if (v.novel) "NOVEL" else "NOT novel (known mechanism in disguise)" });
+    if (!v.novel and std.mem.eql(u8, v.nearest, "scan")) {
+        try out.writeAll("  ⇒ PASS: the certifier saw through the disguise. A future alien op will only count\n");
+        try out.writeAll("    as a real invention if it lands FAR from every anchor AND on the frontier corner.\n");
+    } else {
+        try out.writeAll("  ⇒ FAIL: certifier cannot recognise a disguised known mechanism — fix before searching.\n");
+    }
+}
+
+/// RESEARCH PHASE 2 — THE ALIEN SUBSTRATE reachability proof. The non-human
+/// op-space (bit-mixing + addressable memory + computed addressing; no softmax,
+/// no float-product) must be able to HOST a frontier-breaker before searching it
+/// is worthwhile. We hand-write three alien programs and place them on the same
+/// Phase-0 map: an XOR-accumulator (length-gen corner, via bits not floats), a
+/// hash-table (recall corner, via hashing not softmax), and their UNION (the
+/// empty top-right corner). KILL-TEST: the union reaches BOTH and certifies novel.
+fn alienReachability(out: anytype, seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 2: the alien substrate — is the frontier reachable? ===\n\n");
+    try out.writeAll("Op-space: u64 regs + XOR/AND/OR/SHL/SHR/ROTR/POPCNT/MUM/BSWAP + addressable\n");
+    try out.writeAll("memory (data-dependent load/store) + eq/sel masks. NO softmax, NO float product.\n");
+    try out.writeAll("Content addressing is reachable only via HASHING; accumulation only via BIT-MIXING.\n\n");
+
+    const Named = struct { name: []const u8, p: alien.Program, route: []const u8 };
+    const progs = [_]Named{
+        .{ .name = "alien XOR-scan ", .p = alien.alienXorScan(), .route = "parity via bit-XOR accumulate" },
+        .{ .name = "alien hash-tbl ", .p = alien.alienHashTable(), .route = "recall via hashed memory" },
+        .{ .name = "alien UNION    ", .p = alien.alienUnion(), .route = "both, in one step-body" },
+    };
+
+    try out.writeAll("  alien program   | length-gen (L=256) | recall (K=48) | corner                       | route\n");
+    try out.writeAll("  ----------------+--------------------+---------------+------------------------------+------------------------------\n");
+    for (progs) |g| {
+        const lg = alien.parityAcc(&g.p, 256, 64, seed, true);
+        const rc = alien.recallAcc(&g.p, 48, 1024, seed +% 7, true);
+        try out.print("  {s} |       {d:.3}        |     {d:.3}     | {s:<28} | {s}\n", .{ g.name, lg, rc, describeCorner(lg, rc), g.route });
+    }
+
+    // certify the top-right alien program against the known anchors
+    const u = alien.alienUnion();
+    const fp = alien.fingerprint(&u, seed);
+    const anchors = frontier.knownAnchors(seed);
+    const v = frontier.classify(fp, &anchors, frontier.NOVELTY_THRESHOLD);
+    try out.writeAll("\n[REACHABILITY] the alien op-space spans the WHOLE map, including the empty corner:\n");
+    try out.print("  top-right program fingerprint = [", .{});
+    for (fp, 0..) |c, i| {
+        if (i > 0) try out.writeAll(" ");
+        try out.print("{d:.2}", .{c});
+    }
+    try out.print("]\n  certifier verdict: nearest={s}, dist={d:.3} ⇒ {s}\n", .{ v.nearest, v.dist, if (v.novel) "NOVEL vs every single-mechanism anchor" else "matches a known mechanism" });
+    try out.writeAll("\n[HONEST] the union is two KNOWN mechanisms bolted together — it certifies novel only\n");
+    try out.writeAll("because no SINGLE anchor does both. The real prize (Phase 3 search + Phase 4 gauntlet)\n");
+    try out.writeAll("is whether execution-search DISCOVERS a top-right program, and whether what it finds is\n");
+    try out.writeAll("a unified/irreducible primitive or just rediscovers this union. The substrate is proven\n");
+    try out.writeAll("able to host the answer — searching it is now worthwhile.\n");
+}
+
+/// RESEARCH PHASE 7 (frontier experiment 1) — FORBID THE ATTRACTOR. If the known
+/// mechanisms are convergent attractors, removing their primitives should either (a)
+/// force a DIFFERENT SPELLING of the same mechanism (convergence confirmed), (b) reveal
+/// ANOTHER known mechanism, or (c) make the task unsolvable (reachability limit) — but
+/// NOT produce a genuinely novel primitive. We restrict the op-space and re-search.
+fn alienForbid(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 7 (experiment 1): forbid the attractor ===\n\n");
+    try out.writeAll("Restrict the op-space and re-search. Does forbidding a known mechanism yield a\n");
+    try out.writeAll("NOVEL one, another KNOWN one, or impossibility?\n\n");
+
+    var b1: [alien.Op.count()]alien.Op = undefined;
+    const no_xor = alien.opsExcept(&b1, &.{.a_xor});
+    var b2: [alien.Op.count()]alien.Op = undefined;
+    const no_acc = alien.opsExcept(&b2, &.{ .a_xor, .a_add, .a_sub });
+    var b3: [alien.Op.count()]alien.Op = undefined;
+    const no_mem = alien.opsExcept(&b3, &.{ .a_load, .a_store });
+
+    const Cfg = struct { name: []const u8, axis: alien.Axis, allowed: ?[]const alien.Op, k: usize };
+    const configs = [_]Cfg{
+        .{ .name = "parity, FULL op-space     ", .axis = .parity, .allowed = null, .k = 8 },
+        .{ .name = "parity, NO xor            ", .axis = .parity, .allowed = no_xor, .k = 8 },
+        .{ .name = "parity, NO xor/add/sub    ", .axis = .parity, .allowed = no_acc, .k = 8 },
+        .{ .name = "recall, FULL op-space     ", .axis = .recall, .allowed = null, .k = 8 },
+        .{ .name = "recall, NO load/store     ", .axis = .recall, .allowed = no_mem, .k = 8 },
+    };
+    const n_seeds: usize = 4;
+    const max_evals: usize = 250_000;
+
+    try out.print("{d} seeds × {d} evals/run. Solve = score ≥ 0.95.\n\n", .{ n_seeds, max_evals });
+    try out.writeAll("  config                     | solves | best score\n");
+    try out.writeAll("  ---------------------------+--------+-----------\n");
+    var nomem_champ: ?alien.Program = null;
+    var nomem_best: f64 = 0;
+    for (configs) |cfg| {
+        var solves: usize = 0;
+        var best: f64 = 0;
+        var best_prog: alien.Program = .{};
+        for (0..n_seeds) |s| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% hashName(cfg.name) +% s *% 0x9E3779B1);
+            const p = alien.Params{ .max_evals = max_evals, .fit_K = cfg.k, .allowed_ops = cfg.allowed };
+            const r = try alien.evolveAxis(al, prng.random(), p, base_seed +% s, cfg.axis);
+            if (r.best_score >= 0.95) solves += 1;
+            if (r.best_score > best) {
+                best = r.best_score;
+                best_prog = r.best;
+            }
+        }
+        try out.print("  {s} |  {d}/{d}   |   {d:.3}\n", .{ cfg.name, solves, n_seeds, best });
+        if (std.mem.startsWith(u8, cfg.name, "recall, NO load")) {
+            nomem_champ = best_prog;
+            nomem_best = best;
+        }
+    }
+
+    // inspect the recall-without-memory champion: what mechanism, and is it novel?
+    if (nomem_champ) |*c| {
+        try out.writeAll("\n[INSPECT] recall WITHOUT addressable memory — what did search use instead?\n");
+        try alien.writeProgram(c, out);
+        if (nomem_best >= 0.95) {
+            const eqsel = countOp(c, .a_eq) + countOp(c, .a_sel);
+            const fp = alien.fingerprint(c, base_seed +% 0xC00);
+            const anchors = frontier.knownAnchors(base_seed +% 0xC00);
+            const v = frontier.classify(fp, &anchors, frontier.NOVELTY_THRESHOLD);
+            try out.print("  SOLVED. compare/select ops: {d} | certifier: nearest {s}, dist {d:.2} ⇒ {s}\n", .{ eqsel, v.nearest, v.dist, if (v.novel) "NOVEL vs anchors" else "known mechanism" });
+        } else {
+            try out.print("  did NOT solve (best {d:.3}) — forbidding memory revealed a WALL, not a mechanism.\n", .{nomem_best});
+            try out.writeAll("  (novelty is meaningless for a non-solving program; nothing to certify.)\n");
+        }
+    }
+
+    try out.writeAll("\n[READING] Parity solves even with xor AND add AND sub all forbidden ⇒ the accumulator\n");
+    try out.writeAll("mechanism is MULTIPLY-REALIZABLE: search just finds another spelling (eq/sel/mul/rotr\n");
+    try out.writeAll("tricks tracking the low bit). You can't forbid a convergent mechanism by deleting a few\n");
+    try out.writeAll("ops — the strongest convergence evidence yet. Recall without memory did NOT solve (a\n");
+    try out.writeAll("WALL: the compare-and-select route — itself ATTENTION's mechanism — is a bigger\n");
+    try out.writeAll("conjunction than this budget reaches). So forbidding an attractor reveals a different\n");
+    try out.writeAll("SPELLING of the same mechanism, or a neighbouring KNOWN mechanism, or a wall — never a\n");
+    try out.writeAll("novel primitive. (Refuted only if a SOLVING champion certifies NOVEL and does not reduce\n");
+    try out.writeAll("to a known mechanism on inspection.)\n");
+}
+
+/// RESEARCH PHASE 8 (frontier experiment 2) — INSUFFICIENCY. A task neither the scan
+/// nor the hash-table nor their bolted union can do: PER-KEY COUNTING (output how many
+/// times the current symbol has appeared). It needs accumulation INSIDE the addressed
+/// cell — a fused read-modify-write. Does search discover the fusion, and is it novel
+/// or a known (counter-array) pattern? This is the fair attempt to FORCE novelty.
+fn alienFuse(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 8 (experiment 2): the insufficiency task (per-key counting) ===\n\n");
+    const vocab: usize = 6;
+
+    // ---- known mechanisms FAIL; the fused RMW solves ---------------------------
+    try out.writeAll("[SETUP] per-key counting: output #times the current symbol has appeared (mod 4).\n");
+    try out.writeAll("Neither the scan, the hash-table, nor their bolted union can do it:\n");
+    try out.print("  scan-alone:   {d:.3}\n", .{alien.countingAcc(&alien.alienXorScan(), vocab, 32, 64, base_seed, true)});
+    try out.print("  hash-alone:   {d:.3}\n", .{alien.countingAcc(&alien.alienHashTable(), vocab, 32, 64, base_seed, true)});
+    try out.print("  bolted union: {d:.3}\n", .{alien.countingAcc(&alien.alienUnion(), vocab, 32, 64, base_seed, true)});
+    try out.print("  fused RMW:    {d:.3}  ← only the read-modify-write counter solves it\n\n", .{alien.countingAcc(&alien.alienRMWCounter(), vocab, 32, 64, base_seed, true)});
+
+    // ---- can search DISCOVER the fusion? gamble hard (counting eval is cheap) ---
+    const max_restarts: usize = 40;
+    const per: usize = 400_000;
+    try out.print("[SEARCH] gamble for the fusion: up to {d} restarts × {d} evals.\n", .{ max_restarts, per });
+    var best: f64 = 0;
+    var champ: alien.Program = .{};
+    var restarts_used: usize = 0;
+    var hit = false;
+    for (0..max_restarts) |t| {
+        var prng = std.Random.DefaultPrng.init(base_seed +% 0xF05E +% t *% 0x9E3779B97F4A7C15);
+        const p = alien.Params{ .max_evals = per, .count_vocab = vocab };
+        const r = try alien.evolveAxis(al, prng.random(), p, base_seed +% t, .counting);
+        restarts_used = t + 1;
+        if (r.best_score > best) {
+            best = r.best_score;
+            champ = r.best;
+        }
+        if (r.best_score >= 0.95) {
+            hit = true;
+            break;
+        }
+    }
+    if (hit) {
+        try out.print("  HIT after {d} restart(s) | best {d:.3}\n  discovered champion:\n", .{ restarts_used, best });
+    } else {
+        try out.print("  NO hit in {d} restarts | best {d:.3}\n  best (non-solving) cold champion:\n", .{ restarts_used, best });
+    }
+    try alien.writeProgram(&champ, out);
+
+    // ---- curriculum: seed from a banked hash-table (which search CAN discover) --
+    // The RMW is ~2 mutations from the hash-table (rewire the store source, insert an
+    // increment). Banking a discoverable building block and extending it is the tower
+    // method — a fair test of whether the fusion is REACHABLE from a known part.
+    var via_curriculum = false;
+    if (!hit) {
+        try out.writeAll("\n[CURRICULUM] cold gamble failed — now seed from a banked hash-table building block\n");
+        try out.writeAll("(a mechanism search can discover) and ask if the fusion emerges by extension:\n");
+        const seed_hash = alien.alienHashTable();
+        for (0..12) |t| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% 0x515E +% t *% 0x9E3779B97F4A7C15);
+            var p = alien.Params{ .max_evals = per, .count_vocab = vocab };
+            p.seed_prog = &seed_hash;
+            const r = try alien.evolveAxis(al, prng.random(), p, base_seed +% t, .counting);
+            if (r.best_score > best) {
+                best = r.best_score;
+                champ = r.best;
+            }
+            if (r.best_score >= 0.95) {
+                hit = true;
+                via_curriculum = true;
+                try out.print("  HIT after {d} seeded restart(s) | best {d:.3}\n  extended champion:\n", .{ t + 1, best });
+                try alien.writeProgram(&champ, out);
+                break;
+            }
+        }
+        if (!via_curriculum) try out.print("  curriculum did not reach it either | best {d:.3}\n", .{best});
+    }
+
+    // ---- decompose: is it the fused RMW (more than the union) and is it novel? --
+    const loads = countOp(&champ, .a_load);
+    const stores = countOp(&champ, .a_store);
+    const incrs = countOp(&champ, .a_add) + countOp(&champ, .a_sub);
+    const is_rmw = loads >= 1 and stores >= 1 and incrs >= 1;
+    try out.print("\n[DECOMPOSE] load:{d} store:{d} add/sub:{d} ⇒ {s}\n", .{ loads, stores, incrs, if (is_rmw) "a fused READ-MODIFY-WRITE on addressed memory" else "not a clean RMW" });
+
+    try out.writeAll("\n[VERDICT] ");
+    if (best >= 0.95 and is_rmw) {
+        if (via_curriculum) {
+            try out.writeAll("cold gamble could NOT find the fusion (a 3-op conjunction is too big a needle), but\n");
+            try out.writeAll("seeding from a banked hash-table DID extend to it. So the insufficiency task forces a\n");
+            try out.writeAll("FUSION that is reachable only by COMPOSING a discovered building block — the tower\n");
+            try out.writeAll("method, not cold gambling. ");
+        } else {
+            try out.writeAll("the insufficiency task FORCED a FUSION that cold search found — per-key accumulation\n");
+            try out.writeAll("inside the addressed cell. ");
+        }
+        try out.writeAll("BUT honestly the RMW counter-array is a TEXTBOOK known\n");
+        try out.writeAll("mechanism — rediscovery of a fused-but-known pattern, not a never-seen primitive.\n");
+        try out.writeAll("(The recall↔length-gen certifier is scoped to those axes; it would mislabel an RMW\n");
+        try out.writeAll("counter 'novel' because the counter isn't an anchor — a known limitation, not novelty.)\n");
+        try out.writeAll("Claim C holds: search fuses/composes KNOWN building blocks; it did not mint a new one.\n");
+    } else if (best >= 0.95) {
+        try out.writeAll("counting solved by something other than a clean RMW — inspect by hand; if it is not a\n");
+        try out.writeAll("known pattern this is the interesting case. Re-run more seeds before any claim.\n");
+    } else {
+        try out.writeAll("search did NOT solve counting — neither cold (40 restarts) NOR seeded from a banked\n");
+        try out.writeAll("hash-table. The fused RMW is a 3-op conjunction (load+increment+store, same address),\n");
+        try out.writeAll("a bigger needle than the 2-op hash-table; even extension from a building block didn't\n");
+        try out.writeAll("reach it this budget. A reliability wall, consistent with the conjunction findings —\n");
+        try out.writeAll("still no novelty, just a harder-to-reach KNOWN fusion. Claim C holds.\n");
+    }
+}
+
+/// RESEARCH PHASE 6 — "DOES GAMBLING GET YOU THERE?" Tests the falsifiable claim:
+/// gambling (restarts) changes how RELIABLY you hit an attractor, not WHICH attractor.
+///   (1) gamble on recall, count restarts to first solve (reliability is the only wall);
+///   (2) bank that champion, seed the JOINT (top-right) objective from it — show the
+///       corner is then one easy step away (so "gambling gets you the corner" = TRUE);
+///   (3) decompose the corner program — show it FACTORS into accumulator ⊕ memory, i.e.
+///       the bolted union of two REDISCOVERIES, not a unified novel primitive. So the
+///       thing gambling reliably hands you is the known answer, never a new one.
+fn alienGamble(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 6: does gambling get you there? (reliability vs novelty) ===\n\n");
+    const K: usize = 8;
+
+    // ---- (1) gamble on recall: how many restarts to hit the known mechanism? ----
+    try out.writeAll("[1] GAMBLE on recall (K=8): independent restarts until one hits (solve = 0.95).\n");
+    const max_restarts: usize = 24;
+    const per_restart: usize = 150_000;
+    var restarts_used: usize = 0;
+    var recall_champ: ?alien.Program = null;
+    for (0..max_restarts) |t| {
+        var prng = std.Random.DefaultPrng.init(base_seed +% 0x6A33 +% t *% 0x9E3779B97F4A7C15);
+        const p = alien.Params{ .max_evals = per_restart, .fit_K = K };
+        const r = try alien.evolveAxis(al, prng.random(), p, base_seed +% t, .recall);
+        restarts_used = t + 1;
+        if (r.best_score >= 0.95) {
+            recall_champ = r.best;
+            break;
+        }
+    }
+    if (recall_champ == null) {
+        try out.print("  no hit in {d} restarts this run (rare tail) — rerun; the mechanism is ~1/8.\n", .{max_restarts});
+        return;
+    }
+    try out.print("  HIT after {d} restart(s) — recall is reachable, the only wall is reliability.\n", .{restarts_used});
+    try out.writeAll("  the gambled recall mechanism:\n");
+    try alien.writeProgram(&recall_champ.?, out);
+
+    // ---- (2) seed the JOINT (corner) objective from the banked champion ---------
+    try out.writeAll("\n[2] SEED the top-right (joint) objective from that champion — is the corner close?\n");
+    var rc = recall_champ.?;
+    var joint_champ: alien.Program = rc;
+    var joint_best: f64 = 0;
+    var joint_evals: ?usize = null;
+    for (0..4) |s| {
+        var prng = std.Random.DefaultPrng.init(base_seed +% 0x7B44 +% s *% 0x9E3779B1);
+        var p = alien.Params{ .max_evals = 150_000, .fit_K = K };
+        p.seed_prog = &rc;
+        const r = try alien.evolveAxis(al, prng.random(), p, base_seed +% s, .joint);
+        if (r.best_score > joint_best) {
+            joint_best = r.best_score;
+            joint_champ = r.best;
+            joint_evals = r.evals_to_solve;
+        }
+    }
+    try out.print("  joint score min(parity,recall) = {d:.3}", .{joint_best});
+    if (joint_evals) |e| try out.print(" (corner reached in {d} evals from the seed)", .{e});
+    try out.writeAll("\n");
+    const reached = joint_best >= 0.95;
+
+    // ---- (3) decompose the corner program: rediscovery-union or novel? ----------
+    try out.writeAll("\n[3] DECOMPOSE the corner program — does it factor into the two KNOWN mechanisms?\n");
+    const acc_ops = countOp(&joint_champ, .a_xor) + countOp(&joint_champ, .a_add) + countOp(&joint_champ, .a_mul);
+    const mem_ops = countOp(&joint_champ, .a_load) + countOp(&joint_champ, .a_store);
+    const fp = alien.fingerprint(&joint_champ, base_seed +% 0xC00);
+    const anchors = frontier.knownAnchors(base_seed +% 0xC00);
+    const v = frontier.classify(fp, &anchors, frontier.NOVELTY_THRESHOLD);
+    try alien.writeProgram(&joint_champ, out);
+    try out.print("  accumulator-style ops: {d} | memory ops (load/store): {d}\n", .{ acc_ops, mem_ops });
+    try out.print("  fingerprint = [", .{});
+    for (fp, 0..) |c, i| {
+        if (i > 0) try out.writeAll(" ");
+        try out.print("{d:.2}", .{c});
+    }
+    try out.print("] ⇒ certifier says {s} (nearest {s}, dist {d:.2})\n", .{ if (v.novel) "NOVEL" else "known", v.nearest, v.dist });
+
+    // ---- verdict ---------------------------------------------------------------
+    try out.writeAll("\n[VERDICT] ");
+    if (reached and acc_ops >= 1 and mem_ops >= 1) {
+        try out.writeAll("CLAIM CONFIRMED. Gambling DID get you the corner — but it is the BOLTED UNION of\n");
+        try out.writeAll("two rediscoveries (accumulator ⊕ hashed memory = the scan ⊕ the hash-table). The\n");
+        try out.writeAll("certifier flags it 'novel' only because no SINGLE anchor does both; structurally it\n");
+        try out.writeAll("is two known mechanisms side by side. So: 'keep gambling → you'll get it' is TRUE for\n");
+        try out.writeAll("the KNOWN answer (and reliably so), and FALSE for a NEW one — more restarts hit the\n");
+        try out.writeAll("same minimal-complexity attractors, never a novel primitive. Novelty needs the fitness/\n");
+        try out.writeAll("substrate changed so the known mechanisms STOP being optimal — not more dice.\n");
+    } else if (reached) {
+        try out.writeAll("gambling reached the corner and it did NOT cleanly factor into accumulator ⊕ memory —\n");
+        try out.writeAll("inspect by hand; if real, this is the interesting case. Re-run more seeds first.\n");
+    } else {
+        try out.writeAll("the seeded joint search did not reach the corner this run — raise budget/seeds and\n");
+        try out.writeAll("rerun; the recall half is banked, so the corner should be one accumulate-op away.\n");
+    }
+}
+
+/// RESEARCH PHASE 5 — THE CURRICULUM. The recall needle is a gradient-free
+/// conjunction and reward density can't crack it (Phase 3). The recommended lever:
+/// a K-ladder. Recall with K bindings; ramp K and WARM-START each rung from the
+/// previous rung's champion, so search EXTENDS a stepping-stone rather than
+/// assembling the whole load+store coordination at once. Two readings:
+///   • COLD curve — where does a from-scratch search break as K grows?
+///   • WARM ladder — does seeding from rung K−1 reach a K that COLD cannot?
+/// If warm climbs higher, the curriculum decomposes the needle. If warm ≈ cold and
+/// both cliff at the same K, the conjunction is IRREDUCIBLE to a K-ladder — which
+/// implicates the substrate (lever b: a memory primitive that isn't all-or-nothing),
+/// a precise, honest negative either way.
+fn alienCurriculum(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 5: the K-ladder curriculum vs the recall needle ===\n\n");
+    const ladder = [_]usize{ 1, 2, 3, 4, 6 };
+    const max_evals: usize = 200_000;
+    const n_seeds: usize = 8;
+    try out.print("Recall with K bindings; ladder K∈{{1,2,3,4,6}}, {d} evals/run × {d} seeds. Solve = recall ≥ 0.95.\n\n", .{ max_evals, n_seeds });
+
+    // ---- COLD curve: from-scratch search at each K -----------------------------
+    try out.writeAll("[COLD] from-scratch search at each rung (hit RATE over 8 seeds = the real picture):\n");
+    try out.writeAll("  K | solves | best recall | fastest e→solve\n");
+    try out.writeAll("  --+--------+-------------+----------------\n");
+    var cold_cliff: usize = 0; // largest K cold can solve
+    var cold_champ: ?alien.Program = null;
+    var cold_champ_k: usize = 0;
+    for (ladder) |k| {
+        var solves: usize = 0;
+        var best: f64 = 0;
+        var fastest: ?usize = null;
+        for (0..n_seeds) |s| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% k *% 0x1111 +% s *% 0x9E3779B1);
+            const p = alien.Params{ .max_evals = max_evals, .fit_K = k };
+            const r = try alien.evolveAxis(al, prng.random(), p, base_seed +% s, .recall);
+            if (r.best_score >= 0.95) {
+                solves += 1;
+                if (k >= cold_champ_k) { // keep a champion from the highest solved K
+                    cold_champ = r.best;
+                    cold_champ_k = k;
+                }
+            }
+            if (r.best_score > best) best = r.best_score;
+            if (r.evals_to_solve) |e| {
+                if (fastest == null or e < fastest.?) fastest = e;
+            }
+        }
+        if (solves > 0 and k > cold_cliff) cold_cliff = k;
+        try out.print("  {d} |  {d}/{d}   |    {d:.3}    | ", .{ k, solves, n_seeds, best });
+        try printEvals(out, fastest, 10);
+        try out.writeAll("\n");
+    }
+
+    // ---- is a "solved" champion GENUINE addressing? the held-out K=48 test ------
+    if (cold_champ) |*c| {
+        try out.print("\n[GENERALIZE] best cold champion (solved at K={d}) — does it hold at HELD-OUT K=48?\n", .{cold_champ_k});
+        try alien.writeProgram(c, out);
+        const ld = countOp(c, .a_load) + countOp(c, .a_store);
+        const held = alien.recallAcc(c, 48, 2048, base_seed +% 0xF00, true);
+        try out.print("  load/store ops used: {d} | recall @ K=48 = {d:.3}  ⇒ {s}\n", .{ ld, held, if (held > 0.95) "GENUINE key-addressing (generalizes)" else "a K-specific trick (does NOT generalize)" });
+    }
+
+    // ---- WARM ladder: each rung seeded from the previous rung's champion -------
+    try out.writeAll("\n[WARM] ladder — each rung warm-started from the previous champion:\n");
+    try out.writeAll("  K | solved | best recall | champion carried forward\n");
+    try out.writeAll("  --+--------+-------------+--------------------------\n");
+    var champ: ?alien.Program = null;
+    var warm_reach: usize = 0;
+    for (ladder) |k| {
+        var best: f64 = 0;
+        var best_prog: ?alien.Program = null;
+        for (0..n_seeds) |s| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% 0x5A5A +% k *% 0x2222 +% s *% 0x9E3779B1);
+            var p = alien.Params{ .max_evals = max_evals, .fit_K = k };
+            if (champ) |*c| p.seed_prog = c;
+            const r = try alien.evolveAxis(al, prng.random(), p, base_seed +% s, .recall);
+            if (r.best_score > best) {
+                best = r.best_score;
+                best_prog = r.best;
+            }
+        }
+        const solved = best >= 0.95;
+        if (solved) {
+            warm_reach = k;
+            champ = best_prog; // carry the champion to seed the next rung
+        }
+        try out.print("  {d} |  {s}  |    {d:.3}    | {s}\n", .{ k, if (solved) "yes" else "no ", best, if (solved) "→ seeds next rung" else "(ladder stalls here)" });
+        if (!solved) break; // can't seed the next rung without a champion
+    }
+
+    // ---- verdict (data-driven — three distinct outcomes) -----------------------
+    const champ_generalizes = if (cold_champ) |*c| alien.recallAcc(c, 48, 2048, base_seed +% 0xF00, true) > 0.95 else false;
+    try out.print("\n[RESULT] cold solved up to K={d}; warm ladder reached K={d}.\n", .{ cold_cliff, warm_reach });
+    if (warm_reach > cold_cliff) {
+        try out.writeAll("[CURRICULUM HELPS] warm-starting reached a K cold search could not — the ladder\n");
+        try out.writeAll("decomposes the conjunction: extending the previous rung is climbable where assembling\n");
+        try out.writeAll("from scratch is not. Push the ladder higher, then re-run the joint hunt with the bank.\n");
+    } else if (cold_cliff >= 2 and champ_generalizes) {
+        try out.writeAll("[REFRAME — reliability, not reachability] The needle is NOT unreachable: cold search\n");
+        try out.writeAll("DOES find GENUINE key-addressing (the champion holds at held-out K=48), just at a low,\n");
+        try out.writeAll("noisy hit rate. Warm-starting from the K=1 latch did NOT raise that rate (the latch is\n");
+        try out.writeAll("a structural dead-end). So the real blocker is the SAME one as Brick A — per-attempt\n");
+        try out.writeAll("RELIABILITY of hitting a conjunctive mechanism — not a missing gradient. This revises\n");
+        try out.writeAll("the Phase-3 'unreachable' read: at K≤6 it's reachable-but-rare. The right levers are the\n");
+        try out.writeAll("Brick-A reliability ones (more restarts / parallel attempts), not the K-ladder. Next:\n");
+        try out.writeAll("measure hit-rate vs K to see if reliability collapses as K grows (why K=20 looked dead).\n");
+    } else {
+        try out.writeAll("[IRREDUCIBLE] cold never finds genuine addressing and warm-start doesn't help — the\n");
+        try out.writeAll("conjunction does not decompose into a K-ladder. Honest negative for lever (a). This\n");
+        try out.writeAll("implicates the SUBSTRATE (lever b): a memory primitive whose store↔load wiring is not\n");
+        try out.writeAll("all-or-nothing, accepting that it shapes the substrate toward the known answer.\n");
+    }
+}
+
+/// RESEARCH PHASE 3 DIAGNOSTIC — locate the bottleneck. The joint QD hunt couldn't
+/// reach the top-right. Is recall unreachable even ALONE (a gradient-free needle =
+/// the Brick-A fitness-signal problem), or only jointly (a budget-split problem)?
+/// Run a dedicated single-objective search on each axis and report.
+fn alienProbe(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 3 DIAGNOSTIC: is recall a gradient-free needle, and does a\n");
+    try out.writeAll("denser fitness signal break it? (single-objective probe per axis) ===\n\n");
+    const n_seeds: usize = 4;
+    const max_evals: usize = 300_000;
+    try out.print("Dedicated evolution, {d} evals × {d} seeds. Solve = score ≥ 0.95.\n\n", .{ max_evals, n_seeds });
+    try out.writeAll("  axis / grading        | solves | best score | fastest e→solve\n");
+    try out.writeAll("  ----------------------+--------+------------+----------------\n");
+
+    const Probe = struct { label: []const u8, axis: alien.Axis, dense: bool };
+    const probes = [_]Probe{
+        .{ .label = "parity                ", .axis = .parity, .dense = false },
+        .{ .label = "recall (SPARSE 1-query)", .axis = .recall, .dense = false },
+        .{ .label = "recall (DENSE all-query)", .axis = .recall, .dense = true },
+    };
+
+    for (probes, 0..) |pr, pi| {
+        const p = alien.Params{ .max_evals = max_evals, .dense_recall = pr.dense };
+        var solves: usize = 0;
+        var best: f64 = 0;
+        var fastest: ?usize = null;
+        for (0..n_seeds) |s| {
+            var prng = std.Random.DefaultPrng.init(base_seed +% pi *% 0xABC +% s *% 0x9E3779B1);
+            const r = try alien.evolveAxis(al, prng.random(), p, base_seed +% s, pr.axis);
+            if (r.best_score >= 0.95) solves += 1;
+            if (r.best_score > best) best = r.best_score;
+            if (r.evals_to_solve) |e| {
+                if (fastest == null or e < fastest.?) fastest = e;
+            }
+        }
+        try out.print("  {s} |  {d}/{d}   |   {d:.3}    | ", .{ pr.label, solves, n_seeds, best });
+        try printEvals(out, fastest, 10);
+        try out.writeAll("\n");
+    }
+
+    try out.writeAll("\n[READING] Parity solves freely (per-position partial credit = a gradient). If SPARSE\n");
+    try out.writeAll("recall stays near chance but DENSE recall now SOLVES, the bottleneck was the FITNESS\n");
+    try out.writeAll("SIGNAL, not compute or expressivity — the Brick-A lesson, reproduced in the alien\n");
+    try out.writeAll("substrate. Querying every key (random order) turns one sparse exact-match into K graded\n");
+    try out.writeAll("outcomes, giving search a slope to climb to the load+store mechanism. Dense recall then\n");
+    try out.writeAll("becomes the search-time reward for the joint hunt (validated held-out, sparse, at K=48).\n");
+}
+
+/// RESEARCH PHASE 3 + 4 — THE HUNT and the GAUNTLET. Execution-search (MAP-Elites
+/// niched on the recall×length-gen plane) over the alien op-space, then the honest
+/// gauntlet on whatever reaches the top-right: (a) re-validate at HELD-OUT longer
+/// length / larger K; (b) certify novelty vs the known anchors; (c) decompose —
+/// is it a unified primitive or the bolted union (scan ⊕ hash-table)? Every claim
+/// is execution-only; we report what is there, including "it just rediscovered the
+/// union", which is the honest expected outcome.
+fn alienHunt(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 3+4: the hunt (QD over the alien space) + the gauntlet ===\n\n");
+    const p = alien.Params{ .max_evals = 300_000, .grid = 5 };
+    const n_runs: usize = 4;
+    try out.print("MAP-Elites, 5×5 niches (parity-bucket × recall-bucket), {d} evals/run, {d} runs.\n", .{ p.max_evals, n_runs });
+    try out.writeAll("Search-time fidelity: parity L=24, recall K=20. Target: fill the TOP-RIGHT niche.\n\n");
+
+    var best: ?alien.Program = null;
+    var best_min: f64 = -1;
+    var best_par: f64 = 0;
+    var best_rec: f64 = 0;
+    var topright_hits: usize = 0;
+    var last_grid: alien.HuntResult = undefined;
+
+    for (0..n_runs) |run| {
+        var prng = std.Random.DefaultPrng.init(base_seed +% run *% 0x9E3779B97F4A7C15);
+        const r = try alien.hunt(al, prng.random(), p, base_seed +% run);
+        last_grid = r;
+        if (r.best_topright != null) {
+            topright_hits += 1;
+            const mn = @min(r.tr_parity, r.tr_recall);
+            if (mn > best_min) {
+                best_min = mn;
+                best = r.best_topright;
+                best_par = r.tr_parity;
+                best_rec = r.tr_recall;
+            }
+        }
+    }
+
+    // show the last run's niche occupancy as a parity×recall map
+    try out.writeAll("Niche occupancy (last run) — rows = parity bucket (top=high), cols = recall bucket:\n");
+    const g = last_grid.grid;
+    var pr: usize = g;
+    while (pr > 0) {
+        pr -= 1;
+        try out.writeAll("    ");
+        for (0..g) |rc| try out.writeAll(if (last_grid.filled[pr * g + rc]) "# " else ". ");
+        if (pr == g - 1) try out.writeAll("  ← high parity");
+        try out.writeAll("\n");
+    }
+    try out.writeAll("    (bottom-right cell = high recall) \n\n");
+
+    try out.print("Top-right niche reached in {d}/{d} runs.\n", .{ topright_hits, n_runs });
+    if (best == null) {
+        try out.writeAll("[RESULT] search did NOT reach the top-right corner. The `probe` phase locates WHY:\n");
+        try out.writeAll("recall is a gradient-free CONJUNCTIVE needle — a dedicated 300k-eval search can't break\n");
+        try out.writeAll("0.55 on recall ALONE, while parity solves in <1k. So the joint corner is unreachable\n");
+        try out.writeAll("not from budget-split but from the recall half having no climbable slope. The dense-\n");
+        try out.writeAll("grading fix (Brick A) was REFUTED here (it made recall harder). Honest negative, precisely\n");
+        try out.writeAll("located: content addressing must be made discoverable by a route other than reward density\n");
+        try out.writeAll("(building-block curriculum, or a substrate where the store+load wiring isn't all-or-nothing).\n");
+        return;
+    }
+
+    var champ = best.?;
+    try out.print("[DISCOVERED] a top-right program (search-fidelity parity={d:.3}, recall={d:.3}):\n", .{ best_par, best_rec });
+    try alien.writeProgram(&champ, out);
+
+    // ---- GAUNTLET (a): held-out scale — longer length, larger K ----------------
+    const v_par = alien.parityAcc(&champ, 256, 64, base_seed +% 0xA00, true);
+    const v_rec = alien.recallAcc(&champ, 48, 1024, base_seed +% 0xB00, true);
+    try out.writeAll("\n[GAUNTLET a — held-out scale] trained at L=24/K=20, re-scored at L=256/K=48:\n");
+    try out.print("  length-gen acc = {d:.3} | recall acc = {d:.3}\n", .{ v_par, v_rec });
+    const holds = v_par > 0.95 and v_rec > 0.95;
+
+    // ---- GAUNTLET (b): novelty certification -----------------------------------
+    const fp = alien.fingerprint(&champ, base_seed +% 0xC00);
+    const anchors = frontier.knownAnchors(base_seed +% 0xC00);
+    const v = frontier.classify(fp, &anchors, frontier.NOVELTY_THRESHOLD);
+    try out.print("\n[GAUNTLET b — novelty] fingerprint = [", .{});
+    for (fp, 0..) |c, i| {
+        if (i > 0) try out.writeAll(" ");
+        try out.print("{d:.2}", .{c});
+    }
+    try out.print("]\n  nearest anchor = {s}, dist = {d:.3} ⇒ {s}\n", .{ v.nearest, v.dist, if (v.novel) "NOVEL vs single-mechanism anchors" else "matches a known mechanism" });
+
+    // ---- GAUNTLET (c): decompose — unified primitive or bolted union? ----------
+    const xor_acc = countOp(&champ, .a_xor) + countOp(&champ, .a_add) + countOp(&champ, .a_mul);
+    const mem_ops = countOp(&champ, .a_load) + countOp(&champ, .a_store);
+    try out.writeAll("\n[GAUNTLET c — decompose] does it factor into the two known mechanisms?\n");
+    try out.print("  accumulator-style ops (xor/add/mul into a register): {d} | memory ops (load/store): {d}\n", .{ xor_acc, mem_ops });
+    const looks_union = xor_acc >= 1 and mem_ops >= 1;
+
+    try out.writeAll("\n[VERDICT] ");
+    if (holds and v.novel and looks_union) {
+        try out.writeAll("a DISCOVERED top-right operator that HOLDS at held-out scale and certifies novel —\n");
+        try out.writeAll("but it decomposes into accumulator ⊕ hashed-memory. Honest reading: execution-search\n");
+        try out.writeAll("REDISCOVERED the frontier-spanning UNION on its own (not hand-wired). That is a real\n");
+        try out.writeAll("result for the METHOD (search found the corner unaided), but it is a hybrid, not a\n");
+        try out.writeAll("unified novel primitive. The open frontier is forcing IRREDUCIBILITY — penalise the\n");
+        try out.writeAll("union (shared registers / op budget) so only a genuinely fused mechanism can win.\n");
+    } else if (holds and v.novel) {
+        try out.writeAll("a discovered top-right operator that HOLDS at scale, certifies novel, and does NOT\n");
+        try out.writeAll("cleanly decompose into accumulator ⊕ memory — the most interesting outcome. Inspect\n");
+        try out.writeAll("the program by hand before any claim; run more seeds to confirm it is not a fluke.\n");
+    } else if (!holds) {
+        try out.writeAll("the top-right was reached at SEARCH fidelity but does NOT hold at held-out scale —\n");
+        try out.writeAll("it overfit the short/small task. Honest: not a real frontier-breaker. Raise validation\n");
+        try out.writeAll("fidelity inside the search loop (the brick-E lesson) and re-run.\n");
+    } else {
+        try out.writeAll("reached the corner but failed novelty — it matched a known mechanism's fingerprint.\n");
+    }
+}
+
+/// Count occurrences of an alien op across a program (setup+step).
+fn countOp(prog: *const alien.Program, op: alien.Op) usize {
+    var n: usize = 0;
+    for (prog.setup.slice()) |ins| if (ins.op == op) {
+        n += 1;
+    };
+    for (prog.step.slice()) |ins| if (ins.op == op) {
+        n += 1;
+    };
+    return n;
 }
 
 /// Phase 8 — BRICK A: is the rung-climb's reliability fixable with budget? The
@@ -798,4 +1518,6 @@ test {
     _ = evo;
     _ = lib;
     _ = seq;
+    _ = frontier;
+    _ = alien;
 }

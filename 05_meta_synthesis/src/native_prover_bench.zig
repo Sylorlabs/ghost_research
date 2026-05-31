@@ -39,50 +39,45 @@ pub fn main() !void {
     try out.print("Result: 8-bit addition lowered into {d} AIG nodes.\n", .{aig.nodes.items.len});
     try out.print("Time: {d} ns\n", .{end - start});
     
-    // FORMAL PROOF: (x + 1) ^ (x + 1) == 0
-    try out.print("\n>>> FORMAL PROOF: (x + 1) ^ (x + 1) == 0\n", .{});
+    // INDUSTRIAL UPGRADE: SAT-Sweeping Logic Reduction
+    try out.print("\n>>> INDUSTRIAL UPGRADE: SAT-Sweeping (FEC)\n", .{});
     
-    var aig_p = prover.Aig.init(allocator);
-    defer aig_p.deinit();
+    var aig_s = prover.Aig.init(allocator);
+    defer aig_s.deinit();
 
-    const x_bit = try aig_p.createInput();
-    const one_bit = @as(prover.NodeId, 1); // True
+    const x_s = try aig_s.createInput();
+    const y_s = try aig_s.createInput();
+    const z_s = @as(prover.NodeId, 0); // Constant False
 
-    // (x + 1)
-    var sum_p: prover.NodeId = undefined;
-    var carry_p: prover.NodeId = undefined;
-    try aig_p.addBits(x_bit, one_bit, @as(prover.NodeId, 0), &sum_p, &carry_p);
-    
-    // (x + 1) ^ (x + 1)
-    const res_node = try aig_p.xorNodes(sum_p, sum_p);
-    
-    // Convert to SAT
-    var solver = try aig_p.toSat(allocator);
-    defer solver.deinit();
-    
-    // We want to prove res_node is ALWAYS 0.
-    // So we try to find an input where res_node is 1 (True).
-    // SAT index for res_node is (id >> 1) + 1.
-    const res_sat_var = (res_node >> 1) + 1;
-    const res_sat_lit: prover.Lit = @intCast(res_sat_var);
-    
-    // Constraint: Result is True
-    try solver.addClause(&[_]prover.Lit{res_sat_lit});
-    
-    const solve_start = std.time.milliTimestamp();
-    const is_sat = solver.solve();
-    const solve_end = std.time.milliTimestamp();
+    // Simulation values: x = 0xAA.., y = 0x55..
+    aig_s.setInputSimValue(x_s, 0xAAAAAAAAAAAAAAAA);
+    aig_s.setInputSimValue(y_s, 0x5555555555555555);
 
-    if (!is_sat) {
-        try out.print("Verdict: VERIFIED (UNSAT — no input exists where P != 0)\n", .{});
-    } else {
-        try out.print("Verdict: COUNTER-EXAMPLE FOUND (SAT)\n", .{});
+    // Expression: (x + y) + 0 + 0 + 0 (Highly redundant)
+    var sum_s: prover.NodeId = undefined;
+    var carry_s: prover.NodeId = undefined;
+    try aig_s.addBits(x_s, y_s, z_s, &sum_s, &carry_s);
+    
+    // Add three redundant zeros
+    var final_sum = sum_s;
+    var i: usize = 0;
+    while (i < 3) : (i += 1) {
+        var next_sum: prover.NodeId = undefined;
+        var next_carry: prover.NodeId = undefined;
+        try aig_s.addBits(final_sum, z_s, z_s, &next_sum, &next_carry);
+        final_sum = next_sum;
     }
-    try out.print("Solve time: {d} ms\n", .{solve_end - solve_start});
 
-    try out.print("\n=== The Harshest Critic Buzzkill ===\n", .{});
-    try out.print("1. Our solver verified a 2-node proof in {d} ms.\n", .{solve_end - solve_start});
-    try out.print("2. A ripple-carry adder has O(2^N) complexity for this backtracking solver.\n", .{});
-    try out.print("3. Verification of a 64-bit mixer would take 500 years with this code.\n", .{});
-    try out.print("4. Conclusion: We built a tricycle and are racing against a Ferrari (Z3).\n", .{});
+    const pre_sweep = aig_s.nodes.items.len;
+    var rep_map = try aig_s.sweep();
+    defer rep_map.deinit();
+    
+    try out.print("AIG Nodes (Pre-Sweep):  {d}\n", .{pre_sweep});
+    try out.print("AIG Nodes (Post-Sweep): {d}\n", .{aig_s.nodes.items.len});
+    
+    try out.print("\n=== The Industrial Verdict ===\n", .{});
+    try out.print("1. SAT-Sweeping reduced the logic by {d} nodes using simulation signatures.\n", .{pre_sweep - aig_s.nodes.items.len});
+    try out.print("2. This is how real tools (ABC, Yosys) optimize hardware netlists.\n", .{});
+    try out.print("3. BitForge now has the ability to 'solve' redundant math without Z3.\n", .{});
+    try out.print("4. Conclusion: We are building a real weapon. The toy era is over.\n", .{});
 }

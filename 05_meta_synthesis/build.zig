@@ -35,11 +35,14 @@ const core_module_names = [_][]const u8{
     "domain_opset",
     "domain_search_strategy",
     "domain_symbolic_arx",
+    "domain_superoptimizer",
     "native_prover",
     "domain_128_arx",
     "domain_128_tier4",
     "domain_alien_hack",
+    "domain_associative_memory",
     "domain_graph_alien",
+    "domain_graph_attention",
     "domain_general",
     "domain_sort_net",
     "domain_u64_bijective",
@@ -83,6 +86,12 @@ const core_module_names = [_][]const u8{
 const Exe = struct { name: []const u8, path: []const u8, z3: bool = false };
 
 const exes = [_]Exe{
+    .{ .name = "true_hacker_inventor", .path = "src/true_hacker_inventor.zig", .z3 = true },
+    .{ .name = "hacker_inventor", .path = "src/hacker_inventor.zig", .z3 = false },
+    .{ .name = "aha_distiller", .path = "src/aha_distiller.zig", .z3 = false },
+    .{ .name = "superoptimizer_search", .path = "src/superoptimizer_search.zig", .z3 = false },
+    .{ .name = "graph_attention_search", .path = "src/graph_attention_search.zig", .z3 = false },
+    .{ .name = "attention_alt_search", .path = "src/attention_alt_search.zig", .z3 = false },
     .{ .name = "native_prover_bench", .path = "src/native_prover_bench.zig", .z3 = false },
     .{ .name = "graph_architect_search", .path = "src/graph_architect_search.zig", .z3 = true },
     .{ .name = "alien_hack_cegis", .path = "src/alien_hack_cegis.zig", .z3 = true },

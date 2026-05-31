@@ -224,7 +224,23 @@ zig build run-invent -- phase6   # quality-diversity (MAP-Elites) vs the trap (y
 zig build run-invent -- phase7   # the capstone: the engine climbs the tower BY ITSELF
 zig build run-invent -- phase8   # reliability: regression grading makes the climb ~100x faster
 zig build run-invent -- seq      # "beat attention's weakness": discovers a scan that length-generalizes
+zig build run-invent -- frontier # research §20: the recall ↔ length-gen map (attention vs scan, opposite corners)
+zig build run-invent -- novelty  # research §20: behavioural novelty certifier (catches a disguised scan)
+zig build run-invent -- alien    # research §20: alien substrate — proves the empty top-right corner is reachable
+zig build run-invent -- hunt     # research §20: QD search for a frontier-breaker (honest negative this budget)
+zig build run-invent -- probe    # research §20: recall conjunction — dense-grading fix refuted
+zig build run-invent -- curriculum # research §20: K-ladder REVISES it — addressing is discoverable but RARE (reliability)
+zig build run-invent -- gamble   # research §20: gambling reaches the corner — but it's a UNION of two rediscoveries, not novel
+zig build run-invent -- forbid   # research §20: forbid a known mechanism → re-spelled/known/wall, never novel
+zig build run-invent -- fuse     # research §20: insufficiency task forces a known FUSION (RMW) search can't even reach
 ```
+
+> Research note on the novelty limit: `docs/research/alien_novelty_limit.md` —
+> execution-only search over an alien substrate *rediscovers* known mechanisms;
+> it does not, by gambling, invent.
+
+> The `hunt`/`probe` phases run a real search; build `ReleaseFast`
+> (`zig build -Doptimize=ReleaseFast`) before running them — Debug is ~30× slower.
 
 * **Phase 1** (reproduction, ~AutoML-Zero): on `y = sign(x0·x1)`, evolution beats
   random search (4/5 vs 2/5 solves) and rediscovers the gate in forms a human
@@ -276,6 +292,15 @@ zig build run-invent -- phase6             # quality-diversity (MAP-Elites) esca
 zig build run-invent -- phase7             # the capstone: the engine climbs the tower by itself
 zig build run-invent -- phase8             # rung-climb reliability (regression grading is ~100x faster)
 zig build run-invent -- seq                # beat attention's weakness: discover a length-generalizing scan
+zig build run-invent -- frontier           # §20 alien arc: recall↔length-gen map (opposite corners)
+zig build run-invent -- novelty            # §20 alien arc: behavioural novelty certifier
+zig build run-invent -- alien              # §20 alien arc: alien substrate reachability proof
+zig build run-invent -- hunt               # §20 alien arc: QD frontier-breaker search (honest negative)
+zig build run-invent -- probe              # §20 alien arc: dense-grading fix for recall is refuted
+zig build run-invent -- curriculum         # §20 alien arc: K-ladder — addressing is reachable but rare (reliability)
+zig build run-invent -- gamble             # §20 alien arc: gambling reaches the corner but it's a union of rediscoveries
+zig build run-invent -- forbid             # §20 alien arc: forbid a known mechanism → re-spelled/known/wall, never novel
+zig build run-invent -- fuse               # §20 alien arc: insufficiency task forces a known fusion search can't reach
 zig build test                             # all tests across all engines
 ```
 

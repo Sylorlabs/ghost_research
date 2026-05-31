@@ -421,7 +421,7 @@ pub fn runSmtLib(allocator: std.mem.Allocator, smt_text: []const u8, timeout_ms:
         const err_msg = c.Z3_get_error_msg(ctx, ec);
         return VerifyResult{
             .verdict = .error_smt,
-            .detail = std.mem.span(err_msg),
+            .detail = try allocator.dupe(u8, std.mem.span(err_msg)),
             .elapsed_ms = elapsed,
         };
     }

@@ -1112,3 +1112,204 @@ primitive that breaks a real trade-off (length generalization) and scales.
 L=16/64/200; the stateless regime is ≈ chance; evolution runs end-to-end on the
 sequence substrate. All engines remain green (`zig build test` — 69 tests).
 
+## 20. The alien-architecture research arc (Phases 0–3) — hunting a *novel* primitive
+
+§19 ended on an honest wall: the engine *rediscovered* the scan (a known SSM/RNN
+primitive), and the obvious "fix" (add gated/matrix state) would just reimplement
+Mamba. The lesson: **novelty has to come from the SUBSTRATE, not the search loop** —
+a human-shaped op-set can only re-derive points humans already mapped. So this arc
+rebuilds the substrate as a deliberately **non-human** op-space and asks, as a real
+research question with kill-tests and controls:
+
+> Can execution-only search over an alien primitive space discover a sequence
+> operator that pushes the **recall ↔ length-gen frontier** past where every known
+> primitive sits — and if not, *why not*?
+
+Both answers are results. Run: `frontier`, `novelty`, `alien`, `hunt`, `probe`.
+
+### Phase 0 — the map (`frontier`). Two tasks that pull opposite ways:
+
+```
+  mechanism   | length-gen (parity L=256) | recall (K=32) | corner
+  attention   |           0.496           |     1.000     | recall corner
+  scan        |           1.000           |     0.372     | length-gen corner
+  local       |           0.508           |     0.289     | neither (dominated)
+```
+
+Attention owns recall (content-addressed lookup) and fails parity (a fixed-depth
+average can't represent the unbounded product); the scan is the mirror image. They sit
+at **opposite corners**; the **top-right (high on BOTH) is empty** — the research
+target. **Kill-test (passes):** attention and scan separate by >0.3 on *both* axes.
+
+### Phase 1 — the novelty certifier (`novelty`). The anti-self-deception machinery.
+
+A 6-feature **behavioural fingerprint** `[parity16, parity256, recallK4, recallK48,
+x0_sensitivity, local_agree]` clusters the known mechanisms; a candidate is "novel"
+only if its fingerprint is far from *every* anchor. The clusters are well separated
+(attn↔scan = 1.31, attn↔local = 1.07, scan↔local = 1.41 ≫ threshold 0.35).
+**Kill-test (passes):** a re-implemented scan (parity-via-count, re-indexed memory)
+certifies at distance **0.000** from the scan anchor, verdict **NOT novel** — the
+certifier sees through a known mechanism in disguise. Without this, every "win" is
+just rediscovery we failed to recognise.
+
+### Phase 2 — the alien substrate + reachability proof (`alien`).
+
+Op-space: u64 registers + bit-mixing (XOR/AND/OR/SHL/SHR/ROTR/POPCOUNT/MUM/BSWAP) +
+an **addressable memory with data-dependent addresses** (load/store) + eq/sel masks.
+**No softmax, no float product.** Content addressing is reachable only via *hashing*;
+accumulation only via *bit-mixing*. Hand-written alien programs prove the whole map —
+including the empty corner — is reachable in this op-space:
+
+```
+  alien program  | length-gen L=256 | recall K=48 | corner
+  XOR-scan       |      1.000       |    0.256    | length-gen (parity via bit-XOR)
+  hash-table     |      0.501       |    1.000    | recall (via hashed memory, no softmax)
+  UNION          |      1.000       |    1.000    | TOP-RIGHT (the open target)
+```
+
+The union certifies **novel** (dist 0.692 from nearest anchor) — but **honestly it is
+two known mechanisms bolted together**, novel only because no *single* anchor does
+both. The substrate can host a frontier-breaker; whether *search* finds one, and
+whether it's unified or a bolted union, is the actual question.
+
+### Phase 3 — the hunt (`hunt`) and the diagnostic (`probe`).
+
+MAP-Elites niched on the recall×length-gen plane, 4×300k evals. **Top-right reached
+0/4.** The niche map tells the story — every parity row fills, but the two high-recall
+columns are **completely empty**: search climbs parity freely and never climbs recall
+at all. The `probe` (dedicated single-objective search) locates the bottleneck
+exactly:
+
+```
+  axis / grading           | solves | best score | fastest e→solve
+  parity                   |  4/4   |   1.000    |   838      (climbs freely)
+  recall (SPARSE 1-query)  |  0/4   |   0.547    |   —        (never solves)
+  recall (DENSE all-query) |  0/4   |   0.343    |   —        (the fix made it WORSE)
+```
+
+**Finding (a real, refined result):** recall is a **conjunctive needle** in this
+substrate — load+store must share the right address and value registers
+*simultaneously*; until both are wired, retrieval is zero for *every* key. The
+**Brick-A fitness-signal fix is REFUTED here**: denser grading (query every key) made
+recall *worse*, not better — a half-wired conjunctive mechanism yields partial *output*
+for nothing, so more graded outcomes just raise the bar. This **refines** the Brick-A
+lesson: reward density helps when *partial mechanisms give partial output* (parity,
+arithmetic composition), and **not** for an all-or-nothing conjunction. *(NOTE: Phase 3
+called recall "unreachable"; Phase 5 below REVISES that — it is reachable but RARE.)*
+
+### Phase 5 — the curriculum (`curriculum`), and the revision of Phase 3.
+
+The recommended lever (a): a K-ladder — ramp the number of bindings K and warm-start
+each rung from the previous champion. Running it with 8 seeds REVISED the Phase-3 read:
+
+```
+[COLD] from-scratch search per rung (hit RATE over 8 seeds):
+  K=1: 8/8 (latch, 184 evals)   K=2: 1/8   K=3: 1/8   K=4: 0/8 (0.594)   K=6: 1/8
+[GENERALIZE] best cold champion (solved K=6):  step: r3 = mem[r0]; mem[r0] = r5
+             load/store ops = 2 | recall @ HELD-OUT K=48 = 1.000  ⇒ GENUINE key-addressing
+```
+
+* **Recall addressing IS discoverable by execution.** Cold search found
+  `r3 ← mem[key]; mem[key] ← value` — exactly the hand-written hash-table — and it holds
+  at held-out K=48 (1.000). So Phase 3's "unreachable" was wrong: it's **reachable but
+  RARE** (~1/8 per attempt, roughly K-independent at K≤6; the K=4 0/8 is noise). The real
+  blocker is **per-attempt reliability of hitting a conjunction — the Brick-A problem
+  again**, not a missing gradient. (Phase 3's K=20/4-seed probe missed it by sampling.)
+* **The K-ladder did NOT make the hard jump easier.** The warm ladder appears to solve
+  every rung, but that's two confounds: 8 attempts/rung, and — once addressing is found
+  at K=2 — it is banked and trivially seeds all higher rungs. Warm-starting *from the
+  K=1 latch* does not help discover addressing; the latch is a structural dead-end.
+  Lever (a) is a wash for the hard step.
+
+### Phase 6 — "does gambling get you there?" (`gamble`). The reliability-vs-novelty test.
+
+A falsifiable claim (full note: `docs/research/alien_novelty_limit.md`): *gambling
+changes how reliably you hit an attractor, not which attractor — the attractors are the
+known mechanisms.* The experiment: gamble on recall, bank it, seed the joint (corner)
+objective from it, decompose the result.
+
+```
+[1] recall HIT after 14 restarts  →  step: r3 = mem[r0]; mem[r0] = r5   (the hash-table)
+[2] seed joint from it            →  min(parity,recall) = 1.000 in 19k evals (corner reached)
+[3] corner program: r2 = r2 + r0; r3 = mem[r0]; mem[r0] = r5
+    accumulator ops 1 | memory ops 2 | fp [1 1 1 1 1 0.52] → certifier "NOVEL" (dist 0.68)
+```
+
+**Confirmed.** Gambling DID reach the corner — but it is the **bolted union of two
+rediscoveries** (accumulator ⊕ hashed memory). Note the scan was rediscovered via **ADD**
+here (`r2 += r0`, low bit = parity), and via **XOR** in `curriculum`/`alien` — *same
+mechanism, different alien spelling*, which underlines the convergent-attractor point.
+So **"keep gambling → you'll get it" is TRUE for the KNOWN answer (reliably), FALSE for a
+NEW one**: more restarts hit the same minimal-complexity attractors, never a novel
+primitive. The certifier flags the union "novel" only because no *single* anchor does both.
+
+### Phase 7 — forbid the attractor (`forbid`). The first novelty experiment.
+
+If known mechanisms are convergent attractors, *removing their primitives* should force a
+different spelling of the same mechanism, a neighbouring known mechanism, or a wall — not
+a novel primitive. Restrict the op-space and re-search:
+
+```
+  config                  | solves | best   | reading
+  parity, FULL            |  4/4   | 1.000  | baseline
+  parity, NO xor          |  4/4   | 1.000  | same accumulator, add/sub spelling
+  parity, NO xor/add/sub  |  4/4   | 1.000  | STILL solves — accumulator is multiply-realizable
+  recall, FULL            |  0/4   | 0.563  | (~1/8, 4 seeds — noisy miss)
+  recall, NO load/store   |  0/4   | 0.531  | WALL — no memory ⇒ recall unsolved at this budget
+```
+
+**Finding:** the parity accumulator is so convergent it survives deleting xor *and* add
+*and* sub — search finds yet another spelling (eq/sel/mul/rotr tracking the low bit). You
+cannot forbid a convergent mechanism by removing a few ops. Forbidding memory made recall
+*unsolvable* (a wall — the compare-and-select alternative is itself attention's mechanism
+and a bigger conjunction than this budget reaches). Forbidding an attractor reveals a
+different spelling, a neighbouring *known* mechanism, or a wall — **never a novel one**.
+
+### Phase 8 — the insufficiency task (`fuse`). The fairest attempt to force novelty.
+
+A task neither the scan, the hash-table, nor their bolted union can do: **per-key
+counting** (output how many times the current symbol has appeared). It needs accumulation
+*inside* the addressed cell — a fused read-modify-write.
+
+```
+[SETUP] scan 0.184 | hash 0.184 | union 0.184 | fused RMW 1.000   (only RMW solves it)
+[SEARCH] cold gamble (40 restarts × 400k = 16M evals):  NO hit, best 0.495
+[CURRICULUM] seeded from a banked hash-table building block:  NO hit, best 0.495
+```
+
+**Finding:** the insufficiency task genuinely forces a fusion (only the RMW counter
+solves it) — but search **could not discover it**, neither cold (16M evals) nor by
+extending a banked hash-table. The RMW is a *3-op* conjunction (load + increment + store,
+same address) with no partial-credit slope for the increment — a bigger needle than the
+2-op hash-table, beyond this budget. So even when a task *demands* something past the
+bolted union, what it demands is a *known fused pattern* (a counter array), and the engine
+can't even reach it — a reliability wall, not novelty. (The recall↔length-gen certifier is
+scoped to those two axes and would mislabel an RMW counter "novel" since the counter is
+not an anchor — a known limitation, not evidence of invention.)
+
+### Tier-honest scope — what this arc is and is NOT (and the sobering meta-finding)
+
+* It **is**: a working, verified research apparatus — a frontier *map*, a novelty
+  *certifier* that catches disguised rediscovery, an *alien* substrate proven able to
+  host a frontier-breaker, and a *search* that DOES discover genuine, generalizing
+  content-addressing (`mem[key]` load/store) by execution alone. The method is sound.
+* It is **NOT** "we invented a new architecture", and the deepest finding says why:
+  **the alien substrate did not produce novelty — it produced alien *encodings* of the
+  SAME known mechanisms.** Search rediscovered the scan (XOR-accumulate = running parity)
+  and the hash table (load-before-store = content addressing) because those are the
+  **minimal-complexity solutions even in a bit-mixing op-space**. Making the primitives
+  weird did not make the *solutions* novel. The top-right, when reached, is the union of
+  two rediscoveries — a bolted hybrid, not a unified novel primitive. Forcing genuine
+  novelty would require *forbidding* the convergent known mechanisms (prescribing what
+  you don't want), which is a far harder and more dubious proposition. This is the honest
+  answer to "can we invent something new, not rediscover existing architectures": with
+  execution-only search, known mechanisms are convergent attractors — novelty does not
+  fall out of an alien substrate alone.
+
+### Tests
+
+`inv_frontier.zig` (4) — Phase-0 opposite-corners kill-test, bounded-scan recall decay,
+Phase-1 disguised-scan kill-test, anchor separation. `inv_alien.zig` (6) — three
+corner-reachability kill-tests (XOR-scan, hash-table, union→top-right), union-novelty,
+no-state baseline ≈ chance, hunt smoke. All green (`zig build test`).
+
