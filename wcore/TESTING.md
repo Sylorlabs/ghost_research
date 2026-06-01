@@ -1571,3 +1571,47 @@ atoms?). That recursion, not another search tweak, is where real invention would
 live. `inv_coevo.zig` kill-test: the instrument reduces known atoms and flags distinct-count
 irreducible.
 
+## 26. The atom-forge — an open-ended atom set, and the arc's terminal answer (`atomforge`)
+
+§25 left exactly one frontier: the irreducibility test is *relative to a declared atom set*,
+so a genuinely new primitive would require a substrate whose **atom set is itself
+open-ended** — atoms invented, not composed from a fixed list. `inv_atomforge.zig` builds
+that, by *composing the two instruments the arc already has*: novelty search (§21–22)
+GENERATES candidate behaviours; the irreducibility test (§25), generalised to a growing
+*program* library, CERTIFIES which are irreducible relative to the current atoms; a clean,
+minimal certified candidate is INVENTED (added as a new atom); then irreducibility RECURS.
+
+```
+Base atoms: 5 (gxor gadd pkxor pkadd shift). Irreducibility searches compositions ≤ depth 3.
+round 0–7: INVENTED atoms #6..#13, each certified irreducible vs ALL prior atoms.
+[RESULT] invented 8 atoms; minimal program-length per atom: 5 5 2 3 3 5 5 6
+```
+
+**The mechanism works** — the recursion runs, each atom certified irreducible relative to a
+strictly growing library. But read honestly (the printed verdict says so):
+
+1. **The bar is WEAK.** The 5 base atoms use only xor/add/load/store/mov, so *any* behaviour
+   touching the substrate's other ops (and/or/mum/popcnt/rotr/bswap/sel) is automatically
+   irreducible relative to them. The invented atoms are short *substrate-op programs* — early
+   "invention" is largely **naming substrate ops the base library omitted.**
+2. **Minimal length stays FLAT/noisy** (5 5 2 3 3 5 5 6) — this is **coverage** of the
+   substrate's *fixed* behaviour repertoire heading toward saturation, **not** unbounded
+   complexity growth.
+
+**THE DEEP CLOSE — the arc's terminal answer.** The open-ended atom set does **not escape**
+claim C — it **relocates** it. Every invented atom is itself a short composition of
+**substrate opcodes**; relative to those true primitives it is still composition. The
+recursion **bottoms out at the fixed opcode VM** — the real atom set. So an atom set is
+open-endable at any chosen *level*, but a fixed substrate always has a **bottom**, and at the
+bottom it is composition all the way down. **Genuine unbounded invention would need a
+substrate whose primitives are themselves inventable** — an infinite regress, or a
+learned/physical substrate, which a fixed-opcode machine categorically cannot be.
+
+That closes the investigation. Across 16 phases the answer is one statement, instrument-
+backed at every level: **invention-by-search is composition down to whatever you fix as
+primitive; a fixed substrate always has a bottom, and at the bottom, search composes — it
+does not invent.** What it *does* do well — reliably discover, compose, and (via coevolution)
+assemble known atoms far past direct search — is real and was demonstrated. `inv_atomforge.zig`
+kill-test: base atoms reduce, distinct-count is a new atom, and adding it to the library makes
+it reduce (the invent-then-recurse mechanism is sound).
+

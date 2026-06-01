@@ -20,6 +20,7 @@ const frontier = @import("inv_frontier.zig");
 const alien = @import("inv_alien.zig");
 const open = @import("inv_open.zig");
 const coevo = @import("inv_coevo.zig");
+const forge = @import("inv_atomforge.zig");
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -85,8 +86,10 @@ pub fn main() !void {
         try alienOeCoevo(al, out, seed);
     } else if (std.mem.eql(u8, phase, "irreducible")) {
         try alienIrreducible(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "atomforge")) {
+        try alienAtomForge(al, out, seed);
     } else {
-        try out.print("unknown phase '{s}'. try: phase0..phase8 | seq | frontier | novelty | alien | hunt | probe | curriculum | gamble | forbid | fuse | getrecall | corner | openended | infodesc | coevo | oecoevo | irreducible\n", .{phase});
+        try out.print("unknown phase '{s}'. try: phase0..phase8 | seq | frontier | novelty | alien | hunt | probe | curriculum | gamble | forbid | fuse | getrecall | corner | openended | infodesc | coevo | oecoevo | irreducible | atomforge\n", .{phase});
     }
 }
 
@@ -294,6 +297,108 @@ fn alienReachability(out: anytype, seed: u64) !void {
     try out.writeAll("is whether execution-search DISCOVERS a top-right program, and whether what it finds is\n");
     try out.writeAll("a unified/irreducible primitive or just rediscovers this union. The substrate is proven\n");
     try out.writeAll("able to host the answer — searching it is now worthwhile.\n");
+}
+
+/// RESEARCH PHASE 16 — THE ATOM-FORGE: an OPEN-ENDED ATOM SET. The one frontier the arc
+/// left. Every prior phase used a fixed atom set and found only composition. Here the atom
+/// set GROWS: novelty search generates candidate behaviours, the irreducibility test (now
+/// over a growing program library) certifies which are irreducible relative to the current
+/// atoms, and a clean minimal certified candidate is INVENTED — added as a new atom. Then
+/// irreducibility RECURS (the next atom must beat the enlarged set). Measurables: how many
+/// atoms it invents before saturating, and whether their minimal length GROWS (open-ended)
+/// or plateaus (substrate exhausted).
+fn alienAtomForge(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== RESEARCH PHASE 16: the atom-forge — an OPEN-ENDED atom set ===\n\n");
+    try out.writeAll("novelty search GENERATES behaviours; the irreducibility test CERTIFIES which are new\n");
+    try out.writeAll("relative to the current library; certified ones are INVENTED as atoms; then it recurs.\n\n");
+    const dseed = base_seed ^ 0x1F0; // descriptor seed
+    const fseed = base_seed +% 0xA70F; // irreducibility-test stream seed
+    const depth: usize = 3; // composition depth the irreducibility test searches
+
+    var atoms = forge.baseAtoms();
+    const base_n = atoms.len;
+    try out.print("Base atoms: {d} (gxor gadd pkxor pkadd shift). Irreducibility searches compositions ≤ depth {d}.\n\n", .{ base_n, depth });
+
+    var lengths: [forge.MAX_ATOMS]usize = undefined;
+    var n_invented: usize = 0;
+    const MAX_ROUNDS: usize = 8;
+    for (0..MAX_ROUNDS) |round| {
+        // generate candidate behaviours with task-agnostic novelty search
+        var prng = std.Random.DefaultPrng.init(base_seed +% round *% 0x9E3779B97F4A7C15);
+        var archive = try open.search(al, prng.random(), .{ .pop = 90, .gens = 45, .info = true, .seed = dseed });
+        defer archive.deinit();
+        // prefer MINIMAL atoms: shortest program first
+        std.mem.sort(open.Member, archive.items, {}, struct {
+            fn lt(_: void, a: open.Member, b: open.Member) bool {
+                return a.prog.len() < b.prog.len();
+            }
+        }.lt);
+
+        var invented: ?alien.Program = null;
+        for (archive.items) |cand| {
+            if (!forge.clean(&cand.prog, dseed)) continue;
+            if (forge.reducibleLib(&cand.prog, atoms.slice(), depth, fseed)) continue; // composition → not new
+            invented = cand.prog;
+            break;
+        }
+
+        if (invented == null) {
+            try out.print("round {d}: SATURATED — novelty search found no CLEAN candidate irreducible to the\n", .{round});
+            try out.print("         current {d}-atom library. The reachable clean behaviours are now all composable.\n", .{atoms.len});
+            break;
+        }
+        atoms.appendAssumeCapacity(invented.?);
+        lengths[n_invented] = invented.?.len();
+        n_invented += 1;
+        try out.print("round {d}: INVENTED atom #{d} (program length {d}) — certified IRREDUCIBLE vs the prior {d} atoms.\n", .{ round, atoms.len, invented.?.len(), atoms.len - 1 });
+        if (n_invented <= 2) {
+            try alien.writeProgram(&invented.?, out);
+        }
+        if (atoms.len >= forge.MAX_ATOMS) break;
+    }
+
+    // ---- the trajectory + verdict ----------------------------------------------
+    try out.print("\n[RESULT] invented {d} new atoms beyond the {d} base (library now {d}).\n", .{ n_invented, base_n, atoms.len });
+    if (n_invented > 0) {
+        try out.writeAll("  minimal program-length per invented atom: ");
+        for (0..n_invented) |i| try out.print("{d} ", .{lengths[i]});
+        try out.writeAll("\n");
+    }
+
+    // does minimal length actually CLIMB by a real margin (strong open-endedness), or stay
+    // flat/noisy (mere COVERAGE of the substrate's fixed repertoire)?
+    var climbs = false;
+    if (n_invented >= 4 and lengths[n_invented - 1] >= lengths[0] + 2 and lengths[n_invented - 2] >= lengths[1] + 2) climbs = true;
+
+    try out.writeAll("\n[VERDICT] ");
+    if (n_invented >= 2) {
+        try out.print("the recursion RAN — {d} atoms, each certified irreducible relative to all prior. The\n", .{n_invented});
+        try out.writeAll("open-ended-atom MECHANISM works. But read it honestly, two ways:\n\n");
+        try out.writeAll("1) The bar is WEAK. The 5 base atoms use only xor/add/load/store/mov, so ANY behaviour\n");
+        try out.writeAll("   touching the substrate's other ops (and/or/mum/popcnt/rotr/bswap/sel) is automatically\n");
+        try out.writeAll("   irreducible relative to them. The invented atoms are short substrate-op programs (lengths ");
+        for (0..n_invented) |i| try out.print("{d} ", .{lengths[i]});
+        try out.writeAll(")\n   — early 'invention' is largely NAMING substrate ops the base library omitted.\n");
+        if (climbs) {
+            try out.writeAll("2) Minimal length DOES climb here — weak evidence of rising complexity; needs more rounds.\n");
+        } else {
+            try out.writeAll("2) Minimal length stays FLAT/noisy — this is COVERAGE of the substrate's FIXED behaviour\n");
+            try out.writeAll("   repertoire toward saturation, NOT unbounded complexity growth.\n");
+        }
+        try out.writeAll("\n[THE DEEP CLOSE] the open-ended atom set does NOT escape claim C — it RELOCATES it. Every\n");
+        try out.writeAll("invented atom is itself a short composition of SUBSTRATE OPCODES; relative to those true\n");
+        try out.writeAll("primitives it is still composition. The recursion bottoms out at the fixed opcode VM — the\n");
+        try out.writeAll("real atom set. So an atom set is open-endable at any chosen LEVEL, but a fixed substrate\n");
+        try out.writeAll("always has a BOTTOM, and at the bottom it is composition all the way down. Genuine unbounded\n");
+        try out.writeAll("invention would need a substrate whose PRIMITIVES are themselves inventable — an infinite\n");
+        try out.writeAll("regress, or a learned/physical substrate, which a fixed-opcode machine cannot be. That is\n");
+        try out.writeAll("the arc's TERMINAL answer: invention-by-search is composition down to whatever you fix as\n");
+        try out.writeAll("primitive; claim C holds at the substrate — the real bottom.\n");
+    } else {
+        try out.writeAll("the forge invented <2 atoms — the base library already composes the clean behaviours novelty\n");
+        try out.writeAll("search reached. Even so the deep point stands: any atom would be a substrate-op composition,\n");
+        try out.writeAll("so the recursion bottoms out at the fixed opcode VM — composition all the way down.\n");
+    }
 }
 
 /// RESEARCH PHASE 15 — THE IRREDUCIBILITY TEST. The instrument the whole arc lacked. The
@@ -2234,4 +2339,5 @@ test {
     _ = alien;
     _ = open;
     _ = coevo;
+    _ = forge;
 }

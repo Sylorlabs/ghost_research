@@ -203,16 +203,36 @@ agreement)? Match → reducible; no match → irreducible relative to the atom s
 **So C is now backed by an instrument that could have said otherwise.** Open-ended search
 produces novel *compositions*, never a new *atom* — confirmed rigorously, not by hand.
 
-## What this would take to refute C (the one frontier left)
+## The atom-forge (`atomforge`) — the last frontier, run, and the terminal answer
 
-C stands against fixed-task search, forbidding, insufficiency tasks, novelty search, a
-task-agnostic descriptor, coevolution, an open-ended ladder, **and** the irreducibility test.
-The only avenue that isn't another search tweak:
-- A substrate whose **atom set is itself open-ended** — atoms that can be *invented*, not a
-  fixed opcode list. There, the irreducibility test recurs: a new atom is one irreducible
-  relative to the *previous* atoms. Real invention, if it exists for execution search, lives
-  in that recursion — inventing the atoms, not just composing them. The arc has reduced "can
-  search invent?" to exactly this question, and shown every level below it is composition.
+The one avenue left was a substrate whose atom set is itself open-ended. `inv_atomforge.zig`
+builds it by composing the arc's two instruments: novelty search generates behaviours, the
+irreducibility test (now over a growing program library) certifies which are irreducible
+relative to the current atoms, a certified one is invented, and irreducibility recurs.
+Result (TESTING.md §26):
+
+- **The mechanism runs:** 8 atoms invented across 8 rounds, each certified irreducible vs all
+  prior. The kill-test holds (distinct-count is a new atom; adding it makes it reduce).
+- **But honestly:** the bar is weak (the 5 base atoms omit most substrate ops, so any
+  behaviour using and/or/mum/popcnt/… is trivially irreducible relative to them); minimal
+  length stays flat/noisy (5 5 2 3 3 5 5 6) — coverage of a fixed repertoire, not unbounded
+  complexity growth; and every invented atom is itself a short **substrate-op program**.
+- **The deep close:** the open-ended atom set does **not escape** C — it **relocates** it. The
+  recursion bottoms out at the fixed opcode VM; relative to the substrate primitives,
+  everything is composition. A fixed substrate always has a bottom, and at the bottom search
+  composes — it does not invent.
+
+## Terminal conclusion
+
+Across 16 phases — fixed-task search, forbidding, insufficiency tasks, novelty search, a
+task-agnostic descriptor, coevolution, an open-ended composition ladder, an irreducibility
+test, and an open-ended atom set — **C holds, instrument-backed at every level**:
+**invention-by-search is composition down to whatever you fix as primitive; a fixed substrate
+always has a bottom, and at the bottom, search composes — it does not invent.** Genuine
+unbounded invention would require a substrate whose *primitives are themselves inventable*
+(an infinite regress, or a learned/physical substrate), which a fixed-opcode machine cannot
+be. What execution search *does* do — reliably discover, compose, and (via coevolution)
+assemble known atoms far past direct search — is real, demonstrated, and reproducible.
 
 This note's contribution is the method (map + certifier + alien substrate + the
 reliability-vs-novelty distinction) and the honest, experimentally-defended negative:
