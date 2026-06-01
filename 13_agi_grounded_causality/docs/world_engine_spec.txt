@@ -1,0 +1,19 @@
+=== WORLD ENGINE SPECIFICATION (Machine-Synthesized) ===
+
+1.  OVERVIEW: The World Engine is a non-deterministic state machine. It exists to provide 'Causal Feedback' to the AGI.
+
+2.  STATE:
+    - 8-word State Vector (64-bit each).
+    - 8-word Action Vector (64-bit each).
+    - Transition Function: P(State_t+1 | State_t, Action_t)
+
+3.  CAUSALITY:
+    - The physics are not linear. 
+    - Actions are mapped to state bits through a complex mixing function.
+    - Noise is injected via a PRNG stream, making deterministic prediction impossible.
+
+4.  GOAL:
+    - The AGI must synthesize a Causal Model (a predictive circuit) that minimizes 
+      the prediction error between its 'thought' state_t+1 and the 'real' state_t+1.
+
+Truth: Causality is the limit of prediction under noise.

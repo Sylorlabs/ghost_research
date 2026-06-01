@@ -1,0 +1,9 @@
+.{
+    .name = .agi_immune_loop,
+    .version = "0.1.0",
+    .fingerprint = 0xfd7b400d5d23a91d,
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{ "src", "build.zig", "build.zig.zon" },
+}

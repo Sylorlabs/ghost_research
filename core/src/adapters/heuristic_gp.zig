@@ -8,12 +8,13 @@ pub const NodeType = enum(u4) {
     STAGNATION = 1,
     ENTROPY = 2,
     CONSTANT = 3,
+    PHASE = 10, // Normalized progress (0.0 to 1.0)
     // Operations
     ADD = 4,
     SUB = 5,
     MUL = 6,
     DIV = 7,
-    GT  = 8, // Greater than (returns 1.0 or 0.0)
+    GT  = 8,
     LOG = 9,
 };
 
@@ -24,7 +25,7 @@ pub const Node = struct {
     val: f64 = 0,  // Constant value if op == CONSTANT
 };
 
-pub const Inputs = struct { vel: f64, stag: f64, ent: f64 };
+pub const Inputs = struct { vel: f64, stag: f64, ent: f64, phase: f64 };
 
 pub const Expression = struct {
     nodes: [32]Node,
@@ -41,6 +42,7 @@ pub const Expression = struct {
             .VELOCITY => in.vel,
             .STAGNATION => in.stag,
             .ENTROPY => in.ent,
+            .PHASE => in.phase,
             .CONSTANT => n.val,
             .ADD => self.evalNode(n.left, in) + self.evalNode(n.right, in),
             .SUB => self.evalNode(n.left, in) - self.evalNode(n.right, in),
@@ -67,7 +69,8 @@ fn buildRandomTree(expr: *Expression, rng: *u64, depth: u8) u8 {
     
     if (depth == 0 or (nextRand(rng) % 10 < 3)) {
         // Terminal
-        const t_op: NodeType = @enumFromInt(nextRand(rng) % 4);
+        const terminals = [_]NodeType{ .VELOCITY, .STAGNATION, .ENTROPY, .CONSTANT, .PHASE };
+        const t_op = terminals[nextRand(rng) % terminals.len];
         expr.nodes[idx] = .{ .op = t_op, .val = @as(f64, @floatFromInt(nextRand(rng) % 100)) / 10.0 };
     } else {
         // Operation
@@ -97,6 +100,7 @@ pub fn printExpr(expr: Expression, idx: u8, writer: anytype) !void {
         .VELOCITY => try writer.writeAll("VEL"),
         .STAGNATION => try writer.writeAll("STAG"),
         .ENTROPY => try writer.writeAll("ENT"),
+        .PHASE => try writer.writeAll("PHASE"),
         .CONSTANT => try writer.print("{d:.2}", .{n.val}),
         else => {
             try writer.writeAll("(");
