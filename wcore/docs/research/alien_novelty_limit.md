@@ -187,18 +187,32 @@ the same atoms ever more deeply and never mints a new one. **C holds against the
 attack available.** Novelty-by-search is novelty of *composition*, bounded by the atom set
 the substrate provides.
 
-## What this would take to refute C (still open)
+## The irreducibility test (`irreducible`) — built, and C now rigorously backed
 
-C is about a new *atom*, and it stands against fixed-task search, forbidding, insufficiency
-tasks, novelty search, a task-agnostic descriptor, coevolution, and an open-ended ladder.
-The remaining genuinely-open avenues:
-- An **irreducibility test** — a way to certify a solver does *not* decompose into known
-  atoms. The arc never built one; without it, "novel" can only mean "a composition we don't
-  recognise." This is the honest next instrument, and the precondition for any real novelty claim.
-- A task whose optimal solution is provably *not* any known mechanism or composition of them
-  (hard to construct; most computable tasks decompose into known building blocks).
-- A substrate whose atom set is itself open-ended (atoms that can be invented, not a fixed
-  opcode list) — pushing the novelty question down one more level, where it may simply recur.
+The instrument the arc kept lacking is built (`inv_coevo.reducible`): is a solver's behaviour
+reproducible by a composition of KNOWN atoms (the stage set, searched to depth 4, ≥0.95
+agreement)? Match → reducible; no match → irreducible relative to the atom set. Result
+(TESTING.md §25):
+
+- **It can detect a true outsider:** distinct-count (a global set-cardinality) is flagged
+  IRREDUCIBLE; known atoms and compositions reduce. The test is *not* vacuous.
+- **Applied to §24's deep solvers:** the fingerprint certifier called 7 "novel"; the
+  irreducibility test finds **0 irreducible, 7 false positives** — every "novel" solver is
+  REDUCIBLE to a known-atom composition.
+
+**So C is now backed by an instrument that could have said otherwise.** Open-ended search
+produces novel *compositions*, never a new *atom* — confirmed rigorously, not by hand.
+
+## What this would take to refute C (the one frontier left)
+
+C stands against fixed-task search, forbidding, insufficiency tasks, novelty search, a
+task-agnostic descriptor, coevolution, an open-ended ladder, **and** the irreducibility test.
+The only avenue that isn't another search tweak:
+- A substrate whose **atom set is itself open-ended** — atoms that can be *invented*, not a
+  fixed opcode list. There, the irreducibility test recurs: a new atom is one irreducible
+  relative to the *previous* atoms. Real invention, if it exists for execution search, lives
+  in that recursion — inventing the atoms, not just composing them. The arc has reduced "can
+  search invent?" to exactly this question, and shown every level below it is composition.
 
 This note's contribution is the method (map + certifier + alien substrate + the
 reliability-vs-novelty distinction) and the honest, experimentally-defended negative:

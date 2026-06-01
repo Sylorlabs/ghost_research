@@ -341,6 +341,119 @@ pub fn evolveComposed(
     return .{ .best = best, .fit = best_fit, .ett = null };
 }
 
+// ===========================================================================
+// The IRREDUCIBILITY TEST (§25) — the instrument the whole arc was missing.
+//
+// "Novel by the certifier" only ever meant "not identical to any single known atom",
+// which any COMPOSITION satisfies. To certify a genuine NEW ATOM we need the opposite
+// test: is a solver's BEHAVIOUR reproducible by a composition of KNOWN atoms? The known
+// atoms here are exactly the stage set. A solver is REDUCIBLE if some stage-genome (up to
+// a bounded depth) matches its input→output behaviour on a battery of streams; if none
+// does, it is IRREDUCIBLE *relative to the declared atom set* — it does something no
+// bounded composition of the known atoms can. That is the precondition for any honest
+// novelty claim, and (unlike the fingerprint certifier) it can actually DETECT novelty.
+// ===========================================================================
+
+/// The agreement threshold at which a solver's behaviour counts as "the same function"
+/// as a composed genome. 0.95 = the solve bar: tolerant of an evolved solver that isn't
+/// bit-exact on held-out streams, but far above the ≤~0.5 a genuinely different function
+/// scores (chance is 1/V = 0.25), so a true outsider is never matched by accident.
+pub const MATCH_THRESHOLD: f64 = 0.95;
+
+/// Does `prog`'s output agree with the composed `genome` target ≥ MATCH_THRESHOLD on `n`
+/// random streams?
+pub fn behaviorMatches(prog: *const alien.Program, genome: []const Stage, n: usize, L: usize, seed: u64) bool {
+    var prng = std.Random.DefaultPrng.init(seed);
+    const rng = prng.random();
+    var syms: [256]u8 = undefined;
+    var tgt: [256]u8 = undefined;
+    var got: [256]u8 = undefined;
+    var agree: usize = 0;
+    var total: usize = 0;
+    for (0..n) |_| {
+        for (0..L) |i| syms[i] = @intCast(rng.uintLessThan(usize, V));
+        composedTarget(genome, syms[0..L], tgt[0..L]);
+        alien.runStream(prog, syms[0..L], got[0..L]);
+        for (0..L) |i| {
+            total += 1;
+            if (got[i] == tgt[i]) agree += 1;
+        }
+    }
+    return @as(f64, @floatFromInt(agree)) / @as(f64, @floatFromInt(total)) >= MATCH_THRESHOLD;
+}
+
+/// Search every stage-genome up to `max_depth` for one that reproduces `prog`'s
+/// behaviour. Returns the (shortest) matching genome (REDUCIBLE) or null (IRREDUCIBLE
+/// relative to the stage atom set). Exhaustive: 5 + 25 + … stage-strings.
+pub fn reducible(prog: *const alien.Program, max_depth: usize, seed: u64) ?Genome {
+    const nstage = @typeInfo(Stage).@"enum".fields.len;
+    var d: usize = 1;
+    while (d <= max_depth) : (d += 1) {
+        var total: usize = 1;
+        for (0..d) |_| total *= nstage;
+        var idx: usize = 0;
+        while (idx < total) : (idx += 1) {
+            var g = Genome{};
+            var x = idx;
+            for (0..d) |_| {
+                g.appendAssumeCapacity(@enumFromInt(x % nstage));
+                x /= nstage;
+            }
+            if (behaviorMatches(prog, g.slice(), 12, 32, seed)) return g;
+        }
+    }
+    return null;
+}
+
+/// Distinct-symbol count (a global SET cardinality) — provably NOT a composition of the
+/// stage atoms (which are per-key / global linear reductions and a delay). The kill-test
+/// behaviour that the irreducibility instrument MUST flag irreducible.
+pub fn distinctCountTarget(syms: []const u8, out: []u8) void {
+    var seen = [_]bool{false} ** V;
+    var cnt: usize = 0;
+    for (syms, 0..) |s, i| {
+        if (!seen[s % V]) {
+            seen[s % V] = true;
+            cnt += 1;
+        }
+        out[i] = @intCast(cnt % V);
+    }
+}
+
+/// A hand-written program that computes distinct-symbol count, via memory as seen-flags:
+/// seen=mem[sym]; mem[sym]=1; counter += (seen XOR 1); output counter.
+pub fn distinctCountProg() alien.Program {
+    var p = alien.Program{};
+    p.setup.appendAssumeCapacity(.{ .op = .a_set, .out = 6, .imm = 1 }); // r6 = 1
+    p.step.appendAssumeCapacity(.{ .op = .a_load, .a = 0, .out = 8 }); // r8 = mem[sym]
+    p.step.appendAssumeCapacity(.{ .op = .a_store, .a = 0, .b = 6 }); // mem[sym] = 1
+    p.step.appendAssumeCapacity(.{ .op = .a_xor, .a = 8, .b = 6, .out = 8 }); // r8 = seen XOR 1
+    p.step.appendAssumeCapacity(.{ .op = .a_add, .a = 7, .b = 8, .out = 7 }); // r7 += r8
+    p.step.appendAssumeCapacity(.{ .op = .a_mov, .a = 7, .out = 3 }); // r3 = r7 (output)
+    return p;
+}
+
+test "IRREDUCIBILITY instrument kill-tests: reducible catches compositions, flags a true outsider" {
+    const seed: u64 = 0x133D;
+    // the distinct-count program actually computes distinct count
+    var syms = [_]u8{ 0, 1, 1, 2, 0, 3, 2 };
+    var a: [7]u8 = undefined;
+    var b: [7]u8 = undefined;
+    distinctCountTarget(&syms, &a);
+    alien.runStream(&distinctCountProg(), &syms, &b);
+    try std.testing.expectEqualSlices(u8, &a, &b);
+
+    // a known atom REDUCES (the RMW counter == the pk_add stage)
+    const counter = refSolver(.pk_add);
+    try std.testing.expect(reducible(&counter, 4, seed) != null);
+    // a known atom REDUCES (the global parity == the g_xor stage)
+    const par = refSolver(.g_xor);
+    try std.testing.expect(reducible(&par, 4, seed) != null);
+    // distinct-count is IRREDUCIBLE relative to the stage atom set (the real kill-test:
+    // the instrument can DETECT a behaviour outside the known atoms' closure)
+    try std.testing.expect(reducible(&distinctCountProg(), 4, seed) == null);
+}
+
 pub fn mutateGenome(rng: std.Random, g: Genome) Genome {
     var ng = g;
     const r = rng.float(f64);

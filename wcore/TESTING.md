@@ -1528,3 +1528,46 @@ test** — a way to certify that a solver does *not* decompose into known atoms 
 single `pk_add` stage equals the standalone counting target, and a depth-2 genome differs
 from either stage alone (composition is real).
 
+## 25. The irreducibility test — the capstone instrument (`irreducible`)
+
+Three times the arc hit the same gap (§21, §22, §24): nothing could tell a *new atom* from a
+*new composition of known atoms* — "novel by the certifier" only ever meant "not a single
+known atom," which any composition satisfies. §25 builds the missing instrument. The
+**irreducibility test** (`inv_coevo.reducible`) asks the right question: is a solver's
+*behaviour* reproducible by a composition of KNOWN atoms (the stage set)? It exhaustively
+searches stage-genomes up to depth 4 for one that matches the solver's input→output map
+(≥ 0.95 agreement); a match → REDUCIBLE (a composition); no match → IRREDUCIBLE *relative to
+the declared atom set* (a genuine candidate).
+
+```
+[KILL-TEST] — the instrument must DETECT irreducibility, not just always say "reducible":
+  RMW counter (known atom)   → REDUCIBLE to [c]      (= the pk_add stage)
+  delayed-parity [>X] solver → REDUCIBLE to [>X]
+  distinct-count (outsider)  → IRREDUCIBLE           ← a global set-cardinality, outside the
+                                                       stage atoms' closure — correctly flagged
+[§24 deep solvers] fingerprint certifier  vs  irreducibility test:
+  >X (d2) NOVEL→REDUCIBLE[>X]   XA (d2) NOVEL→REDUCIBLE[XA]   >X>> (d4) NOVEL→REDUCIBLE[>>>X] …
+  RESULT: certifier called 7 'novel'; irreducibility finds 0 irreducible, 7 FALSE POSITIVES.
+```
+
+**Finding — the central claim, now rigorous.** **Every** deep solver the fingerprint
+certifier called "novel" is REDUCIBLE to a composition of known atoms. The irreducibility
+test corrects the certifier's blind spot and confirms — by instrument, not hand-inspection —
+that open-ended search produces novel **compositions**, never a new **atom**. Crucially the
+instrument is **not vacuous**: it flags distinct-count (a true outsider) irreducible, so it
+*could* have flagged a discovered solver irreducible — it simply never does.
+
+**The arc, closed.** The whole investigation now resolves to an instrument-backed statement:
+execution-only search over a fixed atom set **rediscovers and composes known atoms** —
+coevolution genuinely extends *reach* (§23, assembling what direct search can't; §24,
+ratcheting composition depth), but an irreducibility test proves nothing it produces is a new
+atom (§25). Claim C holds, rigorously, against every attack the arc could mount.
+
+**The one honest frontier left:** the irreducibility test is *relative to a declared atom
+set*. A genuinely new primitive would require a substrate whose **atom set is itself
+open-ended** — atoms that can be *invented*, not a fixed opcode list — at which point the
+novelty question recurs one level up (is the new atom irreducible relative to the *previous*
+atoms?). That recursion, not another search tweak, is where real invention would have to
+live. `inv_coevo.zig` kill-test: the instrument reduces known atoms and flags distinct-count
+irreducible.
+

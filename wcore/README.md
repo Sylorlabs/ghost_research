@@ -239,6 +239,7 @@ zig build run-invent -- openended # research §21: the pivot — novelty search 
 zig build run-invent -- infodesc # research §22: task-agnostic descriptor SEES more, but exposes the NOVELTY↔USEFULNESS tension (the deepest wall)
 zig build run-invent -- coevo    # research §23: coevolution+transfer — FIRST POSITIVE: assembles the RMW counter direct search couldn't (reach, not novelty)
 zig build run-invent -- oecoevo  # research §24: open-ended composition ladder ratchets to depth 3-4 — but deep solvers are novel COMPOSITIONS of known atoms, not new atoms
+zig build run-invent -- irreducible # research §25: the irreducibility test — proves §24's "novel" solvers REDUCIBLE to known atoms (detects a true outsider, finds none); claim C, rigorously backed
 ```
 
 > Research note on the novelty limit: `docs/research/alien_novelty_limit.md` —
@@ -313,6 +314,7 @@ zig build run-invent -- openended          # §21 the pivot: novelty search redi
 zig build run-invent -- infodesc           # §22 task-agnostic descriptor sees more, but exposes the novelty↔usefulness tension
 zig build run-invent -- coevo              # §23 coevolution+transfer: FIRST POSITIVE — assembles the RMW counter direct search couldn't (reach)
 zig build run-invent -- oecoevo            # §24 open-ended composition ladder: ratchets to depth 3-4; novel COMPOSITIONS of known atoms, not new atoms
+zig build run-invent -- irreducible        # §25 the irreducibility test: §24's "novel" solvers all REDUCIBLE to known atoms; claim C rigorously backed
 zig build test                             # all tests across all engines
 ```
 
