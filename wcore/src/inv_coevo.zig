@@ -454,6 +454,36 @@ test "IRREDUCIBILITY instrument kill-tests: reducible catches compositions, flag
     try std.testing.expect(reducible(&distinctCountProg(), 4, seed) == null);
 }
 
+/// Greedily remove instructions that don't drop accuracy below the solve bar — the
+/// minimal program for a composed task. Used to compare arrangements FAIRLY by length
+/// (raw evolved programs carry junk; minimisation strips it so the length is the real cost).
+pub fn minimizeForTask(prog: alien.Program, genome: []const Stage, seed: u64) alien.Program {
+    var p = prog;
+    var improved = true;
+    while (improved) {
+        improved = false;
+        var i: usize = 0;
+        while (i < p.step.len) {
+            var q = p;
+            _ = q.step.orderedRemove(i);
+            if (taskFitnessComposed(&q, genome, 40, 20, seed) >= MATCH_THRESHOLD) {
+                p = q;
+                improved = true;
+            } else i += 1;
+        }
+        i = 0;
+        while (i < p.setup.len) {
+            var q = p;
+            _ = q.setup.orderedRemove(i);
+            if (taskFitnessComposed(&q, genome, 40, 20, seed) >= MATCH_THRESHOLD) {
+                p = q;
+                improved = true;
+            } else i += 1;
+        }
+    }
+    return p;
+}
+
 pub fn mutateGenome(rng: std.Random, g: Genome) Genome {
     var ng = g;
     const r = rng.float(f64);

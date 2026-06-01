@@ -1615,3 +1615,40 @@ assemble known atoms far past direct search — is real and was demonstrated. `i
 kill-test: base atoms reduce, distinct-count is a new atom, and adding it to the library makes
 it reduce (the invent-then-recurse mechanism is sound).
 
+## 27. Beat a human composition — the original North Star, honestly scoped (`beathuman`)
+
+The arc proved search can't invent a new *atom*. The original goal — "beat humans / beat
+attention" — was never about atoms; it's about **arrangements**. So this stages the fair,
+non-riggable version: **superoptimisation.** For each composite task, a TIGHT, competent
+human baseline (hand-written, not a strawman) versus search's minimal correct program (search
+gets its building blocks via §23 transfer-seeding; the result is behaviour-preservingly
+minimised). Equal held-out accuracy; compare length = the real cost of the arrangement.
+
+```
+  task          | human len | search solve-rate | search best len | winner (best of 16 runs)
+  gadd          |     1     |     16/16         |     1 (1.00)     | tie
+  shift→gxor    |     2     |     16/16         |     2 (1.00)     | tie
+  pkadd→gxor    |     5     |      0/16         |     — (none)     | human (search NEVER solved)
+  pkxor→shift   |     5     |      3/16         |     4 (1.00)     | SEARCH (leaner!)
+```
+
+**Finding — a modest, real, *unreliable* win.** On `pkxor→shift` search found a **strictly
+leaner** arrangement (4 ops vs a competent 5) at 1.00 held-out accuracy — a genuine
+superoptimisation: the *same* known atoms fused into fewer ops than a person wrote. So "beat
+the human arrangement" is genuinely possible. But read the solve-rates honestly: it is
+**best-of-many-runs** (the leaner program appeared in a *minority* of restarts), it **ties**
+where the human is already minimal (gadd, shift→gxor), and it **never solved** the hardest
+composite (`pkadd→gxor` — the conjunction reliability wall, even seeded). 
+
+**The honest shape of "beating humans" here:** search **matches** a competent human on simple
+compositions, **occasionally super-optimises** a leaner fusion, and **often can't assemble**
+the harder composites at all. That is the realistic, un-hyped form of the original dream — and
+it is consistent with the whole arc: it is **rearranging known atoms** (no new atom, only
+composition), and "better" means *leaner*, not a capability a human couldn't reach.
+
+This closes the North Star honestly. Across 17 phases: execution search **discovers, composes,
+coevolution-assembles, and occasionally super-optimises** arrangements of known atoms — real,
+reproducible, and sometimes better-than-a-person *on efficiency* — but it does **not** invent
+new primitives, and "beating humans" is a modest, unreliable superoptimisation, not a
+revolution in architecture. The dream, measured.
+

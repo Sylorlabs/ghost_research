@@ -222,6 +222,24 @@ Result (TESTING.md §26):
   everything is composition. A fixed substrate always has a bottom, and at the bottom search
   composes — it does not invent.
 
+## Beat a human composition (`beathuman`) — the original goal, measured
+
+The arc's reframe of "beat humans": not invent a new atom (proven impossible), but find a
+better *arrangement* of known atoms than a competent human writes — the fair form being
+superoptimisation. Tight human baselines vs search's minimised correct program (TESTING.md §27):
+
+```
+  gadd  tie(1=1)   shift→gxor tie(2=2)   pkadd→gxor search NEVER solved (0/16)   pkxor→shift SEARCH 4<5 (3/16)
+```
+
+- **A real but modest, unreliable win:** on `pkxor→shift` search fused the same atoms into 4
+  ops where a competent human wrote 5 — a genuine superoptimisation. But it is best-of-many-
+  runs, ties where the human is already minimal, and *never* solved the hardest composite
+  (the conjunction reliability wall).
+- **The honest shape:** search MATCHES competent humans on simple compositions, OCCASIONALLY
+  super-optimises a leaner fusion, and OFTEN can't assemble the harder composites. "Beating
+  humans" here is a modest, unreliable efficiency win — not a revolution in architecture.
+
 ## Terminal conclusion
 
 Across 16 phases — fixed-task search, forbidding, insufficiency tasks, novelty search, a

@@ -241,6 +241,7 @@ zig build run-invent -- coevo    # research §23: coevolution+transfer — FIRST
 zig build run-invent -- oecoevo  # research §24: open-ended composition ladder ratchets to depth 3-4 — but deep solvers are novel COMPOSITIONS of known atoms, not new atoms
 zig build run-invent -- irreducible # research §25: the irreducibility test — proves §24's "novel" solvers REDUCIBLE to known atoms (detects a true outsider, finds none); claim C, rigorously backed
 zig build run-invent -- atomforge # research §26: open-ended ATOM SET (invent atoms, not compose) — the recursion runs but bottoms out at the substrate; composition all the way down (terminal answer)
+zig build run-invent -- beathuman # research §27: beat a competent HUMAN composition (superoptimisation) — search occasionally finds a leaner arrangement (4<5), ties on minimal, fails on hard composites: a modest, unreliable win
 ```
 
 > Research note on the novelty limit: `docs/research/alien_novelty_limit.md` —
@@ -317,6 +318,7 @@ zig build run-invent -- coevo              # §23 coevolution+transfer: FIRST PO
 zig build run-invent -- oecoevo            # §24 open-ended composition ladder: ratchets to depth 3-4; novel COMPOSITIONS of known atoms, not new atoms
 zig build run-invent -- irreducible        # §25 the irreducibility test: §24's "novel" solvers all REDUCIBLE to known atoms; claim C rigorously backed
 zig build run-invent -- atomforge          # §26 open-ended atom set: recursion runs but bottoms out at the substrate — composition all the way down (terminal)
+zig build run-invent -- beathuman          # §27 beat a human composition (superoptimisation): modest unreliable win — leaner arrangement on 1/4, ties/fails elsewhere
 zig build test                             # all tests across all engines
 ```
 
