@@ -95,6 +95,60 @@ fn xorAffineFloor(n: usize, seed: u64) f64 {
     return sum / @as(f64, @floatFromInt(cnt));
 }
 
+// Pure attraction: connectome.attractVectorsPtr's attraction branch WITHOUT the
+// "repulsion if dist < 0.25" forcefield. Used to test whether that forcefield is
+// what floors prediction error.
+fn attractPure(rand: std.Random, a: *hv.Hypervector, b: *const hv.Hypervector, alpha: f32) void {
+    for (0..hv.Blocks) |i| {
+        var diff = a[i] ^ b[i];
+        var flip: u64 = 0;
+        while (diff != 0) {
+            const tz = @ctz(diff);
+            if (rand.float(f32) < alpha) flip |= (@as(u64, 1) << @as(u6, @intCast(tz)));
+            diff &= diff - 1;
+        }
+        a[i] ^= flip;
+    }
+}
+
+// XOR-affine dynamics learned with PURE attraction (no repulsion floor).
+fn xorAffinePureFloor(n: usize, seed: u64) f64 {
+    var prng = std.Random.DefaultPrng.init(seed);
+    const rand = prng.random();
+    var offsets: [3]hv.Hypervector = undefined;
+    var rules: [3]hv.Hypervector = undefined;
+    for (0..3) |a| {
+        offsets[a] = hv.initRandom(rand);
+        rules[a] = hv.initRandom(rand);
+    }
+    var s_t = hv.initRandom(rand);
+    const alpha: f32 = 0.20;
+    const thr: f32 = 0.05;
+    const tail = @max(n / 5, 1);
+    var sum: f64 = 0;
+    var cnt: usize = 0;
+    for (0..n) |i| {
+        const a = rand.intRangeLessThan(usize, 0, 3);
+        const pred = hv.bind(s_t, rules[a]);
+        const s_next = hv.bind(s_t, offsets[a]);
+        const err = @as(f32, @floatFromInt(popcountHV(hv.bind(pred, s_next)))) / D_F;
+        const target = hv.bind(s_t, s_next);
+        if (err > thr) attractPure(rand, &rules[a], &target, alpha);
+        if (i >= n - tail) {
+            sum += err;
+            cnt += 1;
+        }
+        s_t = s_next;
+    }
+    return sum / @as(f64, @floatFromInt(cnt));
+}
+
+fn meanXorAffinePure(n: usize, seeds: usize) f64 {
+    var acc: f64 = 0;
+    for (0..seeds) |s| acc += xorAffinePureFloor(n, @as(u64, s) + 1);
+    return acc / @as(f64, @floatFromInt(seeds));
+}
+
 fn meanBattery(allocator: std.mem.Allocator, params: env_mod.TaskParams, n: usize, seeds: usize) !f64 {
     var acc: f64 = 0;
     for (0..seeds) |s| acc += try batteryFloor(allocator, params, n, @as(u64, s) + 1);
@@ -124,15 +178,20 @@ pub fn main() !void {
     std.debug.print("({d} steps x {d} seeds, mean over final 1/5; lower = model fits the dynamics)\n\n", .{ n, seeds });
 
     const xor_affine = meanXorAffine(n, seeds);
+    const xor_affine_pure = meanXorAffinePure(n, seeds);
     const battery_linear = try meanBattery(allocator, .{}, n, seeds);
     const battery_nonlinear = try meanBattery(allocator, .{ .nonlinear = true }, n, seeds);
 
-    std.debug.print("  dynamics             | steady-state pred error\n", .{});
-    std.debug.print("  ---------------------+------------------------\n", .{});
-    std.debug.print("  xor_affine (control) | {d:.4}\n", .{xor_affine});
-    std.debug.print("  battery_linear       | {d:.4}\n", .{battery_linear});
-    std.debug.print("  battery_nonlinear    | {d:.4}\n", .{battery_nonlinear});
-    std.debug.print("\nReading: xor_affine ~ 0 proves the learner CAN reach zero error when the\n", .{});
-    std.debug.print("dynamics are XOR-affine. A high battery floor is therefore REPRESENTATIONAL,\n", .{});
-    std.debug.print("not an optimisation failure: bind/permute cannot express those transitions.\n", .{});
+    std.debug.print("  dynamics                    | steady-state pred error\n", .{});
+    std.debug.print("  ----------------------------+------------------------\n", .{});
+    std.debug.print("  xor_affine (stock rule)     | {d:.4}\n", .{xor_affine});
+    std.debug.print("  xor_affine (pure attraction)| {d:.4}\n", .{xor_affine_pure});
+    std.debug.print("  battery_linear (stock rule) | {d:.4}\n", .{battery_linear});
+    std.debug.print("  battery_nonlinear           | {d:.4}\n", .{battery_nonlinear});
+    std.debug.print("\nReading: the stock learning rule (attractVectorsPtr) repels any two vectors\n", .{});
+    std.debug.print("within 0.25, so it CANNOT drive prediction error below ~0.25 even on perfectly\n", .{});
+    std.debug.print("representable XOR-affine dynamics. Removing that repulsion (pure attraction)\n", .{});
+    std.debug.print("collapses the affine error toward 0 -> the dominant ceiling is the LEARNING\n", .{});
+    std.debug.print("RULE, not GF(2) expressiveness. The battery floor sits above the affine one,\n", .{});
+    std.debug.print("a smaller, secondary representational gap (nonlinear >= linear).\n", .{});
 }
