@@ -32,10 +32,13 @@ Two testable corollaries:
 | **invention** (wcore Claim C) | fixed opcode VM | only encodings of known mechanisms; 0/7 deep solvers irreducible | a new atom | irreducibility certifier flags the true outsider |
 | **control / world-model** (asi_attempt) | XOR/bundle VSA | band predicate unreadable: nearest-prototype 0.50, best linear 0.51 (chance) | the SUM (total mass) | `mb_mass`: 11.02 fail/1k — beats the hand-coded thermostat (20.80) |
 | **search depth** (BitForge meta-engine) | fixed Tier-0 opcodes | reproducible 44–47 fitness ceiling; "more tiers" refuted | richer Tier-0 op/scoring axis | monotone+parallel+QD crossing only via new axis |
+| **learning** (k-sparse parity, the textbook case) | linear-in-bits | linear at chance for k≥2 (theorem) | nonlinearity / the product monomial | `zig build parity`: linear 0.50 → MLP 1.0, lifted 1.0 |
 
-Each row is the same statement instantiated. The first three now have a runnable
+Each row is the same statement instantiated. The first three have a runnable
 controlled before/after; the fourth is the historical meta-engine ceiling work
-(`docs/05`, `docs/06`).
+(`docs/05`, `docs/06`); the fifth (parity) is the only *textbook* problem rather
+than a repo artefact — the principle predicts its ceiling and generator unchanged
+(`asi_attempt/docs/research/parity_closure.md`).
 
 ## Why the witnesses are the *same* phenomenon
 

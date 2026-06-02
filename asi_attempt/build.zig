@@ -88,6 +88,19 @@ pub fn build(b: *std.Build) void {
     const run_probe_step = b.step("probe", "Run the expressiveness-ceiling dynamics probe");
     run_probe_step.dependOn(&run_probe_cmd.step);
 
+    // Item 2: closure principle on a real problem (k-sparse parity).
+    const parity_exe = b.addExecutable(.{
+        .name = "ghost_parity",
+        .root_source_file = b.path("parity_closure.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(parity_exe);
+    const run_parity_cmd = b.addRunArtifact(parity_exe);
+    run_parity_cmd.step.dependOn(b.getInstallStep());
+    const run_parity_step = b.step("parity", "Run the k-sparse parity closure experiment");
+    run_parity_step.dependOn(&run_parity_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
