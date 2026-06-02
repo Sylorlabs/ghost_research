@@ -106,6 +106,7 @@ const exes = [_]Exe{
     .{ .name = "arx_search", .path = "src/arx_search.zig", .z3 = false },
     .{ .name = "arx_practrand_emit", .path = "src/arx_practrand_emit.zig", .z3 = false },
     .{ .name = "nonlinear_escape_search", .path = "src/nonlinear_escape_search.zig", .z3 = false },
+    .{ .name = "closure_escape_mixer", .path = "src/closure_escape_mixer.zig", .z3 = false },
     .{ .name = "affine_closure", .path = "src/affine_closure.zig", .z3 = true },
     .{ .name = "bittape_inspect", .path = "src/bittape_inspect.zig" },
     .{ .name = "bittape_inventor", .path = "src/bittape_inventor.zig" },
