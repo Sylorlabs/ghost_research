@@ -28,10 +28,14 @@ const RunStats = struct {
 };
 
 fn runPolicy(allocator: std.mem.Allocator, cfg: agent_mod.Config, n_steps: usize, seed: u64) !RunStats {
+    return runPolicyP(allocator, .{}, cfg, n_steps, seed);
+}
+
+fn runPolicyP(allocator: std.mem.Allocator, params: env_mod.TaskParams, cfg: agent_mod.Config, n_steps: usize, seed: u64) !RunStats {
     var prng = std.Random.DefaultPrng.init(seed);
     const rand = prng.random();
 
-    var env = env_mod.Environment.init();
+    var env = env_mod.Environment.initWith(params);
     var agent = try agent_mod.Agent.init(allocator, rand, cfg, &env);
     defer agent.deinit();
 
@@ -76,6 +80,47 @@ fn runPolicyMeanSeeds(allocator: std.mem.Allocator, cfg: agent_mod.Config, n_ste
         .err_early = acc.err_early / sf,
         .err_late = acc.err_late / sf,
     };
+}
+
+fn runPolicyPMeanSeeds(allocator: std.mem.Allocator, params: env_mod.TaskParams, cfg: agent_mod.Config, n_steps: usize, seeds: usize) !RunStats {
+    var acc = RunStats{ .fail_per_1k = 0, .mean_mass = 0, .err_early = 0, .err_late = 0 };
+    for (0..seeds) |s| {
+        const st = try runPolicyP(allocator, params, cfg, n_steps, @as(u64, s) + 1);
+        acc.fail_per_1k += st.fail_per_1k;
+        acc.mean_mass += st.mean_mass;
+        acc.err_early += st.err_early;
+        acc.err_late += st.err_late;
+    }
+    const sf: f64 = @floatFromInt(seeds);
+    return .{ .fail_per_1k = acc.fail_per_1k / sf, .mean_mass = acc.mean_mass / sf, .err_early = acc.err_early / sf, .err_late = acc.err_late / sf };
+}
+
+// Hand-coded thermostat: charge when total mass is near the floor, otherwise rest.
+// A state-dependent (non-constant) policy. If THIS can hold the band, the task is
+// solvable and the learned controller's failure is a real failure, not an
+// unsolvable regime (cf. bigger_shocks, where every policy ties at the lethal floor).
+fn thermostatMeanSeeds(params: env_mod.TaskParams, n_steps: usize, seeds: usize) f64 {
+    var acc: f64 = 0;
+    for (0..seeds) |s| {
+        var prng = std.Random.DefaultPrng.init(@as(u64, s) + 1);
+        const rand = prng.random();
+        var env = env_mod.Environment.initWith(params);
+        var failures: u64 = 0;
+        for (0..n_steps) |_| {
+            var mass: u32 = 0;
+            for (env.grid) |c| mass += c;
+            // charge up near the floor, dump (rest) near the ceiling, else bleed (discharge).
+            const action: env_mod.Action = blk: {
+                if (mass <= params.min_mass + 4) break :blk .charge;
+                if (params.max_mass > 0 and mass >= params.max_mass - 4) break :blk .rest;
+                break :blk .discharge;
+            };
+            env.step(action, rand);
+            if (env.failed) failures += 1;
+        }
+        acc += @as(f64, @floatFromInt(failures)) / @as(f64, @floatFromInt(n_steps)) * 1000.0;
+    }
+    return acc / @as(f64, @floatFromInt(seeds));
 }
 
 fn printRow(label: []const u8, st: RunStats) void {
@@ -262,4 +307,46 @@ pub fn main() !void {
             .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = eps, .pure_attraction = true,
         }, n_steps, seeds));
     }
+
+    // --- BAND: the non-trivial task (Q0) ---------------------------------------
+    // The default cell is trivially solved by `always rest` (0.00). Here a
+    // homeostatic FLOOR (min_mass) makes the task two-sided: rest under-charges,
+    // charge over-charges, so NO constant policy can hold the band. This is the
+    // task on which "competence" is finally measurable above trivial. We report:
+    //   (1) every constant policy (must all fail => task is non-trivial),
+    //   (2) a hand-coded thermostat (must succeed => task is SOLVABLE),
+    //   (3) the learned greedy mb_safety controller (does it discover control?),
+    //   (4) CP3 re-tested here: with a task that NEEDS the model, does prediction
+    //       accuracy finally couple to control?
+    // Disturbances off: shocks/volatility were an accidental mass source that let a
+    // constant `discharge` hold the band. With them off the band is a clean,
+    // deterministic two-sided homeostasis task no constant policy can hold.
+    const band = env_mod.TaskParams{ .min_mass = 16, .max_mass = 48, .shock_period = 0, .volatility_after = 1_000_000 };
+    std.debug.print("\n[BAND] homeostatic band [{d},{d}], disturbances off (no constant policy can hold it):\n", .{ band.min_mass, band.max_mass });
+    std.debug.print("  {s:<22} | {s:>9} | {s:>9} | {s:>8} | {s:>8}\n", .{ "policy", "fail/1k", "mean_mass", "err_e", "err_l" });
+    std.debug.print("  ----------------------+-----------+-----------+----------+---------\n", .{});
+    printRow("const_random", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .random, .enable_learning = false, .enable_macros = false, .enable_meta = false,
+    }, n_steps, seeds));
+    inline for (.{ .rest, .charge, .discharge }) |act| {
+        printRow("const_" ++ @tagName(act), try runPolicyPMeanSeeds(allocator, band, .{
+            .action_mode = .fixed, .fixed_action = act, .enable_learning = false, .enable_macros = false, .enable_meta = false,
+        }, n_steps, seeds));
+    }
+    std.debug.print("  ----------------------+-----------+-----------+----------+---------\n", .{});
+    std.debug.print("  {s:<22} | {d:>9.2} |  (hand-coded state-dependent baseline => task is solvable)\n", .{
+        "thermostat", thermostatMeanSeeds(band, n_steps, seeds),
+    });
+    printRow("learned mb_safety", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+    }, n_steps, seeds));
+    printRow("learned mb_surprise", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_surprise, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+    }, n_steps, seeds));
+    printRow("CP3 stock (repulsion)", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .pure_attraction = false,
+    }, n_steps, seeds));
+    printRow("CP3 pure (no floor)", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .pure_attraction = true,
+    }, n_steps, seeds));
 }

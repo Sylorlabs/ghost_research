@@ -101,6 +101,7 @@ pub fn main() !void {
         .{ .name = "bigger_shocks", .params = .{ .shock_mag = 6 } }, // >= threshold: shocks lethal
         .{ .name = "tight_threshold", .params = .{ .fail_threshold = 4 } },
         .{ .name = "stochastic", .params = .{ .noise_prob = 0.05, .noise_mag = 2 } },
+        .{ .name = "homeostatic", .params = .{ .min_mass = 16, .max_mass = 48, .shock_period = 0, .volatility_after = 1_000_000 } }, // two-sided band, disturbances off
     };
 
     std.debug.print("=== generalization: train {d} / eval {d} x {d} seeds ===\n", .{ train_n, eval_n, seeds });

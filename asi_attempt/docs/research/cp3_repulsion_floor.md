@@ -85,3 +85,27 @@ The method point repeats `expressiveness_ceiling.md`'s lesson one level up: an
 instrument built to confirm a prediction-side fix surfaced that the fix is a
 control-side regression — you only learn that by measuring the thing you actually
 care about (fail/1k), not its proxy (err_l).
+
+## Update (CP3 reversed on a non-trivial task) — see `non_trivial_task.md`
+
+The conclusions above are **correct for the trivial battery cell but do not
+generalise** — they are an artefact of a benchmark whose optimum is the constant
+`always rest`. Re-running the identical stock-vs-pure ablation on the homeostatic
+**band** task (`environment.zig` `min_mass`/`max_mass`; no constant policy can
+hold it) flips the sign:
+
+```
+  task            | stock fail/1k | pure fail/1k | pure err_l
+  ----------------+---------------+--------------+-----------
+  trivial cell    |   2.97        |  10.99       |  0.052    (pure WORSE)
+  homeostatic band|  162.94       |  33.62       |  0.045    (pure ~5x BETTER)
+```
+
+On a task that actually **requires the model to act**, the prediction win
+converts into a ~5× control win. So the right statement is not "better
+world-model hurts control" — it is "**on the trivial task, control did not use
+the model at all.**" Point 2 above ("any path through better world-model must be
+re-justified against control") stands only for the degenerate cell; on the band,
+the repulsion floor is a pure-loss defect for control too, exactly as
+`expressiveness_ceiling.md` first argued. Read `non_trivial_task.md` for the full
+arc.

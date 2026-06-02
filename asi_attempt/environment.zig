@@ -19,7 +19,36 @@ pub const TaskParams = struct {
     noise_prob: f32 = 0.0, // stochastic: per-step chance to bump a random cell
     noise_mag: u8 = 1, // magnitude of the stochastic bump
     nonlinear: bool = false, // add a multiplicative neighbour coupling (non-affine)
+    min_mass: u32 = 0, // homeostatic FLOOR: if >0, total grid mass < min_mass is an
+    // UNDERCHARGE failure. `rest` (and a disturbance-free `discharge`) drain below it.
+    max_mass: u32 = 0, // homeostatic CEILING: if >0, total grid mass > max_mass is an
+    // OVERCHARGE failure. `charge` piles above it. Together [min_mass, max_mass] is a
+    // two-sided band that NO constant policy can hold — competence becomes measurable
+    // above trivial. Best run with shocks/volatility off (those refill `discharge`).
 };
+
+// Seed (and post-failure reset) the grid INSIDE the band so it doesn't instantly
+// fail. Targets the band midpoint, spread evenly, each cell below fail_threshold.
+// Returns all-zeros when min_mass==0, so the default environment is byte-identical.
+fn targetMass(p: TaskParams) u32 {
+    if (p.min_mass == 0) return 0;
+    if (p.max_mass > 0) return (p.min_mass + p.max_mass) / 2;
+    return p.min_mass + 16; // floor-only: start a bit above the floor
+}
+
+fn seededGrid(p: TaskParams) [16]u8 {
+    const tm = targetMass(p);
+    if (tm == 0) return [_]u8{0} ** 16;
+    const cap: u32 = if (p.fail_threshold > 1) p.fail_threshold - 1 else 1;
+    const base = tm / 16;
+    const rem = tm % 16;
+    var g: [16]u8 = undefined;
+    for (0..16) |i| {
+        const v = @min(base + (if (i < rem) @as(u32, 1) else 0), cap);
+        g[i] = @intCast(v);
+    }
+    return g;
+}
 
 pub const Environment = struct {
     grid: [16]u8,
@@ -33,7 +62,7 @@ pub const Environment = struct {
 
     pub fn initWith(params: TaskParams) Environment {
         return .{
-            .grid = [_]u8{0} ** 16,
+            .grid = seededGrid(params), // all-zeros when min_mass==0 (default unchanged)
             .failed = false,
             .step_count = 0,
             .params = params,
@@ -45,8 +74,8 @@ pub const Environment = struct {
         self.step_count += 1;
 
         if (self.failed) {
-            // Auto-reset after failure
-            self.grid = [_]u8{0} ** 16;
+            // Auto-reset after failure (back into the band when min_mass>0)
+            self.grid = seededGrid(p);
             self.failed = false;
             return;
         }
@@ -112,12 +141,20 @@ pub const Environment = struct {
             for (0..16) |i| self.grid[i] +|= add[i];
         }
 
-        // Dendrite short-circuit failure condition
+        // Dendrite short-circuit failure condition (overcharge: a cell too high)
         for (self.grid) |cell| {
             if (cell >= p.fail_threshold) {
                 self.failed = true;
                 break;
             }
+        }
+
+        // Homeostatic band failure: total mass out of [min_mass, max_mass].
+        if (!self.failed and (p.min_mass > 0 or p.max_mass > 0)) {
+            var mass: u32 = 0;
+            for (self.grid) |c| mass += c;
+            if (p.min_mass > 0 and mass < p.min_mass) self.failed = true;
+            if (p.max_mass > 0 and mass > p.max_mass) self.failed = true;
         }
     }
 };
