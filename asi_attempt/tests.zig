@@ -64,7 +64,7 @@ test "the readable channel is RECURRING GRID STRUCTURE, not the failure bit" {
     // real encoder; fail = high-mass short-circuited grids.
     var prng = std.Random.DefaultPrng.init(23);
     const rand = prng.random();
-    const enc = agent_mod.EnvEncoder.init(rand);
+    const enc = agent_mod.EnvEncoder.init(rand, false);
 
     const N = 64;
     var safe: [N]hv.Hypervector = undefined;

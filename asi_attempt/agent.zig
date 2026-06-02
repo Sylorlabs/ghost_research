@@ -21,25 +21,50 @@ const Hypervector = hv.Hypervector;
 /// the agent owns all of its learning state in one place.)
 pub const EnvEncoder = struct {
     P: [16]Hypervector, // one role vector per grid cell (position)
-    V: [256]Hypervector, // one filler vector per cell value
+    V: [256]Hypervector, // one filler vector per cell value (RANDOM: no metric structure)
     P_fail: Hypervector, // role for the failure flag
     V_true: Hypervector, // filler: failed = true
     V_false: Hypervector, // filler: failed = false
 
-    pub fn init(rand: std.Random) EnvEncoder {
+    // Ordinal (thermometer) value fillers: L[k] has a bit set iff that bit's random
+    // level < k, so hamming(L[a],L[b]) ∝ |a-b|. This injects the METRIC structure the
+    // random V[] lacks — the out-of-closure generator the band task needs to read
+    // total mass (a sum/threshold the XOR substrate cannot otherwise expose).
+    ordinal: bool,
+    L: [17]Hypervector,
+
+    pub fn init(rand: std.Random, ordinal: bool) EnvEncoder {
         var enc: EnvEncoder = undefined;
         for (0..16) |i| enc.P[i] = hv.initRandom(rand);
         for (0..256) |i| enc.V[i] = hv.initRandom(rand);
         enc.P_fail = hv.initRandom(rand);
         enc.V_true = hv.initRandom(rand);
         enc.V_false = hv.initRandom(rand);
+        enc.ordinal = ordinal;
+        if (ordinal) {
+            // Only draws when ordinal==true, so the default (random) encoder's RNG
+            // stream — and every downstream eval number — is byte-identical.
+            var levels: [hv.D]u8 = undefined;
+            for (0..hv.D) |i| levels[i] = rand.intRangeLessThan(u8, 0, 16);
+            for (0..17) |k| {
+                var vec: Hypervector = [_]u64{0} ** hv.Blocks;
+                for (0..hv.D) |i| {
+                    if (levels[i] < k) vec[i / 64] |= (@as(u64, 1) << @intCast(i % 64));
+                }
+                enc.L[k] = vec;
+            }
+        }
         return enc;
+    }
+
+    fn filler(self: *const EnvEncoder, value: u8) Hypervector {
+        return if (self.ordinal) self.L[@min(value, 16)] else self.V[value];
     }
 
     pub fn encode(self: *const EnvEncoder, env: *const env_mod.Environment) Hypervector {
         var s = self.P_fail; // base vector
         for (0..16) |i| {
-            s = hv.bind(s, hv.bind(self.P[i], self.V[env.grid[i]]));
+            s = hv.bind(s, hv.bind(self.P[i], self.filler(env.grid[i])));
         }
         const fail_val = if (env.failed) self.V_true else self.V_false;
         s = hv.bind(s, hv.bind(self.P_fail, fail_val));
@@ -53,6 +78,7 @@ pub const ActionMode = enum {
     fixed, // always take `fixed_action` (for baseline policies)
     mb_safety, // model-based: pick the action whose predicted state is safest
     mb_surprise, // model-based: pick the most *predictable* action (min surprise)
+    mb_mass, // nonlinear readout: regulate total mass (a SUM) toward the learned safe midpoint
 };
 
 pub const Config = struct {
@@ -63,6 +89,7 @@ pub const Config = struct {
     enable_meta: bool = true,
     epsilon: f32 = 0.10, // exploration rate for model-based modes
     pure_attraction: bool = false, // CP3: drop the 0.25 repulsion floor in rule learning
+    ordinal_encoding: bool = false, // metric (thermometer) value fillers instead of random
 };
 
 pub const StepResult = struct {
@@ -132,11 +159,24 @@ pub const Agent = struct {
 
     S_t: Hypervector,
 
+    // Nonlinear (out-of-closure) mass readout for .mb_mass. Total grid mass is a SUM
+    // the XOR/bundle substrate cannot expose, so the prototype-distance agent is
+    // blind to the band. Here the agent learns a scalar model instead: the mean
+    // mass-delta per action and the [min,max] of observed safe masses, then picks the
+    // action whose predicted mass is nearest the safe midpoint. Same agent, one
+    // out-of-closure feature added — the controlled test of the closure principle.
+    cur_mass: u32,
+    mass_delta: [3]f32,
+    mass_dn: [3]u32,
+    safe_mass_min: u32,
+    safe_mass_max: u32,
+    safe_mass_n: u32,
+
     pub fn init(allocator: std.mem.Allocator, rand: std.Random, cfg: Config, env: *const env_mod.Environment) !Agent {
         var self: Agent = undefined;
         self.allocator = allocator;
         self.cfg = cfg;
-        self.encoder = EnvEncoder.init(rand);
+        self.encoder = EnvEncoder.init(rand, cfg.ordinal_encoding);
         for (0..3) |i| {
             self.rule_vectors[i] = hv.initRandom(rand);
             self.action_vectors[i] = hv.initRandom(rand);
@@ -162,6 +202,13 @@ pub const Agent = struct {
         self.safe_proto = [_]u64{0} ** hv.Blocks;
         self.fail_proto = [_]u64{0} ** hv.Blocks;
         self.all_proto = [_]u64{0} ** hv.Blocks;
+
+        self.cur_mass = 0;
+        self.mass_delta = .{ 0, 0, 0 };
+        self.mass_dn = .{ 0, 0, 0 };
+        self.safe_mass_min = std.math.maxInt(u32);
+        self.safe_mass_max = 0;
+        self.safe_mass_n = 0;
 
         self.S_t = self.encoder.encode(env);
         return self;
@@ -260,6 +307,25 @@ pub const Agent = struct {
                     const d = hv.hammingDistance(vp, self.all_proto);
                     if (d < best_dist) {
                         best_dist = d;
+                        best = @intCast(a);
+                    }
+                }
+                return best;
+            },
+            .mb_mass => {
+                // Out-of-closure readout: regulate total mass toward the midpoint of
+                // the observed safe-mass range, using the learned per-action delta.
+                if (self.safe_mass_n == 0 or rand.float(f32) < self.cfg.epsilon)
+                    return rand.intRangeLessThan(u8, 0, 3);
+                const setpoint = @as(f32, @floatFromInt(self.safe_mass_min + self.safe_mass_max)) / 2.0;
+                const cm: f32 = @floatFromInt(self.cur_mass);
+                var best: u8 = 0;
+                var best_err: f32 = 1e9;
+                for (0..3) |a| {
+                    const pred = cm + self.mass_delta[a];
+                    const e = @abs(pred - setpoint);
+                    if (e < best_err) {
+                        best_err = e;
                         best = @intCast(a);
                     }
                 }
@@ -402,6 +468,8 @@ pub const Agent = struct {
     }
 
     pub fn step(self: *Agent, env: *env_mod.Environment, rand: std.Random) StepResult {
+        self.cur_mass = 0;
+        for (env.grid) |c| self.cur_mass += c;
         const action_idx = self.chooseAction(rand);
         const action: env_mod.Action = @enumFromInt(action_idx);
         const V_pred = self.predictNext(action_idx);
@@ -412,6 +480,20 @@ pub const Agent = struct {
 
         var grid_mass: u32 = 0;
         for (env.grid) |c| grid_mass += c;
+
+        // Learn the scalar mass model (for .mb_mass): running-mean per-action delta
+        // and the [min,max] range of safe masses.
+        {
+            const d = @as(f32, @floatFromInt(grid_mass)) - @as(f32, @floatFromInt(self.cur_mass));
+            self.mass_dn[action_idx] += 1;
+            const n: f32 = @floatFromInt(self.mass_dn[action_idx]);
+            self.mass_delta[action_idx] += (d - self.mass_delta[action_idx]) / n;
+            if (!failed) {
+                self.safe_mass_min = @min(self.safe_mass_min, grid_mass);
+                self.safe_mass_max = @max(self.safe_mass_max, grid_mass);
+                self.safe_mass_n += 1;
+            }
+        }
 
         const err_vec = hv.bind(V_pred, S_next);
         const error_rate = @as(f32, @floatFromInt(popcountHV(err_vec))) / D_F;

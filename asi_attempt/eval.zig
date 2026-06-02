@@ -349,4 +349,24 @@ pub fn main() !void {
     printRow("CP3 pure (no floor)", try runPolicyPMeanSeeds(allocator, band, .{
         .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .pure_attraction = true,
     }, n_steps, seeds));
+    // Ordinal encoding: inject METRIC structure into the value fillers so total mass
+    // (a sum/threshold) becomes readable. The closure-principle escape in the control
+    // domain — does it push the learned agent below the hand-coded thermostat (20.80)?
+    std.debug.print("  - - - ordinal (metric) value encoding - - -\n", .{});
+    printRow("ordinal stock", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .ordinal_encoding = true,
+    }, n_steps, seeds));
+    printRow("ordinal + pure", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .pure_attraction = true, .ordinal_encoding = true,
+    }, n_steps, seeds));
+    // The explicit out-of-closure generator: a learned scalar mass readout (SUM +
+    // threshold, outside the XOR closure). Same agent, one nonlinear feature added.
+    // Does it match/beat the hand-coded thermostat (20.80)?
+    std.debug.print("  - - - nonlinear mass readout (out-of-closure) - - -\n", .{});
+    printRow("mb_mass learned", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+    }, n_steps, seeds));
+    printRow("mb_mass eps=0.02", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.02,
+    }, n_steps, seeds));
 }
