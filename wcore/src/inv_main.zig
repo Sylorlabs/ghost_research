@@ -86,6 +86,8 @@ pub fn main() !void {
         try alienOeCoevo(al, out, seed);
     } else if (std.mem.eql(u8, phase, "irreducible")) {
         try alienIrreducible(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "budgetscan")) {
+        try budgetScan(al, out, seed);
     } else if (std.mem.eql(u8, phase, "atomforge")) {
         try alienAtomForge(al, out, seed);
     } else if (std.mem.eql(u8, phase, "beathuman")) {
@@ -542,6 +544,92 @@ fn alienAtomForge(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
 /// yes → reducible (a composition). If no → irreducible relative to the atom set (a genuine
 /// candidate). We validate it on kill-cases, then put §24's deep "novel" solvers through it —
 /// exposing how many of the certifier's "novel" flags are actually reducible compositions.
+/// BUDGET SCAN (uncharted): the breadth test reduced only to depth 4. Here we crank
+/// the EXHAUSTIVE reduction budget up to DMAX and ask the genuinely-open question:
+/// does every discovered solver eventually collapse to a known-atom composition as
+/// the budget grows (Claim C robust, and depth-4 "irreducibles" were budget
+/// artifacts), or does ANYTHING survive deep reduction (a candidate genuine atom)?
+/// The answer is not known in advance. reducible() is exhaustive, so "irreducible at
+/// DMAX" means no composition of <= DMAX atoms reproduces the behaviour.
+fn budgetScan(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    const DMAX: usize = 8;
+    const tseed = base_seed +% 0x133D;
+    try out.print("=== BUDGET SCAN: does deeper reduction collapse every solver? (DMAX={d}) ===\n\n", .{DMAX});
+
+    // Sanity: the hand-built true outsider must stay irreducible even at DMAX.
+    const dc = coevo.distinctCountProg();
+    const dc_red = coevo.reducible(&dc, DMAX, tseed);
+    if (dc_red == null) {
+        try out.print("[sanity] distinct-count (true outsider): IRREDUCIBLE at depth<=" ++ "{d} -- instrument non-vacuous.\n\n", .{DMAX});
+    } else {
+        try out.print("[sanity] distinct-count UNEXPECTEDLY reduced -- instrument suspect; results below are weak.\n\n", .{});
+    }
+
+    // Build the same §24-style ladder of deep solvers as the irreducibility phase.
+    const regs: usize = 8;
+    const Pair = struct { genome: coevo.Genome, solver: alien.Program, depth: usize };
+    var arch = std.ArrayList(Pair).init(al);
+    defer arch.deinit();
+    for ([_]coevo.Stage{ .st_gxor, .st_gadd, .st_pkxor, .st_pkadd, .st_shift }, 0..) |st, i| {
+        var g = coevo.Genome{};
+        g.appendAssumeCapacity(st);
+        var pr0 = std.Random.DefaultPrng.init(base_seed +% 0x100 +% i *% 0x9E37);
+        const r = try coevo.evolveComposed(al, pr0.random(), g.slice(), 80_000, regs, base_seed +% i, null);
+        if (r.fit >= 0.95) try arch.append(.{ .genome = g, .solver = r.best, .depth = 1 });
+    }
+    var pr = std.Random.DefaultPrng.init(base_seed +% 0xEE);
+    const rng = pr.random();
+    for (0..36) |it| {
+        if (arch.items.len == 0) break;
+        const parent = arch.items[rng.uintLessThan(usize, arch.items.len)];
+        const cg = coevo.mutateGenome(rng, parent.genome);
+        if (cg.len < 2) continue;
+        var dup = false;
+        for (arch.items) |a| if (coevo.genomeEql(a.genome.slice(), cg.slice())) {
+            dup = true;
+        };
+        if (dup) continue;
+        var r = try coevo.evolveComposed(al, rng, cg.slice(), 50_000, regs, base_seed +% it, &parent.solver);
+        var t: usize = 0;
+        while (r.fit < 0.95 and t < 2) : (t += 1) {
+            const q = arch.items[rng.uintLessThan(usize, arch.items.len)];
+            const r2 = try coevo.evolveComposed(al, rng, cg.slice(), 30_000, regs, base_seed +% it +% t, &q.solver);
+            if (r2.fit > r.fit) r = r2;
+        }
+        if (r.fit >= 0.95 and arch.items.len < 60) try arch.append(.{ .genome = cg, .solver = r.best, .depth = cg.len });
+    }
+
+    // Scan: minimum reduction depth per deep solver (or irreducible at DMAX).
+    var hist = [_]usize{0} ** (DMAX + 1); // hist[d] = #solvers whose min reduction depth is d
+    var deep: usize = 0;
+    var survivors: usize = 0;
+    for (arch.items) |a| {
+        if (a.depth < 2) continue;
+        deep += 1;
+        const red = coevo.reducible(&a.solver, DMAX, tseed);
+        if (red) |g| {
+            hist[g.len] += 1;
+        } else {
+            survivors += 1;
+            try out.print("  [SURVIVOR] a depth-{d} solver is IRREDUCIBLE even at DMAX={d} -- candidate atom.\n", .{ a.depth, DMAX });
+        }
+    }
+    try out.print("\n  min reduction depth | #solvers\n", .{});
+    try out.print("  --------------------+---------\n", .{});
+    for (1..DMAX + 1) |d| {
+        if (hist[d] > 0) try out.print("         {d}          |   {d}\n", .{ d, hist[d] });
+    }
+    try out.print("\n[RESULT] {d} deep solvers; {d} reduced within depth {d}; {d} SURVIVE irreducible at DMAX.\n", .{ deep, deep - survivors, DMAX, survivors });
+    if (survivors == 0) {
+        try out.print("VERDICT: deeper budget collapses everything -- Claim C is ROBUST, not a depth-4 artifact.\n", .{});
+        try out.print("Any earlier 'irreducible at depth 4' was a budget artifact; raising the budget found\n", .{});
+        try out.print("the composition. 'Irreducible' is exactly as deep as your reduction search -- closure all the way up.\n", .{});
+    } else {
+        try out.print("VERDICT: {d} solver(s) resisted reduction at DMAX={d}. Either a genuine candidate atom\n", .{ survivors, DMAX });
+        try out.print("OR DMAX is still too shallow. Re-run at higher DMAX to distinguish -- this is the live edge.\n", .{});
+    }
+}
+
 fn alienIrreducible(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
     try out.writeAll("=== RESEARCH PHASE 15: the irreducibility test (certify a new ATOM vs a composition) ===\n\n");
     const tseed = base_seed +% 0x133D;

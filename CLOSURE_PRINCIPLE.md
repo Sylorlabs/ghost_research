@@ -29,7 +29,7 @@ Two testable corollaries:
 | domain | closed substrate | ceiling (proved/measured) | out-of-closure generator | escape evidence |
 |--------|------------------|---------------------------|--------------------------|-----------------|
 | **mixers** (BitForge thread 07) | GF(2)-affine (XOR/shift) | SAC-error = 0.5 exactly (theorem); PractRand failure | ADD (carry), MUL | `closure_escape_mixer`: 0.5 → 0.13 (ADD) → 0.02 (MUL) |
-| **invention** (wcore Claim C) | fixed opcode VM | only encodings of known mechanisms; **85/86 deep solvers reducible across 16 seeds** (1 budget artifact) | a new atom | irreducibility certifier flags the true outsider (16/16 kill-tests) |
+| **invention** (wcore Claim C) | fixed opcode VM | only encodings of known mechanisms; **85/86 reducible at depth 4, and the 1 exception reduces at depth 5 — 0 survive a deeper budget** | a new atom | irreducibility certifier flags the true outsider (16/16 kill-tests; non-vacuous at depth 8) |
 | **control / world-model** (asi_attempt) | XOR/bundle VSA | band predicate unreadable: nearest-prototype 0.50, best linear 0.51 (chance) | the SUM (total mass) | `mb_mass`: 11.02 fail/1k — beats the hand-coded thermostat (20.80) |
 | **search depth** (BitForge meta-engine) | fixed Tier-0 opcodes | reproducible 44–47 fitness ceiling; "more tiers" refuted | richer Tier-0 op/scoring axis | monotone+parallel+QD crossing only via new axis |
 | **learning** (k-sparse parity, the textbook case) | linear-in-bits | linear at chance for k≥2 (theorem) | nonlinearity / the product monomial | `zig build parity`: linear 0.50 → MLP 1.0, lifted 1.0 |

@@ -27,11 +27,11 @@ showed 7 novel / 0 irreducible. This sweep turns that into a breadth claim.
 - **The instrument is non-vacuous:** in all 16 seeds the kill-test correctly flags
   `distinct-count` (a hand-built true outsider) as irreducible. So "0–1 irreducible"
   is a real measurement, not an instrument that always says "reducible".
-- **The lone exception (seed 0xD00D, 1 irreducible) is almost certainly a
-  budget-limited false negative,** not a new atom. The reducibility test searches
-  for a reducing composition only to **depth 4**; a solver needing a depth-5
-  reduction is reported "irreducible" without being a genuine outsider. Confirming
-  vs refuting it requires a deeper reduction search.
+- **The lone exception (seed 0xD00D, 1 irreducible) is a budget artifact —
+  now confirmed.** `budget_scan.md` cranked the exhaustive reduction budget up and
+  found that solver reduces at **depth 5**; at DMAX=8, 0 of 9 deep solvers survive
+  (and 0 across 4 seeds). The depth-4 "irreducible" simply hadn't looked deep
+  enough. Claim C holds under budget-scaling.
 
 ## The honest epistemics (and the tie to the closure principle)
 
