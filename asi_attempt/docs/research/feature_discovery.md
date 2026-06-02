@@ -38,17 +38,39 @@ under-charge) to useless (`nonzero_count` = the trivial floor). A generic
 keep-the-best search therefore **discovers the sum autonomously** — selection-level
 invention of the out-of-closure generator, no human pointing at "total mass".
 
+## Level 2 — construction from raw cells (no library, no labels)
+
+Selection from a list is the weak form. The strong form is **construction**: build
+the feature from primitives with no candidate offered. `zig build probe` (the
+construction block) does this with unsupervised PCA: collect grids under a random
+policy on the band, form the 16×16 raw-cell covariance, power-iterate its top
+principal component, and compare to the uniform (sum) direction.
+
+```
+cosine(top principal component, uniform/sum direction) = 0.9987   (6 seeds × 8000 steps)
+```
+
+The top PC is the sum direction, near-exactly — with **no labels and no candidate
+list.** The reason is mechanistic: `charge` and `rest` move *all* cells together,
+so the dominant variance axis of the raw cells *is* the sum. The out-of-closure
+feature is therefore **constructed** unsupervised, and control via it scores 11.02
+(`mb_mass`), beating the thermostat. Construction-level discovery — the frontier —
+is achievable here.
+
 ## What this does and does not show
 
-- **Does:** the out-of-closure generator is *discoverable*, not necessarily
-  human-supplied. Given a library of candidate features and a generic control
-  objective, the system finds the one that escapes the substrate's closure.
-- **Does not:** this is **selection** from a candidate library, not **construction**
-  from primitives. The sum was one of four offered features. True invention —
-  synthesising the sum from raw cells with no candidate list — is the harder open
-  problem, and is exactly what wcore's atom-forge attempts (and where it bottoms
-  out at its fixed VM, Claim C). The honest placement: discovery-by-selection is
-  solved here; discovery-by-construction remains the frontier.
+- **Does:** the out-of-closure generator is *discoverable* — by selection (level 1)
+  and even by unsupervised construction from raw primitives (level 2, PCA). It is
+  not inherently human-supplied.
+- **Does not:** construction worked here because the useful feature (the sum)
+  **coincides with the dynamics' dominant variance mode.** PCA finds the controllable
+  direction; it succeeds when "useful" aligns with "high-variance/controllable",
+  which the band dynamics arrange. A useful feature *uncorrelated* with the dominant
+  mode would not be found this way. So the standing frontier sharpens: not "can we
+  construct any feature" but "can we construct a useful feature that is **not**
+  already salient in the dynamics" — which is again the closure question one level
+  up (is the constructor's bias rich enough?), the wcore atom-forge conclusion
+  (Claim C).
 
 ## Connection
 

@@ -92,13 +92,20 @@ thermostat; decoys score 37–333). So the generator is **discoverable, not
 inherently human-only** — *provided it is expressible in the candidate space*
 (`asi_attempt/docs/research/feature_discovery.md`).
 
-**What remains.** This is discovery-by-**selection** from a library, not
-discovery-by-**construction** from primitives. Requiring the candidate space to
-already contain the generator just relocates the closure question one level up: is
-the *space of candidate generators* rich enough? It is closure all the way up —
-exactly the wcore atom-forge conclusion (Claim C). Construction-level invention —
-synthesising the generator from primitives with no candidate list — is the
-standing frontier.
+**Stronger answer (construction-level), also measured.** Unsupervised PCA on the
+raw 16 cells — *no candidate library, no labels* — recovers the sum direction
+almost exactly: `cosine(top principal component, uniform/sum) = 0.9987`. The
+out-of-closure feature is **constructed**, not merely selected, because `charge`/
+`rest` move all cells together so the sum *is* the dominant variance axis
+(`asi_attempt/docs/research/feature_discovery.md`, construction block).
+
+**What remains.** Construction succeeded because the useful feature *coincided with
+the dynamics' dominant, controllable mode*. PCA finds the salient direction; it
+wins when "useful" aligns with "high-variance/controllable." The sharpened
+frontier is therefore constructing a useful generator that is **not** already
+salient in the dynamics — which is the closure question one level up (is the
+constructor's inductive bias rich enough?), exactly the wcore atom-forge
+conclusion (Claim C): closure all the way up.
 
 ## Reproduce
 
