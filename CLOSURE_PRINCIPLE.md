@@ -77,16 +77,28 @@ This reframes several earlier "failures" as correct closure ceilings (the
 meta-engine 44–47 wall; CP3's "better prediction hurt control" on the trivial
 task) and tells you the lever is always the generator, not the grind.
 
-## The open frontier
+## The open frontier — and a partial answer
 
-In all four witnesses the out-of-closure generator was **human-supplied** (we
-added MUL, defined a new atom, fed the SUM). The deepest open question —
-the real definition of "invention" — is whether a system can **discover the
-right out-of-closure generator on its own**, rather than only composing within a
-fixed closure. wcore's atom-forge attempts this and bottoms out at its fixed VM
-(Claim C); the control domain offers the cleanest next test bed (can a feature
-learner *discover* that the sum is the needed readout, without being told?). That
-is the frontier this principle points at.
+In the four witnesses above the out-of-closure generator was **human-supplied**
+(we added MUL, defined a new atom, fed the SUM). The deepest question — the real
+definition of "invention" — is whether a system can **discover the right
+out-of-closure generator on its own**.
+
+**Partial answer (selection-level), now measured.** A generic feature search in
+the control domain — running the controller over candidate aggregates
+{sum, max, first-cell, nonzero-count} and keeping the best, *without being told*
+which matters — discovers the SUM autonomously (11.02 fail/1k, beating the
+thermostat; decoys score 37–333). So the generator is **discoverable, not
+inherently human-only** — *provided it is expressible in the candidate space*
+(`asi_attempt/docs/research/feature_discovery.md`).
+
+**What remains.** This is discovery-by-**selection** from a library, not
+discovery-by-**construction** from primitives. Requiring the candidate space to
+already contain the generator just relocates the closure question one level up: is
+the *space of candidate generators* rich enough? It is closure all the way up —
+exactly the wcore atom-forge conclusion (Claim C). Construction-level invention —
+synthesising the generator from primitives with no candidate list — is the
+standing frontier.
 
 ## Reproduce
 

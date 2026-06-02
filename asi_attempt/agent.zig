@@ -78,8 +78,37 @@ pub const ActionMode = enum {
     fixed, // always take `fixed_action` (for baseline policies)
     mb_safety, // model-based: pick the action whose predicted state is safest
     mb_surprise, // model-based: pick the most *predictable* action (min surprise)
-    mb_mass, // nonlinear readout: regulate total mass (a SUM) toward the learned safe midpoint
+    mb_mass, // nonlinear readout: regulate a learned scalar FEATURE toward the safe midpoint
 };
+
+/// Candidate aggregate features for mb_mass. The point of the discovery
+/// experiment: a generic feature search over these should DISCOVER that the SUM
+/// (the out-of-closure generator) is the one enabling control, with the decoys
+/// failing — autonomous escape rather than a human hard-coding "use total mass".
+pub const FeatureKind = enum { sum, max_cell, first_cell, nonzero_count };
+
+pub fn featureValue(grid: [16]u8, kind: FeatureKind) u32 {
+    switch (kind) {
+        .sum => {
+            var m: u32 = 0;
+            for (grid) |c| m += c;
+            return m;
+        },
+        .max_cell => {
+            var mx: u32 = 0;
+            for (grid) |c| mx = @max(mx, c);
+            return mx;
+        },
+        .first_cell => return grid[0],
+        .nonzero_count => {
+            var n: u32 = 0;
+            for (grid) |c| {
+                if (c > 0) n += 1;
+            }
+            return n;
+        },
+    }
+}
 
 pub const Config = struct {
     action_mode: ActionMode = .random,
@@ -90,6 +119,7 @@ pub const Config = struct {
     epsilon: f32 = 0.10, // exploration rate for model-based modes
     pure_attraction: bool = false, // CP3: drop the 0.25 repulsion floor in rule learning
     ordinal_encoding: bool = false, // metric (thermometer) value fillers instead of random
+    feature: FeatureKind = .sum, // which aggregate mb_mass regulates (discovery experiment)
 };
 
 pub const StepResult = struct {
@@ -468,8 +498,7 @@ pub const Agent = struct {
     }
 
     pub fn step(self: *Agent, env: *env_mod.Environment, rand: std.Random) StepResult {
-        self.cur_mass = 0;
-        for (env.grid) |c| self.cur_mass += c;
+        self.cur_mass = featureValue(env.grid, self.cfg.feature); // the chosen aggregate
         const action_idx = self.chooseAction(rand);
         const action: env_mod.Action = @enumFromInt(action_idx);
         const V_pred = self.predictNext(action_idx);
@@ -481,16 +510,17 @@ pub const Agent = struct {
         var grid_mass: u32 = 0;
         for (env.grid) |c| grid_mass += c;
 
-        // Learn the scalar mass model (for .mb_mass): running-mean per-action delta
-        // and the [min,max] range of safe masses.
+        // Learn the scalar feature model (for .mb_mass): running-mean per-action
+        // delta of the chosen feature and the [min,max] range over safe states.
         {
-            const d = @as(f32, @floatFromInt(grid_mass)) - @as(f32, @floatFromInt(self.cur_mass));
+            const feat_next = featureValue(env.grid, self.cfg.feature);
+            const d = @as(f32, @floatFromInt(feat_next)) - @as(f32, @floatFromInt(self.cur_mass));
             self.mass_dn[action_idx] += 1;
             const n: f32 = @floatFromInt(self.mass_dn[action_idx]);
             self.mass_delta[action_idx] += (d - self.mass_delta[action_idx]) / n;
             if (!failed) {
-                self.safe_mass_min = @min(self.safe_mass_min, grid_mass);
-                self.safe_mass_max = @max(self.safe_mass_max, grid_mass);
+                self.safe_mass_min = @min(self.safe_mass_min, feat_next);
+                self.safe_mass_max = @max(self.safe_mass_max, feat_next);
                 self.safe_mass_n += 1;
             }
         }

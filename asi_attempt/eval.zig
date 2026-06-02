@@ -369,4 +369,24 @@ pub fn main() !void {
     printRow("mb_mass eps=0.02", try runPolicyPMeanSeeds(allocator, band, .{
         .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.02,
     }, n_steps, seeds));
+    // Discovery: can a generic feature search FIND the out-of-closure generator?
+    // Run mb_mass over candidate aggregate features; keep whichever controls best.
+    // If 'sum' wins and the decoys fail, the system discovered the sum autonomously
+    // (selection-level) rather than being told to use total mass.
+    std.debug.print("  - - - feature search (which aggregate enables control?) - - -\n", .{});
+    const feats = [_]agent_mod.FeatureKind{ .sum, .max_cell, .first_cell, .nonzero_count };
+    var best_feat: agent_mod.FeatureKind = .sum;
+    var best_fail: f64 = 1e9;
+    for (feats) |f| {
+        const st = try runPolicyPMeanSeeds(allocator, band, .{
+            .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = f,
+        }, n_steps, seeds);
+        var name: [40]u8 = undefined;
+        printRow(try std.fmt.bufPrint(&name, "feat={s}", .{@tagName(f)}), st);
+        if (st.fail_per_1k < best_fail) {
+            best_fail = st.fail_per_1k;
+            best_feat = f;
+        }
+    }
+    std.debug.print("  => feature search SELECTS '{s}' ({d:.2} fail/1k) as the controlling feature\n", .{ @tagName(best_feat), best_fail });
 }
