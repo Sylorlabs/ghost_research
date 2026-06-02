@@ -88,6 +88,8 @@ pub fn main() !void {
         try alienIrreducible(al, out, seed);
     } else if (std.mem.eql(u8, phase, "budgetscan")) {
         try budgetScan(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "auditscan")) {
+        try auditScan(al, out, seed);
     } else if (std.mem.eql(u8, phase, "atomforge")) {
         try alienAtomForge(al, out, seed);
     } else if (std.mem.eql(u8, phase, "beathuman")) {
@@ -627,6 +629,86 @@ fn budgetScan(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
     } else {
         try out.print("VERDICT: {d} solver(s) resisted reduction at DMAX={d}. Either a genuine candidate atom\n", .{ survivors, DMAX });
         try out.print("OR DMAX is still too shallow. Re-run at higher DMAX to distinguish -- this is the live edge.\n", .{});
+    }
+}
+
+/// INSTRUMENT AUDIT (attack our own negative result): every "reducible" verdict so
+/// far used behaviorMatches with MATCH_THRESHOLD=0.95 -- a 95%-approximation counts
+/// as a "match". A behaviour a known-atom composition matches on 95% but DIFFERS on
+/// 5% is genuinely NOT that composition -- a candidate novelty the loose threshold
+/// hides. Here we re-judge every deep solver under EXACT (100%) matching with a much
+/// larger sample budget, and count solvers that are reducible-loose but
+/// irreducible-EXACT. If any exist, "it can't invent" was a threshold artifact.
+fn auditScan(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    const DMAX: usize = 8;
+    const EN: usize = 64; // exact-check streams
+    const EL: usize = 64; // exact-check stream length  (EN*EL = 4096 symbols)
+    const tseed = base_seed +% 0x133D;
+    try out.print("=== INSTRUMENT AUDIT: loose(0.95) vs EXACT(1.0) reduction (DMAX={d}, {d} exact samples) ===\n\n", .{ DMAX, EN * EL });
+
+    // Sanity: the true outsider must be irreducible under BOTH checks.
+    const dc = coevo.distinctCountProg();
+    const dc_loose = coevo.reducible(&dc, DMAX, tseed);
+    const dc_exact = coevo.reducibleExact(&dc, DMAX, tseed, EN, EL);
+    try out.print("[sanity] distinct-count: loose={s}, exact={s}\n\n", .{ if (dc_loose == null) "IRREDUCIBLE" else "reducible", if (dc_exact == null) "IRREDUCIBLE" else "reducible" });
+
+    const regs: usize = 8;
+    const Pair = struct { genome: coevo.Genome, solver: alien.Program, depth: usize };
+    var arch = std.ArrayList(Pair).init(al);
+    defer arch.deinit();
+    for ([_]coevo.Stage{ .st_gxor, .st_gadd, .st_pkxor, .st_pkadd, .st_shift }, 0..) |st, i| {
+        var g = coevo.Genome{};
+        g.appendAssumeCapacity(st);
+        var pr0 = std.Random.DefaultPrng.init(base_seed +% 0x100 +% i *% 0x9E37);
+        const r = try coevo.evolveComposed(al, pr0.random(), g.slice(), 80_000, regs, base_seed +% i, null);
+        if (r.fit >= 0.95) try arch.append(.{ .genome = g, .solver = r.best, .depth = 1 });
+    }
+    var pr = std.Random.DefaultPrng.init(base_seed +% 0xEE);
+    const rng = pr.random();
+    for (0..36) |it| {
+        if (arch.items.len == 0) break;
+        const parent = arch.items[rng.uintLessThan(usize, arch.items.len)];
+        const cg = coevo.mutateGenome(rng, parent.genome);
+        if (cg.len < 2) continue;
+        var dup = false;
+        for (arch.items) |a| if (coevo.genomeEql(a.genome.slice(), cg.slice())) {
+            dup = true;
+        };
+        if (dup) continue;
+        var r = try coevo.evolveComposed(al, rng, cg.slice(), 50_000, regs, base_seed +% it, &parent.solver);
+        var t: usize = 0;
+        while (r.fit < 0.95 and t < 2) : (t += 1) {
+            const q = arch.items[rng.uintLessThan(usize, arch.items.len)];
+            const r2 = try coevo.evolveComposed(al, rng, cg.slice(), 30_000, regs, base_seed +% it +% t, &q.solver);
+            if (r2.fit > r.fit) r = r2;
+        }
+        if (r.fit >= 0.95 and arch.items.len < 60) try arch.append(.{ .genome = cg, .solver = r.best, .depth = cg.len });
+    }
+
+    var deep: usize = 0;
+    var red_loose: usize = 0;
+    var red_exact: usize = 0;
+    var masked: usize = 0; // loose-reducible but exact-IRREDUCIBLE = candidate novelty
+    for (arch.items) |a| {
+        if (a.depth < 2) continue;
+        deep += 1;
+        const rl = coevo.reducible(&a.solver, DMAX, tseed);
+        const re = coevo.reducibleExact(&a.solver, DMAX, tseed, EN, EL);
+        if (rl != null) red_loose += 1;
+        if (re != null) red_exact += 1;
+        if (rl != null and re == null) {
+            masked += 1;
+            try out.print("  [MASKED] depth-{d} solver: loose-REDUCIBLE but EXACT-IRREDUCIBLE -- candidate novelty.\n", .{a.depth});
+        }
+    }
+    try out.print("\n[RESULT] {d} deep solvers | loose-reducible {d} | exact-reducible {d} | MASKED (loose-red, exact-irred) {d}\n", .{ deep, red_loose, red_exact, masked });
+    if (masked == 0) {
+        try out.print("VERDICT: exact matching AGREES with loose -- the 0.95 threshold was not hiding novelty.\n", .{});
+        try out.print("'It can't invent' survives the instrument audit: every solver is an EXACT composition.\n", .{});
+    } else {
+        try out.print("VERDICT: {d} solver(s) are 95%%-approximable by a composition but NOT exactly one --\n", .{masked});
+        try out.print("the loose threshold WAS masking near-novelty. These are the first real candidates;\n", .{});
+        try out.print("next: are they exact-irreducible at higher DMAX, and are they USEFUL (solve a task)?\n", .{});
     }
 }
 

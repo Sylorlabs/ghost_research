@@ -382,6 +382,47 @@ pub fn behaviorMatches(prog: *const alien.Program, genome: []const Stage, n: usi
     return @as(f64, @floatFromInt(agree)) / @as(f64, @floatFromInt(total)) >= MATCH_THRESHOLD;
 }
 
+/// Instrument audit: EXACT behavioural equality (every symbol must match), with
+/// caller-set sample budget. behaviorMatches uses MATCH_THRESHOLD=0.95, so it calls
+/// a 95%-approximation a "match" -- which could mask a behaviour that is NOT exactly
+/// a composition. This requires 100% agreement over n*L symbols.
+pub fn behaviorMatchesExact(prog: *const alien.Program, genome: []const Stage, n: usize, L: usize, seed: u64) bool {
+    var prng = std.Random.DefaultPrng.init(seed);
+    const rng = prng.random();
+    var syms: [256]u8 = undefined;
+    var tgt: [256]u8 = undefined;
+    var got: [256]u8 = undefined;
+    const ll = @min(L, 256);
+    for (0..n) |_| {
+        for (0..ll) |i| syms[i] = @intCast(rng.uintLessThan(usize, V));
+        composedTarget(genome, syms[0..ll], tgt[0..ll]);
+        alien.runStream(prog, syms[0..ll], got[0..ll]);
+        for (0..ll) |i| if (got[i] != tgt[i]) return false; // any mismatch => NOT equal
+    }
+    return true;
+}
+
+/// Exact-matching exhaustive reduction search (the audit twin of `reducible`).
+pub fn reducibleExact(prog: *const alien.Program, max_depth: usize, seed: u64, n: usize, L: usize) ?Genome {
+    const nstage = @typeInfo(Stage).@"enum".fields.len;
+    var d: usize = 1;
+    while (d <= max_depth) : (d += 1) {
+        var total: usize = 1;
+        for (0..d) |_| total *= nstage;
+        var idx: usize = 0;
+        while (idx < total) : (idx += 1) {
+            var g = Genome{};
+            var x = idx;
+            for (0..d) |_| {
+                g.appendAssumeCapacity(@enumFromInt(x % nstage));
+                x /= nstage;
+            }
+            if (behaviorMatchesExact(prog, g.slice(), n, L, seed)) return g;
+        }
+    }
+    return null;
+}
+
 /// Search every stage-genome up to `max_depth` for one that reproduces `prog`'s
 /// behaviour. Returns the (shortest) matching genome (REDUCIBLE) or null (IRREDUCIBLE
 /// relative to the stage atom set). Exhaustive: 5 + 25 + … stage-strings.

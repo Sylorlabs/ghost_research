@@ -68,6 +68,7 @@ composition). The live edge is letting the atom set grow.
 45. 🟢 [solo] At what **decoy-to-signal variance ratio** does even supervised recovery fail?
 
 ## G. Instrument validation — make sure the tools aren't lying (do this BEFORE trusting results)
+> **#46 DONE** (`instrument_audit.md`): the loose `MATCH_THRESHOLD=0.95` does **not** hide novelty — under exact 100% matching (4096 samples) 0/24 solvers across 3 seeds flip to irreducible. "It can't invent" survives the audit and is more robust.
 46. 🟢 [solo] Does `behaviorMatches` (12 regs, 32 tests) ever declare two **non-equal** programs equal? Stress with adversarial pairs.
 47. 🟡 [solo] Do reducible/irreducible verdicts change as `behaviorMatches` test count rises (32→256)?
 48. 🟢 [solo] Is `domain_superoptimizer.toAig` **faithful**? (I found AND/SHL bugs.) Exhaustively check each op's AIG vs `execute` at small width.
