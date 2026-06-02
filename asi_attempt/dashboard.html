@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ghost Active Inference Telemetry</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --panel-bg: #111;
+            --text-main: #eee;
+            --accent: #0f0;
+            --danger: #f00;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: monospace;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { color: var(--accent); text-transform: uppercase; }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            width: 100%;
+            max-width: 800px;
+        }
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid #333;
+            padding: 1.5rem;
+        }
+        .metric-value {
+            font-size: 2.5rem;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        .chart {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            position: relative;
+            border-bottom: 1px solid #333;
+            border-left: 1px solid #333;
+        }
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent);
+        }
+        #statusDot {
+            height: 10px; width: 10px; border-radius: 50%;
+            display: inline-block; background: var(--danger);
+        }
+        #statusDot.connected { background: var(--accent); }
+    </style>
+</head>
+<body>
+    <div style="width:100%;max-width:800px;display:flex;justify-content:space-between;margin-bottom:2rem;">
+        <h1>Ghost Active Inference</h1>
+        <div><span id="statusDot"></span> <span id="statusText">Disconnected</span></div>
+    </div>
+    <div class="dashboard">
+        <div class="panel">
+            <div>Prediction Error (Energy)</div>
+            <div class="metric-value" id="predError">0.000</div>
+            <div style="color:#888; margin-top: 10px;">Target: Minimize < 0.10</div>
+        </div>
+        <div class="panel">
+            <div>System State</div>
+            <div style="font-size: 1.2rem; margin-top: 10px;">
+                Action: <span id="latestAction" style="color:var(--accent)">-</span><br><br>
+                Status: <span id="failState" style="color:var(--accent)">OK</span>
+            </div>
+        </div>
+        <div class="panel">
+            <div>Active Macro Tools</div>
+            <div class="metric-value" id="macroTools">0</div>
+        </div>
+        <div class="panel">
+            <div>Layer 1 Meta-Class</div>
+            <div class="metric-value" id="metaClass" style="font-size: 1.5rem; word-break: break-all;">UNKNOWN</div>
+        </div>
+        <div class="panel">
+            <div>Executed VM Bytecode</div>
+            <div class="metric-value" id="vmBytecode" style="font-size: 1.5rem; word-break: break-all;">NONE</div>
+        </div>
+        <div class="panel" style="grid-column: 1 / -1;">
+            <div>Prediction Error History</div>
+            <div class="chart" id="chart"></div>
+        </div>
+    </div>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8080');
+        const predErrorEl = document.getElementById('predError');
+        const latestActionEl = document.getElementById('latestAction');
+        const failStateEl = document.getElementById('failState');
+        const macroToolsEl = document.getElementById('macroTools');
+        const metaClassEl = document.getElementById('metaClass');
+        const vmBytecodeEl = document.getElementById('vmBytecode');
+        const chartEl = document.getElementById('chart');
+        
+        const actions = ['CHARGE', 'DISCHARGE', 'REST'];
+        const metaClasses = ['STABILITY', 'OSCILLATION', 'CHAOS'];
+        const opcodes = ['NOP', 'SET_ALPHA', 'SET_THRESH', 'MASK_SHIFT', 'LOOP_JMP'];
+        let history = [];
+
+        ws.onopen = () => {
+            document.getElementById('statusDot').classList.add('connected');
+            document.getElementById('statusText').innerText = 'Live';
+        };
+
+        ws.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            predErrorEl.innerText = data.prediction_error.toFixed(4);
+            latestActionEl.innerText = actions[data.latest_action] || 'UNKNOWN';
+            macroToolsEl.innerText = data.active_macro_tools || 0;
+            metaClassEl.innerText = metaClasses[data.meta_class] || 'UNKNOWN';
+            
+            if (data.vm_bytecode_len > 0) {
+                let codeStr = "";
+                for(let i=0; i<data.vm_bytecode_len; i++) {
+                    const op = data.vm_bytecode[i];
+                    codeStr += (opcodes[op] || op) + " ";
+                }
+                vmBytecodeEl.innerText = codeStr;
+            } else {
+                vmBytecodeEl.innerText = 'NONE';
+            }
+            
+            if (data.failed_state) {
+                failStateEl.innerText = 'DENDRITE SHORT-CIRCUIT';
+                failStateEl.style.color = 'var(--danger)';
+            } else {
+                failStateEl.innerText = 'STABLE';
+                failStateEl.style.color = 'var(--accent)';
+            }
+
+            history.push(data.prediction_error);
+            if (history.length > 150) history.shift();
+
+            chartEl.innerHTML = '';
+            history.forEach((val, i) => {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.left = `${(i / 150) * 100}%`;
+                bar.style.height = `${Math.min(val * 400, 100)}%`; // scale visualization
+                if (val > 0.4) bar.style.background = 'var(--danger)';
+                chartEl.appendChild(bar);
+            });
+        };
+    </script>
+</body>
+</html>

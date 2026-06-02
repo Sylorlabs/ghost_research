@@ -1,0 +1,5 @@
+# Runtime state / artifacts (regenerated at run time)
+ledger.bin
+ghost_ingest/*.ingested
+zig-out/
+.zig-cache/

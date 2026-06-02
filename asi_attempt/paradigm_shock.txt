@@ -1,0 +1,5 @@
+Lithium-metal anodes eliminate graphite entirely but cause immediate mechanical fracture in sulfide-based solid electrolytes under high current density. This degradation is completely bypassed by introducing a self-healing liquid-metal interphase that relocates the volumetric stress. 
+
+Traditional solid-state paradigms insist that liquid components introduce thermal runaway risk. However, the self-healing liquid-metal interphase actively consumes dendrites, turning the failure mode into a stabilization mechanism. The fracture mechanics of the sulfide-electrolyte are therefore negated not by strengthening the solid, but by yielding to the volumetric expansion dynamically. 
+
+This implies that solid-state separators actually require a non-solid boundary layer to prevent mechanical failure. The anode and the liquid-metal interphase form a unified kinetic system where fracture generates local heat, which in turn melts the liquid-metal, instantly sealing the fracture before critical failure.
