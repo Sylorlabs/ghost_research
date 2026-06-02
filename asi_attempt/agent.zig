@@ -79,6 +79,7 @@ pub const ActionMode = enum {
     mb_safety, // model-based: pick the action whose predicted state is safest
     mb_surprise, // model-based: pick the most *predictable* action (min surprise)
     mb_mass, // nonlinear readout: regulate a learned scalar FEATURE toward the safe midpoint
+    mb_plan, // mb_mass + H-step lookahead (rollout over the learned scalar model)
 };
 
 /// Candidate aggregate features for mb_mass. The point of the discovery
@@ -357,6 +358,41 @@ pub const Agent = struct {
                     if (e < best_err) {
                         best_err = e;
                         best = @intCast(a);
+                    }
+                }
+                return best;
+            },
+            .mb_plan => {
+                // H-step lookahead over the learned scalar model: enumerate all 3^H
+                // action sequences, score by out-of-band steps (+ a small centring
+                // term), return the first action of the best sequence.
+                if (self.safe_mass_n == 0 or rand.float(f32) < self.cfg.epsilon)
+                    return rand.intRangeLessThan(u8, 0, 3);
+                const lo: f32 = @floatFromInt(self.safe_mass_min);
+                const hi: f32 = @floatFromInt(self.safe_mass_max);
+                const setpoint = (lo + hi) / 2.0;
+                const H: usize = 4;
+                var total: usize = 1;
+                for (0..H) |_| total *= 3;
+                var best: u8 = 0;
+                var best_cost: f32 = 1e9;
+                var seq: usize = 0;
+                while (seq < total) : (seq += 1) {
+                    var m: f32 = @floatFromInt(self.cur_mass);
+                    var x = seq;
+                    var cost: f32 = 0;
+                    var first: u8 = 0;
+                    for (0..H) |stp| {
+                        const a: usize = x % 3;
+                        x /= 3;
+                        if (stp == 0) first = @intCast(a);
+                        m += self.mass_delta[a];
+                        if (m < lo or m > hi) cost += 1.0;
+                        cost += @abs(m - setpoint) * 0.01;
+                    }
+                    if (cost < best_cost) {
+                        best_cost = cost;
+                        best = first;
                     }
                 }
                 return best;

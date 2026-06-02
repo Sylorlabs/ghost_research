@@ -8,6 +8,14 @@
 > the *closure escape*: the SUM feature beats the XOR-substrate readout (11.02 vs
 > 33–163). mb_mass is a poor controller that beats an even-poorer one. Read every
 > "beats the thermostat" claim below as "beats the XOR agents," nothing more.
+>
+> Two further stress-tests of the same positive (also in the `[BAND]` block):
+> **E2 (planning)** — H=4 lookahead over the learned scalar model scores **11.19**,
+> no better than greedy's 11.02; planning is not the bottleneck. **E3 (noise)** —
+> under stochastic dynamics the tuned thermostat degrades gracefully to **6.84**, but
+> mb_mass collapses to **36.14** (mb_plan 39.03): the learned regulator is **~5×
+> more fragile** than the hand-coded rule. Net: a worse controller, un-helped by
+> planning, and noise-fragile. The closure escape is the only thing that survives.
 
 **Status:** built, measured. The real result is the **closure escape** (the SUM
 readout beats the XOR-substrate readout); the "beats hand-coded" framing was a

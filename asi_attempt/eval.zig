@@ -443,4 +443,22 @@ pub fn main() !void {
     } else {
         std.debug.print("  => mb_mass (11.02) still beats the best grid-tuned thermostat -- the win survives.\n", .{});
     }
+
+    // E2: does H-step planning over the learned scalar model beat greedy mb_mass,
+    // or close the gap to the tuned thermostat (0.00)?
+    std.debug.print("  - - - E2: planning (lookahead) vs greedy mb_mass - - -\n", .{});
+    printRow("mb_plan H=4", try runPolicyPMeanSeeds(allocator, band, .{
+        .action_mode = .mb_plan, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+    }, n_steps, seeds));
+
+    // E3: is the control fragile to STOCHASTIC dynamics? Inject per-step noise.
+    const band_noisy = env_mod.TaskParams{ .min_mass = 16, .max_mass = 48, .shock_period = 0, .volatility_after = 1_000_000, .noise_prob = 0.05, .noise_mag = 2 };
+    std.debug.print("  - - - E3: stochastic band (noise_prob=0.05) -- is control fragile? - - -\n", .{});
+    std.debug.print("  {s:<22} | {d:>9.2} |  (best tuned thermostat under noise)\n", .{ "thermostat(best)+noise", thermostatTuned(band_noisy, best_cb, best_ra, best_rest, n_steps, seeds) });
+    printRow("mb_mass + noise", try runPolicyPMeanSeeds(allocator, band_noisy, .{
+        .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+    }, n_steps, seeds));
+    printRow("mb_plan + noise", try runPolicyPMeanSeeds(allocator, band_noisy, .{
+        .action_mode = .mb_plan, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+    }, n_steps, seeds));
 }
