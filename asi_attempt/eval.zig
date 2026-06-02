@@ -240,4 +240,26 @@ pub fn main() !void {
             eps, frac[0] / sf2 * 100.0, frac[1] / sf2 * 100.0, frac[2] / sf2 * 100.0, e2_fail / sf2,
         });
     }
+
+    // --- CP3: does removing the 0.25 repulsion floor in rule learning improve
+    // CONTROL, not just prediction? dynamics_probe showed pure attraction cuts
+    // forward-model error 5.4x in isolation. Here we run the full mb_safety
+    // controller stock vs pure at the greedy (eps=0, headline competence) and
+    // exploratory (eps=0.02, 0.10) operating points. err_l/err_e show whether the
+    // prediction-error drop reproduces inside the agent; fail/1k shows whether it
+    // converts to control.
+    std.debug.print("\n[CP3] stock repulsion vs pure attraction (mb_safety, clean):\n", .{});
+    std.debug.print("  {s:<22} | {s:>9} | {s:>9} | {s:>8} | {s:>8}\n", .{ "policy", "fail/1k", "mean_mass", "err_e", "err_l" });
+    std.debug.print("  ----------------------+-----------+-----------+----------+---------\n", .{});
+    const cp3_eps = [_]f32{ 0.0, 0.02, 0.10 };
+    for (cp3_eps) |eps| {
+        var name_stock: [32]u8 = undefined;
+        var name_pure: [32]u8 = undefined;
+        printRow(try std.fmt.bufPrint(&name_stock, "stock  eps={d:.2}", .{eps}), try runPolicyMeanSeeds(allocator, .{
+            .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = eps, .pure_attraction = false,
+        }, n_steps, seeds));
+        printRow(try std.fmt.bufPrint(&name_pure, "pure   eps={d:.2}", .{eps}), try runPolicyMeanSeeds(allocator, .{
+            .action_mode = .mb_safety, .enable_macros = false, .enable_meta = false, .epsilon = eps, .pure_attraction = true,
+        }, n_steps, seeds));
+    }
 }

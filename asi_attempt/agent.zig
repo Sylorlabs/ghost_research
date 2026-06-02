@@ -62,6 +62,7 @@ pub const Config = struct {
     enable_macros: bool = true,
     enable_meta: bool = true,
     epsilon: f32 = 0.10, // exploration rate for model-based modes
+    pure_attraction: bool = false, // CP3: drop the 0.25 repulsion floor in rule learning
 };
 
 pub const StepResult = struct {
@@ -418,7 +419,11 @@ pub const Agent = struct {
         if (self.cfg.enable_learning) {
             const target_rule = hv.bind(self.S_t, S_next);
             if (error_rate > self.homeostasis_threshold and self.active_macro == null) {
-                connectome.attractVectorsPtr(rand, &self.rule_vectors[action_idx], &target_rule, self.plasticity_alpha);
+                if (self.cfg.pure_attraction) {
+                    connectome.attractVectorsPtrPure(rand, &self.rule_vectors[action_idx], &target_rule, self.plasticity_alpha);
+                } else {
+                    connectome.attractVectorsPtr(rand, &self.rule_vectors[action_idx], &target_rule, self.plasticity_alpha);
+                }
             }
             self.updatePrototype(S_next, failed);
         }

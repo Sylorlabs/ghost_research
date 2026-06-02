@@ -538,6 +538,26 @@ pub fn attractVectorsPtr(rand: std.Random, a: *Hypervector, b: *const Hypervecto
     }
 }
 
+// CP3: pure attraction — the attraction branch of attractVectorsPtr WITHOUT the
+// "repulsion if dist < 0.25" forcefield. dynamics_probe proved this floor caps
+// forward-model prediction error at ~0.24 (vs ~0.04 without it). This lets the
+// eval harness test whether removing the floor for *rule* learning converts the
+// 5.4x prediction-error win into better *control*.
+pub fn attractVectorsPtrPure(rand: std.Random, a: *Hypervector, b: *const Hypervector, alpha: f32) void {
+    for (0..128) |i| {
+        var diff = a[i] ^ b[i];
+        var flip_mask: u64 = 0;
+        while (diff != 0) {
+            const tz = @ctz(diff);
+            if (rand.float(f32) < alpha) {
+                flip_mask |= (@as(u64, 1) << @as(u6, @intCast(tz)));
+            }
+            diff &= diff - 1;
+        }
+        a[i] ^= flip_mask;
+    }
+}
+
 pub fn attractVectors(matrix: *MemoryMatrix, rand: std.Random, index_a: usize, index_b: usize, alpha: f32) void {
     const vectors = matrix.concepts.items(.vector);
     attractVectorsPtr(rand, &vectors[index_a], &vectors[index_b], alpha);
