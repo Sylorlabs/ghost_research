@@ -30,7 +30,7 @@ Two testable corollaries:
 |--------|------------------|---------------------------|--------------------------|-----------------|
 | **mixers** (BitForge thread 07) | GF(2)-affine (XOR/shift) | SAC-error = 0.5 exactly (theorem); PractRand failure | ADD (carry), MUL | `closure_escape_mixer`: 0.5 → 0.13 (ADD) → 0.02 (MUL) |
 | **invention** (wcore Claim C) | fixed opcode VM | only encodings of known mechanisms; **85/86 reducible at depth 4, and the 1 exception reduces at depth 5 — 0 survive a deeper budget** | a new atom | irreducibility certifier flags the true outsider (16/16 kill-tests; non-vacuous at depth 8) |
-| **control / world-model** (asi_attempt) | XOR/bundle VSA | band predicate unreadable: nearest-prototype 0.50, best linear 0.51 (chance) | the SUM (total mass) | `mb_mass`: 11.02 fail/1k — beats the hand-coded thermostat (20.80) |
+| **control / world-model** (asi_attempt) | XOR/bundle VSA | band predicate unreadable: nearest-prototype 0.50, best linear 0.51 (chance) | the SUM (total mass) | `mb_mass`: 11.02 — beats the XOR readout 3–15× (but a tuned thermostat = 0.00; it does NOT beat hand-coded) |
 | **search depth** (BitForge meta-engine) | fixed Tier-0 opcodes | reproducible 44–47 fitness ceiling; "more tiers" refuted | richer Tier-0 op/scoring axis | monotone+parallel+QD crossing only via new axis |
 | **learning** (k-sparse parity, the textbook case) | linear-in-bits | linear at chance for k≥2 (theorem) | nonlinearity / the product monomial | `zig build parity`: linear 0.50 → MLP 1.0, lifted 1.0 |
 
@@ -58,17 +58,18 @@ than a repo artefact — the principle predicts its ceiling and generator unchan
 
 ## The sharpest single demonstration
 
-`asi_attempt`'s control result is the cleanest, because the escape also yields a
-*super-baseline learned agent*:
+`asi_attempt`'s control result is the cleanest case of the *escape* (it does **not**
+beat hand-coded control — a tuned thermostat scores 0.00; see the E1 correction):
 
 - The XOR/bundle substrate **provably** cannot classify "mass in band": a trained
   perceptron over all 8192 encoding bits scores 0.51 (chance), and metric
   (ordinal) encoding does not help, because cross-cell XOR-binding parity-collapses
   the grid (`zig build probe`).
 - Every in-closure fix plateaus: prototype readout 162.94, +repulsion-fix 33.62,
-  +ordinal 55.63 — all worse than the hand-coded thermostat (20.80).
-- One out-of-closure feature — read the SUM — and the *same* agent learns control
-  at **11.02**, beating the thermostat ~2× (`asi_attempt/docs/research/closure_escape_control.md`).
+  +ordinal 55.63 — all stuck.
+- One out-of-closure feature — read the SUM — and the *same* agent reaches **11.02**,
+  beating the XOR readout 3–15× (the escape). It remains a poor controller: a tuned
+  thermostat solves the band at 0.00 (`asi_attempt/docs/research/closure_escape_control.md`).
 
 ## Practical corollary for this repo (and any learner)
 
@@ -90,8 +91,8 @@ out-of-closure generator on its own**.
 **Partial answer (selection-level), now measured.** A generic feature search in
 the control domain — running the controller over candidate aggregates
 {sum, max, first-cell, nonzero-count} and keeping the best, *without being told*
-which matters — discovers the SUM autonomously (11.02 fail/1k, beating the
-thermostat; decoys score 37–333). So the generator is **discoverable, not
+which matters — discovers the SUM autonomously (11.02 fail/1k, beating the XOR
+readout; decoys score 37–333). So the generator is **discoverable, not
 inherently human-only** — *provided it is expressible in the candidate space*
 (`asi_attempt/docs/research/feature_discovery.md`).
 
@@ -122,7 +123,7 @@ generator" presupposes a richer closure to search within.
 ## Reproduce
 
 ```
-cd asi_attempt && zig build eval     # [BAND]: mb_mass 11.02 beats thermostat 20.80
+cd asi_attempt && zig build eval     # [BAND]: mb_mass 11.02 beats XOR agents; E1: tuned thermostat = 0.00
 cd asi_attempt && zig build probe    # band-readout ceiling: linear readouts at chance
 cd 05_meta_synthesis && zig build -Doptimize=ReleaseFast && ./zig-out/bin/closure_escape_mixer
 ```

@@ -8,7 +8,8 @@ answered at the selection level. Reproduce: `zig build eval` (`[BAND]`, the
 
 `closure_escape_control.md` showed the XOR/bundle substrate is provably blind to
 the band predicate, and that *hand-supplying* the sum (`mb_mass`) escapes it,
-beating the hand-coded thermostat (11.02 vs 20.80). But the sum was supplied by a
+beating the XOR-substrate readout (11.02 vs 33–163; note: it does NOT beat a tuned
+thermostat, which scores 0.00 — see closure_escape_control.md E1 correction). But the sum was supplied by a
 human. The deeper question — the real meaning of "invention" — is whether a system
 can **discover** the right out-of-closure feature on its own.
 
@@ -25,7 +26,7 @@ quantity.
 ```
   feature        | fail/1k
   ---------------+--------
-  sum            |  11.02   <- selected; beats the hand-coded thermostat (20.80)
+  sum            |  11.02   <- selected; beats the XOR agents (NOT a tuned thermostat = 0.00)
   max_cell       |  37.53
   first_cell     | 208.31
   nonzero_count  | 333.31   (= the always-rest floor: useless)
@@ -54,7 +55,7 @@ The top PC is the sum direction, near-exactly — with **no labels and no candid
 list.** The reason is mechanistic: `charge` and `rest` move *all* cells together,
 so the dominant variance axis of the raw cells *is* the sum. The out-of-closure
 feature is therefore **constructed** unsupervised, and control via it scores 11.02
-(`mb_mass`), beating the thermostat. Construction-level discovery — the frontier —
+(`mb_mass`), beating the XOR readout (though not a tuned thermostat). Construction-level discovery — the frontier —
 is achievable here.
 
 ## What this does and does not show

@@ -1,9 +1,18 @@
 # Research note: the closure-wall escape, demonstrated in the control domain
 
-**Status:** built, measured, **a major positive result.** A *learned* controller
-beats hand-coded control on the non-trivial band — but **only** once given one
-feature the XOR substrate provably cannot compute. Reproduce: `zig build eval`
-(`[BAND]` block; means over 6 seeds × 15,000 steps).
+> **CORRECTION (later experiment, `zig build eval` E1 block).** The headline below
+> originally claimed mb_mass "beats hand-coded control." That was a **strawman win**:
+> my hand-coded thermostat (20.80) was badly tuned. A *grid-tuned* thermostat scores
+> **0.00 fail/1k** — it solves the band perfectly, crushing mb_mass's 11.02. So
+> **mb_mass does NOT beat hand-coded control; it loses badly.** What survives is only
+> the *closure escape*: the SUM feature beats the XOR-substrate readout (11.02 vs
+> 33–163). mb_mass is a poor controller that beats an even-poorer one. Read every
+> "beats the thermostat" claim below as "beats the XOR agents," nothing more.
+
+**Status:** built, measured. The real result is the **closure escape** (the SUM
+readout beats the XOR-substrate readout); the "beats hand-coded" framing was a
+strawman, corrected above. Reproduce: `zig build eval` (`[BAND]` block; means over
+6 seeds × 15,000 steps).
 
 ## The setup
 
@@ -52,8 +61,10 @@ band predicate lives *outside the closure* of the substrate.
 sum), learns each action's mean mass-delta and the `[min,max]` of safe masses
 online, and picks the action whose predicted mass is nearest the safe midpoint.
 It still *learns* the dynamics and the band from experience — it is not told
-`[16,48]`. Result: **11.02 — it beats the hand-coded thermostat (20.80) by ~2×**
-and every XOR agent by 3–15×.
+`[16,48]`. Result: **11.02 — it beats every XOR agent by 3–15×** (the closure
+escape). It does **not** beat hand-coded control: a grid-tuned thermostat scores
+**0.00** (E1 correction). 11.02 is a real escape of the XOR readout's ceiling and a
+genuinely bad controller at the same time.
 
 Tellingly, `mb_mass`'s hypervector prediction error stays high (err_l 0.294 — as
 bad as the stuck stock agent), yet its control is the best on record. **Control

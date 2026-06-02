@@ -1,9 +1,17 @@
 # Research note: a non-trivial task — and the CP3 reversal it exposes
 
-**Status:** built, measured, **the project's first genuine competence signal — and
-it reverses the CP3 conclusion.** Reproduce with `zig build eval` (the `[BAND]`
-block) and `zig build eval-gen` (the `homeostatic` regime). Means over 6 seeds ×
-15,000 steps (eval) / 5 seeds × 10k-train/4k-eval (gen).
+> **CORRECTION (E1).** This note calls the band "non-trivial" and reports a hand-coded
+> thermostat at 20.80. That thermostat was **badly tuned**: a grid-tuned one scores
+> **0.00** — the band is trivially solved by a simple state-dependent rule, just as the
+> original cell was by `always rest`. The band is non-trivial **only for constant
+> policies** (they fail 205–333); it is *not* hard for hand-coded control. So the learned
+> agent's 11.02 is not "competence approaching the bar" — the bar is 0.00 and it's far
+> from it. What stands is narrower: no *constant* policy works, and the SUM-feature agent
+> beats the XOR-readout agent. The "first genuine competence signal" framing is withdrawn.
+
+**Status:** built, measured. Reproduce with `zig build eval` (the `[BAND]` block) and
+`zig build eval-gen` (the `homeostatic` regime). Means over 6 seeds × 15,000 steps
+(eval) / 5 seeds × 10k-train/4k-eval (gen).
 
 ## Why this exists
 

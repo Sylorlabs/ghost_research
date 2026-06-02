@@ -123,6 +123,32 @@ fn thermostatMeanSeeds(params: env_mod.TaskParams, n_steps: usize, seeds: usize)
     return acc / @as(f64, @floatFromInt(seeds));
 }
 
+// A tunable 3-branch thermostat: charge below `charge_below`, dump above
+// `high_above` (rest = fast -16, or discharge = gentle -1), else bleed (discharge).
+// Used to grid-tune the BEST hand-coded baseline and check mb_mass isn't a strawman win.
+fn thermostatTuned(params: env_mod.TaskParams, charge_below: u32, high_above: u32, rest_high: bool, n_steps: usize, seeds: usize) f64 {
+    var acc: f64 = 0;
+    for (0..seeds) |s| {
+        var prng = std.Random.DefaultPrng.init(@as(u64, s) + 1);
+        const rand = prng.random();
+        var env = env_mod.Environment.initWith(params);
+        var failures: u64 = 0;
+        for (0..n_steps) |_| {
+            var mass: u32 = 0;
+            for (env.grid) |c| mass += c;
+            const action: env_mod.Action = blk: {
+                if (mass <= charge_below) break :blk .charge;
+                if (mass >= high_above) break :blk (if (rest_high) .rest else .discharge);
+                break :blk .discharge;
+            };
+            env.step(action, rand);
+            if (env.failed) failures += 1;
+        }
+        acc += @as(f64, @floatFromInt(failures)) / @as(f64, @floatFromInt(n_steps)) * 1000.0;
+    }
+    return acc / @as(f64, @floatFromInt(seeds));
+}
+
 fn printRow(label: []const u8, st: RunStats) void {
     std.debug.print("  {s:<22} | {d:>9.2} | {d:>9.3} | {d:>8.3} | {d:>8.3}\n", .{
         label, st.fail_per_1k, st.mean_mass, st.err_early, st.err_late,
@@ -389,4 +415,32 @@ pub fn main() !void {
         }
     }
     std.debug.print("  => feature search SELECTS '{s}' ({d:.2} fail/1k) as the controlling feature\n", .{ @tagName(best_feat), best_fail });
+
+    // E1 (honesty check): did mb_mass (11.02) beat a STRAWMAN thermostat? Grid-tune
+    // the hand-coded baseline over both thresholds and structure; report the best.
+    std.debug.print("  - - - E1: grid-tuned thermostat (is mb_mass a strawman win?) - - -\n", .{});
+    var best_t: f64 = 1e9;
+    var best_cb: u32 = 0;
+    var best_ra: u32 = 0;
+    var best_rest = true;
+    const cbs = [_]u32{ 14, 16, 18, 20, 22, 24 };
+    const ras = [_]u32{ 28, 32, 36, 40, 44, 47 };
+    for (cbs) |cb| for (ras) |ra| {
+        if (ra <= cb) continue;
+        for ([_]bool{ true, false }) |rh| {
+            const f = thermostatTuned(band, cb, ra, rh, n_steps, seeds);
+            if (f < best_t) {
+                best_t = f;
+                best_cb = cb;
+                best_ra = ra;
+                best_rest = rh;
+            }
+        }
+    };
+    std.debug.print("  best thermostat: {d:.2} fail/1k (charge<={d}, high>={d}, high-action={s})  vs  mb_mass 11.02\n", .{ best_t, best_cb, best_ra, if (best_rest) "rest" else "discharge" });
+    if (best_t < 11.02) {
+        std.debug.print("  => a tuned hand-coded thermostat BEATS mb_mass -- the 'learned beats hand-coded' win was a STRAWMAN.\n", .{});
+    } else {
+        std.debug.print("  => mb_mass (11.02) still beats the best grid-tuned thermostat -- the win survives.\n", .{});
+    }
 }
