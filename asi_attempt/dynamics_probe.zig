@@ -337,6 +337,104 @@ fn topPCcosineToUniform(samples: usize, seed: u64) f64 {
     return @abs(dot) / (@sqrt(vn) * u_norm);
 }
 
+// =============================================================================
+// Hidden-feature discovery (the NON-circular test). The PCA result discovers the
+// sum only because the dynamics make the sum the dominant variance axis. Here we
+// rig the opposite: the safety feature is a single cell (cell 0), while cells 8-15
+// are a high-variance CORRELATED decoy block independent of failure. Now the
+// useful feature is NOT salient. We compare three recoverers against the true
+// direction e_0 (cosine; 1.0 = recovered, ~0 = missed):
+//   PCA (unsupervised variance), supervised one-sided, supervised two-sided band.
+// =============================================================================
+fn cosToE0(v: [16]f64) f64 {
+    var n: f64 = 0;
+    for (v) |x| n += x * x;
+    if (n < 1e-12) return 0;
+    return @abs(v[0]) / @sqrt(n);
+}
+
+fn hiddenFeatureRecovery(out: anytype, samples: usize, seed: u64) !void {
+    var prng = std.Random.DefaultPrng.init(seed);
+    const r = prng.random();
+    const X = try std.heap.page_allocator.alloc([16]f64, samples);
+    defer std.heap.page_allocator.free(X);
+    const lab1 = try std.heap.page_allocator.alloc(bool, samples); // one-sided
+    defer std.heap.page_allocator.free(lab1);
+    const lab2 = try std.heap.page_allocator.alloc(bool, samples); // two-sided band
+    defer std.heap.page_allocator.free(lab2);
+    for (0..samples) |s| {
+        var g: [16]f64 = undefined;
+        const decoy: f64 = @floatFromInt(r.intRangeAtMost(i32, 0, 40)); // big shared decoy
+        g[0] = @floatFromInt(r.intRangeAtMost(i32, 0, 6)); // the signal cell
+        for (1..8) |i| g[i] = @floatFromInt(r.intRangeAtMost(i32, 0, 2)); // quiet
+        for (8..16) |i| g[i] = decoy + @as(f64, @floatFromInt(r.intRangeAtMost(i32, 0, 2))); // loud decoy block
+        X[s] = g;
+        lab1[s] = g[0] > 4.0; // one-sided: cell0 too high
+        lab2[s] = g[0] < 2.0 or g[0] > 4.0; // two-sided band on cell0
+    }
+    // PCA: top eigenvector of the 16x16 covariance.
+    var mean: [16]f64 = [_]f64{0} ** 16;
+    for (X) |g| for (0..16) |i| {
+        mean[i] += g[i];
+    };
+    for (0..16) |i| mean[i] /= @floatFromInt(samples);
+    var cov: [16][16]f64 = undefined;
+    for (&cov) |*row| row.* = [_]f64{0} ** 16;
+    for (X) |g| for (0..16) |i| for (0..16) |j| {
+        cov[i][j] += (g[i] - mean[i]) * (g[j] - mean[j]);
+    };
+    var v: [16]f64 = [_]f64{1.0} ** 16;
+    for (0..60) |_| {
+        var nv: [16]f64 = [_]f64{0} ** 16;
+        for (0..16) |i| for (0..16) |j| {
+            nv[i] += cov[i][j] * v[j];
+        };
+        var nn: f64 = 0;
+        for (nv) |x| nn += x * x;
+        nn = @sqrt(nn);
+        if (nn < 1e-12) break;
+        for (0..16) |i| v[i] = nv[i] / nn;
+    }
+    const pca_cos = cosToE0(v);
+    // Supervised direction = mean(fail) - mean(safe), for each labelling.
+    const sup = struct {
+        fn dir(Xs: [][16]f64, lab: []bool) [16]f64 {
+            var mf: [16]f64 = [_]f64{0} ** 16;
+            var ms: [16]f64 = [_]f64{0} ** 16;
+            var nf: f64 = 0;
+            var nsf: f64 = 0;
+            for (Xs, lab) |g, f| {
+                if (f) {
+                    for (0..16) |i| mf[i] += g[i];
+                    nf += 1;
+                } else {
+                    for (0..16) |i| ms[i] += g[i];
+                    nsf += 1;
+                }
+            }
+            var d: [16]f64 = undefined;
+            for (0..16) |i| d[i] = (if (nf > 0) mf[i] / nf else 0) - (if (nsf > 0) ms[i] / nsf else 0);
+            return d;
+        }
+    };
+    const sup1_cos = cosToE0(sup.dir(X, lab1));
+    const sup2_cos = cosToE0(sup.dir(X, lab2));
+    try out.print("\n=== hidden-feature discovery (non-circular): recover e_0 amid a loud decoy ===\n", .{});
+    try out.print("(cosine to the true safety direction; 1.0 = recovered, ~0.25 = chance among 16)\n\n", .{});
+    try out.print("  method                       | cosine to true feature\n", .{});
+    try out.print("  -----------------------------+-----------------------\n", .{});
+    try out.print("  PCA (unsupervised variance)  | {d:.3}\n", .{pca_cos});
+    try out.print("  supervised, one-sided        | {d:.3}\n", .{sup1_cos});
+    try out.print("  supervised, two-sided band   | {d:.3}\n", .{sup2_cos});
+    try out.print("\nReading: PCA is MISLED by the decoy (the earlier sum=top-PC win was circular --\n", .{});
+    try out.print("it only worked because the useful feature WAS the dominant variance). Supervised\n", .{});
+    try out.print("credit-assignment recovers a non-salient ONE-SIDED feature. But a two-sided BAND\n", .{});
+    try out.print("defeats linear supervision too (failures sit on both sides, so mean(fail)~mean(safe)\n", .{});
+    try out.print("along e_0): the band predicate is itself out-of-linear-closure. Discovery of a\n", .{});
+    try out.print("non-salient, non-monotone feature needs supervised direction-finding COMPOSED with\n", .{});
+    try out.print("a nonlinear readout -- neither variance nor linear supervision alone suffices.\n", .{});
+}
+
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
@@ -404,4 +502,6 @@ pub fn main() !void {
     std.debug.print("of the raw cells is ~uniform -- the SUM -- because charge/rest move all cells\n", .{});
     std.debug.print("together. The out-of-closure feature is CONSTRUCTED unsupervised, not just\n", .{});
     std.debug.print("selected. Control via it scores 11.02 (mb_mass). See docs/research/feature_discovery.md.\n", .{});
+
+    try hiddenFeatureRecovery(std.io.getStdErr().writer(), 20000, 7);
 }

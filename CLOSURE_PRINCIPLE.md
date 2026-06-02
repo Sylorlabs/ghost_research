@@ -99,13 +99,22 @@ out-of-closure feature is **constructed**, not merely selected, because `charge`
 `rest` move all cells together so the sum *is* the dominant variance axis
 (`asi_attempt/docs/research/feature_discovery.md`, construction block).
 
-**What remains.** Construction succeeded because the useful feature *coincided with
-the dynamics' dominant, controllable mode*. PCA finds the salient direction; it
-wins when "useful" aligns with "high-variance/controllable." The sharpened
-frontier is therefore constructing a useful generator that is **not** already
-salient in the dynamics — which is the closure question one level up (is the
-constructor's inductive bias rich enough?), exactly the wcore atom-forge
-conclusion (Claim C): closure all the way up.
+**The non-circular test (and a correction).** When the useful feature is made
+*non-salient* (a single cell hidden behind a loud decoy block), the construction
+result collapses: PCA recovers it with cosine **0.000** — the unsupervised result
+above was circular, working only because the feature was the dominant variance
+axis. Supervised credit-assignment recovers a non-salient *one-sided* feature
+(0.999), but a *two-sided band* defeats linear supervision too (0.139): the band
+is itself out-of-linear-closure, so discovery needs supervised direction-finding
+**composed with** a nonlinear readout (`feature_discovery.md`, Level 3).
+
+**What remains.** The honest discovery ladder — selection → unsupervised
+construction (circular) → supervised construction (monotone only) → supervised +
+nonlinear (the real case, not yet a closed loop) — is the closure question
+re-asked at each rung: is the discoverer's inductive bias rich enough to express
+the needed generator? That is exactly the wcore atom-forge conclusion (Claim C):
+closure all the way up. There is no free escape; every level of "discover the
+generator" presupposes a richer closure to search within.
 
 ## Reproduce
 

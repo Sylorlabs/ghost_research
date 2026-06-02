@@ -66,11 +66,42 @@ is achievable here.
   **coincides with the dynamics' dominant variance mode.** PCA finds the controllable
   direction; it succeeds when "useful" aligns with "high-variance/controllable",
   which the band dynamics arrange. A useful feature *uncorrelated* with the dominant
-  mode would not be found this way. So the standing frontier sharpens: not "can we
-  construct any feature" but "can we construct a useful feature that is **not**
-  already salient in the dynamics" — which is again the closure question one level
-  up (is the constructor's bias rich enough?), the wcore atom-forge conclusion
-  (Claim C).
+  mode would not be found this way.
+
+## Level 3 — the non-circular test (this falsifies Level 2's generality)
+
+`zig build probe` (the hidden-feature block) rigs the opposite of Level 2: the
+safety feature is a single cell (`e_0`) while cells 8–15 are a loud correlated
+decoy block independent of failure — so the useful feature is **not** salient.
+Recovering the true direction `e_0` (cosine; chance ≈ 0.25):
+
+```
+  method                       | cosine to true feature
+  -----------------------------+-----------------------
+  PCA (unsupervised variance)  | 0.000   <- misled by the decoy
+  supervised, one-sided        | 0.999   <- recovered
+  supervised, two-sided band   | 0.139   <- failed (slab)
+```
+
+- **PCA recovers nothing (0.000).** This *falsifies the generality of Level 2*:
+  the "PCA constructs the sum" result was circular — it only worked because the
+  feature was the top variance axis. Off that special case, unsupervised variance
+  is useless or actively misled.
+- **Supervised credit-assignment recovers a one-sided non-salient feature (0.999)** —
+  using the failure signal, not variance.
+- **A two-sided band defeats linear supervision too (0.139):** failures sit on
+  both sides of the band, so `mean(fail) ≈ mean(safe)` along `e_0`. The band
+  predicate is itself out-of-linear-closure. Discovering a non-salient,
+  non-monotone feature needs supervised direction-finding **composed with** a
+  nonlinear readout — neither variance nor linear supervision alone suffices.
+
+So the honest discovery ladder: **selection** (works if the generator is in the
+library) → **unsupervised construction** (works only if the generator is the
+dominant mode — circular) → **supervised construction** (works for non-salient
+*monotone* features) → **supervised + nonlinear** (required for the actual band;
+not yet demonstrated as a closed loop). Each rung is the closure question one
+level up — the wcore atom-forge conclusion (Claim C), confirmed from the
+discovery side.
 
 ## Connection
 
