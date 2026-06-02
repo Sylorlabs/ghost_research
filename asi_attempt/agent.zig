@@ -171,6 +171,16 @@ pub const Agent = struct {
         self.allocator.free(self.fail_counts);
     }
 
+    /// Re-seed perceptual state when the agent is dropped into a (possibly
+    /// different) environment, without touching what it has learned (rules,
+    /// prototypes). Used by the generalization harness to test transfer.
+    pub fn beginEpisode(self: *Agent, env: *const env_mod.Environment) void {
+        self.S_t = self.encoder.encode(env);
+        self.active_macro = null;
+        self.macro_step = 0;
+        self.history_idx = 0;
+    }
+
     fn updatePrototype(self: *Agent, state: Hypervector, failed: bool) void {
         const counts = if (failed) self.fail_counts else self.safe_counts;
         for (0..hv.Blocks) |b| {
@@ -395,7 +405,7 @@ pub const Agent = struct {
         const action: env_mod.Action = @enumFromInt(action_idx);
         const V_pred = self.predictNext(action_idx);
 
-        env.step(action);
+        env.step(action, rand);
         const S_next = self.encoder.encode(env);
         const failed = env.failed;
 
