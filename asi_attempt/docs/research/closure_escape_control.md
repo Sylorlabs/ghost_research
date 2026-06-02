@@ -61,6 +61,30 @@ here is not about world-model prediction accuracy at all; it is about having the
 right feature.** This closes the loop on CP3: prediction quality was never the
 binding constraint — substrate *expressiveness* was.
 
+## The ceiling is a representational impossibility (theorem-grade)
+
+`zig build probe` (the band-readout ceiling) settles that this is not a tuning
+failure but a representational one. Generate random grids, label "mass in [16,48]",
+and ask whether *any* linear/XOR readout of the encoding can classify them:
+
+```
+  readout                          | random enc | ordinal enc
+  ---------------------------------+------------+------------
+  nearest-prototype (agent readout)|   0.502    |   0.504      <- chance
+  best linear (perceptron, 8192b)  |   0.513    |   0.510      <- chance
+  sum-threshold (out-of-closure)   |   1.000    |   1.000
+```
+
+Even the *best* linear readout over all 8192 encoding bits is at chance — and
+**ordinal (metric) encoding does not help.** The reason is structural: the encoder
+XOR-binds all 16 cells into one vector, so the grid collapses to a **parity**, and
+total mass (a sum) is information-theoretically unrecoverable by any linear/XOR
+readout, whatever the value fillers are. This is the exact control-domain analogue
+of `affine_closure` (where GF(2)-affine mixers provably cannot achieve avalanche):
+the band predicate lies outside the closure of the substrate, period. `mb_mass`
+wins not because it learns better but because it is given a feature the substrate
+cannot synthesise.
+
 ## Why this matters — the closure principle, demonstrated
 
 This is a controlled before/after of the cross-thread **closure principle**

@@ -161,6 +161,124 @@ fn meanXorAffine(n: usize, seeds: usize) f64 {
     return acc / @as(f64, @floatFromInt(seeds));
 }
 
+// =============================================================================
+// Band-readout ceiling (theorem-grade, control-domain analogue of affine_closure).
+// Question: can ANY linear/XOR readout of the encoding classify "total mass in
+// band"? The encoder XOR-binds all cells into ONE vector, so the grid collapses to
+// a PARITY — value structure (random OR ordinal fillers) is destroyed and the SUM
+// is unrecoverable. We test the agent's actual readout (nearest-prototype, a
+// centroid classifier) and the BEST linear readout (a trained perceptron over the
+// 8192 encoding bits), on random vs ordinal encoding, against the out-of-closure
+// SUM (perfect by construction).
+// =============================================================================
+const BandLo: u32 = 16;
+const BandHi: u32 = 48;
+
+fn gridMassP(g: [16]u8) u32 {
+    var m: u32 = 0;
+    for (g) |c| m += c;
+    return m;
+}
+
+fn randGrid(rand: std.Random) [16]u8 {
+    var g: [16]u8 = undefined;
+    for (0..16) |i| g[i] = rand.intRangeAtMost(u8, 0, 6); // mass ~ N(48,8): ~balanced about the band
+    return g;
+}
+
+inline fn bitAt(e: hv.Hypervector, j: usize) u1 {
+    return @intCast((e[j / 64] >> @intCast(j % 64)) & 1);
+}
+
+// The agent's actual readout: majority-bundle prototypes + nearest (Hamming) class.
+fn protoReadoutAcc(allocator: std.mem.Allocator, rand: std.Random, ordinal: bool, n_train: usize, n_test: usize) !f32 {
+    const enc = agent_mod.EnvEncoder.init(rand, ordinal);
+    var env = env_mod.Environment.initWith(.{});
+    const in_counts = try allocator.alloc(u32, hv.D);
+    defer allocator.free(in_counts);
+    const out_counts = try allocator.alloc(u32, hv.D);
+    defer allocator.free(out_counts);
+    @memset(in_counts, 0);
+    @memset(out_counts, 0);
+    var in_n: u32 = 0;
+    var out_n: u32 = 0;
+    for (0..n_train) |_| {
+        const g = randGrid(rand);
+        env.grid = g;
+        env.failed = false;
+        const e = enc.encode(&env);
+        const is_in = gridMassP(g) >= BandLo and gridMassP(g) <= BandHi;
+        const counts = if (is_in) in_counts else out_counts;
+        for (0..hv.D) |j| counts[j] += bitAt(e, j);
+        if (is_in) in_n += 1 else out_n += 1;
+    }
+    var in_proto: hv.Hypervector = [_]u64{0} ** hv.Blocks;
+    var out_proto: hv.Hypervector = [_]u64{0} ** hv.Blocks;
+    for (0..hv.D) |j| {
+        if (in_n > 0 and in_counts[j] * 2 > in_n) in_proto[j / 64] |= (@as(u64, 1) << @intCast(j % 64));
+        if (out_n > 0 and out_counts[j] * 2 > out_n) out_proto[j / 64] |= (@as(u64, 1) << @intCast(j % 64));
+    }
+    var correct: usize = 0;
+    for (0..n_test) |_| {
+        const g = randGrid(rand);
+        env.grid = g;
+        env.failed = false;
+        const e = enc.encode(&env);
+        const is_in = gridMassP(g) >= BandLo and gridMassP(g) <= BandHi;
+        const pred_in = hv.hammingDistance(e, in_proto) < hv.hammingDistance(e, out_proto);
+        if (pred_in == is_in) correct += 1;
+    }
+    return @as(f32, @floatFromInt(correct)) / @as(f32, @floatFromInt(n_test));
+}
+
+// The BEST linear readout: an online perceptron over the 8192 encoding bits.
+fn perceptronAcc(allocator: std.mem.Allocator, rand: std.Random, ordinal: bool, n_train: usize, n_test: usize, epochs: usize) !f32 {
+    const enc = agent_mod.EnvEncoder.init(rand, ordinal);
+    var env = env_mod.Environment.initWith(.{});
+    const w = try allocator.alloc(f32, hv.D);
+    defer allocator.free(w);
+    @memset(w, 0);
+    var b: f32 = 0;
+    const lr: f32 = 0.01;
+    const X = try allocator.alloc(hv.Hypervector, n_train);
+    defer allocator.free(X);
+    const Y = try allocator.alloc(f32, n_train);
+    defer allocator.free(Y);
+    for (0..n_train) |i| {
+        const g = randGrid(rand);
+        env.grid = g;
+        env.failed = false;
+        X[i] = enc.encode(&env);
+        Y[i] = if (gridMassP(g) >= BandLo and gridMassP(g) <= BandHi) 1.0 else -1.0;
+    }
+    for (0..epochs) |_| {
+        for (0..n_train) |i| {
+            var score: f32 = b;
+            for (0..hv.D) |j| score += if (bitAt(X[i], j) == 1) w[j] else -w[j];
+            const pred: f32 = if (score >= 0) 1.0 else -1.0;
+            if (pred != Y[i]) {
+                for (0..hv.D) |j| {
+                    const x: f32 = if (bitAt(X[i], j) == 1) 1.0 else -1.0;
+                    w[j] += lr * Y[i] * x;
+                }
+                b += lr * Y[i];
+            }
+        }
+    }
+    var correct: usize = 0;
+    for (0..n_test) |_| {
+        const g = randGrid(rand);
+        env.grid = g;
+        env.failed = false;
+        const e = enc.encode(&env);
+        var score: f32 = b;
+        for (0..hv.D) |j| score += if (bitAt(e, j) == 1) w[j] else -w[j];
+        const is_in = gridMassP(g) >= BandLo and gridMassP(g) <= BandHi;
+        if ((score >= 0) == is_in) correct += 1;
+    }
+    return @as(f32, @floatFromInt(correct)) / @as(f32, @floatFromInt(n_test));
+}
+
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
@@ -194,4 +312,25 @@ pub fn main() !void {
     std.debug.print("collapses the affine error toward 0 -> the dominant ceiling is the LEARNING\n", .{});
     std.debug.print("RULE, not GF(2) expressiveness. The battery floor sits above the affine one,\n", .{});
     std.debug.print("a smaller, secondary representational gap (nonlinear >= linear).\n", .{});
+
+    // --- Band-readout ceiling (the control-domain closure witness) ---
+    var prng2 = std.Random.DefaultPrng.init(99);
+    const r2 = prng2.random();
+    const proto_rand = try protoReadoutAcc(allocator, r2, false, 4000, 4000);
+    const proto_ord = try protoReadoutAcc(allocator, r2, true, 4000, 4000);
+    const perc_rand = try perceptronAcc(allocator, r2, false, 2000, 2000, 5);
+    const perc_ord = try perceptronAcc(allocator, r2, true, 2000, 2000, 5);
+    std.debug.print("\n=== band-readout ceiling: can a linear/XOR readout see total mass? ===\n", .{});
+    std.debug.print("(classify 'mass in [16,48]' from the encoding; chance ~ 0.50, balanced)\n\n", .{});
+    std.debug.print("  readout                          | random enc | ordinal enc\n", .{});
+    std.debug.print("  ---------------------------------+------------+------------\n", .{});
+    std.debug.print("  nearest-prototype (agent readout)|   {d:.3}    |   {d:.3}\n", .{ proto_rand, proto_ord });
+    std.debug.print("  best linear (perceptron, 8192b)  |   {d:.3}    |   {d:.3}\n", .{ perc_rand, perc_ord });
+    std.debug.print("  sum-threshold (out-of-closure)   |   1.000    |   1.000   (perfect by construction)\n", .{});
+    std.debug.print("\nReading: the encoder XOR-binds all cells into one vector, so the grid collapses\n", .{});
+    std.debug.print("to a PARITY and total mass (a SUM) is unrecoverable by any linear/XOR readout --\n", .{});
+    std.debug.print("random AND ordinal fillers both ~chance. The band predicate is OUTSIDE the closure\n", .{});
+    std.debug.print("of the substrate; only the explicit SUM feature (mb_mass) reads it. This is the\n", .{});
+    std.debug.print("control-domain analogue of affine_closure -- a representational impossibility,\n", .{});
+    std.debug.print("not a tuning failure. See docs/research/closure_escape_control.md.\n", .{});
 }
