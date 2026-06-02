@@ -101,6 +101,19 @@ pub fn build(b: *std.Build) void {
     const run_parity_step = b.step("parity", "Run the k-sparse parity closure experiment");
     run_parity_step.dependOn(&run_parity_cmd.step);
 
+    // #38/#53: emergent op-pair escape + closure-principle falsification.
+    const syn_exe = b.addExecutable(.{
+        .name = "ghost_synergy",
+        .root_source_file = b.path("synergy.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(syn_exe);
+    const run_syn_cmd = b.addRunArtifact(syn_exe);
+    run_syn_cmd.step.dependOn(b.getInstallStep());
+    const run_syn_step = b.step("synergy", "Run the emergent-escape / falsification experiment");
+    run_syn_step.dependOn(&run_syn_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

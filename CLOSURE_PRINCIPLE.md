@@ -71,6 +71,17 @@ beat hand-coded control — a tuned thermostat scores 0.00; see the E1 correctio
   beating the XOR readout 3–15× (the escape). It remains a poor controller: a tuned
   thermostat solves the band at 0.00 (`asi_attempt/docs/research/closure_escape_control.md`).
 
+## Refinement: the generator can be irreducibly a *pair* (emergent escape)
+
+The escape generator is not always a single op. An exact u8 experiment (`zig build
+synergy`, `asi_attempt/docs/research/emergent_escape.md`) finds targets reachable by
+`base+{X,Y}` but **neither** `base+{X}` nor `base+{Y}`: `x&(x-1)` needs {AND,SUB},
+`x|(x*x)` needs {OR,MUL}. Consequence: **greedy one-op-at-a-time substrate growth
+provably misses these** — neither op alone makes progress, so a greedy certifier
+(like wcore's atom-forge) never adds either. The fix is to search op *tuples*. (The
+falsification side of the same run: the affine base reaches 0/5 nonlinear targets —
+the principle survived an honest attempt to break it.)
+
 ## Practical corollary for this repo (and any learner)
 
 > **When a learner plateaus, first ask whether the target is even in the closure
