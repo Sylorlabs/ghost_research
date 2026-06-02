@@ -435,6 +435,139 @@ fn hiddenFeatureRecovery(out: anytype, samples: usize, seed: u64) !void {
     try out.print("a nonlinear readout -- neither variance nor linear supervision alone suffices.\n", .{});
 }
 
+// =============================================================================
+// Item 1 — complete the discovery ladder: supervised + NONLINEAR cracks the band.
+// The hidden non-salient TWO-SIDED band defeated PCA (0.000), selection, and linear
+// supervision (cosine 0.139). The last rung: does a tiny MLP (supervised + a
+// nonlinearity) recover and classify it? It can represent |w.x - c| with two ReLUs.
+// =============================================================================
+fn sigmoid(z: f64) f64 {
+    const zc = @max(@as(f64, -30), @min(@as(f64, 30), z));
+    return 1.0 / (1.0 + @exp(-zc));
+}
+
+fn mlpVsLinearOnBand(samples: usize, seed: u64) void {
+    const NIN = 16;
+    const H = 8;
+    var prng = std.Random.DefaultPrng.init(seed);
+    const r = prng.random();
+    const ntr = samples * 4 / 5;
+    // Generate standardized data: cell 0 is the (non-salient) signal; cells 8-15 a
+    // loud correlated decoy; label = two-sided band on cell 0.
+    var X = std.heap.page_allocator.alloc([NIN]f64, samples) catch return;
+    defer std.heap.page_allocator.free(X);
+    var Y = std.heap.page_allocator.alloc(f64, samples) catch return;
+    defer std.heap.page_allocator.free(Y);
+    for (0..samples) |s| {
+        var g: [NIN]f64 = undefined;
+        const decoy: f64 = @floatFromInt(r.intRangeAtMost(i32, 0, 40));
+        g[0] = @floatFromInt(r.intRangeAtMost(i32, 0, 6));
+        for (1..8) |i| g[i] = @floatFromInt(r.intRangeAtMost(i32, 0, 2));
+        for (8..16) |i| g[i] = decoy + @as(f64, @floatFromInt(r.intRangeAtMost(i32, 0, 2)));
+        X[s] = g;
+        Y[s] = if (g[0] < 2.0 or g[0] > 4.0) 1.0 else 0.0; // two-sided band on cell 0
+    }
+    // Standardize features using TRAIN stats.
+    var mean: [NIN]f64 = [_]f64{0} ** NIN;
+    var sd: [NIN]f64 = [_]f64{0} ** NIN;
+    for (0..ntr) |s| for (0..NIN) |i| {
+        mean[i] += X[s][i];
+    };
+    for (0..NIN) |i| mean[i] /= @floatFromInt(ntr);
+    for (0..ntr) |s| for (0..NIN) |i| {
+        const d = X[s][i] - mean[i];
+        sd[i] += d * d;
+    };
+    for (0..NIN) |i| sd[i] = @max(1e-6, @sqrt(sd[i] / @as(f64, @floatFromInt(ntr))));
+    for (0..samples) |s| for (0..NIN) |i| {
+        X[s][i] = (X[s][i] - mean[i]) / sd[i];
+    };
+    // Majority-class baseline on test.
+    var pos: f64 = 0;
+    for (ntr..samples) |s| pos += Y[s];
+    const nte: f64 = @floatFromInt(samples - ntr);
+    const majority = @max(pos, nte - pos) / nte;
+
+    // --- Linear logistic regression ---
+    var wl: [NIN]f64 = [_]f64{0} ** NIN;
+    var bl: f64 = 0;
+    const lr: f64 = 0.05;
+    for (0..40) |_| for (0..ntr) |s| {
+        var z: f64 = bl;
+        for (0..NIN) |i| z += wl[i] * X[s][i];
+        const e = sigmoid(z) - Y[s];
+        for (0..NIN) |i| wl[i] -= lr * e * X[s][i];
+        bl -= lr * e;
+    };
+    var lin_correct: f64 = 0;
+    for (ntr..samples) |s| {
+        var z: f64 = bl;
+        for (0..NIN) |i| z += wl[i] * X[s][i];
+        if ((sigmoid(z) > 0.5) == (Y[s] > 0.5)) lin_correct += 1;
+    }
+
+    // --- Tiny MLP: 16 -> 8 ReLU -> 1 sigmoid ---
+    var W1: [H][NIN]f64 = undefined;
+    var b1: [H]f64 = [_]f64{0} ** H;
+    var W2: [H]f64 = undefined;
+    var b2: f64 = 0;
+    for (0..H) |h| {
+        W2[h] = (r.float(f64) - 0.5) * 0.5;
+        for (0..NIN) |i| W1[h][i] = (r.float(f64) - 0.5) * 0.5;
+    }
+    for (0..120) |_| for (0..ntr) |s| {
+        var a1: [H]f64 = undefined;
+        var z1: [H]f64 = undefined;
+        var z2: f64 = b2;
+        for (0..H) |h| {
+            var z: f64 = b1[h];
+            for (0..NIN) |i| z += W1[h][i] * X[s][i];
+            z1[h] = z;
+            a1[h] = if (z > 0) z else 0;
+            z2 += W2[h] * a1[h];
+        }
+        const e = sigmoid(z2) - Y[s];
+        for (0..H) |h| {
+            const d1 = e * W2[h] * (if (z1[h] > 0) @as(f64, 1) else 0);
+            W2[h] -= lr * e * a1[h];
+            for (0..NIN) |i| W1[h][i] -= lr * d1 * X[s][i];
+            b1[h] -= lr * d1;
+        }
+        b2 -= lr * e;
+    };
+    var mlp_correct: f64 = 0;
+    for (ntr..samples) |s| {
+        var z2: f64 = b2;
+        for (0..H) |h| {
+            var z: f64 = b1[h];
+            for (0..NIN) |i| z += W1[h][i] * X[s][i];
+            z2 += W2[h] * (if (z > 0) z else 0);
+        }
+        if ((sigmoid(z2) > 0.5) == (Y[s] > 0.5)) mlp_correct += 1;
+    }
+    // How much of the MLP's input weight mass lands on cell 0 (the true feature)?
+    var w0: f64 = 0;
+    var wtot: f64 = 0;
+    for (0..H) |h| for (0..NIN) |i| {
+        const a = @abs(W1[h][i]);
+        wtot += a;
+        if (i == 0) w0 += a;
+    };
+    std.debug.print("\n=== Item 1: supervised + NONLINEAR cracks the hidden two-sided band ===\n", .{});
+    std.debug.print("(same non-salient task that gave PCA 0.000, linear-supervised cosine 0.139)\n\n", .{});
+    std.debug.print("  classifier                    | test accuracy\n", .{});
+    std.debug.print("  ------------------------------+--------------\n", .{});
+    std.debug.print("  majority-class baseline       |    {d:.3}\n", .{majority});
+    std.debug.print("  linear logistic regression    |    {d:.3}\n", .{lin_correct / nte});
+    std.debug.print("  tiny MLP (16->8 ReLU->1)      |    {d:.3}\n", .{mlp_correct / nte});
+    std.debug.print("  -> MLP input-weight mass on the true cell 0: {d:.1}% (random would be {d:.1}%)\n", .{ w0 / wtot * 100.0, 100.0 / @as(f64, NIN) });
+    std.debug.print("\nReading: the linear classifier is stuck near the majority baseline (the band is a\n", .{});
+    std.debug.print("slab -- out of linear closure). The MLP, supervision COMPOSED with a nonlinearity,\n", .{});
+    std.debug.print("cracks it and concentrates its weight on the hidden cell. This is the last rung of\n", .{});
+    std.debug.print("the discovery ladder -- and the honest bound: it is a small net doing small-net\n", .{});
+    std.debug.print("things, the textbook escape, not a new mechanism. See docs/research/feature_discovery.md.\n", .{});
+}
+
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
@@ -504,4 +637,5 @@ pub fn main() !void {
     std.debug.print("selected. Control via it scores 11.02 (mb_mass). See docs/research/feature_discovery.md.\n", .{});
 
     try hiddenFeatureRecovery(std.io.getStdErr().writer(), 20000, 7);
+    mlpVsLinearOnBand(20000, 7);
 }

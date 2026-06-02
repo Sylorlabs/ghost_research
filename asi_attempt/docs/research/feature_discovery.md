@@ -98,10 +98,35 @@ Recovering the true direction `e_0` (cosine; chance ≈ 0.25):
 So the honest discovery ladder: **selection** (works if the generator is in the
 library) → **unsupervised construction** (works only if the generator is the
 dominant mode — circular) → **supervised construction** (works for non-salient
-*monotone* features) → **supervised + nonlinear** (required for the actual band;
-not yet demonstrated as a closed loop). Each rung is the closure question one
-level up — the wcore atom-forge conclusion (Claim C), confirmed from the
-discovery side.
+*monotone* features) → **supervised + nonlinear** (required for the actual band).
+Each rung is the closure question one level up — the wcore atom-forge conclusion
+(Claim C), confirmed from the discovery side.
+
+## Level 4 — the last rung, demonstrated
+
+`zig build probe` (Item 1 block) trains a tiny MLP (16 → 8 ReLU → 1) on the *same*
+hidden two-sided band that beat PCA, selection, and linear supervision:
+
+```
+  classifier                    | test accuracy
+  ------------------------------+--------------
+  majority-class baseline       |   0.570
+  linear logistic regression    |   0.523   (the slab — out of linear closure)
+  tiny MLP (16->8 ReLU->1)      |   1.000
+  MLP input-weight on true cell |   53.0%   (random would be 6.3%)
+```
+
+The MLP cracks it perfectly and concentrates its weight on the hidden cell —
+supervised credit-assignment **composed with** a nonlinearity recovers and uses a
+non-salient, non-monotone feature that none of the lower rungs could. The ladder
+is complete.
+
+**The honest bound.** This is a small net doing small-net things — the *textbook*
+escape (a two-ReLU unit represents `|w·x − c|`), not a new mechanism. It confirms
+the closure principle's prescription (add nonlinearity to escape a linear closure)
+rather than discovering anything novel. The real frontier is unchanged: every rung
+of "discover the generator" presupposes a discoverer whose own closure already
+contains the generator — closure all the way up (Claim C).
 
 ## Connection
 
