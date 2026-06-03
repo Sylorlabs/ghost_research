@@ -95,15 +95,54 @@ that gradient navigates. Together they sketch a path where the controller is han
 enumerating candidates. That is the small, honest version of the larger aim — a system
 that invents the representation a problem needs.
 
+## Control Transfer (Next #3): attempted — honest NEGATIVE, with a clean mechanism
+
+Reproduce: `zig build concentration-control -- discover-control`
+
+The decisive test of the idea: wire the learnable-`p` feature into the live TD controller
+(quadratic basis + one `f_p` feature, `p` updated by the same semi-gradient TD error), on
+the confirmed witness regime, and ask whether `p` climbs *during control* and closes the
+overflow residual — with NO max handed to it. 80k train / 10k eval / 8 seeds.
+
+```
+  REFERENCE (hand-fixed):  quadratic overflow 9.66 | quad+max overflow 2.31
+  LEARNABLE-p:  final p ≈ 1.38 (started 1.5) | overflow 6.21 | p climbed (>4) on 0/8 seeds
+  DIAGNOSTIC (frozen p):   p=1.5 → 11.73 | p=8 → 4.36 | p=32 → 4.98   (overflow)
+```
+
+Two findings, both honest:
+
+1. **The discovery gradient does NOT transfer to sparse-reward TD.** In the dense
+   supervised classifier `p` shot from 2 to 54; in the control loop it drifts *down* to
+   ~1.38 and climbs on 0/8 seeds. The quadratic basis already explains the band and most
+   danger, so the `f_p` weight stays small; failures are ~1% of steps, so the per-step
+   `p`-gradient is tiny and noisy with no consistent upward pressure. The bootstrapped,
+   sparse control signal is too weak to move a representation hyperparameter that a dense
+   label moved easily.
+
+2. **A *soft* order statistic is a weaker control primitive than the *exact* one.** The
+   frozen-p diagnostic shows a fixed high-p feature *does* help (overflow 11.7 → 4.4 at
+   p=8) — so the feature is useful — but the smooth power mean never reaches the exact
+   `max` result (2.31). A blended top-few-cells surrogate is not as good as the hard max
+   for preventing a single-cell overflow.
+
+Net: representational self-discovery is real in dense supervised learning but **did not**
+close the control gap here — and even if `p` had climbed, the soft surrogate would only
+partially close it. This is the kind of negative that points somewhere: representation
+learning in this control loop needs a **denser driving signal** than sparse failure.
+
 ## Next
 
-1. Make the SUM attractor reach p≈1: anneal lr, decouple the readout scale, or regularise
-   p — does the optimum become reachable, or is p≈2 a real basin of this readout?
-2. Two learnable features (p and a second exponent q) — can it discover it needs BOTH a
-   low and a high rung (the triple-band analogue) without being told how many?
-3. Wire the learnable-p feature into the live TD CONTROLLER (not just a classifier): does
-   p climb during control on the concentration task, closing the overflow residual that
-   the hand-given max feature closed in `concentration_control.md`?
+1. **Auxiliary dense objective:** add a self-supervised head that predicts "some cell
+   overflows within H steps" (dense, unlike the ~1% terminal failure) and let `p` be
+   driven by *that* gradient. Does the denser signal make `p` climb in-loop? (Auxiliary
+   tasks for representation learning — the standard fix for sparse reward.)
+2. **Discover the exact max, not a soft surrogate:** a temperature anneal `p→∞`, or a
+   learnable hard-concrete top-k pool, to reach the 2.31 result rather than ~4.4.
+3. Make the SUM-task attractor reach p≈1 (anneal lr / decouple readout scale) — is the
+   optimum reachable, or is p≈2 a real basin of this readout?
+4. Two learnable exponents (p and q) — can it discover it needs BOTH a low and a high rung
+   (the triple-band analogue) without being told how many?
 
 See: `concentration_control.md`, `basis_degree_control.md`, `feature_discovery.md`,
 `correlation_feature_discovery.md`, repo-root `CLOSURE_PRINCIPLE.md`.

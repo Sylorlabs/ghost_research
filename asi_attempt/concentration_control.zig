@@ -277,6 +277,131 @@ fn episode(env_proto: ConcEnv, basis: Basis, train_steps: usize, eval_steps: usi
     };
 }
 
+// ---- Learnable-p TD controller: discover the order-statistic feature DURING control ----
+// Quadratic basis (handles the polynomial band) PLUS one power-mean feature f_p at index
+// nq=nActive(.quadratic), with a LEARNABLE exponent p shared across actions. Semi-gradient
+// TD updates the weights; p is nudged by the same TD error through dQ/dp = w[a][nq]·df/dp.
+// If p climbs during control and overflow drops toward the hand-given-max result, the
+// controller DISCOVERED the order-statistic feature it needed — no max handed to it.
+const QCtrlP = struct {
+    w: [3][NFEAT]f32,
+    p: f64,
+    lr: f32,
+    lrp: f32,
+    gamma: f32,
+    nq: usize, // index of the learnable-p feature (= nActive(.quadratic))
+
+    fn init(lr: f32, lrp: f32, gamma: f32, p0: f64) QCtrlP {
+        var q: QCtrlP = undefined;
+        for (0..3) |a| {
+            for (0..NFEAT) |k| q.w[a][k] = 0;
+        }
+        q.p = p0;
+        q.lr = lr;
+        q.lrp = lrp;
+        q.gamma = gamma;
+        q.nq = nActive(.quadratic);
+        return q;
+    }
+
+    fn value(self: *const QCtrlP, phi: *const [NFEAT]f32, a: usize) f32 {
+        var z: f32 = 0;
+        for (0..NFEAT) |k| z += self.w[a][k] * phi[k];
+        return z;
+    }
+    fn minValue(self: *const QCtrlP, phi: *const [NFEAT]f32) f32 {
+        var best: f32 = 1e9;
+        for (0..3) |a| {
+            const v = self.value(phi, a);
+            if (v < best) best = v;
+        }
+        return best;
+    }
+    fn choose(self: *const QCtrlP, phi: *const [NFEAT]f32, rng: std.Random, eps: f32) u8 {
+        if (rng.float(f32) < eps) return @intCast(rng.intRangeLessThan(usize, 0, 3));
+        var best: u8 = 0;
+        var best_v: f32 = 1e9;
+        for (0..3) |a| {
+            const v = self.value(phi, a);
+            if (v < best_v) {
+                best_v = v;
+                best = @intCast(a);
+            }
+        }
+        return best;
+    }
+    fn tdUpdate(self: *QCtrlP, phi: *const [NFEAT]f32, a: usize, cost: f32, phi_next: *const [NFEAT]f32, failed: bool, dfdp: f64) void {
+        var target: f32 = cost;
+        if (!failed) target += self.gamma * self.minValue(phi_next);
+        if (target < 0) target = 0;
+        if (target > 1) target = 1;
+        const err = self.value(phi, a) - target;
+        const wp_old = self.w[a][self.nq]; // pre-update weight on the p-feature
+        for (0..NFEAT) |k| self.w[a][k] -= self.lr * err * phi[k];
+        // semi-gradient step on the exponent p
+        var np = self.p - @as(f64, self.lrp) * @as(f64, err) * @as(f64, wp_old) * dfdp;
+        if (np < 0.2) np = 0.2;
+        if (np > 64) np = 64;
+        self.p = np;
+    }
+};
+
+// Fill quadratic features into phi[0..nq] and the power-mean feature at phi[nq]; return df/dp.
+fn featuresP(grid: [NCELL]u8, p: f64, phi: *[NFEAT]f32) f64 {
+    features(grid, .quadratic, phi);
+    const pm = powerMean(grid, p);
+    phi[nActive(.quadratic)] = @floatCast(pm.f);
+    return pm.dfdp;
+}
+
+const PResult = struct { res: Result, p_final: f64 };
+
+fn discoverControlEpisode(out: anytype, env_proto: ConcEnv, train_steps: usize, eval_steps: usize, seed: u64, lr: f32, lrp: f32, gamma: f32, p0: f64, trace: bool) !PResult {
+    var phi: [NFEAT]f32 = undefined;
+    var phi_next: [NFEAT]f32 = undefined;
+    var q = QCtrlP.init(lr, lrp, gamma, p0);
+    var env = env_proto;
+    env.reset();
+    var rng = std.Random.DefaultPrng.init(seed);
+    var prev_failed = false;
+
+    const decay_end: f32 = @floatFromInt(train_steps / 2);
+    if (trace) try out.print("    p: {d:5.2}", .{q.p});
+    const mark = train_steps / 5;
+    for (0..train_steps) |step| {
+        const dfdp = featuresP(env.grid, q.p, &phi);
+        const sf: f32 = @floatFromInt(step);
+        const eps = @max(0.1, 1.0 - sf / decay_end);
+        const a = q.choose(&phi, rng.random(), eps);
+        env.step(a, rng.random());
+        const failed = env.failed;
+        _ = featuresP(env.grid, q.p, &phi_next);
+        if (!prev_failed) q.tdUpdate(&phi, a, if (failed) 1.0 else 0.0, &phi_next, failed, dfdp);
+        prev_failed = failed;
+        if (trace and (step + 1) % mark == 0) try out.print(" -> {d:5.2}", .{q.p});
+    }
+    if (trace) try out.print("\n", .{});
+
+    var fails: u32 = 0;
+    var overflow: u32 = 0;
+    var band: u32 = 0;
+    for (0..eval_steps) |_| {
+        _ = featuresP(env.grid, q.p, &phi);
+        const a = q.choose(&phi, rng.random(), 0.0);
+        env.step(a, rng.random());
+        if (env.failed) {
+            fails += 1;
+            if (env.fail_kind == .overflow) overflow += 1 else band += 1;
+        }
+    }
+    const e: f64 = @floatFromInt(eval_steps);
+    return .{ .res = .{
+        .fail_1k = @as(f64, @floatFromInt(fails)) / e * 1000.0,
+        .overflow_1k = @as(f64, @floatFromInt(overflow)) / e * 1000.0,
+        .band_1k = @as(f64, @floatFromInt(band)) / e * 1000.0,
+    }, .p_final = q.p };
+}
+
 // ---- Oracle feasibility floor ----
 // A hand-coded max-rationing policy with PERFECT access to the true max and sum.
 // It knocks ONLY when a cell is one drip from the threshold (max >= thresh-1), refills
@@ -985,6 +1110,76 @@ pub fn main() !void {
         }
         if (std.mem.eql(u8, arg, "sweep-full")) {
             try runSweep(out, 80_000, 10_000, 6, 0.02, 0.9);
+            return;
+        }
+        if (std.mem.eql(u8, arg, "discover-control")) {
+            try out.print("=== DISCOVER-IN-CONTROL: does the TD controller invent the order-statistic feature? ===\n", .{});
+            try out.print("Confirmed witness regime start=4 thresh=6 sum[48,80] knock=2. Quadratic basis +\n", .{});
+            try out.print("ONE power-mean feature f_p with LEARNABLE p (init 1.5 = ~mean). p climbs only if the\n", .{});
+            try out.print("controller finds it needs an order statistic. Compare to hand-fixed bases.\n\n", .{});
+            const wenv = ConcEnv.init(4, 6, 48, 80, 2, 1);
+            const TR: usize = 80_000;
+            const EV: usize = 10_000;
+            const SEEDS: usize = 8;
+
+            // Reference: hand-fixed quadratic (overflow residual) and quad+max (closes it).
+            var q_ovf: f64 = 0;
+            var m_ovf: f64 = 0;
+            var q_fail: f64 = 0;
+            var m_fail: f64 = 0;
+            for (0..SEEDS) |s| {
+                const seed = 0xABC0 +% @as(u64, s) *% 0x9E37;
+                const rq = episode(wenv, .quadratic, TR, EV, seed, 0.02, 0.9);
+                const rm = episode(wenv, .quad_max, TR, EV, seed, 0.02, 0.9);
+                q_ovf += rq.overflow_1k;
+                m_ovf += rm.overflow_1k;
+                q_fail += rq.fail_1k;
+                m_fail += rm.fail_1k;
+            }
+            const ns: f64 = @floatFromInt(SEEDS);
+            try out.print("  REFERENCE (hand-fixed):\n", .{});
+            try out.print("    quadratic (no max) : fail {d:6.2} | overflow {d:6.2}\n", .{ q_fail / ns, q_ovf / ns });
+            try out.print("    quad+max (hand max): fail {d:6.2} | overflow {d:6.2}\n\n", .{ m_fail / ns, m_ovf / ns });
+
+            try out.print("  LEARNABLE-p controller (quadratic + f_p, p discovered), per seed:\n", .{});
+            var lp_ovf: f64 = 0;
+            var lp_fail: f64 = 0;
+            var p_sum: f64 = 0;
+            var climbed: usize = 0;
+            for (0..SEEDS) |s| {
+                const seed = 0xABC0 +% @as(u64, s) *% 0x9E37;
+                try out.print("   seed {d}:", .{s});
+                const pr = try discoverControlEpisode(out, wenv, TR, EV, seed, 0.02, 0.05, 0.9, 1.5, true);
+                try out.print("           -> final p={d:5.2}, fail {d:6.2}, overflow {d:6.2}\n", .{ pr.p_final, pr.res.fail_1k, pr.res.overflow_1k });
+                lp_ovf += pr.res.overflow_1k;
+                lp_fail += pr.res.fail_1k;
+                p_sum += pr.p_final;
+                if (pr.p_final > 4.0) climbed += 1;
+            }
+            try out.print("\n  LEARNABLE-p mean: final p={d:5.2} | fail {d:6.2} | overflow {d:6.2} | p climbed (>4) on {d}/{d} seeds\n", .{ p_sum / ns, lp_fail / ns, lp_ovf / ns, climbed, SEEDS });
+
+            // Diagnostic: FROZEN p sweep (lrp=0). Isolates "is the f_p feature useful?" from
+            // "does the TD gradient find p?". If overflow falls at high FIXED p, the feature
+            // works and the failure is purely the discovery gradient.
+            try out.print("\n  DIAGNOSTIC — frozen p (lrp=0), mean over {d} seeds:\n", .{SEEDS});
+            try out.print("    fixed p | fail   | overflow\n", .{});
+            try out.print("    --------+--------+---------\n", .{});
+            const ps = [_]f64{ 1.5, 4.0, 8.0, 16.0, 32.0 };
+            for (ps) |pf| {
+                var fo: f64 = 0;
+                var ff: f64 = 0;
+                for (0..SEEDS) |s| {
+                    const seed = 0xABC0 +% @as(u64, s) *% 0x9E37;
+                    const pr = try discoverControlEpisode(out, wenv, TR, EV, seed, 0.02, 0.0, 0.9, pf, false);
+                    fo += pr.res.overflow_1k;
+                    ff += pr.res.fail_1k;
+                }
+                try out.print("    {d:7.1} | {d:6.2} | {d:7.2}\n", .{ pf, ff / ns, fo / ns });
+            }
+
+            try out.print("\n  READING: if frozen high-p overflow approaches the hand-max result ({d:.2}) while the\n", .{m_ovf / ns});
+            try out.print("  LEARNABLE p does NOT climb, the feature is useful but the semi-gradient TD signal is\n", .{});
+            try out.print("  too weak to discover it in-loop — a real limit, distinct from the supervised case.\n", .{});
             return;
         }
         if (std.mem.eql(u8, arg, "discover")) {
