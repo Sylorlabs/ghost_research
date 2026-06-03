@@ -153,6 +153,19 @@ pub fn build(b: *std.Build) void {
     const run_syn_step = b.step("synergy", "Run the emergent-escape / falsification experiment");
     run_syn_step.dependOn(&run_syn_cmd.step);
 
+    // Correlation-based feature pair discovery: O(N) analysis vs O(N²) exhaustive.
+    const corr_exe = b.addExecutable(.{
+        .name = "ghost_correlation",
+        .root_source_file = b.path("correlation_discover.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(corr_exe);
+    const run_corr_cmd = b.addRunArtifact(corr_exe);
+    run_corr_cmd.step.dependOn(b.getInstallStep());
+    const run_corr_step = b.step("correlation-discover", "Run correlation-based feature pair discovery");
+    run_corr_step.dependOn(&run_corr_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
