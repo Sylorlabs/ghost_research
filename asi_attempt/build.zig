@@ -192,6 +192,19 @@ pub fn build(b: *std.Build) void {
     const run_pdis_step = b.step("parallel-disagree", "Run prospective controller disagreement experiment");
     run_pdis_step.dependOn(&run_pdis_cmd.step);
 
+    // Basis-degree control: change only the feature basis degree, measure the jump.
+    const basis_exe = b.addExecutable(.{
+        .name = "ghost_basis",
+        .root_source_file = b.path("basis_control.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(basis_exe);
+    const run_basis_cmd = b.addRunArtifact(basis_exe);
+    run_basis_cmd.step.dependOn(b.getInstallStep());
+    const run_basis_step = b.step("basis-control", "Run basis-degree control experiment (linear vs quadratic)");
+    run_basis_step.dependOn(&run_basis_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
