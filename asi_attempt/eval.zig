@@ -508,4 +508,67 @@ pub fn main() !void {
     }
     std.debug.print("  => best single feature on DUAL_BAND: '{s}' ({d:.2} fail/1k)\n", .{ @tagName(best_dual), best_dual_fail });
     std.debug.print("     Baseline (BAND single-feature): 11.02 fail/1k. Does DUAL_BAND need 2D readout?\n", .{});
+
+    // 2D mb_mass: the predicted fix for dual-band.
+    // Tracks BOTH features, picks actions minimizing total violation of both constraints.
+    std.debug.print("  - - - 2D controller: mb_mass2(sum+left_mass) -- predicted fix - - -\n", .{});
+    printRow("mb_mass2(sum,left)", try runPolicyPMeanSeeds(allocator, dual_band, .{
+        .action_mode = .mb_mass2, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+        .feature = .sum, .feature2 = .left_mass,
+    }, n_steps, seeds));
+    printRow("mb_mass2(sum,right)", try runPolicyPMeanSeeds(allocator, dual_band, .{
+        .action_mode = .mb_mass2, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+        .feature = .sum, .feature2 = .right_mass,
+    }, n_steps, seeds));
+    printRow("mb_mass2(left,right)", try runPolicyPMeanSeeds(allocator, dual_band, .{
+        .action_mode = .mb_mass2, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+        .feature = .left_mass, .feature2 = .right_mass,
+    }, n_steps, seeds));
+
+    // Pair feature discovery: search over all pairs (i,j) of FeatureKinds on dual_band.
+    // Can the system automatically find that (sum, left_mass) is the best pair?
+    std.debug.print("  - - - pair feature discovery: which feature pair best controls DUAL_BAND? - - -\n", .{});
+    const pair_feats = [_]agent_mod.FeatureKind{ .sum, .max_cell, .left_mass, .right_mass };
+    var best_pair_f1 = pair_feats[0];
+    var best_pair_f2 = pair_feats[1];
+    var best_pair_fail: f64 = 1e9;
+    for (pair_feats) |f1| {
+        for (pair_feats) |f2| {
+            if (f1 == f2) continue;
+            const st = try runPolicyPMeanSeeds(allocator, dual_band, .{
+                .action_mode = .mb_mass2, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
+                .feature = f1, .feature2 = f2,
+            }, n_steps, seeds);
+            var name: [50]u8 = undefined;
+            printRow(try std.fmt.bufPrint(&name, "pair({s},{s})", .{ @tagName(f1), @tagName(f2) }), st);
+            if (st.fail_per_1k < best_pair_fail) {
+                best_pair_fail = st.fail_per_1k;
+                best_pair_f1 = f1;
+                best_pair_f2 = f2;
+            }
+        }
+    }
+    std.debug.print("  => BEST PAIR: ({s},{s}) at {d:.2} fail/1k\n", .{ @tagName(best_pair_f1), @tagName(best_pair_f2), best_pair_fail });
+    std.debug.print("     Prediction: (sum,left_mass) should win. Did it?\n", .{});
+
+    // Model disagreement: how often does the 1D agent (sum) predict safe but fail?
+    // This is the "can you see the ceiling" test -- does the agent detect its own blindspot?
+    std.debug.print("  - - - model disagreement: does sum-agent detect its own blindspot? - - -\n", .{});
+    {
+        var ag = try agent_mod.Agent.init(allocator, std.Random.DefaultPrng.init(0xDEAD).random(), .{
+            .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = .sum,
+        }, &env_mod.Environment.initWith(dual_band));
+        defer ag.deinit();
+        var env = env_mod.Environment.initWith(dual_band);
+        var rng = std.Random.DefaultPrng.init(0xDEAD);
+        for (0..n_steps) |_| _ = ag.step(&env, rng.random());
+        const disagree_rate: f64 = if (ag.predicted_safe_n > 0)
+            @as(f64, @floatFromInt(ag.unexplained_fail_n)) / @as(f64, @floatFromInt(ag.predicted_safe_n))
+        else 0.0;
+        std.debug.print("  predicted_safe={d}  unexplained_fail={d}  disagreement_rate={d:.3}\n", .{
+            ag.predicted_safe_n, ag.unexplained_fail_n, disagree_rate,
+        });
+        std.debug.print("  Reading: high disagreement = model provably wrong; agent CAN detect the blindspot\n", .{});
+        std.debug.print("  if disagreement_rate >> 0 => sum model is representationally wrong for dual-band\n", .{});
+    }
 }

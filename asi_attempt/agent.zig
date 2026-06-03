@@ -80,6 +80,7 @@ pub const ActionMode = enum {
     mb_surprise, // model-based: pick the most *predictable* action (min surprise)
     mb_mass, // nonlinear readout: regulate a learned scalar FEATURE toward the safe midpoint
     mb_plan, // mb_mass + H-step lookahead (rollout over the learned scalar model)
+    mb_mass2, // 2D: regulate TWO features (feature + feature2) simultaneously
 };
 
 /// Candidate aggregate features for mb_mass. The point of the discovery
@@ -131,6 +132,7 @@ pub const Config = struct {
     pure_attraction: bool = false, // CP3: drop the 0.25 repulsion floor in rule learning
     ordinal_encoding: bool = false, // metric (thermometer) value fillers instead of random
     feature: FeatureKind = .sum, // which aggregate mb_mass regulates (discovery experiment)
+    feature2: FeatureKind = .left_mass, // second feature for mb_mass2 (2D controller)
 };
 
 pub const StepResult = struct {
@@ -213,6 +215,18 @@ pub const Agent = struct {
     safe_mass_max: u32,
     safe_mass_n: u32,
 
+    // Second feature for mb_mass2 (2D controller)
+    cur_mass2: u32,
+    mass_delta2: [3]f32,
+    mass_dn2: [3]u32,
+    safe_mass_min2: u32,
+    safe_mass_max2: u32,
+    safe_mass_n2: u32,
+
+    // Model disagreement: "I predicted safe but failed" — signal that model is wrong
+    predicted_safe_n: u32,    // steps where cur_mass was within learned safe range
+    unexplained_fail_n: u32,  // of those, how many ended in failure
+
     pub fn init(allocator: std.mem.Allocator, rand: std.Random, cfg: Config, env: *const env_mod.Environment) !Agent {
         var self: Agent = undefined;
         self.allocator = allocator;
@@ -250,6 +264,16 @@ pub const Agent = struct {
         self.safe_mass_min = std.math.maxInt(u32);
         self.safe_mass_max = 0;
         self.safe_mass_n = 0;
+
+        self.cur_mass2 = 0;
+        self.mass_delta2 = .{ 0, 0, 0 };
+        self.mass_dn2 = .{ 0, 0, 0 };
+        self.safe_mass_min2 = std.math.maxInt(u32);
+        self.safe_mass_max2 = 0;
+        self.safe_mass_n2 = 0;
+
+        self.predicted_safe_n = 0;
+        self.unexplained_fail_n = 0;
 
         self.S_t = self.encoder.encode(env);
         return self;
@@ -367,6 +391,40 @@ pub const Agent = struct {
                     const e = @abs(pred - setpoint);
                     if (e < best_err) {
                         best_err = e;
+                        best = @intCast(a);
+                    }
+                }
+                return best;
+            },
+            .mb_mass2 => {
+                // 2D readout: regulate TWO features simultaneously. Pick the action
+                // that minimizes total deviation from both setpoints. Handles the
+                // dual-band task where no single feature suffices.
+                const n1 = self.safe_mass_n;
+                const n2 = self.safe_mass_n2;
+                if (n1 == 0 or n2 == 0 or rand.float(f32) < self.cfg.epsilon)
+                    return rand.intRangeLessThan(u8, 0, 3);
+                const sp1 = @as(f32, @floatFromInt(self.safe_mass_min + self.safe_mass_max)) / 2.0;
+                const sp2 = @as(f32, @floatFromInt(self.safe_mass_min2 + self.safe_mass_max2)) / 2.0;
+                const lo1: f32 = @floatFromInt(self.safe_mass_min);
+                const hi1: f32 = @floatFromInt(self.safe_mass_max);
+                const lo2: f32 = @floatFromInt(self.safe_mass_min2);
+                const hi2: f32 = @floatFromInt(self.safe_mass_max2);
+                const cm1: f32 = @floatFromInt(self.cur_mass);
+                const cm2: f32 = @floatFromInt(self.cur_mass2);
+                var best: u8 = 0;
+                var best_cost: f32 = 1e9;
+                for (0..3) |a| {
+                    const p1 = cm1 + self.mass_delta[a];
+                    const p2 = cm2 + self.mass_delta2[a];
+                    // Out-of-band penalty (hard constraint violation)
+                    const e1: f32 = if (p1 < lo1) (lo1 - p1) else if (p1 > hi1) (p1 - hi1) else 0;
+                    const e2: f32 = if (p2 < lo2) (lo2 - p2) else if (p2 > hi2) (p2 - hi2) else 0;
+                    // Centering term (soft guidance toward midpoint)
+                    const c = (@abs(p1 - sp1) + @abs(p2 - sp2)) * 0.01;
+                    const cost = e1 + e2 + c;
+                    if (cost < best_cost) {
+                        best_cost = cost;
                         best = @intCast(a);
                     }
                 }
@@ -544,7 +602,8 @@ pub const Agent = struct {
     }
 
     pub fn step(self: *Agent, env: *env_mod.Environment, rand: std.Random) StepResult {
-        self.cur_mass = featureValue(env.grid, self.cfg.feature); // the chosen aggregate
+        self.cur_mass = featureValue(env.grid, self.cfg.feature);
+        self.cur_mass2 = featureValue(env.grid, self.cfg.feature2);
         const action_idx = self.chooseAction(rand);
         const action: env_mod.Action = @enumFromInt(action_idx);
         const V_pred = self.predictNext(action_idx);
@@ -556,8 +615,7 @@ pub const Agent = struct {
         var grid_mass: u32 = 0;
         for (env.grid) |c| grid_mass += c;
 
-        // Learn the scalar feature model (for .mb_mass): running-mean per-action
-        // delta of the chosen feature and the [min,max] range over safe states.
+        // Learn scalar feature models (for .mb_mass / .mb_mass2).
         {
             const feat_next = featureValue(env.grid, self.cfg.feature);
             const d = @as(f32, @floatFromInt(feat_next)) - @as(f32, @floatFromInt(self.cur_mass));
@@ -568,6 +626,28 @@ pub const Agent = struct {
                 self.safe_mass_min = @min(self.safe_mass_min, feat_next);
                 self.safe_mass_max = @max(self.safe_mass_max, feat_next);
                 self.safe_mass_n += 1;
+            }
+        }
+        // Second feature (for mb_mass2)
+        {
+            const feat_next2 = featureValue(env.grid, self.cfg.feature2);
+            const d2 = @as(f32, @floatFromInt(feat_next2)) - @as(f32, @floatFromInt(self.cur_mass2));
+            self.mass_dn2[action_idx] += 1;
+            const n2: f32 = @floatFromInt(self.mass_dn2[action_idx]);
+            self.mass_delta2[action_idx] += (d2 - self.mass_delta2[action_idx]) / n2;
+            if (!failed) {
+                self.safe_mass_min2 = @min(self.safe_mass_min2, feat_next2);
+                self.safe_mass_max2 = @max(self.safe_mass_max2, feat_next2);
+                self.safe_mass_n2 += 1;
+            }
+        }
+        // Model disagreement: track when cur_mass was in learned safe range but we failed.
+        // A signal that the 1D model is representationally wrong (unexplained failures).
+        if (self.safe_mass_n > 50) {
+            const in_range = (self.cur_mass >= self.safe_mass_min and self.cur_mass <= self.safe_mass_max);
+            if (in_range) {
+                self.predicted_safe_n += 1;
+                if (failed) self.unexplained_fail_n += 1;
             }
         }
 
