@@ -1,7 +1,13 @@
-# A New Closure Split: Extremal vs. Central Order Statistics
+# The Closure Structure of Order Statistics
 
-**Status:** NEW research (not a re-run). One conjecture confirmed decisively, two
-hypotheses refuted. Reproduce: `zig build order-stats`
+**Status:** NEW research (not a re-run). Maps a previously-uncharted region of the closure
+lattice: (1) an extremal-vs-central split, (2) a Markov–Krein graded law via the moment
+problem, (3) a rank-feature *dimension* hierarchy. Two side-hypotheses refuted along the way.
+Reproduce: `zig build order-stats` (+ ` -- moments`, ` -- iqr`).
+
+Map of results: **R1–R2** median ∉ {poly + max + min} (extremal-vs-central split) ·
+**R3–R4** two refuted gradient hypotheses · **R5** moments pin extremes faster than the
+center (Markov–Krein) · **R6** IQR needs two rank features (rank dimension hierarchy).
 
 ## The Question (genuinely open in advance)
 
@@ -130,6 +136,35 @@ unconditional spread is squeezed and the ratio even **inverts**. Loosening the c
 max un-truncated) removes the artifact and the ratio becomes monotone as theory predicts.
 Use the scale-invariant ratio; report the cap. (This is why R4's raw accuracy looked
 non-monotone — same scale confound, no normalization.)
+
+## Result 6 — A rank-feature DIMENSION hierarchy: IQR needs TWO rank features
+
+Reproduce: `zig build order-stats -- iqr`
+
+R1–R2 showed a *central* order statistic (median) needs **one** rank feature beyond
+polynomials + extremes. Genuinely-open question (not in textbooks for this setting): is
+there a symmetric function that needs **two** rank features, irreducibly? Candidate: the
+**interquartile range** `IQR = Q3 − Q1`. Match `p1`(fixed)`, p2, max, min, median` exactly
+(n = 37,140 balanced), vary IQR:
+```
+  basis                        | held-out accuracy
+  poly2                        | 0.498
+  poly2 + max + min + median   | 0.500   <-- THREE order-stat features, still chance
+  poly2 + Q1 (one quartile)    | 0.694   <-- one rank feature: PARTIAL
+  poly2 + Q3 (one quartile)    | 0.749   <-- one rank feature: PARTIAL
+  poly2 + Q1 + Q3 (two)        | 1.000
+```
+
+**A clean dimension-2 signature.** Supplying 0 → 1 → 2 of the right rank features lifts
+accuracy 0.500 → ~0.70 → 1.000. One quartile is only *partially* informative; you need
+*both*. And the sharp nuance: it is **not the count** of order-stat features — three *other*
+order statistics (max, min, median) give exactly chance (0.500), while *one* quartile gives
+0.69. IQR lives in a **2-dimensional rank subspace** (the quartile pair) that is orthogonal
+to `{max, min, median}` and to the low-degree polynomial.
+
+So the rank axis of the closure lattice is not a single rung. It has a **dimension
+hierarchy** parallel to the polynomial degree hierarchy: `median` = 1 rank dimension, `IQR`
+= 2 rank dimensions, irreducible to polynomial + three other order statistics.
 
 ## Honest Grade
 

@@ -34,7 +34,11 @@ const S: f64 = 5.0;
 //   153          : max/S
 //   154          : min/S
 //   155          : median/S
-const NF = 156;
+//   156          : Q1/S  (lower quartile, sorted[4])
+//   157          : Q3/S  (upper quartile, sorted[11])
+const NF = 158;
+const I_Q1 = 156;
+const I_Q3 = 157;
 const I_MAX = 153;
 const I_MIN = 154;
 const I_MED = 155;
@@ -65,6 +69,8 @@ fn featuresFull(g: [NCELL]u8, phi: *[NF]f64) void {
     phi[I_MIN] = @as(f64, @floatFromInt(s[0])) / S;
     const med = (@as(f64, @floatFromInt(s[NCELL / 2 - 1])) + @as(f64, @floatFromInt(s[NCELL / 2]))) / 2.0;
     phi[I_MED] = med / S;
+    phi[I_Q1] = @as(f64, @floatFromInt(s[4])) / S;
+    phi[I_Q3] = @as(f64, @floatFromInt(s[11])) / S;
 }
 
 // Minimal symmetric power-sum basis for the degree-general strengthening:
@@ -287,6 +293,148 @@ fn runRankDegree(out: anytype) !void {
     }
     try out.print("\n  deg1 uses only the mean (sum, fixed) -> must be ~chance for all k. If deg2/deg3\n", .{});
     try out.print("  lift near-extremal ranks more than central ones, rank-complexity is graded in degree.\n", .{});
+}
+
+// Interquartile range Q3-Q1, and a key matching (p2, max, min, median-feature) exactly.
+// medsum = s[7]+s[8] fixes the median feature (s7+s8)/2 exactly.
+fn iqrValue(g: [NCELL]u8) u8 {
+    var s = g;
+    std.sort.pdq(u8, &s, {}, std.sort.asc(u8));
+    return s[11] - s[4];
+}
+fn keyIQR(g: [NCELL]u8) u64 {
+    var s = g;
+    std.sort.pdq(u8, &s, {}, std.sort.asc(u8));
+    var p2: u64 = 0;
+    for (g) |c| p2 += @as(u64, c) * @as(u64, c);
+    const medsum: u64 = @as(u64, s[7]) + @as(u64, s[8]);
+    return (p2 << 13) | (@as(u64, s[NCELL - 1]) << 9) | (@as(u64, s[0]) << 5) | medsum;
+}
+
+// RANK-FEATURE DIMENSION: does a symmetric function need TWO rank features irreducibly?
+// IQR = Q3-Q1. Conjecture: outside {poly2 + max + min + median} (3 order-stat features) but
+// reachable by {poly2 + Q1 + Q3}. Match (p1 fixed, p2, max, min, median) exactly; vary IQR.
+fn runIQR(out: anytype) !void {
+    try out.print("=== RANK-FEATURE DIMENSION: does IQR (Q3-Q1) need TWO rank features? ===\n", .{});
+    try out.print("Match p1(fixed), p2, max, min, median EXACTLY between IQR-high and IQR-low classes.\n", .{});
+    try out.print("If {{poly2+max+min+median}} stays at chance while {{poly2+Q1+Q3}} ~1.0, IQR is outside\n", .{});
+    try out.print("the closure of polynomial + 3 order-stat features: it needs the two quartiles.\n\n", .{});
+
+    const L: u8 = 4;
+    const CAP: u8 = 10;
+    const MOVES: usize = 120;
+    var rng = std.Random.DefaultPrng.init(0x1A4B7C9);
+    const r = rng.random();
+    for (0..POOL) |k| {
+        Data.grids[k] = genState(r, L, CAP, MOVES);
+        Data.keys[k] = keyIQR(Data.grids[k]);
+        Data.idx[k] = k;
+    }
+    // balancing IQR threshold
+    var hist = [_]u32{0} ** 16;
+    for (0..POOL) |k| hist[iqrValue(Data.grids[k])] += 1;
+    var cum: u32 = 0;
+    var t_iqr: u8 = 0;
+    for (0..16) |b| {
+        cum += hist[b];
+        if (cum * 2 >= POOL) {
+            t_iqr = @intCast(b + 1);
+            break;
+        }
+    }
+    try out.print("  IQR threshold T = {d} (class1: IQR >= T)\n", .{t_iqr});
+
+    const Cmp = struct {
+        fn lt(_: void, a: usize, b: usize) bool {
+            return Data.keys[a] < Data.keys[b];
+        }
+    };
+    std.sort.pdq(usize, &Data.idx, {}, Cmp.lt);
+    var n: usize = 0;
+    var i: usize = 0;
+    while (i < POOL) {
+        var j = i;
+        const kv = Data.keys[Data.idx[i]];
+        while (j < POOL and Data.keys[Data.idx[j]] == kv) j += 1;
+        var hi_buf: [256]usize = undefined;
+        var lo_buf: [256]usize = undefined;
+        var nh: usize = 0;
+        var nl: usize = 0;
+        var t = i;
+        while (t < j) : (t += 1) {
+            const id = Data.idx[t];
+            if (iqrValue(Data.grids[id]) >= t_iqr) {
+                if (nh < hi_buf.len) {
+                    hi_buf[nh] = id;
+                    nh += 1;
+                }
+            } else {
+                if (nl < lo_buf.len) {
+                    lo_buf[nl] = id;
+                    nl += 1;
+                }
+            }
+        }
+        const m = @min(nh, nl);
+        for (0..m) |c| {
+            Data.mg[n] = Data.grids[hi_buf[c]];
+            Data.my[n] = 1.0;
+            n += 1;
+            Data.mg[n] = Data.grids[lo_buf[c]];
+            Data.my[n] = 0.0;
+            n += 1;
+        }
+        i = j;
+    }
+    try out.print("  matched balanced samples n = {d}\n", .{n});
+    if (n < 400) {
+        try out.print("  overlap too thin; relax the matched key.\n", .{});
+        return;
+    }
+    const ntr = (n * 7) / 10;
+    const trg = Data.mg[0..ntr];
+    const try_ = Data.my[0..ntr];
+    const teg = Data.mg[ntr..n];
+    const tey = Data.my[ntr..n];
+
+    var poly2: [NPOLY2]usize = undefined;
+    for (0..NPOLY2) |k| poly2[k] = k;
+    var p_mmm: [NPOLY2 + 3]usize = undefined; // + max,min,median
+    for (0..NPOLY2) |k| p_mmm[k] = k;
+    p_mmm[NPOLY2] = I_MAX;
+    p_mmm[NPOLY2 + 1] = I_MIN;
+    p_mmm[NPOLY2 + 2] = I_MED;
+    var p_q1: [NPOLY2 + 1]usize = undefined; // + Q1 only
+    for (0..NPOLY2) |k| p_q1[k] = k;
+    p_q1[NPOLY2] = I_Q1;
+    var p_q3: [NPOLY2 + 1]usize = undefined; // + Q3 only
+    for (0..NPOLY2) |k| p_q3[k] = k;
+    p_q3[NPOLY2] = I_Q3;
+    var p_q: [NPOLY2 + 2]usize = undefined; // + Q1,Q3
+    for (0..NPOLY2) |k| p_q[k] = k;
+    p_q[NPOLY2] = I_Q1;
+    p_q[NPOLY2 + 1] = I_Q3;
+
+    const a_poly2 = trainAndTest(trg, try_, teg, tey, &poly2, 120, 0.05);
+    const a_mmm = trainAndTest(trg, try_, teg, tey, &p_mmm, 120, 0.05);
+    const a_q1 = trainAndTest(trg, try_, teg, tey, &p_q1, 120, 0.05);
+    const a_q3 = trainAndTest(trg, try_, teg, tey, &p_q3, 120, 0.05);
+    const a_q = trainAndTest(trg, try_, teg, tey, &p_q, 120, 0.05);
+
+    try out.print("\n  basis                        | held-out accuracy\n", .{});
+    try out.print("  -----------------------------+------------------\n", .{});
+    try out.print("  poly2                        | {d:.3}\n", .{a_poly2});
+    try out.print("  poly2 + max + min + median   | {d:.3}   <-- 3 order-stat features, still blind?\n", .{a_mmm});
+    try out.print("  poly2 + Q1 (one quartile)    | {d:.3}   <-- one rank feature enough?\n", .{a_q1});
+    try out.print("  poly2 + Q3 (one quartile)    | {d:.3}\n", .{a_q3});
+    try out.print("  poly2 + Q1 + Q3 (two)        | {d:.3}\n", .{a_q});
+    if (a_mmm < 0.6 and a_q > 0.9) {
+        try out.print("\n  >>> RANK-FEATURE DIMENSION CONFIRMED: IQR is outside {{poly2 + max + min + median}}\n", .{});
+        try out.print("      ({d:.3}, chance) but in {{poly2 + Q1 + Q3}} ({d:.3}). A symmetric function can need\n", .{ a_mmm, a_q });
+        try out.print("      TWO specific rank features, irreducible to polynomial + 3 other order statistics.\n", .{});
+    } else {
+        try out.print("\n  >>> inconclusive (mmm={d:.3}, q={d:.3}, n={d}).\n", .{ a_mmm, a_q, n });
+    }
 }
 
 fn medianOf(g: [NCELL]u8) f64 {
@@ -529,6 +677,10 @@ pub fn main() !void {
     while (args.next()) |arg| {
         if (std.mem.eql(u8, arg, "moments")) {
             try runMoments(out);
+            return;
+        }
+        if (std.mem.eql(u8, arg, "iqr")) {
+            try runIQR(out);
             return;
         }
     }
