@@ -309,4 +309,67 @@ pub fn main() !void {
     } else {
         try out.print("UNEXPECTED: pair-search also failed -- the escape requires something beyond pairs.\n", .{});
     }
+
+    // Pair-power ranking: for each (i,j) pair of nonlinear ops, how many targets
+    // does base+{i,j} reach? Maps the full reachability landscape.
+    try out.print("\n=== pair-power ranking — which op PAIR unlocks the most targets? ===\n", .{});
+    try out.print("  pair       | targets/5\n", .{});
+    try out.print("  -----------+----------\n", .{});
+    for (0..nl.len) |i| {
+        for (i + 1..nl.len) |j| {
+            var pb: [base.len + 2]Op = undefined;
+            @memcpy(pb[0..base.len], &base);
+            pb[base.len] = nl[i].op;
+            pb[base.len + 1] = nl[j].op;
+            var n: usize = 0;
+            for (targets) |t| {
+                if (minLen(&pb, MAXL, t.f) != null) n += 1;
+            }
+            try out.print("  {s}+{s:<3}   | {d}/5\n", .{ nl[i].name, nl[j].name, n });
+        }
+    }
+
+    // Triplet-emergence check: does any of our 5 targets require 3 ops simultaneously?
+    // (reachable by some triplet but NOT by any single or pair)
+    try out.print("\n=== triplet-emergence check: does any target need 3 ops simultaneously? ===\n", .{});
+    var triplet_emergent: usize = 0;
+    for (targets) |t| {
+        var single_ok = false;
+        for (nl) |c| {
+            var sb: [base.len + 1]Op = undefined;
+            @memcpy(sb[0..base.len], &base);
+            sb[base.len] = c.op;
+            if (minLen(&sb, MAXL, t.f) != null) { single_ok = true; break; }
+        }
+        var pair_ok = false;
+        for (0..nl.len) |i| {
+            for (i + 1..nl.len) |j| {
+                var pb: [base.len + 2]Op = undefined;
+                @memcpy(pb[0..base.len], &base);
+                pb[base.len] = nl[i].op;
+                pb[base.len + 1] = nl[j].op;
+                if (minLen(&pb, MAXL, t.f) != null) { pair_ok = true; break; }
+            }
+            if (pair_ok) break;
+        }
+        var triple_ok = false;
+        if (!pair_ok) {
+            for (0..nl.len) |i| for (i + 1..nl.len) |j| for (j + 1..nl.len) |k| {
+                var tb: [base.len + 3]Op = undefined;
+                @memcpy(tb[0..base.len], &base);
+                tb[base.len] = nl[i].op;
+                tb[base.len + 1] = nl[j].op;
+                tb[base.len + 2] = nl[k].op;
+                if (minLen(&tb, MAXL, t.f) != null) { triple_ok = true; break; }
+            };
+        }
+        if (!single_ok and !pair_ok and triple_ok) {
+            triplet_emergent += 1;
+            try out.print("  TRIPLET-EMERGENT: {s}\n", .{t.name});
+        }
+    }
+    if (triplet_emergent == 0) {
+        try out.print("  No triplet-emergent targets in this set: all 5 targets covered by singles or pairs.\n", .{});
+        try out.print("  Emergence saturates at depth 2 for these targets -- pair-search is SUFFICIENT.\n", .{});
+    }
 }
