@@ -76,11 +76,15 @@ beat hand-coded control — a tuned thermostat scores 0.00; see the E1 correctio
 The escape generator is not always a single op. An exact u8 experiment (`zig build
 synergy`, `asi_attempt/docs/research/emergent_escape.md`) finds targets reachable by
 `base+{X,Y}` but **neither** `base+{X}` nor `base+{Y}`: `x&(x-1)` needs {AND,SUB},
-`x|(x*x)` needs {OR,MUL}. Consequence: **greedy one-op-at-a-time substrate growth
-provably misses these** — neither op alone makes progress, so a greedy certifier
-(like wcore's atom-forge) never adds either. The fix is to search op *tuples*. (The
-falsification side of the same run: the affine base reaches 0/5 nonlinear targets —
-the principle survived an honest attempt to break it.)
+`x|(x*x)` needs {OR,MUL}. Consequence (tested, and a self-correction): greedy
+one-op-at-a-time substrate growth misses these **only when the components have no
+standalone use** — measured: on a rich 5-target set greedy reaches 5/5 (it picks up
+each component for some other target), but on an isolated `{x&(x-1)}` greedy reaches
+0/1 while the full op-set reaches 1/1, because AND and SUB are then useless alone and
+greedy never starts. So tuple search is needed *exactly* for components with no
+standalone use, not in general (my first "provably misses" was overstated; I caught
+it by testing). Falsification side of the same run: the affine base reaches 0/5
+nonlinear targets — the principle survived an honest attempt to break it.
 
 ## Practical corollary for this repo (and any learner)
 

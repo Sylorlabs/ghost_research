@@ -75,6 +75,44 @@ fn minLen(ops: []const Op, maxL: usize, target: *const fn (u8) u8) ?usize {
     return null;
 }
 
+fn countReachable(ops: []const Op, maxL: usize, targets: []const Target) usize {
+    var n: usize = 0;
+    for (targets) |t| {
+        if (minLen(ops, maxL, t.f) != null) n += 1;
+    }
+    return n;
+}
+
+// Greedy substrate growth: from the affine base, repeatedly add the single
+// nonlinear op that unlocks the most currently-unreachable targets; stop when no
+// single op adds any. Returns targets reached. This is how the atom-forge grows.
+fn greedyGrow(base: []const Op, nl: []const Nonlin, maxL: usize, targets: []const Target) usize {
+    var mask: [16]Op = undefined;
+    @memcpy(mask[0..base.len], base);
+    var len = base.len;
+    var used = [_]bool{false} ** 8;
+    var cur = countReachable(mask[0..len], maxL, targets);
+    while (true) {
+        var best_gain: usize = 0;
+        var best: usize = 0;
+        for (nl, 0..) |c, i| {
+            if (used[i]) continue;
+            mask[len] = c.op;
+            const r = countReachable(mask[0 .. len + 1], maxL, targets);
+            if (r > cur + best_gain) {
+                best_gain = r - cur;
+                best = i;
+            }
+        }
+        if (best_gain == 0) break; // greedy stuck: no single op makes progress
+        mask[len] = nl[best].op;
+        len += 1;
+        used[best] = true;
+        cur += best_gain;
+    }
+    return cur;
+}
+
 // --- nonlinear targets (each provably outside the affine closure) ---
 fn t_and_shr(x: u8) u8 {
     return x & (x >> 1);
@@ -143,10 +181,27 @@ pub fn main() !void {
     try out.print("  => {d} emergent (irreducible-pair) escapes found.\n\n", .{synergy_found});
     if (synergy_found > 0) {
         try out.print("VERDICT: emergent escape is REAL -- some out-of-closure generators are irreducibly a\n", .{});
-        try out.print("PAIR: neither op alone makes progress, only both together. Implication: greedy\n", .{});
-        try out.print("one-op-at-a-time substrate growth (e.g. the atom-forge) PROVABLY MISSES these --\n", .{});
-        try out.print("you must add ops simultaneously. A non-obvious refinement of the closure principle.\n", .{});
+        try out.print("PAIR: neither op alone reaches the target, only both together.\n\n", .{});
     } else {
-        try out.print("VERDICT: no emergent pairs at this depth -- every escape was achievable one op at a time.\n", .{});
+        try out.print("VERDICT: no emergent pairs at this depth -- every escape was achievable one op at a time.\n\n", .{});
     }
+
+    // Does greedy substrate growth actually MISS emergent escapes? Test the claim.
+    try out.print("=== does GREEDY substrate growth miss them? (the atom-forge's growth rule) ===\n", .{});
+    const full = countReachable(&[_]Op{ .XOR, .SHL, .SHR, .NOTA, .AND, .OR, .ADD, .SUB, .MUL }, MAXL, &targets);
+    const greedy_rich = greedyGrow(&base, &nl, MAXL, &targets);
+    try out.print("  rich target set ({d} targets): greedy growth reaches {d}/{d}, full op-set reaches {d}/{d}\n", .{ targets.len, greedy_rich, targets.len, full, targets.len });
+    // Isolated emergent target: only x&(x-1), whose components (AND, SUB) are then
+    // useless alone -> greedy can never start.
+    const iso = [_]Target{.{ .name = "x&(x-1)", .f = &t_clear_low }};
+    const greedy_iso = greedyGrow(&base, &nl, MAXL, &iso);
+    const full_iso = countReachable(&[_]Op{ .XOR, .SHL, .SHR, .NOTA, .AND, .OR, .ADD, .SUB, .MUL }, MAXL, &iso);
+    try out.print("  isolated {{x&(x-1)}}: greedy growth reaches {d}/1, full op-set reaches {d}/1\n\n", .{ greedy_iso, full_iso });
+    try out.print("CORRECTED CLAIM: greedy growth does NOT always miss emergent escapes. In a RICH target\n", .{});
+    try out.print("set it usually reaches them, because each component op gets added for some OTHER target,\n", .{});
+    try out.print("after which its partner becomes individually useful. Greedy provably FAILS only when the\n", .{});
+    try out.print("pair's components are useless for EVERY available target (the isolated case: greedy 0/1,\n", .{});
+    try out.print("full 1/1) -- then no single op ever makes progress and greedy never starts. So the precise\n", .{});
+    try out.print("condition is: greedy substrate growth misses an emergent escape iff its components have no\n", .{});
+    try out.print("standalone use. Tuple search is needed exactly there.\n", .{});
 }
