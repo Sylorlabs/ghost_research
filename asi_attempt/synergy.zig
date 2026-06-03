@@ -113,6 +113,67 @@ fn greedyGrow(base: []const Op, nl: []const Nonlin, maxL: usize, targets: []cons
     return cur;
 }
 
+// Pair-search substrate growth: same as greedy, but when no single op makes
+// progress, tries all op-PAIRS before giving up. This is the predicted fix for
+// isolated emergent escapes (components with no standalone use) — the precise
+// case where greedy provably fails.
+fn pairGrow(base: []const Op, nl: []const Nonlin, maxL: usize, targets: []const Target) usize {
+    var mask: [16]Op = undefined;
+    @memcpy(mask[0..base.len], base);
+    var len = base.len;
+    var used = [_]bool{false} ** 8;
+    var cur = countReachable(mask[0..len], maxL, targets);
+    while (true) {
+        var best_gain: usize = 0;
+        var best: usize = 0;
+        for (nl, 0..) |c, i| {
+            if (used[i]) continue;
+            mask[len] = c.op;
+            const r = countReachable(mask[0 .. len + 1], maxL, targets);
+            if (r > cur + best_gain) {
+                best_gain = r - cur;
+                best = i;
+            }
+        }
+        if (best_gain > 0) {
+            mask[len] = nl[best].op;
+            len += 1;
+            used[best] = true;
+            cur += best_gain;
+            continue;
+        }
+        // No single op helps — escalate to pair search
+        var best_pair_gain: usize = 0;
+        var best_i: usize = 0;
+        var best_j: usize = 0;
+        for (0..nl.len) |i| {
+            if (used[i]) continue;
+            for (i + 1..nl.len) |j| {
+                if (used[j]) continue;
+                mask[len] = nl[i].op;
+                mask[len + 1] = nl[j].op;
+                const r = countReachable(mask[0 .. len + 2], maxL, targets);
+                if (r > cur + best_pair_gain) {
+                    best_pair_gain = r - cur;
+                    best_i = i;
+                    best_j = j;
+                }
+            }
+        }
+        if (best_pair_gain > 0) {
+            mask[len] = nl[best_i].op;
+            mask[len + 1] = nl[best_j].op;
+            len += 2;
+            used[best_i] = true;
+            used[best_j] = true;
+            cur += best_pair_gain;
+            continue;
+        }
+        break;
+    }
+    return cur;
+}
+
 // --- nonlinear targets (each provably outside the affine closure) ---
 fn t_and_shr(x: u8) u8 {
     return x & (x >> 1);
@@ -203,5 +264,49 @@ pub fn main() !void {
     try out.print("pair's components are useless for EVERY available target (the isolated case: greedy 0/1,\n", .{});
     try out.print("full 1/1) -- then no single op ever makes progress and greedy never starts. So the precise\n", .{});
     try out.print("condition is: greedy substrate growth misses an emergent escape iff its components have no\n", .{});
-    try out.print("standalone use. Tuple search is needed exactly there.\n", .{});
+    try out.print("standalone use. Tuple search is needed exactly there.\n\n", .{});
+
+    // #30 op-power ranking: which single nonlinear op unlocks the most targets,
+    // and what is the minimum program length? Exact over 256 inputs, no sampling.
+    try out.print("=== #30: op-power ranking — single-op reach and minimum program length (MAXL={d}) ===\n", .{MAXL});
+    try out.print("  op   | targets/5 | min-lengths (- = unreachable at MAXL={d})\n", .{MAXL});
+    try out.print("  -----+-----------+--------------------------------------------\n", .{});
+    for (nl) |c| {
+        var op_buf: [base.len + 1]Op = undefined;
+        @memcpy(op_buf[0..base.len], &base);
+        op_buf[base.len] = c.op;
+        var n_reached: usize = 0;
+        for (targets) |t| {
+            if (minLen(&op_buf, MAXL, t.f) != null) n_reached += 1;
+        }
+        try out.print("  {s:<4} | {d}/5       | ", .{ c.name, n_reached });
+        for (targets) |t| {
+            const ml = minLen(&op_buf, MAXL, t.f);
+            if (ml) |l| {
+                try out.print("{d} ", .{l});
+            } else {
+                try out.print("- ", .{});
+            }
+        }
+        try out.print("\n", .{});
+    }
+    try out.print("\n", .{});
+
+    // The predicted experiment: PAIR-SEARCH substrate growth fixes the isolated case.
+    // Prediction: greedy=0/1, pair-grow=1/1 on isolated {x&(x-1)}.
+    try out.print("=== predicted experiment: PAIR-SEARCH fixes the isolated emergent escape ===\n", .{});
+    try out.print("(components have no standalone use; greedy never starts; pair-search finds {{AND,SUB}})\n\n", .{});
+    const pair_rich = pairGrow(&base, &nl, MAXL, &targets);
+    try out.print("  rich target set: pair-grow {d}/{d}   greedy {d}/{d}   full {d}/{d}\n", .{ pair_rich, targets.len, greedy_rich, targets.len, full, targets.len });
+    const pair_iso = pairGrow(&base, &nl, MAXL, &iso);
+    try out.print("  isolated {{x&(x-1)}}: pair-grow {d}/1   greedy {d}/1   full {d}/1\n\n", .{ pair_iso, greedy_iso, full_iso });
+    if (pair_iso > greedy_iso) {
+        try out.print("CONFIRMED: pair-search FIXES the isolated emergent escape where greedy is stuck.\n", .{});
+        try out.print("Greedy cannot start (AND and SUB are each useless alone on this target). Pair\n", .{});
+        try out.print("search tries all (i,j) and finds {{AND,SUB}} immediately. Design implication:\n", .{});
+        try out.print("an atom-forge should escalate to pair-search when single-op greedy stalls --\n", .{});
+        try out.print("exactly what pairGrow() does. The cost is O(n^2) per stall vs O(n) for greedy.\n", .{});
+    } else {
+        try out.print("UNEXPECTED: pair-search also failed -- the escape requires something beyond pairs.\n", .{});
+    }
 }
