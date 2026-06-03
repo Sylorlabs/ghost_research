@@ -145,8 +145,9 @@ const AdaptiveAgent = struct {
         var switched = false;
 
         const WARMUP: usize = 1500;
-        const DISAGREE_THRESHOLD: f64 = 0.08; // trigger search if >8% unexplained failures
-        const PROBE_STEPS: usize = 600;
+        const DISAGREE_THRESHOLD: f64 = 0.03; // trigger search if >3% unexplained failures
+        const PROBE_STEPS: usize = 2000; // KNOWN LIMITATION: 2000 steps is insufficient --
+        // probes are dominated by exploration noise and make wrong switches (see research doc)
 
         for (0..n_steps) |step| {
             // Phase transition logic
