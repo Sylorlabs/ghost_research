@@ -166,6 +166,32 @@ pub fn build(b: *std.Build) void {
     const run_corr_step = b.step("correlation-discover", "Run correlation-based feature pair discovery");
     run_corr_step.dependOn(&run_corr_cmd.step);
 
+    // Triple-band: 3-constraint task, tests whether dual-band pair scales.
+    const triple_exe = b.addExecutable(.{
+        .name = "ghost_triple",
+        .root_source_file = b.path("triple_band_test.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(triple_exe);
+    const run_triple_cmd = b.addRunArtifact(triple_exe);
+    run_triple_cmd.step.dependOn(b.getInstallStep());
+    const run_triple_step = b.step("triple-band-test", "Run triple-band constraint test");
+    run_triple_step.dependOn(&run_triple_cmd.step);
+
+    // Prospective controller disagreement: forward-looking feature selection.
+    const pdis_exe = b.addExecutable(.{
+        .name = "ghost_parallel_disagree",
+        .root_source_file = b.path("parallel_disagree.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(pdis_exe);
+    const run_pdis_cmd = b.addRunArtifact(pdis_exe);
+    run_pdis_cmd.step.dependOn(b.getInstallStep());
+    const run_pdis_step = b.step("parallel-disagree", "Run prospective controller disagreement experiment");
+    run_pdis_step.dependOn(&run_pdis_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

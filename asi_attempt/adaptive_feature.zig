@@ -98,16 +98,25 @@ const ScalarController = struct {
     }
 };
 
-// Run a feature probe: try a feature for n_steps, return fail/1k + disagree rate.
-fn probeFeature(f: FeatureKind, params: env_mod.TaskParams, n_steps: usize, seed: u64) struct { fail_per_1k: f64, disagree: f64 } {
-    var ctrl = ScalarController.init(f);
-    var env = env_mod.Environment.initWith(params);
-    var rng = std.Random.DefaultPrng.init(seed);
-    var fails: u32 = 0;
-    for (0..n_steps) |_| { if (ctrl.step(&env, rng.random())) fails += 1; }
+// Run a feature probe across multiple seeds, return mean fail/1k.
+// Multiple seeds eliminates the "bad probe seed" variance that caused wrong switches.
+fn probeFeature(f: FeatureKind, params: env_mod.TaskParams, n_steps: usize, base_seed: u64) struct { fail_per_1k: f64, disagree: f64 } {
+    const N_PROBE_SEEDS = 4;
+    var total_fails: f64 = 0;
+    var total_disagree: f64 = 0;
+    for (0..N_PROBE_SEEDS) |s| {
+        const seed = base_seed +% @as(u64, s) *% 0x4567;
+        var ctrl = ScalarController.init(f);
+        var env = env_mod.Environment.initWith(params);
+        var rng = std.Random.DefaultPrng.init(seed);
+        var fails: u32 = 0;
+        for (0..n_steps) |_| { if (ctrl.step(&env, rng.random())) fails += 1; }
+        total_fails += @as(f64, @floatFromInt(fails)) / @as(f64, @floatFromInt(n_steps)) * 1000.0;
+        total_disagree += ctrl.disagreeRate();
+    }
     return .{
-        .fail_per_1k = @as(f64, @floatFromInt(fails)) / @as(f64, @floatFromInt(n_steps)) * 1000.0,
-        .disagree = ctrl.disagreeRate(),
+        .fail_per_1k = total_fails / N_PROBE_SEEDS,
+        .disagree = total_disagree / N_PROBE_SEEDS,
     };
 }
 
@@ -144,10 +153,9 @@ const AdaptiveAgent = struct {
         var total_fails: u32 = 0;
         var switched = false;
 
-        const WARMUP: usize = 1500;
-        const DISAGREE_THRESHOLD: f64 = 0.03; // trigger search if >3% unexplained failures
-        const PROBE_STEPS: usize = 2000; // KNOWN LIMITATION: 2000 steps is insufficient --
-        // probes are dominated by exploration noise and make wrong switches (see research doc)
+        const WARMUP: usize = 3000;
+        const DISAGREE_THRESHOLD: f64 = 0.03;
+        const PROBE_STEPS: usize = 10_000; // fixed: 2000 was too short (exploration noise dominated)
 
         for (0..n_steps) |step| {
             // Phase transition logic
@@ -208,7 +216,7 @@ pub fn main() !void {
     var log_writer = out_writer.any();
     const out = std.io.getStdOut().writer();
 
-    const n_steps: usize = 8000;
+    const n_steps: usize = 60_000; // warmup(3k) + probes(5 feats x 10k = 50k) + commit phase
     const seeds = [_]u64{ 0xABC1, 0xDEF2, 0x1234, 0xF00D, 0xBEEF };
 
     const dual_band = env_mod.TaskParams{

@@ -607,6 +607,10 @@ pub const Agent = struct {
         const action_idx = self.chooseAction(rand);
         const action: env_mod.Action = @enumFromInt(action_idx);
         const V_pred = self.predictNext(action_idx);
+        // Track whether we're in a reset step. When env.failed==true before step(),
+        // the env discards the action and resets the grid. The resulting feat_next is
+        // the seeded state, not a real action delta — learning from it corrupts the model.
+        const prev_failed = env.failed;
 
         env.step(action, rand);
         const S_next = self.encoder.encode(env);
@@ -616,7 +620,9 @@ pub const Agent = struct {
         for (env.grid) |c| grid_mass += c;
 
         // Learn scalar feature models (for .mb_mass / .mb_mass2).
-        {
+        // Skip on reset steps (prev_failed==true): the action was discarded by the env,
+        // feat_next is the seeded reset value, so the delta is a large reset artifact.
+        if (!prev_failed) {
             const feat_next = featureValue(env.grid, self.cfg.feature);
             const d = @as(f32, @floatFromInt(feat_next)) - @as(f32, @floatFromInt(self.cur_mass));
             self.mass_dn[action_idx] += 1;
@@ -628,8 +634,8 @@ pub const Agent = struct {
                 self.safe_mass_n += 1;
             }
         }
-        // Second feature (for mb_mass2)
-        {
+        // Second feature (for mb_mass2) — also skip on reset steps.
+        if (!prev_failed) {
             const feat_next2 = featureValue(env.grid, self.cfg.feature2);
             const d2 = @as(f32, @floatFromInt(feat_next2)) - @as(f32, @floatFromInt(self.cur_mass2));
             self.mass_dn2[action_idx] += 1;

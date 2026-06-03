@@ -29,6 +29,8 @@ pub const TaskParams = struct {
     max_left_mass: u32 = 0, // where total-mass readout is insufficient: knowing sum alone
     // does NOT tell you if left_mass is in range. Agent needs a 2D readout or a feature
     // that captures distribution, not just total. Default 0 = constraint off.
+    min_right_mass: u32 = 0, // two-sided band on the RIGHT HALF (cells 8..15).
+    max_right_mass: u32 = 0, // triple-band: adds a 3rd constraint on top of left+sum.
 };
 
 // Seed (and post-failure reset) the grid INSIDE the band so it doesn't instantly
@@ -166,6 +168,13 @@ pub const Environment = struct {
             for (self.grid[0..8]) |c| lm += c;
             if (p.min_left_mass > 0 and lm < p.min_left_mass) self.failed = true;
             if (p.max_left_mass > 0 and lm > p.max_left_mass) self.failed = true;
+        }
+        // Right-half band failure: right_mass out of [min_right_mass, max_right_mass].
+        if (!self.failed and (p.min_right_mass > 0 or p.max_right_mass > 0)) {
+            var rm: u32 = 0;
+            for (self.grid[8..16]) |c| rm += c;
+            if (p.min_right_mass > 0 and rm < p.min_right_mass) self.failed = true;
+            if (p.max_right_mass > 0 and rm > p.max_right_mass) self.failed = true;
         }
     }
 };
