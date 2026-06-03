@@ -220,6 +220,21 @@ pub fn build(b: *std.Build) void {
     const run_conc_step = b.step("concentration-control", "Run order-statistic vs polynomial closure experiment");
     run_conc_step.dependOn(&run_conc_cmd.step);
 
+    // Order statistics: is the MEDIAN (a central/rank statistic) outside the closure of
+    // {polynomial + max + min} (extremal statistics)? A new closure-lattice split.
+    const os_exe = b.addExecutable(.{
+        .name = "ghost_order_stats",
+        .root_source_file = b.path("order_statistics.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(os_exe);
+    const run_os_cmd = b.addRunArtifact(os_exe);
+    run_os_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_os_cmd.addArgs(args);
+    const run_os_step = b.step("order-stats", "Run median-vs-extremal closure experiment");
+    run_os_step.dependOn(&run_os_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
