@@ -101,6 +101,19 @@ pub fn build(b: *std.Build) void {
     const run_parity_step = b.step("parity", "Run the k-sparse parity closure experiment");
     run_parity_step.dependOn(&run_parity_cmd.step);
 
+    // Macro-action discovery: temporal primitives for dual-band control.
+    const macro_exe = b.addExecutable(.{
+        .name = "ghost_macro",
+        .root_source_file = b.path("macro_discover.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(macro_exe);
+    const run_macro_cmd = b.addRunArtifact(macro_exe);
+    run_macro_cmd.step.dependOn(b.getInstallStep());
+    const run_macro_step = b.step("macro-discover", "Run macro-action discovery experiment");
+    run_macro_step.dependOn(&run_macro_cmd.step);
+
     // #38/#53: emergent op-pair escape + closure-principle falsification.
     const syn_exe = b.addExecutable(.{
         .name = "ghost_synergy",
