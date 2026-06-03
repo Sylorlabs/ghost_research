@@ -614,6 +614,95 @@ fn runProbe(out: anytype, level: u8, thresh: u8, cap: u8, moves: usize, seed: u6
     });
 }
 
+// ---- Representation DISCOVERY: can gradient find the right rung of the power-mean ladder? ----
+// We proved max = lim_{p→∞} ( (1/N) Σ (x_i/S)^p )^{1/p}. Instead of HANDING the controller a
+// max feature, give it ONE feature with a learnable exponent p: the power mean f_p(x). p=1 is
+// the arithmetic mean (linear/sum); p→∞ is max. Train p by gradient alongside a logistic
+// readout. Ground-truth check on two matched tasks differing ONLY in which order statistic
+// they need:
+//   MAX task : sum matched (constant), max differs  -> p SHOULD climb toward max.
+//   SUM task : max matched (constant), sum differs  -> p SHOULD stay near 1 (mean).
+// If learned p lands on the correct rung, the system DISCOVERED the representation it needed.
+
+const PMResult = struct { f: f64, dfdp: f64 };
+
+// Power mean f_p and its derivative w.r.t. p, via a numerically stable log-sum-exp form.
+fn powerMean(g: [NCELL]u8, p: f64) PMResult {
+    const eps: f64 = 1e-3;
+    const N: f64 = @floatFromInt(NCELL);
+    var ln_u: [NCELL]f64 = undefined;
+    var m: f64 = -1e30;
+    for (0..NCELL) |i| {
+        const u = @as(f64, @floatFromInt(g[i])) / S + eps;
+        ln_u[i] = @log(u);
+        const a = p * ln_u[i];
+        if (a > m) m = a;
+    }
+    var sw: f64 = 0; // Σ exp(p·ln u_i − m)
+    var swl: f64 = 0; // Σ exp(p·ln u_i − m)·ln u_i
+    for (0..NCELL) |i| {
+        const w = @exp(p * ln_u[i] - m);
+        sw += w;
+        swl += w * ln_u[i];
+    }
+    const logM = m + @log(sw) - @log(N);
+    const dlogMdp = swl / sw; // = (Σ u^p ln u)/(Σ u^p)
+    const f = @exp(logM / p);
+    const dfdp = f * (p * dlogMdp - logM) / (p * p);
+    return .{ .f = f, .dfdp = dfdp };
+}
+
+const DiscoverResult = struct { p_final: f64, acc: f64 };
+
+// Train [b + w·f_p] logistic with p learnable. lrp=0 freezes p (fixed-p baseline).
+fn trainDiscover(out: anytype, label: []const u8, grids: []const [NCELL]u8, ys: []const f32, p_init: f64, epochs: usize, lrw: f64, lrp: f64, trace: bool) !DiscoverResult {
+    var b: f64 = 0;
+    var w: f64 = 0;
+    var p: f64 = p_init;
+    if (trace) try out.print("    {s}: p {d:5.2}", .{ label, p });
+    for (0..epochs) |ep| {
+        for (grids, ys) |g, yf| {
+            const y: f64 = yf;
+            const pm = powerMean(g, p);
+            var z = b + w * pm.f;
+            if (z > 30) z = 30;
+            if (z < -30) z = -30;
+            const pr = 1.0 / (1.0 + @exp(-z));
+            const d = pr - y; // dL/dz
+            const gp = d * w * pm.dfdp; // dL/dp (uses current w)
+            b -= lrw * d;
+            w -= lrw * d * pm.f;
+            p -= lrp * gp;
+            if (p < 0.2) p = 0.2;
+            if (p > 64) p = 64;
+        }
+        if (trace and (ep + 1) % (epochs / 5) == 0) try out.print(" -> {d:5.2}", .{p});
+    }
+    var correct: usize = 0;
+    for (grids, ys) |g, yf| {
+        const pm = powerMean(g, p);
+        const z = b + w * pm.f;
+        const pred: f64 = if (z >= 0) 1.0 else 0.0;
+        if (pred == yf) correct += 1;
+    }
+    const acc = @as(f64, @floatFromInt(correct)) / @as(f64, @floatFromInt(grids.len));
+    if (trace) try out.print("  | final p={d:.2}, acc={d:.3}\n", .{ p, acc });
+    return .{ .p_final = p, .acc = acc };
+}
+
+// SUM-task generator: one cell fixed at C (max constant), others in [0,C-1]; label sum>=K.
+fn genFixedMax(rng: std.Random, C: u8, K: u32, positive: bool) [NCELL]u8 {
+    while (true) {
+        var g: [NCELL]u8 = undefined;
+        for (0..NCELL) |i| g[i] = rng.intRangeLessThan(u8, 0, C);
+        g[rng.intRangeLessThan(usize, 0, NCELL)] = C;
+        var s: u32 = 0;
+        for (g) |c| s += c;
+        if (positive and s >= K) return g;
+        if (!positive and s < K) return g;
+    }
+}
+
 // ---- Degree-general probe: is max in the degree-d SYMMETRIC POLYNOMIAL closure? ----
 // For exchangeable (coordinate-symmetric) data the best degree-d polynomial classifier
 // depends ONLY on the power sums p_k = Σ x_i^k, k=1..d. And max(x) = lim_{k→∞}(p_k)^{1/k}
@@ -896,6 +985,55 @@ pub fn main() !void {
         }
         if (std.mem.eql(u8, arg, "sweep-full")) {
             try runSweep(out, 80_000, 10_000, 6, 0.02, 0.9);
+            return;
+        }
+        if (std.mem.eql(u8, arg, "discover")) {
+            try out.print("=== REPRESENTATION DISCOVERY: learn the exponent p of a power-mean feature ===\n", .{});
+            try out.print("f_p(x) = ((1/N) Σ (x_i/S)^p)^(1/p).  p=1 -> mean (linear/sum);  p->inf -> max.\n", .{});
+            try out.print("Two matched tasks, p learned by gradient. p init=2.0 for BOTH. Trace: p over epochs.\n\n", .{});
+
+            const NPC = 2500; // per class
+            const Buf = struct {
+                var grids: [2 * NPC][NCELL]u8 = undefined;
+                var ys: [2 * NPC]f32 = undefined;
+            };
+            var rng = std.Random.DefaultPrng.init(0xD15C0);
+            const r = rng.random();
+
+            // ---- MAX task: sum matched (constant), max differs. Truth: needs p->inf. ----
+            const L: u8 = 4;
+            const T: u8 = 9;
+            for (0..NPC) |k| {
+                Buf.grids[2 * k] = genMatched(r, L, T, 16, 24, true);
+                Buf.ys[2 * k] = 1.0;
+                Buf.grids[2 * k + 1] = genMatched(r, L, T, 16, 24, false);
+                Buf.ys[2 * k + 1] = 0.0;
+            }
+            try out.print("  MAX task (sum matched at {d}, classify max>=T={d}); truth: p should CLIMB.\n", .{ @as(u32, L) * NCELL, T });
+            _ = try trainDiscover(out, "learned-p", &Buf.grids, &Buf.ys, 2.0, 200, 0.05, 0.5, true);
+            const m1 = try trainDiscover(out, "fixed p=1", &Buf.grids, &Buf.ys, 1.0, 200, 0.05, 0.0, false);
+            const m32 = try trainDiscover(out, "fixed p=32", &Buf.grids, &Buf.ys, 32.0, 200, 0.05, 0.0, false);
+            try out.print("    baselines: fixed p=1 acc={d:.3} (mean is blind to max) | fixed p=32 acc={d:.3}\n\n", .{ m1.acc, m32.acc });
+
+            // ---- SUM task: max matched (constant=C), sum differs. Truth: needs p~1. ----
+            const C: u8 = 8;
+            const K: u32 = 60;
+            for (0..NPC) |k| {
+                Buf.grids[2 * k] = genFixedMax(r, C, K, true);
+                Buf.ys[2 * k] = 1.0;
+                Buf.grids[2 * k + 1] = genFixedMax(r, C, K, false);
+                Buf.ys[2 * k + 1] = 0.0;
+            }
+            try out.print("  SUM task (max matched at C={d}, classify sum>=K={d}); truth: p should fall to ~1.\n", .{ C, K });
+            _ = try trainDiscover(out, "learned-p  (from below, init 2) ", &Buf.grids, &Buf.ys, 2.0, 200, 0.05, 0.5, true);
+            _ = try trainDiscover(out, "learned-p  (from above, init 12)", &Buf.grids, &Buf.ys, 12.0, 200, 0.05, 0.5, true);
+            const s1 = try trainDiscover(out, "fixed p=1", &Buf.grids, &Buf.ys, 1.0, 200, 0.05, 0.0, false);
+            const s32 = try trainDiscover(out, "fixed p=32", &Buf.grids, &Buf.ys, 32.0, 200, 0.05, 0.0, false);
+            try out.print("    baselines: fixed p=1 acc={d:.3} | fixed p=32 acc={d:.3} (max is blind to sum)\n\n", .{ s1.acc, s32.acc });
+
+            try out.print("  READING: if learned-p climbs high on MAX and stays ~1 on SUM, gradient DISCOVERED\n", .{});
+            try out.print("  which rung of the power-mean ladder each task needs -- representational self-tuning,\n", .{});
+            try out.print("  verified against the known closure requirement of each task.\n", .{});
             return;
         }
         if (std.mem.eql(u8, arg, "degree")) {
