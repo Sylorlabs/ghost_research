@@ -25,6 +25,10 @@ pub const TaskParams = struct {
     // OVERCHARGE failure. `charge` piles above it. Together [min_mass, max_mass] is a
     // two-sided band that NO constant policy can hold — competence becomes measurable
     // above trivial. Best run with shocks/volatility off (those refill `discharge`).
+    min_left_mass: u32 = 0, // two-sided band on the LEFT HALF (cells 0..7). For tasks
+    max_left_mass: u32 = 0, // where total-mass readout is insufficient: knowing sum alone
+    // does NOT tell you if left_mass is in range. Agent needs a 2D readout or a feature
+    // that captures distribution, not just total. Default 0 = constraint off.
 };
 
 // Seed (and post-failure reset) the grid INSIDE the band so it doesn't instantly
@@ -155,6 +159,13 @@ pub const Environment = struct {
             for (self.grid) |c| mass += c;
             if (p.min_mass > 0 and mass < p.min_mass) self.failed = true;
             if (p.max_mass > 0 and mass > p.max_mass) self.failed = true;
+        }
+        // Left-half band failure: left_mass out of [min_left_mass, max_left_mass].
+        if (!self.failed and (p.min_left_mass > 0 or p.max_left_mass > 0)) {
+            var lm: u32 = 0;
+            for (self.grid[0..8]) |c| lm += c;
+            if (p.min_left_mass > 0 and lm < p.min_left_mass) self.failed = true;
+            if (p.max_left_mass > 0 and lm > p.max_left_mass) self.failed = true;
         }
     }
 };

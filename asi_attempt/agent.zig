@@ -86,7 +86,7 @@ pub const ActionMode = enum {
 /// experiment: a generic feature search over these should DISCOVER that the SUM
 /// (the out-of-closure generator) is the one enabling control, with the decoys
 /// failing — autonomous escape rather than a human hard-coding "use total mass".
-pub const FeatureKind = enum { sum, max_cell, first_cell, nonzero_count };
+pub const FeatureKind = enum { sum, max_cell, first_cell, nonzero_count, left_mass, right_mass };
 
 pub fn featureValue(grid: [16]u8, kind: FeatureKind) u32 {
     switch (kind) {
@@ -107,6 +107,16 @@ pub fn featureValue(grid: [16]u8, kind: FeatureKind) u32 {
                 if (c > 0) n += 1;
             }
             return n;
+        },
+        .left_mass => {
+            var m: u32 = 0;
+            for (grid[0..8]) |c| m += c;
+            return m;
+        },
+        .right_mass => {
+            var m: u32 = 0;
+            for (grid[8..16]) |c| m += c;
+            return m;
         },
     }
 }

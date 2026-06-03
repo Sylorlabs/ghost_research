@@ -72,6 +72,45 @@ Which nonlinear op individually unlocks the most of the 5 nonlinear targets?
 
 ---
 
+## Pair-power ranking
+
+For each pair of nonlinear ops, how many of the 5 targets can `base+{i,j}` reach?
+
+```
+  pair       | targets/5
+  -----------+----------
+  AND+OR     | 2/5
+  AND+ADD    | 1/5
+  AND+SUB    | 2/5
+  AND+MUL    | 2/5
+  OR+ADD     | 1/5
+  OR+SUB     | 1/5
+  OR+MUL     | 3/5    <-- strongest pair
+  ADD+SUB    | 0/5
+  ADD+MUL    | 1/5
+  SUB+MUL    | 1/5
+```
+
+**OR+MUL is the strongest pair (3/5)**: MUL reaches `x*x` alone; OR reaches `x|(x<<1)` alone;
+together they reach `x|(x*x)`. The emergent pair (`x|(x*x)`) is one of three targets covered.
+
+**ADD+SUB = 0/5**: both ops are individually 0/5, and as a pair still reach nothing. The
+emergent escape `{AND,SUB}→x&(x-1)` requires AND too. This shows that not all pairs with
+"weak" ops are emergent — the combination must also have the right structural fit.
+
+## Triplet-emergence check
+
+Does any target need 3 ops simultaneously (reachable by some triplet but not any pair)?
+
+```
+  No triplet-emergent targets in this set: all 5 targets covered by singles or pairs.
+  Emergence saturates at depth 2 for these targets -- pair-search is SUFFICIENT.
+```
+
+Pairs are necessary (for the 2 emergent targets) and sufficient (no third level).
+
+---
+
 ## Conclusion
 
 Pair-search substrate growth:

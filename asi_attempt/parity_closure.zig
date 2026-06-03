@@ -128,6 +128,143 @@ fn mlpAcc(seed: u64, k: usize, n_train: usize, n_test: usize) f64 {
     return correct / @as(f64, @floatFromInt(n_test));
 }
 
+// Hard parity: relevant bits are RANDOM (chosen once per seed, then fixed).
+// The MLP must discover WHICH k bits matter, not just their relationship.
+// This is the genuinely hard version — C(N,k) possible feature subsets.
+fn hardParityLabel(x: [N]f64, bit_mask: u32, k: usize) f64 {
+    var p: f64 = 1.0;
+    var found: usize = 0;
+    for (0..N) |i| {
+        if (bit_mask & (@as(u32, 1) << @intCast(i)) != 0) {
+            p *= x[i];
+            found += 1;
+            if (found >= k) break;
+        }
+    }
+    return if (p > 0) 0.0 else 1.0;
+}
+
+fn randomBitMask(r: std.Random, k: usize) u32 {
+    var mask: u32 = 0;
+    var chosen: usize = 0;
+    var available = [_]usize{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+    for (0..k) |i| {
+        const j = i + r.intRangeLessThan(usize, 0, N - i);
+        const tmp = available[i];
+        available[i] = available[j];
+        available[j] = tmp;
+        mask |= @as(u32, 1) << @intCast(available[i]);
+        chosen += 1;
+    }
+    return mask;
+}
+
+fn mlpAccHard(seed: u64, k: usize, n_train: usize, n_test: usize) f64 {
+    const H = 64; // bigger network for harder task
+    var prng = std.Random.DefaultPrng.init(seed);
+    const r = prng.random();
+    const bit_mask = randomBitMask(r, k); // fixed for this trial
+    var W1: [H][N]f64 = undefined;
+    var b1: [H]f64 = [_]f64{0} ** H;
+    var W2: [H]f64 = undefined;
+    var b2: f64 = 0;
+    for (0..H) |h| {
+        W2[h] = (r.float(f64) - 0.5);
+        for (0..N) |i| W1[h][i] = (r.float(f64) - 0.5) * 0.5;
+    }
+    const lr: f64 = 0.02;
+    const epochs: usize = 300;
+    for (0..epochs) |_| for (0..n_train) |_| {
+        const x = genX(r);
+        const y = hardParityLabel(x, bit_mask, k);
+        var a1: [H]f64 = undefined;
+        var z1: [H]f64 = undefined;
+        var z2: f64 = b2;
+        for (0..H) |h| {
+            var z: f64 = b1[h];
+            for (0..N) |i| z += W1[h][i] * x[i];
+            z1[h] = z;
+            a1[h] = if (z > 0) z else 0;
+            z2 += W2[h] * a1[h];
+        }
+        const e = sigmoid(z2) - y;
+        for (0..H) |h| {
+            const d1 = e * W2[h] * (if (z1[h] > 0) @as(f64, 1) else 0);
+            W2[h] -= lr * e * a1[h];
+            for (0..N) |i| W1[h][i] -= lr * d1 * x[i];
+            b1[h] -= lr * d1;
+        }
+        b2 -= lr * e;
+    };
+    var correct: f64 = 0;
+    for (0..n_test) |_| {
+        const x = genX(r);
+        const y = hardParityLabel(x, bit_mask, k);
+        var z2: f64 = b2;
+        for (0..H) |h| {
+            var z: f64 = b1[h];
+            for (0..N) |i| z += W1[h][i] * x[i];
+            z2 += W2[h] * (if (z > 0) z else 0);
+        }
+        if ((sigmoid(z2) > 0.5) == (y > 0.5)) correct += 1;
+    }
+    return correct / @as(f64, @floatFromInt(n_test));
+}
+
+// Phase-boundary sweep: for each (k, n_train) pair, run the MLP and record
+// whether SGD finds the parity function. Returns accuracy (>0.9 = found).
+// Uses fewer epochs/hidden to make the sweep feasible.
+fn mlpAccFast(seed: u64, k: usize, n_train: usize, n_test: usize) f64 {
+    const H = 32;
+    var prng = std.Random.DefaultPrng.init(seed);
+    const r = prng.random();
+    var W1: [H][N]f64 = undefined;
+    var b1: [H]f64 = [_]f64{0} ** H;
+    var W2: [H]f64 = undefined;
+    var b2: f64 = 0;
+    for (0..H) |h| {
+        W2[h] = (r.float(f64) - 0.5);
+        for (0..N) |i| W1[h][i] = (r.float(f64) - 0.5) * 0.5;
+    }
+    const lr: f64 = 0.05;
+    const epochs: usize = 150;
+    for (0..epochs) |_| for (0..n_train) |_| {
+        const x = genX(r);
+        const y = parityLabel(x, k);
+        var a1: [H]f64 = undefined;
+        var z1: [H]f64 = undefined;
+        var z2: f64 = b2;
+        for (0..H) |h| {
+            var z: f64 = b1[h];
+            for (0..N) |i| z += W1[h][i] * x[i];
+            z1[h] = z;
+            a1[h] = if (z > 0) z else 0;
+            z2 += W2[h] * a1[h];
+        }
+        const e = sigmoid(z2) - y;
+        for (0..H) |h| {
+            const d1 = e * W2[h] * (if (z1[h] > 0) @as(f64, 1) else 0);
+            W2[h] -= lr * e * a1[h];
+            for (0..N) |i| W1[h][i] -= lr * d1 * x[i];
+            b1[h] -= lr * d1;
+        }
+        b2 -= lr * e;
+    };
+    var correct: f64 = 0;
+    for (0..n_test) |_| {
+        const x = genX(r);
+        const y = parityLabel(x, k);
+        var z2: f64 = b2;
+        for (0..H) |h| {
+            var z: f64 = b1[h];
+            for (0..N) |i| z += W1[h][i] * x[i];
+            z2 += W2[h] * (if (z > 0) z else 0);
+        }
+        if ((sigmoid(z2) > 0.5) == (y > 0.5)) correct += 1;
+    }
+    return correct / @as(f64, @floatFromInt(n_test));
+}
+
 pub fn main() !void {
     const out = std.io.getStdOut().writer();
     const ntr: usize = 20000;
@@ -152,4 +289,65 @@ pub fn main() !void {
     try out.print("SAME principle (affine_closure / band-readout / Claim C) predicts the ceiling and its\n", .{});
     try out.print("generator on a canonical, un-invented problem. Large-k sparse parity stays hard for\n", .{});
     try out.print("SGD even for the MLP -- the real frontier (the generator gets exponentially hidden).\n", .{});
+
+    // #41: phase boundary — (k, n_train) grid where MLP transitions from finding to not finding parity.
+    // Theory: sample complexity for SGD on parity is ~2^k × poly(N). We map this empirically.
+    try out.print("\n=== #41: phase boundary — where does the MLP STOP finding k-sparse parity? ===\n", .{});
+    try out.print("MLP accuracy (>0.90 = found, ~0.50 = chance). 3 seeds, take max.\n", .{});
+    const ks = [_]usize{ 1, 2, 3, 4, 5, 6 };
+    const ntrains = [_]usize{ 100, 500, 2000, 8000, 20000 };
+    try out.print("  n_train -> | ", .{});
+    for (ntrains) |nt| try out.print("{d:>6} ", .{nt});
+    try out.print("\n  k          |\n", .{});
+    try out.print("  -----------+", .{});
+    for (ntrains) |_| try out.print("-------", .{});
+    try out.print("\n", .{});
+    for (ks) |k| {
+        try out.print("  k={d}        | ", .{k});
+        for (ntrains) |nt| {
+            var best: f64 = 0;
+            for ([_]u64{ 0xABC, 0xDEF, 0x123 }) |s| {
+                const acc = mlpAccFast(s, k, nt, 1000);
+                if (acc > best) best = acc;
+            }
+            const marker: u8 = if (best > 0.90) '.' else if (best > 0.70) '?' else ' ';
+            try out.print("{d:.3}{c} ", .{ best, marker });
+        }
+        try out.print("\n", .{});
+    }
+    try out.print("\n  Legend: '.' = found (>0.90), '?' = partial (0.70-0.90), ' ' = not found (<0.70)\n", .{});
+    try out.print("  Reading: shows the (k, n_train) boundary where SGD transitions from solving to\n", .{});
+    try out.print("  not solving k-sparse parity. Theoretical complexity ~2^k -- verify empirically.\n", .{});
+    try out.print("\n  IMPORTANT caveat: relevant bits are ALWAYS the first k (fixed). This is the EASY\n", .{});
+    try out.print("  version. The MLP only needs to learn WHAT to do with those bits, not WHICH bits\n", .{});
+    try out.print("  matter. The hard version (unknown relevant bits) should be much more sample-costly.\n", .{});
+
+    // Hard version: RANDOM relevant bits — the MLP must discover which k bits matter.
+    // C(N,k) possible subsets. This is the genuine statistical-query-hard version.
+    try out.print("\n=== HARD parity: random relevant bits (MLP must find WHICH k bits) ===\n", .{});
+    try out.print("H=64 neurons, 300 epochs, 3 seeds. C(16,k) possible feature subsets.\n\n", .{});
+    const ks_hard = [_]usize{ 1, 2, 3, 4 };
+    const ntrains_hard = [_]usize{ 500, 2000, 8000, 20000 };
+    try out.print("  n_train -> | ", .{});
+    for (ntrains_hard) |nt| try out.print("{d:>6} ", .{nt});
+    try out.print("\n  k          |\n", .{});
+    try out.print("  -----------+", .{});
+    for (ntrains_hard) |_| try out.print("-------", .{});
+    try out.print("\n", .{});
+    for (ks_hard) |k| {
+        try out.print("  k={d}        | ", .{k});
+        for (ntrains_hard) |nt| {
+            var best: f64 = 0;
+            for ([_]u64{ 0xABC, 0xDEF, 0x123 }) |s| {
+                const acc = mlpAccHard(s, k, nt, 1000);
+                if (acc > best) best = acc;
+            }
+            const marker: u8 = if (best > 0.90) '.' else if (best > 0.70) '?' else ' ';
+            try out.print("{d:.3}{c} ", .{ best, marker });
+        }
+        try out.print("\n", .{});
+    }
+    try out.print("\n  Prediction: hard k=2 should need ~N^2 = 256 samples (quadratic in N);\n", .{});
+    try out.print("  hard k=3 should need ~N^3 = 4096; hard k=4 near-impossible at these budgets.\n", .{});
+    try out.print("  This is the statistical-query lower bound for parity discovery.\n", .{});
 }

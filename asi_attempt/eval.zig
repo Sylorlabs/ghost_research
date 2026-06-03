@@ -400,7 +400,7 @@ pub fn main() !void {
     // If 'sum' wins and the decoys fail, the system discovered the sum autonomously
     // (selection-level) rather than being told to use total mass.
     std.debug.print("  - - - feature search (which aggregate enables control?) - - -\n", .{});
-    const feats = [_]agent_mod.FeatureKind{ .sum, .max_cell, .first_cell, .nonzero_count };
+    const feats = [_]agent_mod.FeatureKind{ .sum, .max_cell, .first_cell, .nonzero_count, .left_mass, .right_mass };
     var best_feat: agent_mod.FeatureKind = .sum;
     var best_fail: f64 = 1e9;
     for (feats) |f| {
@@ -461,4 +461,51 @@ pub fn main() !void {
     printRow("mb_plan + noise", try runPolicyPMeanSeeds(allocator, band_noisy, .{
         .action_mode = .mb_plan, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
     }, n_steps, seeds));
+
+    // --- DUAL_BAND: task where SUM readout is insufficient (#21) ------------------
+    // Band on total mass [16,48] AND left-half mass [6,22] simultaneously.
+    // A single-feature mb_mass(sum) can regulate total mass but not left_mass.
+    // A single-feature mb_mass(left_mass) can regulate left_mass but not total mass.
+    // Neither single feature is sufficient: the task genuinely needs 2D readout.
+    // Tests: does feature-search DISCOVER the limits? Which single feature is better?
+    // (Seeding: total_mass=32 → each cell=2 → left_mass=16 ∈ [6,22] ✓)
+    const dual_band = env_mod.TaskParams{
+        .min_mass = 16, .max_mass = 48,
+        .min_left_mass = 6, .max_left_mass = 22,
+        .shock_period = 0, .volatility_after = 1_000_000,
+    };
+    std.debug.print("\n[DUAL_BAND] total_mass∈[{d},{d}] AND left_mass∈[{d},{d}] (#21: sum insufficient):\n", .{
+        dual_band.min_mass, dual_band.max_mass, dual_band.min_left_mass, dual_band.max_left_mass,
+    });
+    std.debug.print("  {s:<22} | {s:>9} | {s:>9} | {s:>8} | {s:>8}\n", .{ "policy", "fail/1k", "mean_mass", "err_e", "err_l" });
+    std.debug.print("  ----------------------+-----------+-----------+----------+---------\n", .{});
+    std.debug.print("  {s:<22} | {d:>9.2} |  (thermostat: sum-only, does it hold both constraints?)\n", .{
+        "thermostat(sum)", thermostatMeanSeeds(dual_band, n_steps, seeds),
+    });
+    printRow("mb_mass(sum)", try runPolicyPMeanSeeds(allocator, dual_band, .{
+        .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = .sum,
+    }, n_steps, seeds));
+    printRow("mb_mass(left_mass)", try runPolicyPMeanSeeds(allocator, dual_band, .{
+        .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = .left_mass,
+    }, n_steps, seeds));
+    printRow("mb_mass(right_mass)", try runPolicyPMeanSeeds(allocator, dual_band, .{
+        .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = .right_mass,
+    }, n_steps, seeds));
+    std.debug.print("  - - - feature search on DUAL_BAND (any single feature work?) - - -\n", .{});
+    const dual_feats = [_]agent_mod.FeatureKind{ .sum, .max_cell, .left_mass, .right_mass, .nonzero_count };
+    var best_dual: agent_mod.FeatureKind = .sum;
+    var best_dual_fail: f64 = 1e9;
+    for (dual_feats) |f| {
+        const st = try runPolicyPMeanSeeds(allocator, dual_band, .{
+            .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = f,
+        }, n_steps, seeds);
+        var name: [40]u8 = undefined;
+        printRow(try std.fmt.bufPrint(&name, "feat={s}", .{@tagName(f)}), st);
+        if (st.fail_per_1k < best_dual_fail) {
+            best_dual_fail = st.fail_per_1k;
+            best_dual = f;
+        }
+    }
+    std.debug.print("  => best single feature on DUAL_BAND: '{s}' ({d:.2} fail/1k)\n", .{ @tagName(best_dual), best_dual_fail });
+    std.debug.print("     Baseline (BAND single-feature): 11.02 fail/1k. Does DUAL_BAND need 2D readout?\n", .{});
 }
