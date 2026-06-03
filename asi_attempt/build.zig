@@ -114,6 +114,19 @@ pub fn build(b: *std.Build) void {
     const run_macro_step = b.step("macro-discover", "Run macro-action discovery experiment");
     run_macro_step.dependOn(&run_macro_cmd.step);
 
+    // Adaptive feature discovery: self-directed model repair via disagreement detection.
+    const adapt_exe = b.addExecutable(.{
+        .name = "ghost_adaptive",
+        .root_source_file = b.path("adaptive_feature.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(adapt_exe);
+    const run_adapt_cmd = b.addRunArtifact(adapt_exe);
+    run_adapt_cmd.step.dependOn(b.getInstallStep());
+    const run_adapt_step = b.step("adaptive-feature", "Run adaptive feature discovery experiment");
+    run_adapt_step.dependOn(&run_adapt_cmd.step);
+
     // #38/#53: emergent op-pair escape + closure-principle falsification.
     const syn_exe = b.addExecutable(.{
         .name = "ghost_synergy",
