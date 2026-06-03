@@ -114,6 +114,19 @@ pub fn build(b: *std.Build) void {
     const run_macro_step = b.step("macro-discover", "Run macro-action discovery experiment");
     run_macro_step.dependOn(&run_macro_cmd.step);
 
+    // Quick dual-band 2D controller test.
+    const dual_exe = b.addExecutable(.{
+        .name = "ghost_dual_test",
+        .root_source_file = b.path("dual_band_test.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(dual_exe);
+    const run_dual_cmd = b.addRunArtifact(dual_exe);
+    run_dual_cmd.step.dependOn(b.getInstallStep());
+    const run_dual_step = b.step("dual-band-test", "Run 2D controller test on dual-band");
+    run_dual_step.dependOn(&run_dual_cmd.step);
+
     // Adaptive feature discovery: self-directed model repair via disagreement detection.
     const adapt_exe = b.addExecutable(.{
         .name = "ghost_adaptive",
