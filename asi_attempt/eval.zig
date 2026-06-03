@@ -555,7 +555,8 @@ pub fn main() !void {
     // This is the "can you see the ceiling" test -- does the agent detect its own blindspot?
     std.debug.print("  - - - model disagreement: does sum-agent detect its own blindspot? - - -\n", .{});
     {
-        var ag = try agent_mod.Agent.init(allocator, std.Random.DefaultPrng.init(0xDEAD).random(), .{
+        var disagree_prng = std.Random.DefaultPrng.init(0xDEAD);
+        var ag = try agent_mod.Agent.init(allocator, disagree_prng.random(), .{
             .action_mode = .mb_mass, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = .sum,
         }, &env_mod.Environment.initWith(dual_band));
         defer ag.deinit();

@@ -205,6 +205,21 @@ pub fn build(b: *std.Build) void {
     const run_basis_step = b.step("basis-control", "Run basis-degree control experiment (linear vs quadratic)");
     run_basis_step.dependOn(&run_basis_cmd.step);
 
+    // Concentration control: does a MAX (order-statistic) constraint defeat the
+    // quadratic (polynomial) basis? Tests the closure boundary H4.
+    const conc_exe = b.addExecutable(.{
+        .name = "ghost_concentration",
+        .root_source_file = b.path("concentration_control.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(conc_exe);
+    const run_conc_cmd = b.addRunArtifact(conc_exe);
+    run_conc_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_conc_cmd.addArgs(args);
+    const run_conc_step = b.step("concentration-control", "Run order-statistic vs polynomial closure experiment");
+    run_conc_step.dependOn(&run_conc_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

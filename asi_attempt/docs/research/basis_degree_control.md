@@ -86,14 +86,15 @@ previously needed exhaustive search.
   any literal capability sense. The claim is scoped to: in this control microworld,
   a basis-degree change replaces the entire hand-feature-search pipeline and does it
   perfectly and reliably.
-- **H4 (order-statistic constraint) is UNTESTED.** The overflow-dominant task was
-  meant to test whether the per-cell `max` constraint (an order statistic, not a
-  fixed-degree polynomial) defeats the quadratic basis. It collapsed: linear and
-  quadratic both give *identical* 111.11 fail/1k because the task is degenerate.
-  In this environment `charge`/`rest` act ~uniformly across cells, so "max cell ≤ k"
-  and "total mass ≤ K" are effectively the SAME constraint (unlike left/right mass,
-  which `discharge` can shift). The polynomial-vs-order-statistic boundary is not
-  isolated here. Testing H4 needs an environment with non-uniform per-cell dynamics.
+- **H4 (order-statistic constraint) — now ANSWERED in `concentration_control.md`.**
+  The overflow-dominant task here was degenerate: uniform `charge`/`rest` dynamics make
+  "max cell ≤ k" and "total mass ≤ K" the SAME constraint, so linear and quadratic both
+  give *identical* 111.11 fail/1k. A purpose-built concentration env isolates it, and the
+  answer is decisive: `max(x) ≥ T` is outside the polynomial closure at **every** finite
+  degree (matching power sums `p_1..p_d` forces a degree-d polynomial to exact chance
+  0.500; one `max` feature → 1.000). Control consequence: in a certified-feasible regime,
+  quadratic solves the band but leaves a max-specific overflow residual that the order-
+  statistic feature closes (a reliability/tail effect). See `concentration_control.md`.
 - **No new-to-world algorithm.** This is linear/quadratic function approximation +
   TD(0) — textbook RL. The contribution is the *measured* demonstration that the
   basis-degree change (linear→quadratic) is exactly the boundary between unreliable
@@ -110,9 +111,12 @@ This is the cleanest closure-principle demonstration in the project:
 
 ## Next
 
-1. Build a non-uniform-dynamics environment to actually test H4 (does a `max`
-   constraint defeat the quadratic basis? does it need an L∞ / order-statistic basis?).
+1. ~~Build a non-uniform-dynamics environment to actually test H4.~~ **DONE** —
+   `concentration_control.md`: the max constraint needs an order-statistic atom outside
+   *every* polynomial closure (proven degree-general via power-sum matching).
 2. Cubic / higher basis: is there a task in the quadratic-closure gap that needs degree 3?
+   (Partial: the order statistic is the witness for "degree-3 still fails" — a *polynomial*
+   degree-3 task in the gap is still open.)
 3. Inspect the learned quadratic weights: do they reconstruct sum² (uniform cross-term
    weights) and left/right structure? Confirm the constraints emerge as interpretable
    weight patterns.
