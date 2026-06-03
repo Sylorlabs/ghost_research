@@ -131,6 +131,28 @@ close the control gap here — and even if `p` had climbed, the soft surrogate w
 partially close it. This is the kind of negative that points somewhere: representation
 learning in this control loop needs a **denser driving signal** than sparse failure.
 
+## Methodological caveat — the "min↔mean↔max ladder" demo has a saddle (tried, reverted)
+
+A tempting extension: replace the power mean with a Boltzmann pooling
+`f_τ(x) = Σ x_i·softmax(τ x_i)` (τ<0→min, τ=0→mean, τ>0→max; smooth through 0, gradient
+`df/dτ = weighted variance`), init τ=0, and show gradient discovers the *sign* — negative
+for a min-task, positive for a max-task. **It does not cleanly work, for two real reasons,
+so it was built, measured, and reverted (not shipped):**
+
+1. **τ=0 is a saddle under sum-matching.** When sum is matched exactly, `f_τ` at τ=0 is the
+   (constant) mean → the readout weight `w` gets no gradient → τ's gradient (∝ `w`) is ~0 →
+   τ random-walks off the saddle into a noise-chosen basin. (The `discover` result above
+   works precisely because it inits p=2, *off* the mean — that is the load-bearing detail.)
+2. **Spike-presence is detectable at BOTH extremes.** A single outlier raises variance, so
+   `f_τ` deviates from the mean for τ>0 *and* τ<0; with a free-sign `w`, both basins
+   separate the data → sign ambiguity. Observed: τ fell negative on a max-task (acc 0.825,
+   a weak min-basin) and drifted to −24 on a τ-uninformative sum-task (acc 1.0 at any τ, so
+   no restoring force).
+
+Lesson for the items below: **start the learnable rung OFF the mean**, and design tasks so
+only one order-statistic sign separates (e.g. isolate the target statistic while holding
+the others' distribution fixed), or the "discovers the sign from neutral" claim is unsound.
+
 ## Next
 
 1. **Auxiliary dense objective:** add a self-supervised head that predicts "some cell
