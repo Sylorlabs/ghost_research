@@ -350,6 +350,48 @@ pub fn build(b: *std.Build) void {
     const run_comp_step = b.step("composed-discovery", "Composed primitives: neither operator alone suffices");
     run_comp_step.dependOn(&run_comp_cmd.step);
 
+    // FRONTIER 6: composition auto-detection via power-accuracy mismatch probe.
+    const opi_exe = b.addExecutable(.{
+        .name = "ghost_operator_inference",
+        .root_source_file = b.path("operator_inference.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(opi_exe);
+    const run_opi_cmd = b.addRunArtifact(opi_exe);
+    run_opi_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_opi_cmd.addArgs(args);
+    const run_opi_step = b.step("operator-inference", "Structural probes identify composed vs simple families");
+    run_opi_step.dependOn(&run_opi_cmd.step);
+
+    // FRONTIER 7: multi-period discovery — what does spectral do with two simultaneous periods?
+    const mp_exe = b.addExecutable(.{
+        .name = "ghost_multi_period",
+        .root_source_file = b.path("multi_period.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(mp_exe);
+    const run_mp_cmd = b.addRunArtifact(mp_exe);
+    run_mp_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_mp_cmd.addArgs(args);
+    const run_mp_step = b.step("multi-period", "Multi-period spectral discovery");
+    run_mp_step.dependOn(&run_mp_cmd.step);
+
+    // FRONTIER 8: sparse parity sample complexity wall.
+    const sp_exe = b.addExecutable(.{
+        .name = "ghost_sparse_parity",
+        .root_source_file = b.path("sparse_parity.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(sp_exe);
+    const run_sp_cmd = b.addRunArtifact(sp_exe);
+    run_sp_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_sp_cmd.addArgs(args);
+    const run_sp_step = b.step("sparse-parity", "Sample complexity wall for k-of-n sparse parity");
+    run_sp_step.dependOn(&run_sp_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
