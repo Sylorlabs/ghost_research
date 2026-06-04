@@ -71,14 +71,45 @@ so it is correctly flagged beyond the ladder rather than mis-attributed.
   Both are optimization artifacts, not closure facts; worth recording so they aren't
   mistaken for capability limits.
 
+## Closing the Loop: Forge + Promote on Beyond-Ladder
+
+Reproduce: `zig build order-stats -- forge`
+
+The diagnoser flags parity-of-count **beyond** B1..B5. The invention step
+(`RESEARCH_QUESTIONS.md` #1, the only place "yes it can invent" is possible): search a
+**principled primitive family** for a member that crosses the target, then **promote** it.
+Parity is periodic in the count `c`, so the family is count-Fourier features
+`cos(ω · #{cells ≥ H})`, searched over a grid of `(H, ω)`:
+```
+  cos(0.2 · #cells>=5)  (low freq)  | 0.501
+  cos(pi/2· #cells>=5)  (period 4)  | 0.482
+  cos(pi  · #cells>=3)              | 0.524
+  cos(pi  · #cells>=4)              | 0.544
+  cos(pi  · #cells>=5)              | 1.000   <-- CROSSES -> promoted
+  cos(pi  · #cells>=6)              | 0.503
+```
+The forge finds *exactly* the member matching the target's structure (`H=5, ω=π`, i.e.
+`(-1)^c`) and promotes it; every decoy (wrong frequency, wrong threshold) fails. The
+beyond-ladder target is now **in the extended closure**. This is the full loop:
+**diagnose → beyond ladder → forge from a family → promote → captured.**
+
+**Honest limit (the real frontier).** Three things make this a *demonstration of the
+mechanism*, not full invention: (1) the family `cos(ω·count)` is chosen *knowing* parity is
+periodic — a general forge would have to choose/grow the family too, from a large library or
+a generative grammar. (2) it is a small **grid search** over `(H, ω)`, not **gradient
+discovery** of `ω`; learning the parity frequency by gradient is the canonical hard case and
+would likely fail (a useful future negative). (3) "promote" here just adds the feature; a
+real open-atom-set loop would re-run the *whole* diagnoser with the enlarged basis and ask
+whether the *next* round finds something irreducible to the enlarged set (#1–#6 of the
+research agenda). So: the forge+promote *plumbing* works and is clean; the open problem is
+forging primitives whose *family was not handed in advance*.
+
 ## Why It Matters / Next
 
-This is the smallest honest version of "a system that knows which primitive a problem
-needs." The next rung toward actual invention: when a target is flagged **beyond the
-ladder** (like parity), *extend* the ladder — search for a new primitive that crosses it,
-then **promote** it into the basis (the open-atom-set loop, `RESEARCH_QUESTIONS.md` #1). A
-diagnoser that, on hitting its ceiling, forges and certifies the missing primitive would be
-the step from inference to invention.
+This is the smallest honest version of "a system that knows which primitive a problem needs,
+and forges a new one when stuck." The frontier above — discovering the primitive *family*
+itself, and learning continuous primitive parameters by gradient where grid search won't
+scale — is the line between this working demo and genuine open-ended invention.
 
 See: `order_statistics_closure.md` (the lattice this ladder is built from),
 `basis_degree_control.md`, `representation_discovery.md`, repo-root `CLOSURE_PRINCIPLE.md`.
