@@ -143,18 +143,18 @@ pub const Aig = struct {
         const new_id: NodeId = @intCast(self.nodes.items.len * 2);
         try self.nodes.append(key);
         try self.strash.put(key, new_id);
-        
+
         const val_a = self.getSimValue(a);
         const val_b = self.getSimValue(b);
         try self.sim_values.append(val_a & val_b);
-        
         return new_id;
     }
 
-    pub fn getSimValue(self: Aig, id: NodeId) SimVector {
+    pub fn getSimValue(self: *const Aig, id: NodeId) u64 {
         const idx = id >> 1;
+        if (idx >= self.sim_values.items.len) return 0;
         const val = self.sim_values.items[idx];
-        return if (id & 1 != 0) ~val else val;
+        return if ((id & 1) != 0) ~val else val;
     }
 
     pub fn setInputSimValue(self: *Aig, id: NodeId, val: SimVector) void {

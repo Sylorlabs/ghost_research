@@ -1,0 +1,9 @@
+.{
+    .name = .novelty_probe,
+    .version = "0.1.0",
+    .fingerprint = 0x135b64c8ae84d4ad,
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{ "src", "build.zig", "build.zig.zon" },
+}

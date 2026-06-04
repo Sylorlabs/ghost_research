@@ -1,0 +1,9 @@
+.{
+    .name = .stability_synth,
+    .version = "0.1.0",
+    .fingerprint = 0x7dbe89a2a4457ffd,
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{ "src", "build.zig", "build.zig.zon" },
+}

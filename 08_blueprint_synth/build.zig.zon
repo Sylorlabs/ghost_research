@@ -1,7 +1,7 @@
 .{
-    .name = .agi_immune_loop,
+    .name = .blueprint_synth,
     .version = "0.1.0",
-    .fingerprint = 0xfd7b400d5d23a91d,
+    .fingerprint = 0x7c2189b47efa83db,
     .dependencies = .{
         .core = .{ .path = "../core" },
     },

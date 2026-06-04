@@ -1,0 +1,9 @@
+.{
+    .name = .agent_loop,
+    .version = "0.1.0",
+    .fingerprint = 0x1fdc42d38b7d4dfc,
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{ "src", "build.zig", "build.zig.zon" },
+}

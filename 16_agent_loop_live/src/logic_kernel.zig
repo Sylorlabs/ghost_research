@@ -1,0 +1,3 @@
+pub fn synthesized_logic(x: u64, y: u64) u64 {
+    return x ^ y;
+}

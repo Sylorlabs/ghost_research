@@ -1,7 +1,7 @@
 .{
-    .name = .agi_final,
+    .name = .motor_synth,
     .version = "0.1.0",
-    .fingerprint = 0xbe3e30243c80ade0,
+    .fingerprint = 0xbe3e30248c777687,
     .dependencies = .{
         .core = .{ .path = "../core" },
     },

@@ -5,6 +5,7 @@ const SearchPoint = struct {
     vel: f64,
     stag: f64,
     ent: f64,
+    phase: f64,
     should_reset: bool,
 };
 
@@ -40,7 +41,8 @@ pub fn main() !void {
         try history.append(.{
             .vel = velocity,
             .stag = @as(f64, @floatFromInt(stagnation)),
-            .ent = 1.0, // Placeholder
+            .ent = 1.0, 
+            .phase = 0.5,
             .should_reset = stagnation > 150,
         });
         _ = hits;
@@ -63,7 +65,7 @@ pub fn main() !void {
         // Fitness: How well does this formula predict when we are in a trap?
         var hits: f64 = 0;
         for (history.items) |p| {
-            const res = cand.evaluate(.{ .vel = p.vel, .stag = p.stag, .ent = p.ent });
+            const res = cand.evaluate(.{ .vel = p.vel, .stag = p.stag, .ent = p.ent, .phase = p.phase });
             const pred_reset = res > 1.0; // Heuristic fires if result > 1.0
             if (pred_reset == p.should_reset) hits += 1.0;
         }

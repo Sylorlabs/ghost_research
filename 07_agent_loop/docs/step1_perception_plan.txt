@@ -1,0 +1,17 @@
+const std = @import("std");
+
+pub fn main() !void {
+    const out = std.io.getStdOut().writer();
+    try out.print("=== AGI BODY REALIZATION: STEP 1 ===\n", .{});
+    try out.print("Target: PERCEPTION (Data Ingestion Subsystem)\n", .{});
+    try out.print("Machine Directive: 'High-bandwidth ingestion is the primary energy source.'\n\n", .{});
+
+    try out.print("To implement PERCEPTION, we need a module that can ingest the entire `corpus/` directory\n", .{});
+    try out.print("and transform it into a stream of bit-vectors for COGNITION to analyze.\n\n", .{});
+
+    try out.print("PLAN:\n", .{});
+    try out.print("1. Implement `perception.zig` in 07_body_realization/src/.\n", .{});
+    try out.print("2. It must recursively scan `corpus/*.txt`.\n", .{});
+    try out.print("3. It must use a sliding window to generate 128-bit 'Percepts' (2x u64).\n", .{});
+    try out.print("4. This bit-stream will be the fuel for the rest of the body.\n", .{});
+}

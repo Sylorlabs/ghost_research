@@ -1,0 +1,9 @@
+.{
+    .name = .distillation_probe,
+    .version = "0.1.0",
+    .fingerprint = 0x99f821720d1587f2,
+    .dependencies = .{
+        .core = .{ .path = "../core" },
+    },
+    .paths = .{ "src", "build.zig", "build.zig.zon" },
+}
