@@ -251,6 +251,34 @@ pub fn build(b: *std.Build) void {
     const run_cliff_step = b.step("clifford", "Run the binding-algebra closure experiment (XOR vs Hadamard vs Clifford)");
     run_cliff_step.dependOn(&run_cliff_cmd.step);
 
+    // RQ C23: can GRADIENT discover the primitive parameter omega, or only grid search?
+    const fam_exe = b.addExecutable(.{
+        .name = "ghost_family_gradient",
+        .root_source_file = b.path("family_gradient.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(fam_exe);
+    const run_fam_cmd = b.addRunArtifact(fam_exe);
+    run_fam_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_fam_cmd.addArgs(args);
+    const run_fam_step = b.step("family-gradient", "Gradient vs grid search for the primitive parameter");
+    run_fam_step.dependOn(&run_fam_cmd.step);
+
+    // RQ I53: falsification hunt — is the XOR closure ceiling robust to a nonlinear readout?
+    const fals_exe = b.addExecutable(.{
+        .name = "ghost_falsify",
+        .root_source_file = b.path("falsify_closure.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(fals_exe);
+    const run_fals_cmd = b.addRunArtifact(fals_exe);
+    run_fals_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_fals_cmd.addArgs(args);
+    const run_fals_step = b.step("falsify", "Falsification hunt: attack the XOR closure ceiling with an MLP");
+    run_fals_step.dependOn(&run_fals_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
