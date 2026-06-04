@@ -279,6 +279,77 @@ pub fn build(b: *std.Build) void {
     const run_fals_step = b.step("falsify", "Falsification hunt: attack the XOR closure ceiling with an MLP");
     run_fals_step.dependOn(&run_fals_cmd.step);
 
+    // FRONTIER 1: does Clifford's geometric product give relational (pairwise) features a
+    // plain real bind doesn't? (the test clifford_binding.md left open)
+    const clrel_exe = b.addExecutable(.{
+        .name = "ghost_clifford_relational",
+        .root_source_file = b.path("clifford_relational.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(clrel_exe);
+    const run_clrel_cmd = b.addRunArtifact(clrel_exe);
+    run_clrel_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_clrel_cmd.addArgs(args);
+    const run_clrel_step = b.step("clifford-relational", "Clifford vs real pairwise binding on a relational (XOR) predicate");
+    run_clrel_step.dependOn(&run_clrel_cmd.step);
+
+    // FRONTIER 2: a periodicity-aware (spectral) operator discovers omega where gradient fails.
+    const spec_exe = b.addExecutable(.{
+        .name = "ghost_spectral_discovery",
+        .root_source_file = b.path("spectral_discovery.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(spec_exe);
+    const run_spec_cmd = b.addRunArtifact(spec_exe);
+    run_spec_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_spec_cmd.addArgs(args);
+    const run_spec_step = b.step("spectral-discovery", "Periodicity-aware discovery of the primitive parameter omega");
+    run_spec_step.dependOn(&run_spec_cmd.step);
+
+    // FRONTIER 3: Clifford's bivector earns its keep on an antisymmetric / oriented predicate.
+    const anti_exe = b.addExecutable(.{
+        .name = "ghost_antisymmetric_relational",
+        .root_source_file = b.path("antisymmetric_relational.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(anti_exe);
+    const run_anti_cmd = b.addRunArtifact(anti_exe);
+    run_anti_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_anti_cmd.addArgs(args);
+    const run_anti_step = b.step("antisymmetric-relational", "Clifford grade-2 vs real pairwise on oriented predicate");
+    run_anti_step.dependOn(&run_anti_cmd.step);
+
+    // FRONTIER 4: k-parity interaction-order ladder — ceiling at each degree d < k.
+    const hoc_exe = b.addExecutable(.{
+        .name = "ghost_higher_order_closure",
+        .root_source_file = b.path("higher_order_closure.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(hoc_exe);
+    const run_hoc_cmd = b.addRunArtifact(hoc_exe);
+    run_hoc_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_hoc_cmd.addArgs(args);
+    const run_hoc_step = b.step("higher-order-closure", "k-parity requires k-th order monomials");
+    run_hoc_step.dependOn(&run_hoc_cmd.step);
+
+    // FRONTIER 5: composed discovery — two staged operators for composed primitive families.
+    const comp_exe = b.addExecutable(.{
+        .name = "ghost_composed_discovery",
+        .root_source_file = b.path("composed_discovery.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(comp_exe);
+    const run_comp_cmd = b.addRunArtifact(comp_exe);
+    run_comp_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_comp_cmd.addArgs(args);
+    const run_comp_step = b.step("composed-discovery", "Composed primitives: neither operator alone suffices");
+    run_comp_step.dependOn(&run_comp_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
