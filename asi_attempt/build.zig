@@ -235,6 +235,22 @@ pub fn build(b: *std.Build) void {
     const run_os_step = b.step("order-stats", "Run median-vs-extremal closure experiment");
     run_os_step.dependOn(&run_os_cmd.step);
 
+    // RQ A10: does changing the BINDING ALGEBRA change the readout closure? Compares
+    // XOR-VSA vs a real Hadamard control vs Clifford geometric-product binding on
+    // reading total mass (the SUM the XOR substrate provably cannot expose).
+    const cliff_exe = b.addExecutable(.{
+        .name = "ghost_clifford",
+        .root_source_file = b.path("clifford_closure.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(cliff_exe);
+    const run_cliff_cmd = b.addRunArtifact(cliff_exe);
+    run_cliff_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_cliff_cmd.addArgs(args);
+    const run_cliff_step = b.step("clifford", "Run the binding-algebra closure experiment (XOR vs Hadamard vs Clifford)");
+    run_cliff_step.dependOn(&run_cliff_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
