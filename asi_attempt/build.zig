@@ -476,6 +476,20 @@ pub fn build(b: *std.Build) void {
     const run_dl_step = b.step("discovery-loop", "Convergence test for gradient discovery algorithm");
     run_dl_step.dependOn(&run_dl_cmd.step);
 
+    // FRONTIER 15: two-phase gradient discovery — discover then solve cleanly.
+    const tp_exe = b.addExecutable(.{
+        .name = "ghost_two_phase_discovery",
+        .root_source_file = b.path("two_phase_discovery.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tp_exe);
+    const run_tp_cmd = b.addRunArtifact(tp_exe);
+    run_tp_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_tp_cmd.addArgs(args);
+    const run_tp_step = b.step("two-phase-discovery", "Two-phase: gap-stopped discovery then clean retrain");
+    run_tp_step.dependOn(&run_tp_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
