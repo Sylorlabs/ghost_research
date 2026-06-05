@@ -406,6 +406,20 @@ pub fn build(b: *std.Build) void {
     const run_pcs_step = b.step("period-candidate-search", "Fix for AND-composition failure: accuracy grid vs power spectrum");
     run_pcs_step.dependOn(&run_pcs_cmd.step);
 
+    // FRONTIER 10: predicate tomography — accuracy profiles across all substrates.
+    const pt_exe = b.addExecutable(.{
+        .name = "ghost_predicate_tomography",
+        .root_source_file = b.path("predicate_tomography.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(pt_exe);
+    const run_pt_cmd = b.addRunArtifact(pt_exe);
+    run_pt_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_pt_cmd.addArgs(args);
+    const run_pt_step = b.step("predicate-tomography", "Fingerprint 12 predicates across 9 substrates");
+    run_pt_step.dependOn(&run_pt_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
