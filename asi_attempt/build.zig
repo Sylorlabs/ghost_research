@@ -420,6 +420,48 @@ pub fn build(b: *std.Build) void {
     const run_pt_step = b.step("predicate-tomography", "Fingerprint 12 predicates across 9 substrates");
     run_pt_step.dependOn(&run_pt_cmd.step);
 
+    // FRONTIER 11: symmetry groups predict substrate requirements.
+    const sym_exe = b.addExecutable(.{
+        .name = "ghost_symmetry_discovery",
+        .root_source_file = b.path("symmetry_discovery.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(sym_exe);
+    const run_sym_cmd = b.addRunArtifact(sym_exe);
+    run_sym_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_sym_cmd.addArgs(args);
+    const run_sym_step = b.step("symmetry-discovery", "Symmetry groups predict substrate requirements");
+    run_sym_step.dependOn(&run_sym_cmd.step);
+
+    // FRONTIER 12: gradient discovery — failure gradient points toward needed substrate.
+    const gd_exe = b.addExecutable(.{
+        .name = "ghost_gradient_discovery",
+        .root_source_file = b.path("gradient_discovery.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(gd_exe);
+    const run_gd_cmd = b.addRunArtifact(gd_exe);
+    run_gd_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_gd_cmd.addArgs(args);
+    const run_gd_step = b.step("gradient-discovery", "Failure gradient identifies needed substrate extension");
+    run_gd_step.dependOn(&run_gd_cmd.step);
+
+    // FRONTIER 13: basis comparison — cosine vs step vs square-wave vs dual.
+    const bc_exe = b.addExecutable(.{
+        .name = "ghost_basis_comparison",
+        .root_source_file = b.path("basis_comparison.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(bc_exe);
+    const run_bc_cmd = b.addRunArtifact(bc_exe);
+    run_bc_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_bc_cmd.addArgs(args);
+    const run_bc_step = b.step("basis-comparison", "Compare cosine vs step vs dual basis functions");
+    run_bc_step.dependOn(&run_bc_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
