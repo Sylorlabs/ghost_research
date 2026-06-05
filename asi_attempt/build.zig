@@ -392,6 +392,20 @@ pub fn build(b: *std.Build) void {
     const run_sp_step = b.step("sparse-parity", "Sample complexity wall for k-of-n sparse parity");
     run_sp_step.dependOn(&run_sp_cmd.step);
 
+    // FRONTIER 9: period-candidate search — accuracy-grid and iterative-residual vs power-spectrum.
+    const pcs_exe = b.addExecutable(.{
+        .name = "ghost_period_candidate_search",
+        .root_source_file = b.path("period_candidate_search.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(pcs_exe);
+    const run_pcs_cmd = b.addRunArtifact(pcs_exe);
+    run_pcs_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_pcs_cmd.addArgs(args);
+    const run_pcs_step = b.step("period-candidate-search", "Fix for AND-composition failure: accuracy grid vs power spectrum");
+    run_pcs_step.dependOn(&run_pcs_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
