@@ -462,6 +462,20 @@ pub fn build(b: *std.Build) void {
     const run_bc_step = b.step("basis-comparison", "Compare cosine vs step vs dual basis functions");
     run_bc_step.dependOn(&run_bc_cmd.step);
 
+    // FRONTIER 14: discovery loop — does gradient discovery converge?
+    const dl_exe = b.addExecutable(.{
+        .name = "ghost_discovery_loop",
+        .root_source_file = b.path("discovery_loop.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(dl_exe);
+    const run_dl_cmd = b.addRunArtifact(dl_exe);
+    run_dl_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_dl_cmd.addArgs(args);
+    const run_dl_step = b.step("discovery-loop", "Convergence test for gradient discovery algorithm");
+    run_dl_step.dependOn(&run_dl_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
