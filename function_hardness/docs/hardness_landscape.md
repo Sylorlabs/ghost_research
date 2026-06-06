@@ -135,6 +135,70 @@ AND(b0,b1)  0x8888:  deg1=16, deg2=16, xor2=12, joint=16 ✓
 - XOR(b0,b1) is deg2-separable (b0 + b1 − 2·b0·b1 is a linear combo of deg2 features) and xor2-separable (direct feature). deg1 can't do it. ✓
 - AND(b0,b1) is deg1-separable (b0+b1 ≥ 1.5 is a linear threshold). xor2 can only get 12/16 — XOR-pair features can't detect conjunctions. ✓
 
+## Mathematical hypotheses (math_hypotheses.zig)
+
+Four hypotheses tested against exhaustive n=4 data.
+
+### H1 — Span equivalence: CONFIRMED
+
+rank(AND-deg2) = rank(joint) = rank([AND-deg2 | joint]) = **10**.
+
+The two feature sets span the same subspace of R^16. Algebraic proof: XOR(bi,bj) = bi+bj−2·bi·bj is in the AND-deg2 span; AND(bi,bj) = (bi+bj−XOR(bi,bj))/2 is in the joint span. The 80-predicate closure gap measured earlier is **pure convergence noise**, not a real structural difference.
+
+### H2 — Cover's formula: PARTIAL (with striking asymmetry)
+
+Cover's theorem (general position) predicts closure fraction = Σ C(N−1,k) / 2^(N−1) using effective rank as d. Measured vs predicted:
+
+| substrate | rank | Cover pred | measured | **ratio** |
+|-----------|------|-----------|---------|---------|
+| deg1      | 4    | 5.92%     | 2.87%   | 0.485   |
+| deg2      | 10   | 94.08%    | 87.73%  | 0.933   |
+| **xor2**  | **6**| **30.36%**| **0.39%**| **0.013** |
+| joint     | 10   | 94.08%    | 87.85%  | 0.934   |
+
+The xor2 ratio of **0.013** is catastrophic — xor2 operates at 1.3% of its Cover-predicted capacity despite having rank 6. deg1 (rank 4) operates at 48.5%. The binary input structure is 37× more damaging to XOR features than to AND features.
+
+**Why:** when multiple input bits are zero, all XOR pairs involving those bits collapse to the same value simultaneously. XOR features share coordinated zeros across inputs, creating a far more constrained geometry than rank alone captures. AND features don't exhibit this coordinated collapse — a pair feature can be zero even when both individual bits are one (impossible for XOR).
+
+### H3 — Polynomial degree: SUFFICIENT confirmed, NECESSARY refuted
+
+AND-polynomial degree of a predicate = degree of its unique multilinear expansion over {0,1}.
+
+Degree distribution across all 65536 predicates:
+
+| poly-deg | total  | in deg1 | in deg2 | in xor2 | in joint |
+|----------|--------|---------|---------|---------|---------|
+| 0        | 2      | 2       | 2       | 2       | 2       |
+| 1        | 8      | 8       | 8       | 0       | 8       |
+| 2        | 212    | 48      | 212     | 68      | 212     |
+| 3        | 12,648 | 352     | 11,392  | 0       | 11,392  |
+| 4        | 52,666 | 1,472   | 45,918  | 184     | 45,960  |
+
+**Sufficiency (0 failures):** every predicate with poly-deg ≤ k is in the deg-k closure. Poly-deg gives a hard lower bound: if deg-k features can't represent f exactly, they can still separate it.
+
+**Necessity refuted:** "bonus" predicates in closure despite poly-deg > k:
+- deg1 bonus: **1,872** (poly-deg > 1 but linearly separable on raw bits)
+- deg2 bonus: **57,310** (poly-deg > 2 but linearly separable by AND-pairs)
+
+57,310 / 57,494 = **99.7% of the deg2 closure are bonus predicates** — functions that require degree-3 or degree-4 polynomial representations but are still linearly separable in degree-2 feature space. The polynomial degree characterizes exact representability; linear separability is far weaker and far larger.
+
+### H4 — Monotone predicates vs XOR: CONFIRMED (2 trivial exceptions)
+
+Monotone function: flipping any bit from 0→1 never decreases the output.
+
+- Total monotone predicates: **168** (exactly Dedekind D(4) — independent validation ✓)
+- Monotone ∩ deg1 closure: 150 (89.3% of monotone functions are linear-threshold)
+- Monotone ∩ xor2 closure: **2** — both are the constant-0 and constant-1 functions (trivially in every closure)
+- Non-trivial monotone ∩ xor2: **0**
+
+XOR features are structurally blind to monotone structure. A monotone function requires the feature space to encode a direction where "more 1s → higher score." XOR-pair features are symmetric (XOR(bi,bj) = XOR(bj,bi)) and don't increase when inputs gain more 1s — the all-ones input has all XOR-pair features = 0, same as the all-zeros input.
+
+### New hypotheses generated
+
+From H2: **what determines the Cover penalty ratio?** The ratio 0.013 for xor2 vs 0.934 for deg2 (same input dimension) suggests the penalty depends on the specific geometry of the feature matrix, not just its rank. Hypothesis: the penalty is inversely related to the condition number (ratio of largest to smallest singular value) of the feature matrix.
+
+From H3: **the "bonus" characterization problem.** If 99.7% of the deg2 closure are predicates with poly-deg > 2, polynomial degree is a poor predictor of closure membership. What characterizes the 8,014 predicates that have poly-deg ≤ 4 but are NOT in deg2 closure? These are the genuinely hard predicates.
+
 ## Cross-n results (n=5 and n=6, 100k sampled predicates each)
 
 ### Closure fraction by substrate and n

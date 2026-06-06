@@ -31,4 +31,18 @@ pub fn build(b: *std.Build) void {
     if (b.args) |args| run_sample_cmd.addArgs(args);
     const run_sample_step = b.step("sample", "Sampling-based hardness for n=5 and n=6");
     run_sample_step.dependOn(&run_sample_cmd.step);
+
+    const math_exe = b.addExecutable(.{
+        .name = "math_hypotheses",
+        .root_source_file = b.path("math_hypotheses.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(math_exe);
+
+    const run_math_cmd = b.addRunArtifact(math_exe);
+    run_math_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_math_cmd.addArgs(args);
+    const run_math_step = b.step("math", "Four analytical hypotheses on the n=4 predicate landscape");
+    run_math_step.dependOn(&run_math_cmd.step);
 }
