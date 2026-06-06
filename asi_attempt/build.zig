@@ -476,6 +476,20 @@ pub fn build(b: *std.Build) void {
     const run_dl_step = b.step("discovery-loop", "Convergence test for gradient discovery algorithm");
     run_dl_step.dependOn(&run_dl_cmd.step);
 
+    // FRONTIER 22: Newton's method (IRLS) — quadratic convergence on k5-parity.
+    const nw_exe = b.addExecutable(.{
+        .name = "ghost_newton_solver",
+        .root_source_file = b.path("newton_solver.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(nw_exe);
+    const run_nw_cmd = b.addRunArtifact(nw_exe);
+    run_nw_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_nw_cmd.addArgs(args);
+    const run_nw_step = b.step("newton-solver", "Newton IRLS vs adaptive GD on the full k-parity ladder");
+    run_nw_step.dependOn(&run_nw_cmd.step);
+
     // FRONTIER 21: sub-monomial force-add — enumerate all sub-monomials of discovered leading term.
     const sm_exe = b.addExecutable(.{
         .name = "ghost_submonomial_solver",
