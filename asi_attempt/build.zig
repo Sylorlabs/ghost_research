@@ -476,6 +476,34 @@ pub fn build(b: *std.Build) void {
     const run_dl_step = b.step("discovery-loop", "Convergence test for gradient discovery algorithm");
     run_dl_step.dependOn(&run_dl_cmd.step);
 
+    // FRONTIER 17: adaptive retrain — LR halving closes the k3-parity optimizer gap.
+    const ar_exe = b.addExecutable(.{
+        .name = "ghost_adaptive_retrain",
+        .root_source_file = b.path("adaptive_retrain.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(ar_exe);
+    const run_ar_cmd = b.addRunArtifact(ar_exe);
+    run_ar_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_ar_cmd.addArgs(args);
+    const run_ar_step = b.step("adaptive-retrain", "Adaptive LR halving to close the k3-parity 0.877 ceiling");
+    run_ar_step.dependOn(&run_ar_cmd.step);
+
+    // FRONTIER 16: dual stopping criterion — gap AND magnitude (conjunction).
+    const ds_exe = b.addExecutable(.{
+        .name = "ghost_dual_stop_discovery",
+        .root_source_file = b.path("dual_stop_discovery.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(ds_exe);
+    const run_ds_cmd = b.addRunArtifact(ds_exe);
+    run_ds_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_ds_cmd.addArgs(args);
+    const run_ds_step = b.step("dual-stop-discovery", "Dual stopping: gap AND magnitude conjunction fixes k3-parity");
+    run_ds_step.dependOn(&run_ds_cmd.step);
+
     // FRONTIER 15: two-phase gradient discovery — discover then solve cleanly.
     const tp_exe = b.addExecutable(.{
         .name = "ghost_two_phase_discovery",
