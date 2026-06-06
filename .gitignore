@@ -3,3 +3,5 @@ zig-out/
 build.err
 build.log
 error.log
+math_hypotheses
+math_hypotheses.o
