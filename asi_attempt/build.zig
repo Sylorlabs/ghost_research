@@ -476,6 +476,34 @@ pub fn build(b: *std.Build) void {
     const run_dl_step = b.step("discovery-loop", "Convergence test for gradient discovery algorithm");
     run_dl_step.dependOn(&run_dl_cmd.step);
 
+    // FRONTIER 21: sub-monomial force-add — enumerate all sub-monomials of discovered leading term.
+    const sm_exe = b.addExecutable(.{
+        .name = "ghost_submonomial_solver",
+        .root_source_file = b.path("submonomial_solver.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(sm_exe);
+    const run_sm_cmd = b.addRunArtifact(sm_exe);
+    run_sm_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_sm_cmd.addArgs(args);
+    const run_sm_step = b.step("submonomial-solver", "Force-add all sub-monomials of discovered degree-k leading term");
+    run_sm_step.dependOn(&run_sm_cmd.step);
+
+    // FRONTIER 20: online position refinement — narrow pool dynamically as features are found.
+    const og_exe = b.addExecutable(.{
+        .name = "ghost_online_guided",
+        .root_source_file = b.path("online_guided.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(og_exe);
+    const run_og_cmd = b.addRunArtifact(og_exe);
+    run_og_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_og_cmd.addArgs(args);
+    const run_og_step = b.step("online-guided", "Online: narrow candidate pool to discovered positions after each step");
+    run_og_step.dependOn(&run_og_cmd.step);
+
     // FRONTIER 19: guided pool extension — pass-1 finds positions, pass-2 uses filtered pool.
     const gp_exe = b.addExecutable(.{
         .name = "ghost_guided_pool",
