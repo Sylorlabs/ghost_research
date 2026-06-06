@@ -588,6 +588,20 @@ pub fn build(b: *std.Build) void {
     const run_tp_step = b.step("two-phase-discovery", "Two-phase: gap-stopped discovery then clean retrain");
     run_tp_step.dependOn(&run_tp_cmd.step);
 
+    // FRONTIER 23: bit-state mechanism — XOR accumulator + bit-indexed recall as the third corner.
+    const bs_exe = b.addExecutable(.{
+        .name = "ghost_bit_state",
+        .root_source_file = b.path("bit_state_mechanism.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(bs_exe);
+    const run_bs_cmd = b.addRunArtifact(bs_exe);
+    run_bs_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_bs_cmd.addArgs(args);
+    const run_bs_step = b.step("bit-state", "Bit-state mechanism: XOR parity + bit-indexed recall as the third corner");
+    run_bs_step.dependOn(&run_bs_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
