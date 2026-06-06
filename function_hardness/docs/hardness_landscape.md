@@ -1,6 +1,8 @@
-# Function Hardness: Exhaustive n=4 Predicate Landscape
+# Function Hardness: Predicate Landscape (n=4 exhaustive, n=5/6 sampled)
 
-**Status:** complete. Reproduce: `cd function_hardness && zig build run -Doptimize=ReleaseFast`
+**Status:** complete. Reproduce:
+- `cd function_hardness && zig build run -Doptimize=ReleaseFast` (n=4 exhaustive)
+- `cd function_hardness && zig build sample -Doptimize=ReleaseFast` (n=5, n=6 sampling)
 
 ## The Question
 
@@ -132,6 +134,35 @@ AND(b0,b1)  0x8888:  deg1=16, deg2=16, xor2=12, joint=16 ✓
 - 4-way parity is at chance for all degree-<4 substrates, as theory predicts.
 - XOR(b0,b1) is deg2-separable (b0 + b1 − 2·b0·b1 is a linear combo of deg2 features) and xor2-separable (direct feature). deg1 can't do it. ✓
 - AND(b0,b1) is deg1-separable (b0+b1 ≥ 1.5 is a linear threshold). xor2 can only get 12/16 — XOR-pair features can't detect conjunctions. ✓
+
+## Cross-n results (n=5 and n=6, 100k sampled predicates each)
+
+### Closure fraction by substrate and n
+
+| Substrate | n=4 (exhaustive) | n=5 (sampled) | n=6 (sampled) |
+|-----------|-----------------|---------------|---------------|
+| deg1      | 2.87%           | 0.001%        | 0.000%        |
+| deg2      | 87.73%          | 25.51%        | 0.036%        |
+| deg3      | —               | 99.23%        | 72.84%        |
+| xor2      | 0.39%           | 0.002%        | 0.000%        |
+| joint     | 87.85%          | 31.67%        | 0.104%        |
+| Q38 rate  | 0.35%           | 1.79%         | 0.33%         |
+
+### deg3 slips at n=6
+
+The hypothesis "deg3 holds near 99% coverage" was directly tested and falsified. At n=5, deg3 (25 features, 32 inputs) covers 99.23% of random predicates. At n=6, deg3 (41 features, 64 inputs) covers only 72.84%.
+
+The mechanism is overparameterization, not function-class coverage. By Cover's theorem, the fraction of randomly labeled point sets that are linearly separable depends on the ratio of feature dimension to sample count. At n=5, 25 features vs 32 points (ratio 0.78) is in the highly overparameterized regime. At n=6, 41 vs 64 (ratio 0.64) is less so. At n=7, deg3 would have C(7,3)+C(7,2)+C(7,1) = 35+21+7 = 63 features vs 128 points (ratio 0.49) — right at the phase transition. **Predicted n=7 coverage: ~50%.**
+
+The implication: the 99.23% figure at n=5 is not evidence that deg3 features are "sufficient" for n=5 — it is evidence that 25 features nearly overfits 32 binary points regardless of what those features represent.
+
+### deg2 collapses completely by n=6
+
+87.73% at n=4 → 25.51% at n=5 → 0.036% at n=6. The same 21 features that covered 87% of the n=4 space cover essentially nothing in the 2^64-element n=6 space.
+
+### Q38 rate peaked at n=5
+
+0.35% (n=4) → 1.79% (n=5) → 0.33% (n=6). The emergent-escape structure peaks around n=5 in terms of hit rate against random sampling. At n=6, the predicate space is so large that even the AND+XOR compound predicates that require joint substrate are a small fraction.
 
 ## Open questions
 
