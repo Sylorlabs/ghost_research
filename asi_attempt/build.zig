@@ -476,6 +476,34 @@ pub fn build(b: *std.Build) void {
     const run_dl_step = b.step("discovery-loop", "Convergence test for gradient discovery algorithm");
     run_dl_step.dependOn(&run_dl_cmd.step);
 
+    // FRONTIER 19: guided pool extension — pass-1 finds positions, pass-2 uses filtered pool.
+    const gp_exe = b.addExecutable(.{
+        .name = "ghost_guided_pool",
+        .root_source_file = b.path("guided_pool.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(gp_exe);
+    const run_gp_cmd = b.addRunArtifact(gp_exe);
+    run_gp_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_gp_cmd.addArgs(args);
+    const run_gp_step = b.step("guided-pool", "Guided pool: positions from pass-1 filter the degree-5 candidates");
+    run_gp_step.dependOn(&run_gp_cmd.step);
+
+    // FRONTIER 18: extended pool — degree-4 and degree-5 monomials for k4-parity and k2∧k3.
+    const ep_exe = b.addExecutable(.{
+        .name = "ghost_extended_pool",
+        .root_source_file = b.path("extended_pool.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(ep_exe);
+    const run_ep_cmd = b.addRunArtifact(ep_exe);
+    run_ep_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_ep_cmd.addArgs(args);
+    const run_ep_step = b.step("extended-pool", "Extend pool to degree-5; test k4/k5-parity and k2∧k3");
+    run_ep_step.dependOn(&run_ep_cmd.step);
+
     // FRONTIER 17: adaptive retrain — LR halving closes the k3-parity optimizer gap.
     const ar_exe = b.addExecutable(.{
         .name = "ghost_adaptive_retrain",
