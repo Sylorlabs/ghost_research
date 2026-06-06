@@ -1,6 +1,6 @@
 # Frontier 2 — A periodicity-aware operator discovers ω where gradient cannot
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build spectral-discovery`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build spectral-discovery`
 
 ## The gap this closes
 

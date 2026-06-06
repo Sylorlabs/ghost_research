@@ -1,9 +1,9 @@
 # Frontiers 19-21 — Guided Pool, Online Refinement, Sub-Monomial Force-Add
 
 **Status:** built, measured. Reproduce:
-- F19: `cd asi_attempt && zig build guided-pool`
-- F20: `cd asi_attempt && zig build online-guided`
-- F21: `cd asi_attempt && zig build submonomial-solver`
+- F19: `cd sparse_poly_discovery && zig build guided-pool`
+- F20: `cd sparse_poly_discovery && zig build online-guided`
+- F21: `cd sparse_poly_discovery && zig build submonomial-solver`
 
 ## Background
 

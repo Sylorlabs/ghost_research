@@ -8,7 +8,7 @@ needs an external ingredient. The 🟢 `[solo]` rows are where to spend runs.
 > **2026-06-03 round — four directions answered** (see `RESEARCH_ROUND_2026_06_03.md`):
 > **A10 (new, Clifford binding)** ✅ — changing the bind off GF(2) moves the closure, but a
 > plain real bind matches Clifford; "leave GF(2)," not the geometric product, is the lever
-> (`asi_attempt/docs/research/clifford_binding.md`). **A1–A3 (atom-forge)** ✅ — iterated
+> (`sparse_poly_discovery/docs/research/clifford_binding.md`). **A1–A3 (atom-forge)** ✅ — iterated
 > promotion covers a fixed substrate (flat complexity, bottoms out at the opcode VM); it
 > relocates claim C, doesn't escape it. **Forge-parameter frontier** ✅ negative — gradient
 > cannot learn the parity ω (vanishing gradient at the optimum); grid search can
@@ -43,7 +43,7 @@ composition). The live edge is letting the atom set grow.
 17. 🟢 [solo] Two atoms A,B with **synergy**: {A,B} reaches behaviours neither {A} nor {B} (plus composition) reaches?
 18. 🟡 [solo] Add one nonlinear atom (carry/AND) to an XOR-only set — which tasks **flip** from unsolvable to solvable?
 
-## C. Control agent (asi_attempt) — beyond mb_mass
+## C. Control agent (sparse_poly_discovery) — beyond mb_mass
 19. 🟢 [solo] Does **multi-step planning** (rollout over the scalar model) beat greedy mb_mass (11.02), or is greedy already optimal?
 20. 🟡 [solo] Does mb_mass survive **stochastic** band dynamics, or collapse like the attractor-recogniser?
 21. 🟢 [solo] A band variant where the **sum is insufficient** and a 2-feature readout is needed — does feature-search find the pair?

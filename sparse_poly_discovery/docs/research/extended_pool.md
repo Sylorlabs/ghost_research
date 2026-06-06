@@ -1,6 +1,6 @@
 # Frontier 18 — Extended Pool (degree-4 and degree-5)
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build extended-pool`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build extended-pool`
 
 ## What was tested
 

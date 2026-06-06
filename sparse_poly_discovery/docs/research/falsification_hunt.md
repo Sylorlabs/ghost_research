@@ -1,6 +1,6 @@
 # RQ I53 — Falsification hunt: can the XOR closure ceiling be broken?
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build falsify`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build falsify`
 
 ## The hunt
 

@@ -21,7 +21,7 @@ Every research thread in this repository independently ran into the same wall:
 Five independent witnesses with runnable before/after experiments:
 - **Mixers** — GF(2)-affine programs provably plateau at SAC-error 0.5; ADD/MUL escapes it.
 - **wcore atom-forge** — fixed opcode VM: 85/86 behaviours reducible at depth 4; 0 survive deeper budget.
-- **asi_attempt control** — XOR/bundle VSA readout of band predicate: 0.51 (chance); SUM feature escapes to 11.02.
+- **sparse_poly_discovery control** — XOR/bundle VSA readout of band predicate: 0.51 (chance); SUM feature escapes to 11.02.
 - **Meta-engine ceiling** — reproducible 44–47 fitness ceiling; monotone+parallel finally broke it to 47.49.
 - **k-sparse parity** — linear model at chance for k≥2 (theorem); nonlinearity escapes it.
 
@@ -56,7 +56,7 @@ ghost_research/
 ├── 17_self_model_probe/    Subjectivity model + value-alignment gate probe
 ├── 18_stability_synth/     Stability-scored plan synthesizer
 │
-├── asi_attempt/            Primary research: Closure Principle control agent + order-statistics invention bridge
+├── sparse_poly_discovery/            Primary research: Closure Principle control agent + order-statistics invention bridge
 ├── wcore/                  Primary research: zero-bias invention engine, irreducibility certifier, open-atom-set loop
 │
 ├── results/                Experiment outputs (CSV / logs) — run binaries from repo root
@@ -66,7 +66,7 @@ ghost_research/
 ```
 
 Projects 01–05 are the core synthesis research line. Projects 06–18 are applied probes
-and scaffolds built on that machinery. `asi_attempt` and `wcore` are the active primary
+and scaffolds built on that machinery. `sparse_poly_discovery` and `wcore` are the active primary
 research lines on the Closure Principle and algebraic invention.
 
 ---
@@ -78,7 +78,7 @@ There is no top-level build. Each project builds independently against the share
 ```sh
 cd core && zig build                      # shared library (build first)
 cd 04_verified_synthesis && zig build     # any project resolves ../core automatically
-cd asi_attempt && zig build eval          # run the control agent eval
+cd sparse_poly_discovery && zig build eval          # run the control agent eval
 ```
 
 Binaries land in each project's `zig-out/bin/`. Always run binaries from the **repo
@@ -97,9 +97,9 @@ require `libz3` at `/usr/lib/x86_64-linux-gnu`.
 | Ceiling escape (monotone + parallel + QD) | **47.49** | `docs/05/recursive_engine_phase_abc.md` |
 | Affine closure proof (MUL-free ceiling) | SAC-error = 0.5 exactly (theorem) | `05_meta_synthesis/docs/07/` |
 | Closure escape (mixer) | 0.5 → 0.13 (ADD) → 0.02 (MUL) | `05_meta_synthesis/src/closure_escape_mixer.zig` |
-| VSA band readout ceiling | 0.51 (chance), proved | `asi_attempt/docs/research/` |
-| Out-of-closure escape (SUM feature) | **11.02** fail/1k vs 162 baseline | `asi_attempt` |
-| Invention bridge: diagnose + forge + promote | 6/6 correct class inference; beyond-ladder target captured | `asi_attempt/order_statistics.zig` |
+| VSA band readout ceiling | 0.51 (chance), proved | `sparse_poly_discovery/docs/research/` |
+| Out-of-closure escape (SUM feature) | **11.02** fail/1k vs 162 baseline | `sparse_poly_discovery` |
+| Invention bridge: diagnose + forge + promote | 6/6 correct class inference; beyond-ladder target captured | `sparse_poly_discovery/order_statistics.zig` |
 | wcore: fixed atom set cannot invent | 0/86 behaviours irreducible at depth ≥5 | `wcore/inv_atomforge.zig` |
 | CEGIS rediscovery of `x & (x-1)` | 3 generations, formally verified | `04_verified_synthesis` |
 
@@ -127,7 +127,7 @@ require `libz3` at `/usr/lib/x86_64-linux-gnu`.
    (XOR/bundle parity-collapses the grid; a typed invertible bind is the out-of-closure
    generator) and external AIT theory to be the next concrete escape.
 
-3. **Generator-family discovery by gradient** (`asi_attempt`, RQ C23) — the
+3. **Generator-family discovery by gradient** (`sparse_poly_discovery`, RQ C23) — the
    `forge + promote` loop works when the primitive family is supplied; the unsolved case
    is discovering the family structure itself without being told what to search over.
 

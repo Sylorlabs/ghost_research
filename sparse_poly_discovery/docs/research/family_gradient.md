@@ -1,6 +1,6 @@
 # RQ C23 — Can gradient discover the primitive parameter, or only grid search?
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build family-gradient`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build family-gradient`
 
 ## The question
 

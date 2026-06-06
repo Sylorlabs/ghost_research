@@ -1,4 +1,4 @@
-# asi_attempt — a VSA predictive-coding agent (honest description)
+# sparse_poly_discovery — a VSA predictive-coding agent (honest description)
 
 A small hyperdimensional-computing (VSA) agent that learns a forward model of a
 toy "battery cell" environment and — after the work in this directory — uses that

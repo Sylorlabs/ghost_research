@@ -1,6 +1,6 @@
 # Frontier 16 — Dual Stopping Criterion
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build dual-stop-discovery`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build dual-stop-discovery`
 
 ## What was tested
 

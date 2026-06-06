@@ -1,6 +1,6 @@
 # Frontier 6 — composition detection via power-accuracy mismatch
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build operator-inference`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build operator-inference`
 
 ## The probe
 

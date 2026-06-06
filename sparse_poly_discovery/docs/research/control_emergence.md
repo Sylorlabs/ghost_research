@@ -7,7 +7,7 @@ Reproduce with `zig build eval` (table + Q5 + E1 + E2) and `zig build unit-test`
 
 ## Background
 
-`asi_attempt` was presented as an *active inference* agent. Active inference says
+`sparse_poly_discovery` was presented as an *active inference* agent. Active inference says
 an agent acts to keep itself in *preferred* states. Reading the code (now
 refactored into `agent.zig`) shows it only ever did *half* of that: it learns a
 forward model by minimising **perceptual** surprise, but its **actions** were

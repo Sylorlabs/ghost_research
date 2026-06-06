@@ -14,7 +14,7 @@
 //! affine_closure ceiling (docs/research/07), a theorem, not bad luck. MUL is the
 //! out-of-closure generator that makes P(flip) ~ 0.5 and escapes it.
 //!
-//! Program-synthesis twin of asi_attempt/docs/research/closure_escape_control.md
+//! Program-synthesis twin of sparse_poly_discovery/docs/research/closure_escape_control.md
 //! (mb_mass): grinding within a closed primitive set cannot leave its closure;
 //! one out-of-closure generator does. Run: build core ReleaseFast, then
 //! ./zig-out/bin/closure_escape_mixer
@@ -129,5 +129,5 @@ pub fn main() !void {
     try out.print("nonlinear, so it escapes pure-affine to ~0.13 -- but plateaus there. MUL, a stronger\n", .{});
     try out.print("out-of-closure generator, drives SAC-error ~6x lower (~0.02). Two-level escape:\n", .{});
     try out.print("linear core stuck at 0.5 (theorem); ADD partial; MUL full. Same search, generators\n", .{});
-    try out.print("added -- the synthesis twin of mb_mass (asi_attempt closure_escape_control.md).\n", .{});
+    try out.print("added -- the synthesis twin of mb_mass (sparse_poly_discovery closure_escape_control.md).\n", .{});
 }

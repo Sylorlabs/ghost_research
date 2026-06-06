@@ -1,6 +1,6 @@
 # Frontier 14 — Discovery Loop: convergence, failure modes, and the gap signal
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build discovery-loop`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build discovery-loop`
 
 ## What was tested
 

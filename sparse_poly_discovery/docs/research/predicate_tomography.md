@@ -1,6 +1,6 @@
 # Frontier 10 — predicate tomography: accuracy profiles fingerprint algebraic class
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build predicate-tomography`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build predicate-tomography`
 
 ## What was tested
 

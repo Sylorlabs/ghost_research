@@ -1,6 +1,6 @@
 # RQ A10 — Does the binding algebra change the readout closure?
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build clifford`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build clifford`
 
 ## The question
 

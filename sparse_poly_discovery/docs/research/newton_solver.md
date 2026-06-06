@@ -1,6 +1,6 @@
 # Frontier 22 — Newton's Method (IRLS)
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build newton-solver`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build newton-solver`
 
 ## What was tested
 

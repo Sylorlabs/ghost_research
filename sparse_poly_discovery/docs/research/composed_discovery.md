@@ -1,6 +1,6 @@
 # Frontier 5 — composed discovery: the closure principle applies recursively
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build composed-discovery`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build composed-discovery`
 
 ## What this tests
 

@@ -1,6 +1,6 @@
 # Frontier 11 — Symmetry Discovery: symmetry groups predict substrate requirements
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build symmetry-discovery`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build symmetry-discovery`
 
 ## Hypothesis
 

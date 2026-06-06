@@ -3,7 +3,7 @@ const env_mod = @import("environment.zig");
 const agent_mod = @import("agent.zig");
 
 // =============================================================================
-// asi_attempt — generalization harness
+// sparse_poly_discovery — generalization harness
 //
 // "Intelligence" is the gap between train and HELD-OUT performance. The main
 // eval (eval.zig) trains and tests on one regime, so it cannot see that gap.

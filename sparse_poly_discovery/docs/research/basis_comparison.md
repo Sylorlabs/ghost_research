@@ -1,6 +1,6 @@
 # Frontier 13 — Basis Comparison: cosine vs step vs square-wave vs dual
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build basis-comparison`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build basis-comparison`
 
 ## Hypothesis
 

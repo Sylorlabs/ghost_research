@@ -5,7 +5,7 @@ const agent_mod = @import("agent.zig");
 const env_mod = @import("environment.zig");
 
 // =============================================================================
-// asi_attempt — expressiveness-ceiling probe
+// sparse_poly_discovery — expressiveness-ceiling probe
 //
 // The forward model is XOR-affine: it predicts S_next = bind(S_t, rule_a), i.e.
 // the current state XORed with a learned per-action offset. bind/permute are

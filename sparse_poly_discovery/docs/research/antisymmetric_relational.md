@@ -1,6 +1,6 @@
 # Frontier 3 — Clifford's bivector earns its keep: oriented predicate, shared-basis encoding
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build antisymmetric-relational`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build antisymmetric-relational`
 
 ## The gap this closes
 

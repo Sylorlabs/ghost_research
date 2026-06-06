@@ -1,6 +1,6 @@
 # Frontier 8 — sparse parity: sample complexity growth as irrelevant bits increase
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build sparse-parity`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build sparse-parity`
 
 ## What was tested
 

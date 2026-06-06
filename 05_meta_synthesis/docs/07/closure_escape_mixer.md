@@ -3,7 +3,7 @@
 **Status:** built, measured. Reproduce: `cd 05_meta_synthesis && zig build
 -Doptimize=ReleaseFast && ./zig-out/bin/closure_escape_mixer` (12,000 hill-climb
 iters × 6 seeds). Companion to the `affine_closure` theorem (this thread) and the
-control-domain twin `asi_attempt/docs/research/closure_escape_control.md`.
+control-domain twin `sparse_poly_discovery/docs/research/closure_escape_control.md`.
 
 ## The question
 

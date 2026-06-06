@@ -1,6 +1,6 @@
 # Frontier 7 — multi-period discovery: spectral scales to XOR-combined periods, fails on AND
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build multi-period`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build multi-period`
 
 ## What was tested
 

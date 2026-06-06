@@ -1,6 +1,6 @@
 # Frontier 12 — Gradient Discovery: failure gradient identifies the needed substrate
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build gradient-discovery`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build gradient-discovery`
 
 ## Hypothesis
 

@@ -2,7 +2,7 @@
 
 A cross-thread synthesis of this repository's deepest recurring result. It unifies
 findings that were discovered independently in three different subprojects
-(BitForge mixer synthesis, the wcore invention engine, the asi_attempt control
+(BitForge mixer synthesis, the wcore invention engine, the sparse_poly_discovery control
 agent) and states them as one principle, now backed by runnable controlled
 before/after experiments in each domain.
 
@@ -30,7 +30,7 @@ Two testable corollaries:
 |--------|------------------|---------------------------|--------------------------|-----------------|
 | **mixers** (BitForge thread 07) | GF(2)-affine (XOR/shift) | SAC-error = 0.5 exactly (theorem); PractRand failure | ADD (carry), MUL | `closure_escape_mixer`: 0.5 → 0.13 (ADD) → 0.02 (MUL) |
 | **invention** (wcore Claim C) | fixed opcode VM | only encodings of known mechanisms; **85/86 reducible at depth 4, and the 1 exception reduces at depth 5 — 0 survive a deeper budget** | a new atom | irreducibility certifier flags the true outsider (16/16 kill-tests; non-vacuous at depth 8) |
-| **control / world-model** (asi_attempt) | XOR/bundle VSA | band predicate unreadable: nearest-prototype 0.50, best linear 0.51 (chance) | the SUM (total mass) | `mb_mass`: 11.02 — beats the XOR readout 3–15× (but a tuned thermostat = 0.00; it does NOT beat hand-coded) |
+| **control / world-model** (sparse_poly_discovery) | XOR/bundle VSA | band predicate unreadable: nearest-prototype 0.50, best linear 0.51 (chance) | the SUM (total mass) | `mb_mass`: 11.02 — beats the XOR readout 3–15× (but a tuned thermostat = 0.00; it does NOT beat hand-coded) |
 | **search depth** (BitForge meta-engine) | fixed Tier-0 opcodes | reproducible 44–47 fitness ceiling; "more tiers" refuted | richer Tier-0 op/scoring axis | monotone+parallel+QD crossing only via new axis |
 | **learning** (k-sparse parity, the textbook case) | linear-in-bits | linear at chance for k≥2 (theorem) | nonlinearity / the product monomial | `zig build parity`: linear 0.50 → MLP 1.0, lifted 1.0 |
 
@@ -38,7 +38,7 @@ Each row is the same statement instantiated. The first three have a runnable
 controlled before/after; the fourth is the historical meta-engine ceiling work
 (`docs/05`, `docs/06`); the fifth (parity) is the only *textbook* problem rather
 than a repo artefact — the principle predicts its ceiling and generator unchanged
-(`asi_attempt/docs/research/parity_closure.md`).
+(`sparse_poly_discovery/docs/research/parity_closure.md`).
 
 ## Why the witnesses are the *same* phenomenon
 
@@ -51,14 +51,14 @@ than a repo artefact — the principle predicts its ceiling and generator unchan
   composition of known atoms; total mass (a sum/threshold) is not a parity.
 - In every case "optimise harder" was tried and failed by the same mechanism:
   more iters/tiers (meta-engine), better prediction and metric encoding
-  (asi_attempt CP3 + ordinal), longer programs (mixer L24). All stay in the
+  (sparse_poly_discovery CP3 + ordinal), longer programs (mixer L24). All stay in the
   closure.
 - In every case the fix has the same shape: add a generator the closure lacks —
   MUL, a new atom, the SUM.
 
 ## The sharpest single demonstration
 
-`asi_attempt`'s control result is the cleanest case of the *escape* (it does **not**
+`sparse_poly_discovery`'s control result is the cleanest case of the *escape* (it does **not**
 beat hand-coded control — a tuned thermostat scores 0.00; see the E1 correction):
 
 - The XOR/bundle substrate **provably** cannot classify "mass in band": a trained
@@ -69,12 +69,12 @@ beat hand-coded control — a tuned thermostat scores 0.00; see the E1 correctio
   +ordinal 55.63 — all stuck.
 - One out-of-closure feature — read the SUM — and the *same* agent reaches **11.02**,
   beating the XOR readout 3–15× (the escape). It remains a poor controller: a tuned
-  thermostat solves the band at 0.00 (`asi_attempt/docs/research/closure_escape_control.md`).
+  thermostat solves the band at 0.00 (`sparse_poly_discovery/docs/research/closure_escape_control.md`).
 
 ## Refinement: the generator can be irreducibly a *pair* (emergent escape)
 
 The escape generator is not always a single op. An exact u8 experiment (`zig build
-synergy`, `asi_attempt/docs/research/emergent_escape.md`) finds targets reachable by
+synergy`, `sparse_poly_discovery/docs/research/emergent_escape.md`) finds targets reachable by
 `base+{X,Y}` but **neither** `base+{X}` nor `base+{Y}`: `x&(x-1)` needs {AND,SUB},
 `x|(x*x)` needs {OR,MUL}. Consequence (tested, and a self-correction): greedy
 one-op-at-a-time substrate growth misses these **only when the components have no
@@ -109,14 +109,14 @@ the control domain — running the controller over candidate aggregates
 which matters — discovers the SUM autonomously (11.02 fail/1k, beating the XOR
 readout; decoys score 37–333). So the generator is **discoverable, not
 inherently human-only** — *provided it is expressible in the candidate space*
-(`asi_attempt/docs/research/feature_discovery.md`).
+(`sparse_poly_discovery/docs/research/feature_discovery.md`).
 
 **Stronger answer (construction-level), also measured.** Unsupervised PCA on the
 raw 16 cells — *no candidate library, no labels* — recovers the sum direction
 almost exactly: `cosine(top principal component, uniform/sum) = 0.9987`. The
 out-of-closure feature is **constructed**, not merely selected, because `charge`/
 `rest` move all cells together so the sum *is* the dominant variance axis
-(`asi_attempt/docs/research/feature_discovery.md`, construction block).
+(`sparse_poly_discovery/docs/research/feature_discovery.md`, construction block).
 
 **The non-circular test (and a correction).** When the useful feature is made
 *non-salient* (a single cell hidden behind a loud decoy block), the construction
@@ -138,11 +138,11 @@ generator" presupposes a richer closure to search within.
 ## Reproduce
 
 ```
-cd asi_attempt && zig build eval     # [BAND]: mb_mass 11.02 beats XOR agents; E1: tuned thermostat = 0.00
-cd asi_attempt && zig build probe    # band-readout ceiling: linear readouts at chance
+cd sparse_poly_discovery && zig build eval     # [BAND]: mb_mass 11.02 beats XOR agents; E1: tuned thermostat = 0.00
+cd sparse_poly_discovery && zig build probe    # band-readout ceiling: linear readouts at chance
 cd 05_meta_synthesis && zig build -Doptimize=ReleaseFast && ./zig-out/bin/closure_escape_mixer
 ```
 
-See: `asi_attempt/docs/research/{non_trivial_task,cp3_repulsion_floor,closure_escape_control}.md`,
+See: `sparse_poly_discovery/docs/research/{non_trivial_task,cp3_repulsion_floor,closure_escape_control}.md`,
 `05_meta_synthesis/docs/07/{affine_closure_*,closure_escape_mixer}.md`, and the
 wcore arc note `wcore/docs/research/alien_novelty_limit.md`.

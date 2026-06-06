@@ -1,6 +1,6 @@
 # Frontier 9 — period candidate search: accuracy-grid fixes AND-composition failure
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build period-candidate-search`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build period-candidate-search`
 
 ## What was tested
 

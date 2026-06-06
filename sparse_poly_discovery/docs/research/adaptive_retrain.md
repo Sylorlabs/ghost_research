@@ -1,6 +1,6 @@
 # Frontier 17 — Adaptive Retrain
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build adaptive-retrain`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build adaptive-retrain`
 
 ## What was tested
 

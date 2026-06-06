@@ -3,7 +3,7 @@ const env_mod = @import("environment.zig");
 const agent_mod = @import("agent.zig");
 
 // =============================================================================
-// asi_attempt — evaluation harness
+// sparse_poly_discovery — evaluation harness
 //
 // The original project had NO evaluation: it ran a real-time daemon, pushed
 // telemetry to a dashboard, and never answered "does the agent actually control
@@ -230,7 +230,7 @@ pub fn main() !void {
     if (args.next()) |a| n_steps = std.fmt.parseInt(usize, a, 10) catch n_steps;
     if (args.next()) |a| seeds = std.fmt.parseInt(usize, a, 10) catch seeds;
 
-    std.debug.print("=== asi_attempt evaluation: {d} steps x {d} seeds ===\n\n", .{ n_steps, seeds });
+    std.debug.print("=== sparse_poly_discovery evaluation: {d} steps x {d} seeds ===\n\n", .{ n_steps, seeds });
     std.debug.print("  {s:<22} | {s:>9} | {s:>9} | {s:>8} | {s:>8}\n", .{ "policy", "fail/1k", "mean_mass", "err_e", "err_l" });
     std.debug.print("  ----------------------+-----------+-----------+----------+---------\n", .{});
 

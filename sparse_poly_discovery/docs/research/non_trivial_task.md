@@ -15,7 +15,7 @@
 
 ## Why this exists
 
-Every prior asi_attempt result is haunted by one fact: the battery cell is
+Every prior sparse_poly_discovery result is haunted by one fact: the battery cell is
 **trivially solved by `always rest` (0.00 fail/1k)**. You cannot measure
 "intelligence" on a task whose optimum is a constant policy — and CP3
 (`cp3_repulsion_floor.md`) showed the consequence: on that task, improving the

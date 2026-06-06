@@ -50,7 +50,7 @@ ghost_research/
 ├── 16_agent_loop_live/    Full agent loop: perception + cognition + homeostasis + motor bridge
 ├── 17_self_model_probe/   Subjectivity model + value-alignment gate probe
 ├── 18_stability_synth/    Stability-evaluated plan synthesizer (200k iters)
-├── asi_attempt/           Closure-principle control agent: VSA readout ceiling + order-statistics research
+├── sparse_poly_discovery/           Closure-principle control agent: VSA readout ceiling + order-statistics research
 ├── wcore/                 Zero-bias invention engine: atom-forge, irreducibility certifier, open-atom-set
 ├── results/               Experiment outputs (CSV/logs) — written relative to repo root
 ├── state/                 Persisted engine state (.bin files)
@@ -239,9 +239,9 @@ statements are print statements.
 
 ---
 
-### asi_attempt — Closure-Principle Control Agent
+### sparse_poly_discovery — Closure-Principle Control Agent
 
-**Folder:** `asi_attempt/`  
+**Folder:** `sparse_poly_discovery/`  
 **Status:** Active primary research  
 **What it is:** The most disciplined research project in the repo. Implements a
 reward-driven control agent over a grid-cell battery simulation, using VSA encoding.
@@ -348,10 +348,10 @@ Full list with honesty flags at [`RESEARCH_QUESTIONS.md`](RESEARCH_QUESTIONS.md)
 | A1–A9 | Open-atom-set promotion loop | Partially prototyped (wcore) |
 | A10 *(proposed)* | Clifford binding vs XOR/bundle: does it break the VSA band ceiling? | **Not started** |
 | B10–B18 | wcore engine knobs (DMAX, budget, coevolution) | Mostly open |
-| C19–C28 | asi_attempt control: planning, nonlinear features, multi-objective | Partially done |
+| C19–C28 | sparse_poly_discovery control: planning, nonlinear features, multi-objective | Partially done |
 | D29–D35 | Mixer / meta-engine ceiling and superoptimization | Thread 05–07 done; D32–D34 open |
 | E36–E40 | Closure principle theory | Closure Principle confirmed; decidability open |
-| F41–F45 | Discovery ladder sample complexity | Partially mapped in asi_attempt |
+| F41–F45 | Discovery ladder sample complexity | Partially mapped in sparse_poly_discovery |
 | G46–G49 | Instrument validation | #46 done; #48–#49 open |
 | H50–H52 | Scaling laws | Open |
 | I53–I56 | Falsification hunts — try to break our own claims | Ongoing |
@@ -370,14 +370,14 @@ Full list with honesty flags at [`RESEARCH_QUESTIONS.md`](RESEARCH_QUESTIONS.md)
 
 ```bash
 # The five closure witnesses
-cd asi_attempt && zig build eval         # mb_mass 11.02 beats XOR; tuned thermostat = 0.00
-cd asi_attempt && zig build probe        # band readout at chance under XOR/bundle
+cd sparse_poly_discovery && zig build eval         # mb_mass 11.02 beats XOR; tuned thermostat = 0.00
+cd sparse_poly_discovery && zig build probe        # band readout at chance under XOR/bundle
 cd 05_meta_synthesis && zig build -Doptimize=ReleaseFast && ./zig-out/bin/closure_escape_mixer
-cd asi_attempt && zig build parity       # linear 0.50 → MLP 1.0
+cd sparse_poly_discovery && zig build parity       # linear 0.50 → MLP 1.0
 
 # The invention bridge
-cd asi_attempt && zig build order-stats -- diagnose   # 6/6 correct class inference
-cd asi_attempt && zig build order-stats -- forge       # beyond-ladder forge + promote
+cd sparse_poly_discovery && zig build order-stats -- diagnose   # 6/6 correct class inference
+cd sparse_poly_discovery && zig build order-stats -- forge       # beyond-ladder forge + promote
 
 # Meta-engine ceiling
 cd 05_meta_synthesis && zig build -Doptimize=ReleaseFast

@@ -38,7 +38,7 @@ showed 7 novel / 0 irreducible. This sweep turns that into a breadth claim.
 "Irreducible" is **always relative to the reduction budget**: you can never prove a
 behaviour is a new atom, only fail to reduce it within a given depth/closure. The
 1/86 is exactly that limit showing through. This is the same structure as the
-discovery ladder in `asi_attempt/docs/research/feature_discovery.md` and the
+discovery ladder in `sparse_poly_discovery/docs/research/feature_discovery.md` and the
 parity frontier: every claim of "a genuine new thing" presupposes the closure
 you are reducing against — closure all the way up. The breadth result is therefore
 a **negative result, done at scale**: across 86 discovered solvers and 16 seeds,

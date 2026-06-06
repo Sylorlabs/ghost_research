@@ -16,8 +16,8 @@ made it *more* fundamental.
 
 ## A — Clifford binding (RQ A10): does changing the bind algebra move the closure?
 
-**Built:** `asi_attempt/clifford_closure.zig` (`zig build clifford`).
-**Doc:** `asi_attempt/docs/research/clifford_binding.md`.
+**Built:** `sparse_poly_discovery/clifford_closure.zig` (`zig build clifford`).
+**Doc:** `sparse_poly_discovery/docs/research/clifford_binding.md`.
 
 Held the VSA recipe fixed (random role per cell, value filler, bind, bundle, linear readout)
 and changed **only** the bind: XOR (GF(2)) vs a real Hadamard control vs a Cl(13,0) geometric
@@ -62,8 +62,8 @@ cannot be. Consistent with the Clifford and falsification results: the substrate
 
 ## C — Family discovery by gradient (RQ C23): can gradient learn the primitive parameter?
 
-**Built:** `asi_attempt/family_gradient.zig` (`zig build family-gradient`).
-**Doc:** `asi_attempt/docs/research/family_gradient.md`.
+**Built:** `sparse_poly_discovery/family_gradient.zig` (`zig build family-gradient`).
+**Doc:** `sparse_poly_discovery/docs/research/family_gradient.md`.
 
 The forge grid-searches `(H,ω)` for `cos(ω·count)` to capture parity. Can gradient learn ω?
 
@@ -81,8 +81,8 @@ The forge grid-searches `(H,ω)` for `cos(ω·count)` to capture parity. Can gra
 
 ## D — Falsification hunt (RQ I53): can the XOR ceiling be broken?
 
-**Built:** `asi_attempt/falsify_closure.zig` (`zig build falsify`).
-**Doc:** `asi_attempt/docs/research/falsification_hunt.md`.
+**Built:** `sparse_poly_discovery/falsify_closure.zig` (`zig build falsify`).
+**Doc:** `sparse_poly_discovery/docs/research/falsification_hunt.md`.
 
 Attacked the XOR ceiling with a nonlinear MLP, and — decisively — with a training-free
 information-theoretic test.

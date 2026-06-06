@@ -1,6 +1,6 @@
 # Frontier 4 — k-parity interaction-order ladder
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build higher-order-closure`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build higher-order-closure`
 
 ## What this tests
 
@@ -36,9 +36,9 @@ This is the interaction-order axis of the same closure principle that governs:
 
 - **Mixer ceiling** (05_meta_synthesis): GF(2)-affine ops (XOR/shift) ceiling at SAC=0.5;
   escape requires ADD (exit GF(2)), then MUL (second-order nonlinear)
-- **VSA band ceiling** (asi_attempt): XOR/bundle encoding gives chance on mass-band;
+- **VSA band ceiling** (sparse_poly_discovery): XOR/bundle encoding gives chance on mass-band;
   escape requires SUM (a degree-1 function NOT in the XOR closure)
-- **Parity closure** (asi_attempt): linear readout chance for k≥2 parity;
+- **Parity closure** (sparse_poly_discovery): linear readout chance for k≥2 parity;
   escape requires the degree-k product monomial
 
 k-parity is the same principle over the degree axis: degree k is the minimum generator.

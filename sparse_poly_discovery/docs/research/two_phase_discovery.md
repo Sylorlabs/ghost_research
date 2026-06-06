@@ -1,6 +1,6 @@
 # Frontier 15 — Two-Phase Discovery: gap-stopped discovery then clean retrain
 
-**Status:** built, measured. Reproduce: `cd asi_attempt && zig build two-phase-discovery`
+**Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build two-phase-discovery`
 
 ## What was tested
 
