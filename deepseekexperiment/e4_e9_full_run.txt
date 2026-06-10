@@ -1,0 +1,79 @@
+=== E4/E9 MoE residual-stream compounding ===
+tokens: { 671, 16174, 294, 1527, 11768, 344, 223, 20 }
+streams: ref(f32) vs quant(H+P3refit weights, rotated int8 acts)
+attention ablated to zero in both streams; HC machinery exact
+
+L00 hash  cos=0.98917 route_overlap=1.00 experts=48 t=13s
+L01 hash  cos=0.98762 route_overlap=1.00 experts=48 t=26s
+L02 hash  cos=0.98776 route_overlap=1.00 experts=48 t=39s
+L03 score cos=0.98485 route_overlap=0.88 experts=43 t=50s
+L04 score cos=0.98040 route_overlap=0.88 experts=52 t=63s
+L05 score cos=0.97930 route_overlap=0.85 experts=43 t=74s
+L06 score cos=0.97612 route_overlap=0.75 experts=46 t=85s
+L07 score cos=0.97185 route_overlap=0.77 experts=51 t=97s
+L08 score cos=0.96474 route_overlap=0.75 experts=43 t=109s
+L09 score cos=0.95448 route_overlap=0.69 experts=54 t=120s
+L10 score cos=0.93729 route_overlap=0.69 experts=51 t=132s
+L11 score cos=0.92692 route_overlap=0.62 experts=55 t=144s
+L12 score cos=0.91709 route_overlap=0.69 experts=51 t=156s
+L13 score cos=0.91846 route_overlap=0.73 experts=47 t=168s
+L14 score cos=0.91778 route_overlap=0.79 experts=47 t=180s
+L15 score cos=0.91663 route_overlap=0.73 experts=51 t=192s
+L16 score cos=0.91607 route_overlap=0.73 experts=46 t=203s
+L17 score cos=0.91645 route_overlap=0.69 experts=45 t=213s
+L18 score cos=0.91462 route_overlap=0.69 experts=43 t=224s
+L19 score cos=0.91046 route_overlap=0.69 experts=42 t=234s
+L20 score cos=0.88368 route_overlap=0.63 experts=44 t=244s
+L21 score cos=0.84918 route_overlap=0.65 experts=41 t=254s
+L22 score cos=0.76718 route_overlap=0.50 experts=46 t=264s
+L23 score cos=0.69380 route_overlap=0.46 experts=57 t=277s
+L24 score cos=0.67071 route_overlap=0.62 experts=42 t=287s
+L25 score cos=0.70770 route_overlap=0.46 experts=55 t=299s
+L26 score cos=0.64723 route_overlap=0.21 experts=61 t=310s
+L27 score cos=0.63965 route_overlap=0.50 experts=52 t=320s
+L28 score cos=0.62103 route_overlap=0.29 experts=58 t=331s
+L29 score cos=0.58422 route_overlap=0.27 experts=62 t=342s
+L30 score cos=0.54175 route_overlap=0.29 experts=61 t=353s
+L31 score cos=0.53017 route_overlap=0.27 experts=58 t=365s
+L32 score cos=0.50135 route_overlap=0.38 experts=61 t=376s
+L33 score cos=0.45756 route_overlap=0.29 experts=66 t=388s
+L34 score cos=0.40910 route_overlap=0.27 experts=60 t=400s
+L35 score cos=0.44933 route_overlap=0.27 experts=63 t=411s
+L36 score cos=0.43588 route_overlap=0.17 experts=73 t=423s
+L37 score cos=0.42608 route_overlap=0.10 experts=69 t=436s
+L38 score cos=0.41475 route_overlap=0.15 experts=67 t=449s
+L39 score cos=0.40336 route_overlap=0.17 experts=76 t=463s
+L40 score cos=0.39356 route_overlap=0.08 experts=78 t=476s
+L41 score cos=0.38596 route_overlap=0.13 experts=80 t=490s
+L42 score cos=0.37123 route_overlap=0.17 experts=73 t=504s
+L43 score cos=0.36201 route_overlap=0.19 experts=68 t=515s
+L44 score cos=0.34734 route_overlap=0.15 experts=81 t=528s
+L45 score cos=0.34415 route_overlap=0.23 experts=73 t=542s
+L46 score cos=0.34065 route_overlap=0.21 experts=69 t=554s
+L47 score cos=0.33615 route_overlap=0.19 experts=74 t=567s
+L48 score cos=0.33356 route_overlap=0.10 experts=78 t=580s
+L49 score cos=0.31291 route_overlap=0.21 experts=75 t=593s
+L50 score cos=0.30890 route_overlap=0.25 experts=70 t=606s
+L51 score cos=0.30863 route_overlap=0.25 experts=72 t=619s
+L52 score cos=0.31051 route_overlap=0.15 experts=72 t=633s
+L53 score cos=0.29670 route_overlap=0.23 experts=70 t=645s
+L54 score cos=0.28803 route_overlap=0.12 experts=76 t=659s
+L55 score cos=0.28318 route_overlap=0.23 experts=73 t=673s
+L56 score cos=0.27988 route_overlap=0.17 experts=75 t=686s
+L57 score cos=0.31177 route_overlap=0.23 experts=70 t=698s
+L58 score cos=0.28613 route_overlap=0.23 experts=65 t=711s
+L59 score cos=0.23891 route_overlap=0.15 experts=71 t=723s
+L60 score cos=0.22478 route_overlap=0.12 experts=73 t=736s
+
+--- final head ---
+tok    671: logit_cos=0.46094 top1 ref=7387 q=303 DIFF  top10_overlap=0.0
+tok  16174: logit_cos=0.39115 top1 ref=14 q=16 DIFF  top10_overlap=0.3
+tok    294: logit_cos=0.32451 top1 ref=271 q=17574 DIFF  top10_overlap=0.0
+tok   1527: logit_cos=0.43325 top1 ref=6002 q=601 DIFF  top10_overlap=0.0
+tok  11768: logit_cos=0.44245 top1 ref=223 q=91 DIFF  top10_overlap=0.3
+tok    344: logit_cos=0.33256 top1 ref=1839 q=402 DIFF  top10_overlap=0.1
+tok    223: logit_cos=0.18766 top1 ref=14 q=18 DIFF  top10_overlap=0.0
+tok     20: logit_cos=0.44554 top1 ref=16 q=12040 DIFF  top10_overlap=0.1
+
+top1 agreement: 0/8   mean top10 overlap: 0.100
+total time: 748s

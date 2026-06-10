@@ -16,7 +16,7 @@
 const std = @import("std");
 const safetensors = @import("safetensors.zig");
 
-const WEIGHTS_DIR = "/mnt/steamgames/DeepSeek-V4-Pro";
+pub const WEIGHTS_DIR = "/mnt/steamgames/DeepSeek-V4-Pro";
 
 // ---------- dtype decode ----------
 
@@ -59,11 +59,11 @@ fn buildE8m0Lut() [256]f32 {
     return lut;
 }
 
-const fp8_lut = buildFp8Lut();
-const fp4_lut = buildFp4Lut();
-const e8m0_lut = buildE8m0Lut();
+pub const fp8_lut = buildFp8Lut();
+pub const fp4_lut = buildFp4Lut();
+pub const e8m0_lut = buildE8m0Lut();
 
-const Mat = struct {
+pub const Mat = struct {
     data: []f32,
     rows: usize,
     cols: usize,
@@ -74,7 +74,7 @@ const Mat = struct {
 };
 
 // fp8 e4m3 weight [R, C] with e8m0 scale [ceil(R/128), ceil(C/128)]
-fn dequantFp8(alloc: std.mem.Allocator, w: safetensors.Tensor, s: safetensors.Tensor) !Mat {
+pub fn dequantFp8(alloc: std.mem.Allocator, w: safetensors.Tensor, s: safetensors.Tensor) !Mat {
     const rows = w.shape[0];
     const cols = w.shape[1];
     const s_cols = s.shape[1];
@@ -93,7 +93,7 @@ fn dequantFp8(alloc: std.mem.Allocator, w: safetensors.Tensor, s: safetensors.Te
 
 // fp4 e2m1 packed 2/byte along K (low nibble = even col), stored [R, C/2],
 // e8m0 scale [R, C/32]
-fn dequantFp4(alloc: std.mem.Allocator, w: safetensors.Tensor, s: safetensors.Tensor) !Mat {
+pub fn dequantFp4(alloc: std.mem.Allocator, w: safetensors.Tensor, s: safetensors.Tensor) !Mat {
     const rows = w.shape[0];
     const byte_cols = w.shape[1];
     const cols = byte_cols * 2;
@@ -115,7 +115,7 @@ fn dequantFp4(alloc: std.mem.Allocator, w: safetensors.Tensor, s: safetensors.Te
 }
 
 // bf16 weight (no scale)
-fn dequantBf16(alloc: std.mem.Allocator, w: safetensors.Tensor) !Mat {
+pub fn dequantBf16(alloc: std.mem.Allocator, w: safetensors.Tensor) !Mat {
     const rows = w.shape[0];
     const cols = w.shape[1];
     const out = try alloc.alloc(f32, rows * cols);
@@ -129,7 +129,7 @@ fn dequantBf16(alloc: std.mem.Allocator, w: safetensors.Tensor) !Mat {
 // ---------- quantizers (produce a dequantized-equivalent f32 matrix) ----------
 
 // 1-bit: per block of `block` cols, w -> sign(w) * mean|w|  (distiller format)
-fn quantize1bit(alloc: std.mem.Allocator, w: Mat, block: usize) !Mat {
+pub fn quantize1bit(alloc: std.mem.Allocator, w: Mat, block: usize) !Mat {
     const out = try alloc.alloc(f32, w.rows * w.cols);
     var i: usize = 0;
     while (i < w.data.len) : (i += block) {
@@ -145,7 +145,7 @@ fn quantize1bit(alloc: std.mem.Allocator, w: Mat, block: usize) !Mat {
 }
 
 // ternary: threshold 0.7*mean|w| per block, scale = mean|w| over kept elems
-fn quantizeTernary(alloc: std.mem.Allocator, w: Mat, block: usize) !Mat {
+pub fn quantizeTernary(alloc: std.mem.Allocator, w: Mat, block: usize) !Mat {
     const out = try alloc.alloc(f32, w.rows * w.cols);
     var i: usize = 0;
     while (i < w.data.len) : (i += block) {
@@ -171,7 +171,7 @@ fn quantizeTernary(alloc: std.mem.Allocator, w: Mat, block: usize) !Mat {
 
 // k-plane residual binarization: W ~ sum_p s_p * sign(r_p), r_{p+1} = r_p - s_p*sign(r_p).
 // Every plane is still XNOR+popcount at runtime. Returns dequantized-equivalent matrix.
-fn quantizeBitplanes(alloc: std.mem.Allocator, w: Mat, block: usize, planes: usize) !Mat {
+pub fn quantizeBitplanes(alloc: std.mem.Allocator, w: Mat, block: usize, planes: usize) !Mat {
     const out = try alloc.alloc(f32, w.rows * w.cols);
     @memset(out, 0);
     const resid = try alloc.alloc(f32, w.rows * w.cols);
@@ -195,7 +195,7 @@ fn quantizeBitplanes(alloc: std.mem.Allocator, w: Mat, block: usize, planes: usi
 
 // in-place fast Walsh-Hadamard transform on chunks of `chunk` (power of 2),
 // normalized so the transform is orthonormal
-fn fwhtChunks(x: []f32, chunk: usize) void {
+pub fn fwhtChunks(x: []f32, chunk: usize) void {
     const inv = 1.0 / @sqrt(@as(f32, @floatFromInt(chunk)));
     var base: usize = 0;
     while (base < x.len) : (base += chunk) {
@@ -215,7 +215,7 @@ fn fwhtChunks(x: []f32, chunk: usize) void {
     }
 }
 
-fn hadamardChunkFor(cols: usize) usize {
+pub fn hadamardChunkFor(cols: usize) usize {
     // largest power of 2 that divides cols (7168 -> 1024, 1536 -> 512, 3072 -> 1024)
     var c: usize = 1;
     while (cols % (c * 2) == 0 and c * 2 <= 4096) c *= 2;
@@ -224,14 +224,14 @@ fn hadamardChunkFor(cols: usize) usize {
 
 // rotate every row of W by the block-diagonal Hadamard (W' = W * H^T);
 // pairing with x' = H x preserves the product since H is orthonormal
-fn rotateRows(w: Mat, chunk: usize) void {
+pub fn rotateRows(w: Mat, chunk: usize) void {
     for (0..w.rows) |r| {
         fwhtChunks(w.data[r * w.cols .. (r + 1) * w.cols], chunk);
     }
 }
 
 // 1-bit activation with per-`block` scale: sign(x) * mean|x|_block
-fn binarizeActScaled(x: []const f32, out: []f32, block: usize) void {
+pub fn binarizeActScaled(x: []const f32, out: []f32, block: usize) void {
     var i: usize = 0;
     while (i < x.len) : (i += block) {
         var sum_abs: f32 = 0;
@@ -243,7 +243,7 @@ fn binarizeActScaled(x: []const f32, out: []f32, block: usize) void {
 
 // k-plane residual binarization of the activation vector (same trick as weights;
 // every weight-plane x act-plane dot is still XNOR+popcount at runtime)
-fn binarizeActPlanes(x: []const f32, out: []f32, block: usize, planes: usize) void {
+pub fn binarizeActPlanes(x: []const f32, out: []f32, block: usize, planes: usize) void {
     var resid_buf: [32768]f32 = undefined;
     const resid = resid_buf[0..x.len];
     @memcpy(resid, x);
@@ -263,9 +263,123 @@ fn binarizeActPlanes(x: []const f32, out: []f32, block: usize, planes: usize) vo
     }
 }
 
+// E1: greedy bitplanes + least-squares scale refit (+ optional sign re-greedy).
+// Given fixed signs s_p per block, scales solve the kxk system G a = b,
+// G_pq = <s_p,s_q>, b_p = <s_p,w>. Storage identical to greedy planes.
+pub fn quantizeBitplanesRefit(alloc: std.mem.Allocator, w: Mat, block: usize, planes: usize, alternations: usize) !Mat {
+    const out = try alloc.alloc(f32, w.rows * w.cols);
+    const signs = try alloc.alloc(i8, planes * block);
+    defer alloc.free(signs);
+    const resid = try alloc.alloc(f32, block);
+    defer alloc.free(resid);
+    var scales: [8]f64 = undefined;
+
+    var i: usize = 0;
+    while (i < w.data.len) : (i += block) {
+        const wblk = w.data[i .. i + block];
+        // greedy init
+        @memcpy(resid, wblk);
+        for (0..planes) |p| {
+            var sum_abs: f32 = 0;
+            for (resid) |v| sum_abs += @abs(v);
+            const scale = sum_abs / @as(f32, @floatFromInt(block));
+            scales[p] = scale;
+            for (0..block) |j| {
+                const s: i8 = if (resid[j] > 0) 1 else -1;
+                signs[p * block + j] = s;
+                resid[j] -= @as(f32, @floatFromInt(s)) * scale;
+            }
+        }
+        for (0..alternations + 1) |it| {
+            // refit scales: solve G a = b (planes x planes, tiny -> gauss elim)
+            var g: [8][9]f64 = undefined;
+            for (0..planes) |p| {
+                for (0..planes) |q| {
+                    var dot: i32 = 0;
+                    for (0..block) |j| dot += @as(i32, signs[p * block + j]) * signs[q * block + j];
+                    g[p][q] = @floatFromInt(dot);
+                }
+                var bp: f64 = 0;
+                for (0..block) |j| bp += @as(f64, wblk[j]) * @as(f64, @floatFromInt(signs[p * block + j]));
+                g[p][planes] = bp;
+            }
+            for (0..planes) |col| { // gaussian elimination, partial pivot
+                var piv = col;
+                for (col + 1..planes) |r| {
+                    if (@abs(g[r][col]) > @abs(g[piv][col])) piv = r;
+                }
+                std.mem.swap([9]f64, &g[col], &g[piv]);
+                if (@abs(g[col][col]) < 1e-12) continue;
+                for (col + 1..planes) |r| {
+                    const f = g[r][col] / g[col][col];
+                    for (col..planes + 1) |c| g[r][c] -= f * g[col][c];
+                }
+            }
+            var p_rev: usize = planes;
+            while (p_rev > 0) {
+                p_rev -= 1;
+                var acc = g[p_rev][planes];
+                for (p_rev + 1..planes) |c| acc -= g[p_rev][c] * scales[c];
+                scales[p_rev] = if (@abs(g[p_rev][p_rev]) < 1e-12) 0 else acc / g[p_rev][p_rev];
+            }
+            if (it == alternations) break;
+            // re-greedy signs with refit scales
+            @memcpy(resid, wblk);
+            for (0..planes) |p| {
+                for (0..block) |j| {
+                    const s: i8 = if (resid[j] > 0) 1 else -1;
+                    signs[p * block + j] = s;
+                    resid[j] -= @as(f32, @floatFromInt(s)) * @as(f32, @floatCast(scales[p]));
+                }
+            }
+        }
+        for (0..block) |j| {
+            var acc: f64 = 0;
+            for (0..planes) |p| acc += scales[p] * @as(f64, @floatFromInt(signs[p * block + j]));
+            out[i + j] = @floatCast(acc);
+        }
+    }
+    return .{ .data = out, .rows = w.rows, .cols = w.cols };
+}
+
+// E2: int8 activations with per-block absmax scale (hybrid alternative to act planes)
+pub fn quantizeActInt8(x: []const f32, out: []f32, block: usize) void {
+    var i: usize = 0;
+    while (i < x.len) : (i += block) {
+        var amax: f32 = 0;
+        for (x[i .. i + block]) |v| amax = @max(amax, @abs(v));
+        const scale = amax / 127.0;
+        if (scale == 0) {
+            @memset(out[i .. i + block], 0);
+            continue;
+        }
+        for (0..block) |j| {
+            out[i + j] = @round(x[i + j] / scale) * scale;
+        }
+    }
+}
+
+// E5: random sign diagonal (QuaRot-style incoherence), deterministic per index
+fn randSign(idx: usize) f32 {
+    var h = idx *% 0x9E3779B97F4A7C15;
+    h ^= h >> 33;
+    h *%= 0xFF51AFD7ED558CCD;
+    return if (h & 1 == 0) 1.0 else -1.0;
+}
+
+fn applySignDiagCols(w: Mat) void {
+    for (0..w.rows) |r| {
+        for (0..w.cols) |c| w.data[r * w.cols + c] *= randSign(c);
+    }
+}
+
+fn applySignDiagVec(x: []f32) void {
+    for (x, 0..) |*v, c| v.* *= randSign(c);
+}
+
 // ---------- gemv + metrics ----------
 
-fn gemv(w: Mat, x: []const f32, y: []f32) void {
+pub fn gemv(w: Mat, x: []const f32, y: []f32) void {
     for (0..w.rows) |r| {
         const row = w.data[r * w.cols .. (r + 1) * w.cols];
         var acc: f32 = 0;
@@ -274,7 +388,7 @@ fn gemv(w: Mat, x: []const f32, y: []f32) void {
     }
 }
 
-fn cosine(a: []const f32, b: []const f32) f32 {
+pub fn cosine(a: []const f32, b: []const f32) f32 {
     var dot: f64 = 0;
     var na: f64 = 0;
     var nb: f64 = 0;
@@ -373,7 +487,7 @@ fn weightStats(w: Mat) struct { mean_abs: f32, frac_zero: f32 } {
     };
 }
 
-fn loadDequant(alloc: std.mem.Allocator, st: *safetensors.SafetensorsFile, name: []const u8) !?Mat {
+pub fn loadDequant(alloc: std.mem.Allocator, st: *safetensors.SafetensorsFile, name: []const u8) !?Mat {
     const w_t = st.tensors.get(name) orelse return null;
     var name_buf: [256]u8 = undefined;
     if (std.mem.eql(u8, w_t.dtype, "F8_E4M3")) {
@@ -565,6 +679,144 @@ fn runRound2Job(alloc: std.mem.Allocator, st: *safetensors.SafetensorsFile, name
     try stdout.print("\n", .{});
 }
 
+const ActMode = union(enum) {
+    full: void, // f32 activations
+    planes: struct { k: usize, blk: usize },
+    int8: usize, // block size
+};
+
+const WMode = union(enum) {
+    greedy: usize, // planes
+    refit: struct { k: usize, alternations: usize },
+};
+
+// one full pipeline evaluation: optional sign-diag + Hadamard on both sides,
+// weight quantization, activation quantization, cosine vs untouched reference
+fn evalConfig(
+    alloc: std.mem.Allocator,
+    wref: Mat,
+    xs_gauss: []const []f32,
+    xs_heavy: []const []f32,
+    chunk: usize, // 0 = no rotation
+    signdiag: bool,
+    wmode: WMode,
+    act: ActMode,
+) !VariantResult {
+    var wwork = Mat{ .data = try alloc.dupe(f32, wref.data), .rows = wref.rows, .cols = wref.cols };
+    defer wwork.deinit(alloc);
+    if (signdiag) applySignDiagCols(wwork);
+    if (chunk > 0) rotateRows(wwork, chunk);
+    const wq = switch (wmode) {
+        .greedy => |k| try quantizeBitplanes(alloc, wwork, 64, k),
+        .refit => |r| try quantizeBitplanesRefit(alloc, wwork, 64, r.k, r.alternations),
+    };
+    defer wq.deinit(alloc);
+
+    const y_ref = try alloc.alloc(f32, wref.rows);
+    defer alloc.free(y_ref);
+    const y_q = try alloc.alloc(f32, wref.rows);
+    defer alloc.free(y_q);
+    const x_t = try alloc.alloc(f32, wref.cols);
+    defer alloc.free(x_t);
+    const x_act = try alloc.alloc(f32, wref.cols);
+    defer alloc.free(x_act);
+
+    var result: VariantResult = .{ .cos_gauss = 0, .cos_heavy = 0 };
+    for ([2][]const []f32{ xs_gauss, xs_heavy }, 0..) |xs, dist| {
+        var cos_sum: f32 = 0;
+        for (xs) |x| {
+            gemv(wref, x, y_ref);
+            @memcpy(x_t, x);
+            if (signdiag) applySignDiagVec(x_t);
+            if (chunk > 0) fwhtChunks(x_t, chunk);
+            switch (act) {
+                .full => @memcpy(x_act, x_t),
+                .planes => |p| binarizeActPlanes(x_t, x_act, p.blk, p.k),
+                .int8 => |blk| quantizeActInt8(x_t, x_act, blk),
+            }
+            gemv(wq, x_act, y_q);
+            cos_sum += cosine(y_ref, y_q);
+        }
+        const avg = cos_sum / NVEC;
+        if (dist == 0) result.cos_gauss = avg else result.cos_heavy = avg;
+    }
+    return result;
+}
+
+// E1+E2+E5
+fn runRound3Job(alloc: std.mem.Allocator, st: *safetensors.SafetensorsFile, name: []const u8, stdout: anytype, rng: *std.Random.DefaultPrng) !void {
+    const wref = (try loadDequant(alloc, st, name)) orelse {
+        try stdout.print("{s}: NOT FOUND\n", .{name});
+        return;
+    };
+    defer wref.deinit(alloc);
+    const xs_gauss = try makeActivations(alloc, rng, wref.cols, false);
+    defer freeActivations(alloc, xs_gauss);
+    const xs_heavy = try makeActivations(alloc, rng, wref.cols, true);
+    defer freeActivations(alloc, xs_heavy);
+    const chunk = hadamardChunkFor(wref.cols);
+    try stdout.print("{s} [{d}x{d}] chunk={d}\n", .{ name, wref.rows, wref.cols, chunk });
+
+    // E1: greedy vs refit vs refit+regreedy (act f32, no rotation needed)
+    try stdout.print("  E1 w-only      ", .{});
+    for ([2]usize{ 2, 3 }) |k| {
+        const g_ = try evalConfig(alloc, wref, xs_gauss, xs_heavy, 0, false, .{ .greedy = k }, .full);
+        const r0 = try evalConfig(alloc, wref, xs_gauss, xs_heavy, 0, false, .{ .refit = .{ .k = k, .alternations = 0 } }, .full);
+        const r2 = try evalConfig(alloc, wref, xs_gauss, xs_heavy, 0, false, .{ .refit = .{ .k = k, .alternations = 2 } }, .full);
+        try stdout.print("P{d}: greedy={d:.4} refit={d:.4} alt2={d:.4}  ", .{ k, g_.cos_gauss, r0.cos_gauss, r2.cos_gauss });
+    }
+    try stdout.print("\n", .{});
+
+    // E2: act budget under H rotation, P3 refit weights
+    const wm = WMode{ .refit = .{ .k = 3, .alternations = 2 } };
+    try stdout.print("  E2 acts (H+P3w)", .{});
+    inline for (.{ 1, 2, 3, 4 }) |ak| {
+        const r = try evalConfig(alloc, wref, xs_gauss, xs_heavy, chunk, false, wm, .{ .planes = .{ .k = ak, .blk = 64 } });
+        try stdout.print(" aP{d}={d:.4}/{d:.4}", .{ ak, r.cos_gauss, r.cos_heavy });
+    }
+    {
+        const r32 = try evalConfig(alloc, wref, xs_gauss, xs_heavy, chunk, false, wm, .{ .planes = .{ .k = 3, .blk = 32 } });
+        const r128 = try evalConfig(alloc, wref, xs_gauss, xs_heavy, chunk, false, wm, .{ .planes = .{ .k = 3, .blk = 128 } });
+        const ri8 = try evalConfig(alloc, wref, xs_gauss, xs_heavy, chunk, false, wm, .{ .int8 = 64 });
+        const rfull = try evalConfig(alloc, wref, xs_gauss, xs_heavy, chunk, false, wm, .full);
+        try stdout.print("\n  E2 cont.        aP3b32={d:.4}/{d:.4} aP3b128={d:.4}/{d:.4} aInt8={d:.4}/{d:.4} aF32={d:.4}/{d:.4}\n", .{ r32.cos_gauss, r32.cos_heavy, r128.cos_gauss, r128.cos_heavy, ri8.cos_gauss, ri8.cos_heavy, rfull.cos_gauss, rfull.cos_heavy });
+    }
+
+    // E5: rotation design at P3w/P3a-b64
+    const am = ActMode{ .planes = .{ .k = 3, .blk = 64 } };
+    try stdout.print("  E5 rotation    ", .{});
+    {
+        const none = try evalConfig(alloc, wref, xs_gauss, xs_heavy, 0, false, wm, am);
+        try stdout.print(" none={d:.4}/{d:.4}", .{ none.cos_gauss, none.cos_heavy });
+        for ([3]usize{ 256, 1024, 4096 }) |c| {
+            if (wref.cols % c != 0) continue;
+            const r = try evalConfig(alloc, wref, xs_gauss, xs_heavy, c, false, wm, am);
+            try stdout.print(" H{d}={d:.4}/{d:.4}", .{ c, r.cos_gauss, r.cos_heavy });
+        }
+        const sd = try evalConfig(alloc, wref, xs_gauss, xs_heavy, chunk, true, wm, am);
+        try stdout.print(" sdH{d}={d:.4}/{d:.4}\n", .{ chunk, sd.cos_gauss, sd.cos_heavy });
+    }
+}
+
+// E3: sensitivity of every tensor class at P1..P4 (act f32)
+fn runRound4Job(alloc: std.mem.Allocator, st: *safetensors.SafetensorsFile, name: []const u8, stdout: anytype, rng: *std.Random.DefaultPrng) !void {
+    const wref = (try loadDequant(alloc, st, name)) orelse {
+        try stdout.print("{s:<48} NOT FOUND / unsupported\n", .{name});
+        return;
+    };
+    defer wref.deinit(alloc);
+    const xs_gauss = try makeActivations(alloc, rng, wref.cols, false);
+    defer freeActivations(alloc, xs_gauss);
+    const xs_heavy = try makeActivations(alloc, rng, wref.cols, true);
+    defer freeActivations(alloc, xs_heavy);
+    try stdout.print("{s:<48} [{d:>5}x{d:<5}]", .{ name, wref.rows, wref.cols });
+    for (1..5) |k| {
+        const r = try evalConfig(alloc, wref, xs_gauss, xs_heavy, 0, false, .{ .refit = .{ .k = k, .alternations = 2 } }, .full);
+        try stdout.print(" P{d}={d:.4}", .{ k, r.cos_gauss });
+    }
+    try stdout.print("\n", .{});
+}
+
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
@@ -575,7 +827,51 @@ pub fn main() !void {
 
     var args = std.process.args();
     _ = args.skip();
-    const round2 = if (args.next()) |a| std.mem.eql(u8, a, "round2") else false;
+    const mode: []const u8 = args.next() orelse "round1";
+    const round2 = std.mem.eql(u8, mode, "round2");
+
+    if (std.mem.eql(u8, mode, "round3")) {
+        try stdout.print("=== ROUND 3 (E1 refit / E2 act budget / E5 rotation design) ===\n", .{});
+        try stdout.print("cells: gaussian/heavy-tail cosine\n\n", .{});
+        var timer = try std.time.Timer.start();
+        const st = try safetensors.SafetensorsFile.load(alloc, WEIGHTS_DIR ++ "/model-00002-of-00064.safetensors");
+        defer st.deinit();
+        const jobs = [_][]const u8{
+            "layers.0.attn.wkv.weight",
+            "layers.0.ffn.shared_experts.w1.weight",
+            "layers.0.ffn.experts.0.w1.weight",
+        };
+        for (jobs) |name| try runRound3Job(alloc, st, name, stdout, &rng);
+        try stdout.print("\ntotal time: {d:.1}s\n", .{@as(f64, @floatFromInt(timer.read())) / 1e9});
+        return;
+    }
+
+    if (std.mem.eql(u8, mode, "round4")) {
+        try stdout.print("=== ROUND 4 (E3 per-tensor-class sensitivity, refit planes, act f32) ===\n\n", .{});
+        var timer = try std.time.Timer.start();
+        const st = try safetensors.SafetensorsFile.load(alloc, WEIGHTS_DIR ++ "/model-00005-of-00064.safetensors");
+        defer st.deinit();
+        const jobs = [_][]const u8{
+            "layers.3.attn.wq_a.weight",
+            "layers.3.attn.wq_b.weight",
+            "layers.3.attn.wkv.weight",
+            "layers.3.attn.wo_a.weight",
+            "layers.3.attn.wo_b.weight",
+            "layers.3.attn.compressor.wkv.weight",
+            "layers.3.attn.compressor.wgate.weight",
+            "layers.3.ffn.gate.weight",
+            "layers.3.ffn.shared_experts.w1.weight",
+            "layers.3.ffn.shared_experts.w2.weight",
+            "layers.3.ffn.shared_experts.w3.weight",
+            "layers.3.ffn.experts.0.w1.weight",
+            "layers.3.ffn.experts.0.w2.weight",
+            "layers.3.ffn.experts.0.w3.weight",
+            "layers.3.ffn.experts.100.w1.weight",
+        };
+        for (jobs) |name| try runRound4Job(alloc, st, name, stdout, &rng);
+        try stdout.print("\ntotal time: {d:.1}s\n", .{@as(f64, @floatFromInt(timer.read())) / 1e9});
+        return;
+    }
 
     if (round2) {
         try stdout.print("=== ROUND 2: residual XOR bitplanes + Hadamard rotation ===\n", .{});

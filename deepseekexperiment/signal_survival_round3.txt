@@ -1,0 +1,20 @@
+=== ROUND 3 (E1 refit / E2 act budget / E5 rotation design) ===
+cells: gaussian/heavy-tail cosine
+
+layers.0.attn.wkv.weight [512x7168] chunk=1024
+  E1 w-only      P2: greedy=0.9353 refit=0.9367 alt2=0.9409  P3: greedy=0.9725 refit=0.9733 alt2=0.9792  
+  E2 acts (H+P3w) aP1=0.7918/0.8387 aP2=0.9190/0.9376 aP3=0.9561/0.9632 aP4=0.9674/0.9730
+  E2 cont.        aP3b32=0.9572/0.9639 aP3b128=0.9569/0.9620 aInt8=0.9799/0.9808 aF32=0.9799/0.9809
+  E5 rotation     none=0.9530/0.6012 H256=0.9550/0.9698 H1024=0.9561/0.9632 sdH1024=0.9540/0.9635
+layers.0.ffn.shared_experts.w1.weight [3072x7168] chunk=1024
+  E1 w-only      P2: greedy=0.9367 refit=0.9382 alt2=0.9413  P3: greedy=0.9736 refit=0.9745 alt2=0.9791  
+  E2 acts (H+P3w) aP1=0.7828/0.8298 aP2=0.9183/0.9350 aP3=0.9532/0.9631 aP4=0.9656/0.9713
+  E2 cont.        aP3b32=0.9543/0.9636 aP3b128=0.9525/0.9621 aInt8=0.9792/0.9796 aF32=0.9792/0.9796
+  E5 rotation     none=0.9538/0.5969 H256=0.9539/0.9677 H1024=0.9532/0.9631 sdH1024=0.9534/0.9632
+layers.0.ffn.experts.0.w1.weight [3072x7168] chunk=1024
+  E1 w-only      P2: greedy=0.9322 refit=0.9348 alt2=0.9357  P3: greedy=0.9719 refit=0.9756 alt2=0.9794  
+  E2 acts (H+P3w) aP1=0.7849/0.8461 aP2=0.9159/0.9396 aP3=0.9541/0.9640 aP4=0.9664/0.9720
+  E2 cont.        aP3b32=0.9552/0.9650 aP3b128=0.9531/0.9638 aInt8=0.9794/0.9794 aF32=0.9794/0.9794
+  E5 rotation     none=0.9535/0.5808 H256=0.9538/0.9691 H1024=0.9541/0.9640 sdH1024=0.9532/0.9644
+
+total time: 35.1s

@@ -1,0 +1,26 @@
+expert sizes: P3=25.6MB fp4=33.5MB; shared experts pinned: 1.5GB ... too big for 16GB RAM!
+=> price shared experts as always-RAM only if cache budget >= 1.6GB+
+
+ RAM cache    store cap/layer   hit  compute   fetch    tps
+       4GB  ext4_p3         2  0.01    362ms   4039ms   0.23
+       8GB  ext4_p3         5  0.03    362ms   3978ms   0.23
+      12GB  ext4_p3         8  0.04    362ms   3917ms   0.23
+      24GB  ext4_p3        16  0.08    362ms   3754ms   0.24
+      48GB  ext4_p3        33  0.17    362ms   3406ms   0.27
+      96GB  ext4_p3        66  0.34    362ms   2700ms   0.33
+       4GB ntfs_fp4         2  0.01    362ms  59781ms   0.02
+       8GB ntfs_fp4         5  0.03    362ms  58875ms   0.02
+      12GB ntfs_fp4         8  0.04    362ms  57969ms   0.02
+      24GB ntfs_fp4        16  0.08    362ms  55554ms   0.02
+      48GB ntfs_fp4        33  0.17    362ms  50402ms   0.02
+      96GB ntfs_fp4        66  0.34    362ms  39967ms   0.02
+
+notes:
+- 16GB machine: realistic RAM cache budget ~6-8GB after shared experts pinned
+  (1.6GB) + attention/gates/OS => the 4-8GB rows are this machine.
+- ext4_p3 store requires ~300GB converted store; currently no drive fits the
+  full set; a partial store (hot experts) interpolates between rows.
+- score-layer hit rates are extrapolated from hash-layer Zipf locality; true
+  sequential-text score routing needs the attention port (future work).
+- RAM upgrade (e.g. 64-96GB) moves cache on-die: 192-384 experts/layer cached
+  => 0.75-1.0 hit rate => 1-3 tps territory on this CPU.

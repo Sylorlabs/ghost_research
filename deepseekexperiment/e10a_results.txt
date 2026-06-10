@@ -1,0 +1,7 @@
+NTFS source (fp4 expert reads): 1079 MB/s aggregate | per-33MB read p50=32ms p90=33ms | corpus 805GiB
+ext4 root (P3 expert reads): 2183 MB/s aggregate | per-25MB read p50=12ms p90=14ms | corpus 78GiB
+
+per-token fetch cost if NOTHING cached (58 score layers x 6 routed experts):
+  from NTFS fp4 : 11.2 s/token
+  from ext4 P3  : 4.2 s/token
+(shared experts + hash layers are pinned/prefetched; caching cuts the rest)

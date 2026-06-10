@@ -1,0 +1,23 @@
+=== E6: quantization fidelity on REAL captured activations ===
+
+loaded 488 activation records, 61 layers
+real act outlier severity: worst max/mean|x| = 16x
+
+layer 5 (8 real act vectors), experts.0.w1:
+  naive P3 + act f32          : 0.9858
+  H + P3 + act int8 (operating point): 0.9853
+  P3 + act int8, NO rotation  : 0.9858
+  AWQ a=0.25 P3 + act f32     : 0.9848
+  AWQ a=0.50 P3 + act f32     : 0.9821
+layer 30 (8 real act vectors), experts.0.w1:
+  naive P3 + act f32          : 0.9814
+  H + P3 + act int8 (operating point): 0.9813
+  P3 + act int8, NO rotation  : 0.9814
+  AWQ a=0.25 P3 + act f32     : 0.9806
+  AWQ a=0.50 P3 + act f32     : 0.9777
+layer 50 (8 real act vectors), experts.0.w1:
+  naive P3 + act f32          : 0.9844
+  H + P3 + act int8 (operating point): 0.9841
+  P3 + act int8, NO rotation  : 0.9843
+  AWQ a=0.25 P3 + act f32     : 0.9830
+  AWQ a=0.50 P3 + act f32     : 0.9805

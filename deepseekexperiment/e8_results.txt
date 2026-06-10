@@ -1,0 +1,15 @@
+=== E8: packed kernel throughput (3072x7168 expert-shaped matrix) ===
+
+A f32 GEMV            :   3.19 ms  (6.9 Gw/s, 27.6 GB/s f32)
+B P3w x int8a         :   4.62 ms  (4.8 Gw/s, 1.79 GB/s of packed planes)
+C P3w x P3a XNOR      :   2.06 ms  (10.7 Gw/s)
+D fp4 decode GEMV     :  14.28 ms  (1.5 Gw/s, 0.77 GB/s of fp4)
+FWHT 7168 (c1024)     :  0.006 ms
+fp4->P3 conversion    :   95.1 ms per expert matrix (231.6 Mw/s)
+
+per-token MoE compute, kernel A f32:    4092 ms (0.24 tps compute-bound, 1 thread)
+per-token MoE compute, kernel B P3xint8:    5913 ms (0.17 tps compute-bound, 1 thread)
+per-token MoE compute, kernel C XNOR:    2638 ms (0.38 tps compute-bound, 1 thread)
+per-token MoE compute, kernel D fp4:   18288 ms (0.05 tps compute-bound, 1 thread)
+
+(multiply tps by ~10 for 12-core parallel GEMV)

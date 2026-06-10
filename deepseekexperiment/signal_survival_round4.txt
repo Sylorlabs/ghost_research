@@ -1,0 +1,19 @@
+=== ROUND 4 (E3 per-tensor-class sensitivity, refit planes, act f32) ===
+
+layers.3.attn.wq_a.weight                        [ 1536x7168 ] P1=0.7976 P2=0.9412 P3=0.9793 P4=0.9908
+layers.3.attn.wq_b.weight                        [65536x1536 ] P1=0.8006 P2=0.9420 P3=0.9793 P4=0.9912
+layers.3.attn.wkv.weight                         [  512x7168 ] P1=0.8030 P2=0.9422 P3=0.9784 P4=0.9910
+layers.3.attn.wo_a.weight                        [16384x4096 ] P1=0.7955 P2=0.9401 P3=0.9782 P4=0.9905
+layers.3.attn.wo_b.weight                        [ 7168x16384] P1=0.8034 P2=0.9420 P3=0.9795 P4=0.9912
+layers.3.attn.compressor.wkv.weight              [  512x7168 ] P1=0.7968 P2=0.9390 P3=0.9793 P4=0.9908
+layers.3.attn.compressor.wgate.weight            [  512x7168 ] P1=0.7976 P2=0.9428 P3=0.9799 P4=0.9913
+layers.3.ffn.gate.weight                         [  384x7168 ] P1=0.7916 P2=0.9390 P3=0.9780 P4=0.9905
+layers.3.ffn.shared_experts.w1.weight            [ 3072x7168 ] P1=0.7993 P2=0.9411 P3=0.9795 P4=0.9912
+layers.3.ffn.shared_experts.w2.weight            [ 7168x3072 ] P1=0.7956 P2=0.9403 P3=0.9782 P4=0.9905
+layers.3.ffn.shared_experts.w3.weight            [ 3072x7168 ] P1=0.8039 P2=0.9416 P3=0.9789 P4=0.9910
+layers.3.ffn.experts.0.w1.weight                 [ 3072x7168 ] P1=0.7940 P2=0.9340 P3=0.9795 P4=0.9915
+layers.3.ffn.experts.0.w2.weight                 [ 7168x3072 ] P1=0.7941 P2=0.9353 P3=0.9798 P4=0.9917
+layers.3.ffn.experts.0.w3.weight                 [ 3072x7168 ] P1=0.7960 P2=0.9356 P3=0.9797 P4=0.9914
+layers.3.ffn.experts.100.w1.weight               [ 3072x7168 ] P1=0.7989 P2=0.9365 P3=0.9799 P4=0.9916
+
+total time: 68.9s

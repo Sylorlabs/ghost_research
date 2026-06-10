@@ -1,0 +1,35 @@
+token stream: 21601 tokens, 3020 unique ids
+probe tokens (26): [671, 16174, 294, 1527, 11768, 344, 223, 20, 90, 16, 1351, 14031, 90176, 2605, 1354, 58783]...
+
+layer 0: working set growth [(64, 207), (256, 317), (1024, 384), (4096, 384), (21601, 384)]
+  LRU cap= 32: hit rate 0.158
+  LRU cap= 64: hit rate 0.331
+  LRU cap=128: hit rate 0.595
+  LRU cap=192: hit rate 0.748
+  LRU cap=256: hit rate 0.857
+  LRU cap=384: hit rate 0.997
+  prev-8-token overlap: 0.237
+  prev-32-token overlap: 0.593
+  prev-128-token overlap: 0.872
+
+layer 1: working set growth [(64, 203), (256, 328), (1024, 384), (4096, 384), (21601, 384)]
+  LRU cap= 32: hit rate 0.156
+  LRU cap= 64: hit rate 0.327
+  LRU cap=128: hit rate 0.587
+  LRU cap=192: hit rate 0.745
+  LRU cap=256: hit rate 0.857
+  LRU cap=384: hit rate 0.997
+  prev-8-token overlap: 0.236
+  prev-32-token overlap: 0.589
+  prev-128-token overlap: 0.873
+
+layer 2: working set growth [(64, 206), (256, 329), (1024, 383), (4096, 384), (21601, 384)]
+  LRU cap= 32: hit rate 0.154
+  LRU cap= 64: hit rate 0.323
+  LRU cap=128: hit rate 0.586
+  LRU cap=192: hit rate 0.743
+  LRU cap=256: hit rate 0.855
+  LRU cap=384: hit rate 0.997
+  prev-8-token overlap: 0.232
+  prev-32-token overlap: 0.591
+  prev-128-token overlap: 0.872
