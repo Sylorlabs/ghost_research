@@ -1,0 +1,51 @@
+#version 450
+#extension GL_ARB_gpu_shader_int64 : require
+
+layout(local_size_x = 256) in; // Optimized for RX 5700 XT Wavefronts (RDNA)
+
+struct BitBlock {
+    uint64_t bits;
+    float scale;
+};
+
+layout(binding = 0) readonly buffer InputBuffer {
+    uint64_t in_packed[];
+};
+
+layout(binding = 1) readonly buffer WeightBuffer {
+    BitBlock w_blocks[];
+};
+
+layout(binding = 2) writeonly buffer OutputBuffer {
+    float out_logits[];
+};
+
+layout(push_constant) uniform Constants {
+    uint dim_blocks;
+} params;
+
+void main() {
+    // Each thread computes the exact dot product for one output dimension
+    uint out_idx = gl_GlobalInvocationID.x;
+    float dot_sum = 0.0;
+    
+    uint weight_offset = out_idx * params.dim_blocks;
+    
+    // Process 64 floats (1 u64 bitblock) per iteration
+    for (uint i = 0; i < params.dim_blocks; i++) {
+        uint64_t in_bits = in_packed[i];
+        BitBlock block = w_blocks[weight_offset + i];
+        
+        // Native GPU XNOR
+        uint64_t xnor = ~(in_bits ^ block.bits);
+        
+        // Native GPU Popcount (split into 32-bit registers for RDNA optimization)
+        int pop = bitCount(uint(xnor)) + bitCount(uint(xnor >> 32));
+        
+        // Recover block magnitude 
+        int true_dot = (pop * 2) - 64;
+        dot_sum += float(true_dot) * block.scale;
+    }
+    
+    out_logits[out_idx] = dot_sum;
+}

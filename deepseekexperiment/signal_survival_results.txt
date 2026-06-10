@@ -1,0 +1,28 @@
+=== SIGNAL SURVIVAL: DeepSeek V4 Pro 1-bit/ternary quantization ===
+cosine(reference fp32 GEMV, quantized GEMV), avg over 8 vectors
+A: w1bit+act_f32  B: w1bit+act_1bit(XNOR)  C: ternary+act_f32  D: ternary+act_1bit
+each cell: gaussian / heavy-tail(1% channels x20)   z = fraction of exact-zero weights
+
+--- layer 0 (shard 2) ---
+layers.0.attn.wq_a.weight                  F8_E4M3 [ 1536x7168 ] z=0.000 | A 0.8081/0.7988 | B 0.6529/0.2919 | C 0.9025/0.9003 | D 0.7236/0.3342
+layers.0.attn.wq_b.weight                  F8_E4M3 [65536x1536 ] z=0.000 | A 0.8032/0.8016 | B 0.6384/0.3459 | C 0.9026/0.9012 | D 0.7197/0.3904
+layers.0.attn.wkv.weight                   F8_E4M3 [  512x7168 ] z=0.000 | A 0.7940/0.8035 | B 0.6243/0.2853 | C 0.9008/0.9009 | D 0.7139/0.3185
+  block sweep (variant A, gauss/heavy):  b16=0.8020/0.8133  b32=0.7972/0.8064  b128=0.7918/0.8012  b256=0.7914/0.8000
+layers.0.attn.wo_a.weight                  F8_E4M3 [16384x4096 ] z=0.000 | A 0.7984/0.7981 | B 0.6379/0.3215 | C 0.8986/0.8987 | D 0.7183/0.3609
+layers.0.attn.wo_b.weight                  F8_E4M3 [ 7168x16384] z=0.000 | A 0.7984/0.8001 | B 0.6343/0.2854 | C 0.9020/0.9010 | D 0.7177/0.3208
+layers.0.attn.compressor.wkv.weight        BF16    [  512x7168 ] z=0.000 | A 0.7997/0.8054 | B 0.6298/0.3418 | C 0.8967/0.9072 | D 0.7095/0.3968
+layers.0.ffn.shared_experts.w1.weight      F8_E4M3 [ 3072x7168 ] z=0.000 | A 0.7961/0.8010 | B 0.6318/0.3227 | C 0.9026/0.9025 | D 0.7167/0.3683
+layers.0.ffn.shared_experts.w2.weight      F8_E4M3 [ 7168x3072 ] z=0.000 | A 0.8014/0.7982 | B 0.6407/0.2715 | C 0.9011/0.9004 | D 0.7196/0.3043
+layers.0.ffn.experts.0.w1.weight           I8      [ 3072x7168 ] z=0.117 | A 0.7923/0.7915 | B 0.6322/0.2438 | C 0.8980/0.8981 | D 0.7149/0.2774
+  block sweep (variant A, gauss/heavy):  b16=0.8038/0.8027  b32=0.7960/0.7957  b128=0.7908/0.7888  b256=0.7900/0.7878
+layers.0.ffn.experts.0.w2.weight           I8      [ 7168x3072 ] z=0.115 | A 0.7959/0.7964 | B 0.6378/0.3086 | C 0.8981/0.8980 | D 0.7213/0.3516
+layers.0.ffn.experts.0.w3.weight           I8      [ 3072x7168 ] z=0.117 | A 0.7941/0.7929 | B 0.6361/0.2675 | C 0.8977/0.8995 | D 0.7190/0.3017
+layers.0.ffn.experts.7.w1.weight           I8      [ 3072x7168 ] z=0.117 | A 0.7960/0.7954 | B 0.6380/0.3292 | C 0.8977/0.8981 | D 0.7139/0.3726
+--- layer 30 (shard 32) ---
+layers.30.attn.wq_b.weight                 F8_E4M3 [65536x1536 ] z=0.000 | A 0.8015/0.8015 | B 0.6408/0.3738 | C 0.9017/0.9017 | D 0.7207/0.4208
+layers.30.attn.wkv.weight                  F8_E4M3 [  512x7168 ] z=0.000 | A 0.8026/0.7971 | B 0.6416/0.3472 | C 0.9001/0.8988 | D 0.7172/0.3866
+layers.30.ffn.shared_experts.w1.weight     F8_E4M3 [ 3072x7168 ] z=0.000 | A 0.8038/0.7977 | B 0.6344/0.2993 | C 0.9024/0.9002 | D 0.7174/0.3430
+layers.30.ffn.experts.0.w1.weight          I8      [ 3072x7168 ] z=0.116 | A 0.7966/0.7905 | B 0.6300/0.3299 | C 0.8965/0.8981 | D 0.7120/0.3716
+layers.30.ffn.experts.0.w2.weight          I8      [ 7168x3072 ] z=0.117 | A 0.7942/0.7965 | B 0.6322/0.2563 | C 0.8986/0.8983 | D 0.7152/0.2873
+
+total time: 59.5s

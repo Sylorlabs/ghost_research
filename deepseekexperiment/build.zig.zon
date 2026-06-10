@@ -1,0 +1,10 @@
+.{
+    .name = .deepseek_v4_expert,
+    .version = "0.1.0",
+    .fingerprint = 0xeec485b15d947c6f,
+    .paths = .{
+        "src",
+        "build.zig",
+        "build.zig.zon",
+    },
+}

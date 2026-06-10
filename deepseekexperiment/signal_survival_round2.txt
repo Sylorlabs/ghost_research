@@ -1,0 +1,31 @@
+=== ROUND 2: residual XOR bitplanes + Hadamard rotation ===
+Pk = k bitplanes (each plane is XNOR+popcount). H = block-Hadamard rotation.
+act:f32 = real activations; act:1b64 = sign(x)*mean|x| per 64 (XOR-native)
+g = gaussian acts, h = heavy-tail acts
+
+layers.0.attn.wkv.weight [512x7168]
+  planes act:f32   P1=0.8025/0.7934  P2=0.9353/0.9352  P3=0.9725/0.9738  P4=0.9856/0.9862  
+  planes act:1b64  P2g=0.7527  P2h=0.3833  P3g=0.7812  P3h=0.3936  
+  planes act:Pk64  P2wP2ag=0.8754  P2wP2ah=0.5067  P3wP3ag=0.9467  P3wP3ah=0.5981  
+  H+PkwPka 1b64    HP2g=0.8790  HP2h=0.8976  HP3g=0.9489  HP3h=0.9574  
+  H(c1024) act:1b64 HP2g=0.7524  HP2h=0.8035  HP3g=0.7832  HP3h=0.8316  
+layers.0.attn.wq_b.weight [65536x1536]
+  planes act:f32   P1=0.8032/0.8016  P2=0.9374/0.9364  P3=0.9739/0.9735  P4=0.9863/0.9860  
+  planes act:1b64  P2g=0.7501  P2h=0.4179  P3g=0.7797  P3h=0.4353  
+  planes act:Pk64  P2wP2ag=0.8790  P2wP2ah=0.5579  P3wP3ag=0.9492  P3wP3ah=0.6405  
+  H+PkwPka 1b64    HP2g=0.8799  HP2h=0.8908  HP3g=0.9494  HP3h=0.9565  
+  H(c512) act:1b64 HP2g=0.7553  HP2h=0.7784  HP3g=0.7848  HP3h=0.8085  
+layers.0.ffn.shared_experts.w1.weight [3072x7168]
+  planes act:f32   P1=0.8007/0.7997  P2=0.9374/0.9355  P3=0.9739/0.9734  P4=0.9861/0.9861  
+  planes act:1b64  P2g=0.7463  P2h=0.3644  P3g=0.7754  P3h=0.3783  
+  planes act:Pk64  P2wP2ag=0.8780  P2wP2ah=0.5120  P3wP3ag=0.9479  P3wP3ah=0.5914  
+  H+PkwPka 1b64    HP2g=0.8778  HP2h=0.8921  HP3g=0.9492  HP3h=0.9559  
+  H(c1024) act:1b64 HP2g=0.7540  HP2h=0.7813  HP3g=0.7826  HP3h=0.8129  
+layers.0.ffn.experts.0.w1.weight [3072x7168]
+  planes act:f32   P1=0.7953/0.7957  P2=0.9326/0.9328  P3=0.9719/0.9718  P4=0.9854/0.9853  
+  planes act:1b64  P2g=0.7475  P2h=0.3976  P3g=0.7774  P3h=0.4165  
+  planes act:Pk64  P2wP2ag=0.8750  P2wP2ah=0.5296  P3wP3ag=0.9462  P3wP3ah=0.6100  
+  H+PkwPka 1b64    HP2g=0.8798  HP2h=0.8892  HP3g=0.9495  HP3h=0.9554  
+  H(c1024) act:1b64 HP2g=0.7488  HP2h=0.7795  HP3g=0.7796  HP3h=0.8114  
+
+total time: 47.7s
