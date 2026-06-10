@@ -97,20 +97,28 @@ accumulation through 116 sublayers is the other half.
 state (0.19 at L60, routing overlap 0.10, top-1 1/8). **One more XOR plane
 does not escape the cascade — diminishing returns are immediate.**
 
-**Control 3, P8 weights (~0.9995/matmul, diagnostic only — more bits than
-fp4):** see `e9_p8_chaos_control.txt`. Purpose: distinguish "the stack is
-chaotically sensitive to ANY perturbation" (cosine-to-reference is then the
-wrong metric; only task metrics like perplexity are meaningful) from
-"P3-specific damage."
+**Control 3, P8 weights (~0.9995/matmul — MORE total bits than the original
+fp4):** collapses on an almost identical trajectory to P3: 0.93 (L20), 0.61
+(L30), 0.23 (L60), top-1 agreement **0/8**. Routing overlap already 0.77-0.92
+by layers 4-8 even at this fidelity. End-state comparison at L60:
+P3 = 0.225, P4 = 0.191, **P8 = 0.228**, forced-routing P3 = 0.42.
 
-**Honest interpretation:** a 61-layer, 1.5T-param MoE amplifies per-matmul
-error ~0.98 into total trajectory divergence. Matching the reference model
-token-for-token at XOR bit budgets is ruled out by these runs. What is NOT
-yet ruled out: the quantized model remaining a *good language model* in its
-own right (divergence ≠ damage in a chaotic system — two fp64 weather sims
-diverge too). Deciding that requires task evaluation (perplexity over text),
-which requires the attention port. The P8 control tells us which world we
-are in.
+**Verdict: the collapse is precision-INDEPENDENT in this range. The stack
+(as tested) is chaotically sensitive to any perturbation** — the gate's
+top-6 margins are razor-thin, so even 0.05% hidden-state error flips picks,
+and 58 score-routed layers amplify flips into full trajectory divergence.
+
+**Honest interpretation:** cosine-to-reference is the wrong success metric
+for this architecture. Two near-identical copies of the model diverge —
+like two weather simulations. This is not evidence the XOR model is broken;
+it is evidence reference-matching cannot measure whether it is. Note that
+DeepSeek themselves trained/ship this model at fp4 expert precision — the
+model is built to function under rounding noise of roughly this order. The
+question "does intelligence survive XOR conversion" is answerable only by
+functional evaluation (perplexity/task accuracy of the XOR model standalone),
+which requires the attention port. Caveat: attention ablation may overstate
+chaos — real attention re-anchors every layer to the shared input context
+and could partially re-synchronize trajectories.
 
 ## E8 — Kernel throughput (this CPU)
 
@@ -147,11 +155,26 @@ batch decoding (amortize fetches), smaller V4 variants, or 256GB+ RAM.
    planes + int8 acts = 0.98 per matmul on real weights and real activations,
    3.25 bits/weight, fastest kernel on this CPU.
 2. The failure mode is not precision — it's **dynamics**: score routing
-   amplifies sub-2% hidden-state error into discrete expert flips that
-   cascade through 61 layers. Hash routing (DeepSeek's own innovation,
-   layers 0-2) is immune; if the whole model were hash-routed it would
-   likely survive XOR conversion.
-3. Token-for-token reference matching at XOR budgets: ruled out. Quality of
-   the diverged model: open question, needs attention port + perplexity.
+   amplifies even 0.05% hidden-state error (P8) into discrete expert flips
+   that cascade through 61 layers exactly like 2% error (P3) does. Hash
+   routing (DeepSeek's own innovation, layers 0-2) is immune; if the whole
+   model were hash-routed it would likely survive XOR conversion unchanged.
+3. **Reference-matching is the wrong metric — proven by P8.** The stack
+   diverges from itself under any perturbation. Whether the XOR model is
+   still a good language model is open and requires the attention port +
+   perplexity evaluation. The model already tolerates fp4 rounding noise
+   by design, so 0.98/matmul XOR noise being functionally fine is plausible.
 4. This machine tops out ≈0.23 tps for V4 Pro regardless of quantization
-   cleverness — the expert working set is the binding constraint, not FLOPs.
+   cleverness — the ~300GB expert working set is the binding constraint,
+   not FLOPs (XOR compute is only 360ms/token).
+
+## Next frontier (in order of information per hour)
+
+1. **Port MLA attention + indexer** from `inference/model.py` into
+   `moe_stack.zig` — unlocks sequential text, real perplexity of the XOR
+   model standalone, and true score-layer cache locality measurement.
+2. **Perplexity A/B**: ref vs XOR on a few KB of held-out text. This — not
+   cosine — answers "did the intelligence survive."
+3. If quality holds: build the tiered engine (pinned shared experts,
+   tid2eid prefetch, LRU expert cache, XNOR kernels) and accept ~0.2-0.3
+   tps on this hardware, or revisit hardware (RAM is the lever, not GPU).
