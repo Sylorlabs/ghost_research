@@ -9,6 +9,34 @@ reproduce commands for every key experiment.
 
 ---
 
+## Vector Symbolic Architectures (VSA) / Hyperdimensional Computing
+
+Vector Symbolic Architectures (VSA) or Hyperdimensional Computing is a paradigm representing information as high-dimensional vectors (e.g., 10,000 dimensions). By using robust mathematical operations (like addition for superposition, multiplication/XOR for binding, and permutation for sequence), VSAs allow algebraic composition of concepts. This creates a continuous, distributed representation where symbolic logic and geometric similarity coexist, enabling systems to perform reasoning and pattern matching robustly even in the presence of noise.
+
+## The Engine
+
+This repository serves as a pure-Zig Vector Symbolic Architecture engine. It features mmap-backed 8-walker manifold ingestion, concept synthesis, and invention algorithms—all with zero external dependencies.
+
+## Building and Running
+
+Ensure you have Zig installed, then run:
+
+```bash
+zig build run
+```
+*Example output:*
+```
+[INFO] Initializing VSA core...
+[INFO] 8-walker manifold ingestion complete.
+[INFO] Synthesizing concepts... Done.
+```
+
+## Ecosystem Connection
+
+This engine operates as the mathematical core for the Ghost ecosystem. It provides the high-performance synthesis and structural representations that are utilized by `ghost_engine` (the runtime and reasoning layer) and exposed via `ghost_cli` (the developer interface).
+
+---
+
 ## The Unifying Result
 
 Every research thread in this repository independently ran into the same wall:

@@ -49,7 +49,7 @@ pub const Hypervector = struct {
         var res = Hypervector.initEmpty();
         var i: usize = 0;
         while (i < WordCount) : (i += 1) {
-            res.data[i] = self.data[i] ^ other.data[i];
+            res.data[i] = self.data[i] +% other.data[i];
         }
         return res;
     }

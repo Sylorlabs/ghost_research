@@ -5,3 +5,5 @@ build.log
 error.log
 math_hypotheses
 math_hypotheses.o
+logs/
+state/
