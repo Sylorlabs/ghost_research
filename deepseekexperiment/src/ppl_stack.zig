@@ -678,6 +678,16 @@ pub fn main() !void {
     if (args.next()) |a| n_threads = try std.fmt.parseInt(u32, a, 10);
     std.debug.assert(ntok % 128 == 0);
 
+    // ACT_DUMP=<path>: dump ref-stream post-ffn_norm activations (the exact
+    // gate/expert inputs) as [layer u32, tok u32, 7168 f32] records — same
+    // format as calib_acts.bin, for manifold analysis (B5).
+    var act_dump: ?std.fs.File = null;
+    if (std.process.getEnvVarOwned(alloc, "ACT_DUMP")) |p| {
+        act_dump = try std.fs.cwd().createFile(p, .{});
+        alloc.free(p);
+    } else |_| {}
+    defer if (act_dump) |f| f.close();
+
     var ckpt_name_buf: [128]u8 = undefined;
     const ckpt_name = try std.fmt.bufPrint(&ckpt_name_buf, "ppl_ckpt_T{d}_off{d}_cap{d}.bin", .{ ntok, tok_offset, cache_cap });
     const ckpt_want = CkptHeader{
@@ -974,6 +984,11 @@ pub fn main() !void {
                 splits[t * 2 + s] = hcPre(hi, hc_ffn, xs[(t * 2 + s) * DIM .. (t * 2 + s + 1) * DIM]);
                 const xn = xs[(t * 2 + s) * DIM .. (t * 2 + s + 1) * DIM];
                 rmsNormApply(xn, ffn_norm);
+                if (s == 0) if (act_dump) |f| {
+                    const lt = [2]u32{ @intCast(layer), @intCast(t) };
+                    try f.writeAll(std.mem.asBytes(&lt));
+                    try f.writeAll(std.mem.sliceAsBytes(xn));
+                };
                 for (0..N_EXPERTS) |e| {
                     scores[e] = sqrtSoftplus(@floatCast(dotF64(gate_w.data[e * DIM .. (e + 1) * DIM], xn)));
                 }
