@@ -16,7 +16,29 @@
 const std = @import("std");
 const safetensors = @import("safetensors.zig");
 
-pub const WEIGHTS_DIR = "/mnt/steamgames/DeepSeek-V4-Pro";
+// The weights drive has two fstab entries (same UUID) that race at boot,
+// so the checkpoint shows up at a different mount point per boot.
+// Resolve at runtime instead of baking one path in at comptime.
+pub const WEIGHTS_DIR_CANDIDATES = [_][]const u8{
+    "/mnt/steamgames/DeepSeek-V4-Pro",
+    "/mnt/corpus/DeepSeek-V4-Pro",
+};
+
+pub fn weightsDir() []const u8 {
+    for (WEIGHTS_DIR_CANDIDATES) |d| {
+        std.fs.accessAbsolute(d, .{}) catch continue;
+        return d;
+    }
+    std.debug.panic("DeepSeek-V4-Pro checkpoint not found at any known mount point (is the NTFS drive mounted?)", .{});
+}
+
+var shard_path_buf: [128]u8 = undefined;
+
+/// Path to shard `idx` of the checkpoint. Returns a slice of a shared
+/// module buffer — call from the (single) weight-loading thread only.
+pub fn shardPath(idx: usize) []const u8 {
+    return std.fmt.bufPrint(&shard_path_buf, "{s}/model-{d:0>5}-of-00064.safetensors", .{ weightsDir(), idx }) catch unreachable;
+}
 
 // ---------- dtype decode ----------
 
@@ -834,7 +856,7 @@ pub fn main() !void {
         try stdout.print("=== ROUND 3 (E1 refit / E2 act budget / E5 rotation design) ===\n", .{});
         try stdout.print("cells: gaussian/heavy-tail cosine\n\n", .{});
         var timer = try std.time.Timer.start();
-        const st = try safetensors.SafetensorsFile.load(alloc, WEIGHTS_DIR ++ "/model-00002-of-00064.safetensors");
+        const st = try safetensors.SafetensorsFile.load(alloc, shardPath(2));
         defer st.deinit();
         const jobs = [_][]const u8{
             "layers.0.attn.wkv.weight",
@@ -849,7 +871,7 @@ pub fn main() !void {
     if (std.mem.eql(u8, mode, "round4")) {
         try stdout.print("=== ROUND 4 (E3 per-tensor-class sensitivity, refit planes, act f32) ===\n\n", .{});
         var timer = try std.time.Timer.start();
-        const st = try safetensors.SafetensorsFile.load(alloc, WEIGHTS_DIR ++ "/model-00005-of-00064.safetensors");
+        const st = try safetensors.SafetensorsFile.load(alloc, shardPath(5));
         defer st.deinit();
         const jobs = [_][]const u8{
             "layers.3.attn.wq_a.weight",
@@ -879,7 +901,7 @@ pub fn main() !void {
         try stdout.print("act:f32 = real activations; act:1b64 = sign(x)*mean|x| per 64 (XOR-native)\n", .{});
         try stdout.print("g = gaussian acts, h = heavy-tail acts\n\n", .{});
         var timer = try std.time.Timer.start();
-        const st = try safetensors.SafetensorsFile.load(alloc, WEIGHTS_DIR ++ "/model-00002-of-00064.safetensors");
+        const st = try safetensors.SafetensorsFile.load(alloc, shardPath(2));
         defer st.deinit();
         const jobs = [_][]const u8{
             "layers.0.attn.wkv.weight",
@@ -924,7 +946,7 @@ pub fn main() !void {
 
     {
         try stdout.print("--- layer 0 (shard 2) ---\n", .{});
-        const st = try safetensors.SafetensorsFile.load(alloc, WEIGHTS_DIR ++ "/model-00002-of-00064.safetensors");
+        const st = try safetensors.SafetensorsFile.load(alloc, shardPath(2));
         defer st.deinit();
         for (layer0_jobs, 0..) |name, i| {
             // sweep block sizes on one fp8 and one fp4 tensor
@@ -934,7 +956,7 @@ pub fn main() !void {
     }
     {
         try stdout.print("--- layer 30 (shard 32) ---\n", .{});
-        const st = try safetensors.SafetensorsFile.load(alloc, WEIGHTS_DIR ++ "/model-00032-of-00064.safetensors");
+        const st = try safetensors.SafetensorsFile.load(alloc, shardPath(32));
         defer st.deinit();
         for (layer30_jobs) |name| {
             try runJob(alloc, st, name, stdout, &rng, false);

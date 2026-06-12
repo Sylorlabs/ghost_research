@@ -49,7 +49,88 @@ const OLR = 1024;
 const GROUP_DIM = NHEADS * HD / OGROUPS; // 4096
 const WIN = 128;
 
-var n_threads: u32 = 6;
+var n_threads: u32 = 10;
+
+// ---------- layer checkpointing (resume an interrupted run) ----------
+// The only cross-layer state is `h` (hidden states) plus the U3 counters,
+// so a byte-identical restore continues deterministically.
+
+const CKPT_MAGIC: u64 = 0xC4EC9D11;
+
+const CkptHeader = extern struct {
+    magic: u64,
+    ntok: u64,
+    tok_offset: u64,
+    cache_cap: u64,
+    eps_bits: u64,
+    next_layer: u64,
+    u3_subs: u64,
+    u3_miss_pol: u64,
+    u3_miss_base: u64,
+};
+
+fn ckptSave(name: []const u8, hdr: CkptHeader, h: []const f32) !void {
+    var tmp_buf: [128]u8 = undefined;
+    const tmp = try std.fmt.bufPrint(&tmp_buf, "{s}.tmp", .{name});
+    {
+        const f = try std.fs.cwd().createFile(tmp, .{});
+        defer f.close();
+        try f.writeAll(std.mem.asBytes(&hdr));
+        try f.writeAll(std.mem.sliceAsBytes(h));
+    }
+    try std.fs.cwd().rename(tmp, name);
+}
+
+/// Returns the header if a checkpoint matching the run config exists
+/// (and fills `h`), else null.
+fn ckptLoad(name: []const u8, want: CkptHeader, h: []f32) ?CkptHeader {
+    const f = std.fs.cwd().openFile(name, .{}) catch return null;
+    defer f.close();
+    var hdr: CkptHeader = undefined;
+    const n = f.readAll(std.mem.asBytes(&hdr)) catch return null;
+    if (n != @sizeOf(CkptHeader)) return null;
+    if (hdr.magic != CKPT_MAGIC or hdr.ntok != want.ntok or
+        hdr.tok_offset != want.tok_offset or hdr.cache_cap != want.cache_cap or
+        hdr.eps_bits != want.eps_bits) return null;
+    const hn = f.readAll(std.mem.sliceAsBytes(h)) catch return null;
+    if (hn != h.len * 4) return null;
+    return hdr;
+}
+
+// ---------- U3: cache-aware routing (quant stream, score layers) ----------
+// Simulates a per-layer LRU expert cache evolving over tokens (= decode time).
+// Policy: if a routed expert is not resident and some resident expert keeps
+// >= (1-eps) of its gate score, route to the resident one instead. The gate's
+// razor-thin top-6 margins (P8 chaos finding) suggest this is nearly free.
+
+fn lruFind(cache: []const usize, n: usize, eid: usize) ?usize {
+    for (cache[0..n], 0..) |e, i| {
+        if (e == eid) return i;
+    }
+    return null;
+}
+
+/// Touch eid (insert/refresh, LRU-evict if full). Returns true on miss.
+fn lruTouch(cache: []usize, ts: []u64, n: *usize, cap: usize, eid: usize, clock: u64) bool {
+    if (lruFind(cache, n.*, eid)) |i| {
+        ts[i] = clock;
+        return false;
+    }
+    if (n.* < cap) {
+        cache[n.*] = eid;
+        ts[n.*] = clock;
+        n.* += 1;
+    } else {
+        var victim: usize = 0;
+        var i: usize = 1;
+        while (i < n.*) : (i += 1) {
+            if (ts[i] < ts[victim]) victim = i;
+        }
+        cache[victim] = eid;
+        ts[victim] = clock;
+    }
+    return true;
+}
 
 fn ratioFor(layer: usize) usize {
     if (layer < 2) return 128;
@@ -586,26 +667,60 @@ pub fn main() !void {
     _ = args.skip();
     var ntok: usize = 256;
     var max_layers: usize = N_LAYERS;
+    var tok_offset: usize = 0; // skip this many stream tokens (pick eval text region)
+    var cache_cap: usize = 0; // U3: per-layer LRU expert cache capacity (0 = policy off)
+    var sub_eps: f32 = 0.10; // U3: max relative gate-score sacrifice for a resident substitute
     if (args.next()) |a| ntok = try std.fmt.parseInt(usize, a, 10);
     if (args.next()) |a| max_layers = try std.fmt.parseInt(usize, a, 10);
+    if (args.next()) |a| tok_offset = try std.fmt.parseInt(usize, a, 10);
+    if (args.next()) |a| cache_cap = try std.fmt.parseInt(usize, a, 10);
+    if (args.next()) |a| sub_eps = try std.fmt.parseFloat(f32, a);
+    if (args.next()) |a| n_threads = try std.fmt.parseInt(u32, a, 10);
     std.debug.assert(ntok % 128 == 0);
+
+    var ckpt_name_buf: [128]u8 = undefined;
+    const ckpt_name = try std.fmt.bufPrint(&ckpt_name_buf, "ppl_ckpt_T{d}_off{d}_cap{d}.bin", .{ ntok, tok_offset, cache_cap });
+    const ckpt_want = CkptHeader{
+        .magic = CKPT_MAGIC,
+        .ntok = ntok,
+        .tok_offset = tok_offset,
+        .cache_cap = cache_cap,
+        .eps_bits = @as(u32, @bitCast(sub_eps)),
+        .next_layer = 0,
+        .u3_subs = 0,
+        .u3_miss_pol = 0,
+        .u3_miss_base = 0,
+    };
 
     // real text tokens
     const tf = try std.fs.cwd().openFile("stream_tokens.bin", .{});
     defer tf.close();
+    try tf.seekTo(tok_offset * 4);
     const tokens = try alloc.alloc(u32, ntok + 1);
     defer alloc.free(tokens);
     _ = try tf.readAll(std.mem.sliceAsBytes(tokens));
 
     try stdout.print("=== E11: full V4 stack with MLA attention — standalone perplexity A/B ===\n", .{});
-    try stdout.print("T={d} real text tokens | ref(f32) vs quant(H+P{d}refit weights, int8 acts)\n", .{ ntok, W_PLANES });
+    try stdout.print("T={d} real text tokens (stream offset {d}) | ref(f32) vs quant(H+P{d}refit weights, int8 acts)\n", .{ ntok, tok_offset, W_PLANES });
+    if (cache_cap > 0) try stdout.print("U3 cache-aware routing ON (quant stream, score layers): LRU cap={d}/layer, eps={d:.2}\n", .{ cache_cap, sub_eps });
     try stdout.print("attention: MLA + window-{d} + gated compressor (exact at this T)\n\n", .{WIN});
 
     // hidden states: [t][stream][HCDIM] flattened
     const h = try alloc.alloc(f32, ntok * 2 * HCDIM);
     defer alloc.free(h);
-    {
-        const st1 = try safetensors.SafetensorsFile.load(alloc, ss.WEIGHTS_DIR ++ "/model-00001-of-00064.safetensors");
+
+    var start_layer: usize = 0;
+    var u3_subs_total: usize = 0;
+    var u3_miss_pol_total: usize = 0;
+    var u3_miss_base_total: usize = 0;
+    if (ckptLoad(ckpt_name, ckpt_want, h)) |hdr| {
+        start_layer = hdr.next_layer;
+        u3_subs_total = hdr.u3_subs;
+        u3_miss_pol_total = hdr.u3_miss_pol;
+        u3_miss_base_total = hdr.u3_miss_base;
+        try stdout.print("RESUMING from checkpoint {s} at layer {d}\n", .{ ckpt_name, start_layer });
+    } else {
+        const st1 = try safetensors.SafetensorsFile.load(alloc, ss.shardPath(1));
         defer st1.deinit();
         const emb = st1.tensors.get("embed.weight").?;
         var row: [DIM]f32 = undefined;
@@ -650,9 +765,8 @@ pub fn main() !void {
     const route_w = try alloc.alloc([2][TOPK]f32, ntok);
     defer alloc.free(route_w);
 
-    for (0..max_layers) |layer| {
-        var sp_buf: [256]u8 = undefined;
-        const shard_path = try std.fmt.bufPrint(&sp_buf, "{s}/model-{d:0>5}-of-00064.safetensors", .{ ss.WEIGHTS_DIR, layer + 2 });
+    for (start_layer..max_layers) |layer| {
+        const shard_path = ss.shardPath(layer + 2);
         const st = try safetensors.SafetensorsFile.load(alloc, shard_path);
         defer st.deinit();
         const ratio = ratioFor(layer);
@@ -842,6 +956,17 @@ pub fn main() !void {
 
         var scores: [N_EXPERTS]f32 = undefined;
         var route_overlap_sum: f64 = 0;
+        // U3 per-layer state: policy LRU + identical baseline LRU fed by
+        // unmodified picks (so one run yields both miss counts)
+        var lru_pol: [N_EXPERTS]usize = undefined;
+        var lru_pol_ts: [N_EXPERTS]u64 = undefined;
+        var lru_pol_n: usize = 0;
+        var lru_base: [N_EXPERTS]usize = undefined;
+        var lru_base_ts: [N_EXPERTS]u64 = undefined;
+        var lru_base_n: usize = 0;
+        var u3_subs: usize = 0;
+        var u3_miss_pol: usize = 0;
+        var u3_miss_base: usize = 0;
         for (0..ntok) |t| {
             for (0..2) |s| {
                 const hi = h[(t * 2 + s) * HCDIM .. (t * 2 + s + 1) * HCDIM];
@@ -871,6 +996,37 @@ pub fn main() !void {
                             }
                         }
                         routing[t][s][k] = best;
+                    }
+                }
+                if (s == 1 and !is_hash and cache_cap > 0) {
+                    // baseline miss accounting (unmodified picks)
+                    for (0..TOPK) |k| {
+                        if (lruTouch(&lru_base, &lru_base_ts, &lru_base_n, cache_cap, routing[t][s][k], t)) u3_miss_base += 1;
+                    }
+                    // policy: substitute cold picks with near-equal residents
+                    for (0..TOPK) |k| {
+                        const pick = routing[t][s][k];
+                        if (lruFind(&lru_pol, lru_pol_n, pick) != null) continue;
+                        var best_c: usize = N_EXPERTS;
+                        var best_s: f32 = -1;
+                        for (lru_pol[0..lru_pol_n]) |c| {
+                            var taken = false;
+                            for (0..TOPK) |kk| {
+                                if (routing[t][s][kk] == c) taken = true;
+                            }
+                            if (!taken and scores[c] > best_s) {
+                                best_s = scores[c];
+                                best_c = c;
+                            }
+                        }
+                        if (best_c < N_EXPERTS and best_s >= (1 - sub_eps) * scores[pick]) {
+                            routing[t][s][k] = best_c;
+                            u3_subs += 1;
+                        }
+                    }
+                    // final picks update the policy cache; misses = fetches
+                    for (0..TOPK) |k| {
+                        if (lruTouch(&lru_pol, &lru_pol_ts, &lru_pol_n, cache_cap, routing[t][s][k], t)) u3_miss_pol += 1;
                     }
                 }
                 var wsum: f32 = 0;
@@ -956,11 +1112,23 @@ pub fn main() !void {
         }
         const elapsed = @as(f64, @floatFromInt(timer.read())) / 1e9;
         try stdout.print("L{d:0>2} r{d:<3} {s} cos={d:.5} route_ov={d:.2} experts={d} t={d:.0}s\n", .{ layer, ratio, if (is_hash) "hash " else "score", cos_sum / @as(f64, @floatFromInt(ntok)), route_overlap_sum / @as(f64, @floatFromInt(ntok)), works.count(), elapsed });
+        if (cache_cap > 0 and !is_hash) {
+            try stdout.print("     U3: subs={d} miss_pol={d} miss_base={d}\n", .{ u3_subs, u3_miss_pol, u3_miss_base });
+            u3_subs_total += u3_subs;
+            u3_miss_pol_total += u3_miss_pol;
+            u3_miss_base_total += u3_miss_base;
+        }
+        var ckpt_hdr = ckpt_want;
+        ckpt_hdr.next_layer = layer + 1;
+        ckpt_hdr.u3_subs = u3_subs_total;
+        ckpt_hdr.u3_miss_pol = u3_miss_pol_total;
+        ckpt_hdr.u3_miss_base = u3_miss_base_total;
+        try ckptSave(ckpt_name, ckpt_hdr, h);
     }
 
     // ===== head + perplexity =====
-    try stdout.print("\n--- perplexity (eval positions: second half, step 2) ---\n", .{});
-    const st63 = try safetensors.SafetensorsFile.load(alloc, ss.WEIGHTS_DIR ++ "/model-00063-of-00064.safetensors");
+    try stdout.print("\n--- perplexity (eval positions: second half, step 1) ---\n", .{});
+    const st63 = try safetensors.SafetensorsFile.load(alloc, ss.shardPath(63));
     defer st63.deinit();
     const head_fn = try tensor1dF32(alloc, st63, "hc_head_fn");
     defer alloc.free(head_fn);
@@ -975,12 +1143,22 @@ pub fn main() !void {
     var eval_pos = std.ArrayListUnmanaged(usize){};
     defer eval_pos.deinit(alloc);
     var ep: usize = ntok / 2;
-    while (ep < ntok - 1) : (ep += 2) try eval_pos.append(alloc, ep);
+    while (ep < ntok - 1) : (ep += 1) try eval_pos.append(alloc, ep);
 
     var nll = [2]f64{ 0, 0 };
     var top1_agree: usize = 0;
     const logits = try alloc.alloc(f32, 2 * VOCAB);
     defer alloc.free(logits);
+
+    // per-position diagnostics: is quant damage diffuse or concentrated?
+    var csv_name_buf: [64]u8 = undefined;
+    const csv_name = if (cache_cap > 0)
+        try std.fmt.bufPrint(&csv_name_buf, "e11_positions_T{d}_off{d}_cap{d}.csv", .{ ntok, tok_offset, cache_cap })
+    else
+        try std.fmt.bufPrint(&csv_name_buf, "e11_positions_T{d}_off{d}.csv", .{ ntok, tok_offset });
+    const csv = try std.fs.cwd().createFile(csv_name, .{});
+    defer csv.close();
+    try csv.writeAll("pos,target,ref_nll,quant_nll,ref_top1,quant_top1\n");
 
     for (eval_pos.items) |t| {
         var xf: [2][DIM]f32 = undefined;
@@ -1010,6 +1188,7 @@ pub fn main() !void {
         }
         const target = tokens[t + 1];
         var top1: [2]usize = undefined;
+        var p_nll: [2]f64 = undefined;
         for (0..2) |s| {
             const l = logits[s * VOCAB .. (s + 1) * VOCAB];
             var mx: f32 = -std.math.inf(f32);
@@ -1023,13 +1202,22 @@ pub fn main() !void {
             top1[s] = arg;
             var den: f64 = 0;
             for (l) |v| den += @exp(@as(f64, v - mx));
-            nll[s] += -(@as(f64, l[target]) - mx - @log(den));
+            p_nll[s] = -(@as(f64, l[target]) - mx - @log(den));
+            nll[s] += p_nll[s];
         }
         if (top1[0] == top1[1]) top1_agree += 1;
+        var line_buf: [160]u8 = undefined;
+        const line = try std.fmt.bufPrint(&line_buf, "{d},{d},{d:.4},{d:.4},{d},{d}\n", .{ t, target, p_nll[0], p_nll[1], top1[0], top1[1] });
+        try csv.writeAll(line);
     }
     const n_eval: f64 = @floatFromInt(eval_pos.items.len);
     try stdout.print("\nREF   mean NLL = {d:.4} nats  ppl = {d:.2}\n", .{ nll[0] / n_eval, @exp(nll[0] / n_eval) });
     try stdout.print("QUANT mean NLL = {d:.4} nats  ppl = {d:.2}\n", .{ nll[1] / n_eval, @exp(nll[1] / n_eval) });
     try stdout.print("top1 agreement at eval positions: {d}/{d}\n", .{ top1_agree, eval_pos.items.len });
+    if (cache_cap > 0) {
+        const red = 100.0 * (1.0 - @as(f64, @floatFromInt(u3_miss_pol_total)) / @as(f64, @floatFromInt(@max(u3_miss_base_total, 1))));
+        try stdout.print("U3 totals (score layers, quant stream): subs={d}  fetches {d} vs baseline {d}  ({d:.1}% fetch reduction)\n", .{ u3_subs_total, u3_miss_pol_total, u3_miss_base_total, red });
+    }
     try stdout.print("total time: {d:.0}s\n", .{@as(f64, @floatFromInt(timer.read())) / 1e9});
+    std.fs.cwd().deleteFile(ckpt_name) catch {};
 }

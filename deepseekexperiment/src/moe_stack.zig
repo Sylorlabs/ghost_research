@@ -331,7 +331,7 @@ pub fn main() !void {
     defer alloc.free(h);
 
     { // embed
-        const st1 = try safetensors.SafetensorsFile.load(alloc, ss.WEIGHTS_DIR ++ "/model-00001-of-00064.safetensors");
+        const st1 = try safetensors.SafetensorsFile.load(alloc, ss.shardPath(1));
         defer st1.deinit();
         const emb = st1.tensors.get("embed.weight").?;
         var row: [DIM]f32 = undefined;
@@ -364,8 +364,7 @@ pub fn main() !void {
     var name_buf: [128]u8 = undefined;
 
     for (0..max_layers) |layer| {
-        var shard_path_buf: [256]u8 = undefined;
-        const shard_path = try std.fmt.bufPrint(&shard_path_buf, "{s}/model-{d:0>5}-of-00064.safetensors", .{ ss.WEIGHTS_DIR, layer + 2 });
+        const shard_path = ss.shardPath(layer + 2);
         const st = try safetensors.SafetensorsFile.load(alloc, shard_path);
         defer st.deinit();
 
@@ -556,7 +555,7 @@ pub fn main() !void {
 
     // ---------- final head (E9) ----------
     try stdout.print("\n--- final head ---\n", .{});
-    const st63 = try safetensors.SafetensorsFile.load(alloc, ss.WEIGHTS_DIR ++ "/model-00063-of-00064.safetensors");
+    const st63 = try safetensors.SafetensorsFile.load(alloc, ss.shardPath(63));
     defer st63.deinit();
     const head_fn = try tensor1dF32(alloc, st63, "hc_head_fn"); // [HC, HCDIM]
     defer alloc.free(head_fn);
