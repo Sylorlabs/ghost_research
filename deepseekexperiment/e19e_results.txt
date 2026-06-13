@@ -1,0 +1,10 @@
+E19e rank sweep (held-out generalization): layer 30, 384 warmup / 128 held-out
+   r  inputproj-HO  fullsurr-HO  P3 MB/exp  WS_hot64  WS_250  held-out input energy covered
+  64         0.573        0.499       0.43      1.6G    6.3G                           41%
+ 128         0.631        0.547       0.86      3.2G   12.4G                           49%
+ 192         0.658        0.573       1.28      4.8G   18.6G                           53%
+ 256         0.675        0.589       1.71      6.3G   24.8G                           55%
+ 320         0.686        0.601       2.14      7.9G   31.0G                           56%
+ 383         0.694        0.608       2.55      9.5G   37.0G                           58%
+
+if input-proj-HO reaches ~0.95 at some r AND WS fits 16GB -> surrogate viable at that r; if it plateaus <0.7 for all r -> manifold drift kills static surrogate (go hybrid).
