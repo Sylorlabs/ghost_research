@@ -364,6 +364,113 @@ pub fn quantizeBitplanesRefit(alloc: std.mem.Allocator, w: Mat, block: usize, pl
     return .{ .data = out, .rows = w.rows, .cols = w.cols };
 }
 
+// Packed export of quantizeBitplanesRefit: identical math, but emits the
+// sign bits + refit scales (the engine's on-disk/runtime format) instead of
+// the dequantized-equivalent matrix. Layout matches xnor_bench.PackedPlanes:
+// bits[plane][row][col/64] u64 (bit j = sign of element j positive),
+// scales[plane][row][col/64] f32. block must be 64.
+pub const Packed3 = struct {
+    bits: []u64,
+    scales: []f32,
+    rows: usize,
+    cols: usize,
+    planes: usize,
+
+    pub fn deinit(self: @This(), alloc: std.mem.Allocator) void {
+        alloc.free(self.bits);
+        alloc.free(self.scales);
+    }
+};
+
+pub fn packBitplanesRefit(alloc: std.mem.Allocator, w: Mat, planes: usize, alternations: usize) !Packed3 {
+    const block = 64;
+    std.debug.assert(w.cols % block == 0);
+    const words = w.cols / block;
+    const n = planes * w.rows * words;
+    var out = Packed3{
+        .bits = try alloc.alloc(u64, n),
+        .scales = try alloc.alloc(f32, n),
+        .rows = w.rows,
+        .cols = w.cols,
+        .planes = planes,
+    };
+    const signs = try alloc.alloc(i8, planes * block);
+    defer alloc.free(signs);
+    const resid = try alloc.alloc(f32, block);
+    defer alloc.free(resid);
+    var scales: [8]f64 = undefined;
+
+    var i: usize = 0;
+    while (i < w.data.len) : (i += block) {
+        const wblk = w.data[i .. i + block];
+        @memcpy(resid, wblk);
+        for (0..planes) |p| {
+            var sum_abs: f32 = 0;
+            for (resid) |v| sum_abs += @abs(v);
+            const scale = sum_abs / @as(f32, @floatFromInt(block));
+            scales[p] = scale;
+            for (0..block) |j| {
+                const s: i8 = if (resid[j] > 0) 1 else -1;
+                signs[p * block + j] = s;
+                resid[j] -= @as(f32, @floatFromInt(s)) * scale;
+            }
+        }
+        for (0..alternations + 1) |it| {
+            var g: [8][9]f64 = undefined;
+            for (0..planes) |p| {
+                for (0..planes) |q| {
+                    var dot: i32 = 0;
+                    for (0..block) |j| dot += @as(i32, signs[p * block + j]) * signs[q * block + j];
+                    g[p][q] = @floatFromInt(dot);
+                }
+                var bp: f64 = 0;
+                for (0..block) |j| bp += @as(f64, wblk[j]) * @as(f64, @floatFromInt(signs[p * block + j]));
+                g[p][planes] = bp;
+            }
+            for (0..planes) |col| {
+                var piv = col;
+                for (col + 1..planes) |r| {
+                    if (@abs(g[r][col]) > @abs(g[piv][col])) piv = r;
+                }
+                std.mem.swap([9]f64, &g[col], &g[piv]);
+                if (@abs(g[col][col]) < 1e-12) continue;
+                for (col + 1..planes) |r| {
+                    const f = g[r][col] / g[col][col];
+                    for (col..planes + 1) |c| g[r][c] -= f * g[col][c];
+                }
+            }
+            var p_rev: usize = planes;
+            while (p_rev > 0) {
+                p_rev -= 1;
+                var acc = g[p_rev][planes];
+                for (p_rev + 1..planes) |c| acc -= g[p_rev][c] * scales[c];
+                scales[p_rev] = if (@abs(g[p_rev][p_rev]) < 1e-12) 0 else acc / g[p_rev][p_rev];
+            }
+            if (it == alternations) break;
+            @memcpy(resid, wblk);
+            for (0..planes) |p| {
+                for (0..block) |j| {
+                    const s: i8 = if (resid[j] > 0) 1 else -1;
+                    signs[p * block + j] = s;
+                    resid[j] -= @as(f32, @floatFromInt(s)) * @as(f32, @floatCast(scales[p]));
+                }
+            }
+        }
+        const row = (i / w.cols);
+        const word0 = (i % w.cols) / block;
+        for (0..planes) |p| {
+            var bits: u64 = 0;
+            for (0..block) |j| {
+                if (signs[p * block + j] > 0) bits |= @as(u64, 1) << @intCast(j);
+            }
+            const idx = p * w.rows * words + row * words + word0;
+            out.bits[idx] = bits;
+            out.scales[idx] = @floatCast(scales[p]);
+        }
+    }
+    return out;
+}
+
 // E2: int8 activations with per-block absmax scale (hybrid alternative to act planes)
 pub fn quantizeActInt8(x: []const f32, out: []f32, block: usize) void {
     var i: usize = 0;

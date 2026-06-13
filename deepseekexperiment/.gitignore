@@ -20,3 +20,6 @@ CONTROLS_DONE
 ACTDUMP_DONE
 EPS40_DONE
 HYST_DONE
+engine_weights/
+forge
+ppl_stack_actdump
