@@ -96,3 +96,13 @@ One line per discovery, newest at the bottom of each section. Full detail in
   => 20 tps now needs (GPU compute, DONE) + (experts in ~600GB fast RAM, HARDWARE).
   The 16GB box stays fetch-bound ~0.29 tps regardless of the GPU. The wall is
   now cleanly MEMORY CAPACITY, not compute and not algorithm.
+- TOP-K REDUCTION (2026-06-13): DEAD. REF ppl top-6=14.06, top-4=17.13(+0.20),
+  top-3=17.84(+0.24), top-2=25.42(+0.59). Dropping below 6 experts costs MORE
+  quality than the whole XOR tax, AND fetch savings are sublinear (union
+  saturates: 198->134/layer at top-3, only 1.5x). The model genuinely uses all
+  6 fine-grained experts. Not a viable fetch lever.
+- FETCH-LEVER STATUS: compression DEAD, surrogate DEAD, top-k DEAD, faster-drive
+  capacity-BLOCKED, frequency-precision UNTESTED (~2x bounded), MTP-speculative
+  UNTESTED (fetch-FREQUENCY via consecutive-token locality — last big lever).
+  Honest 16GB fetch ceiling stays ~1-2 tps. The 49B-active-params/token floor is
+  physical; 20 tps needs RAM (hold working set) — not an assumption-wall.
