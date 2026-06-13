@@ -106,3 +106,12 @@ One line per discovery, newest at the bottom of each section. Full detail in
   UNTESTED (fetch-FREQUENCY via consecutive-token locality — last big lever).
   Honest 16GB fetch ceiling stays ~1-2 tps. The 49B-active-params/token floor is
   physical; 20 tps needs RAM (hold working set) — not an assumption-wall.
+- COHERENT-TEXT SPAN LOCALITY (2026-06-13, route_coherent.bin 512 tok, span_locality.py):
+  coherent text is 4x more local than the diverse probe — consecutive-pair overlap
+  0.32 (vs 0.08), K=8 span amortization 1.76x, K=16 2.15x. => MTP/span-batching is
+  VIABLE as a ~1.8-2.2x fetch lever (the diverse-probe near-zero was a measurement
+  artifact — re-measuring on coherent text was the right call). BUT session working
+  set still 273/layer over 512 tokens (427GB) — doesn't fit 16GB; caching alone
+  can't hold it. Honest stacked 16GB ceiling rises to ~3-6 tps (MTP 1.8x x
+  freq-precision 2x x U3 1.3x x fast-drive placement), measured-grounded, still
+  not 20 (session working set needs RAM). MTP port now justified.

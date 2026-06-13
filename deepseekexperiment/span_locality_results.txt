@@ -1,0 +1,9 @@
+span locality (COHERENT text): route_coherent.bin, score-layers=58, tokens=512
+  K= 1 consecutive: fetch amortization 1.00x (union 6.0 of 6)
+  K= 2 consecutive: fetch amortization 1.21x (union 9.9 of 12)
+  K= 4 consecutive: fetch amortization 1.46x (union 16.5 of 24)
+  K= 8 consecutive: fetch amortization 1.76x (union 27.3 of 48)
+  K=16 consecutive: fetch amortization 2.15x (union 44.6 of 96)
+consecutive-pair overlap: 0.32
+session working set: 273 distinct experts/layer over 512 coherent tokens (of 384)
+  -> if cached, that's 427GB/layer-set; RAM holds ~10/layer
