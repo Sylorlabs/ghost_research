@@ -1,0 +1,132 @@
+=== E11: full V4 stack with MLA attention — standalone perplexity A/B ===
+T=128 real text tokens (stream offset 8000) | ref(f32) vs quant(H+P3refit weights, int8 acts)
+U3 cache-aware routing ON (quant stream, score layers): LRU cap=128/layer, eps=0.40
+attention: MLA + window-128 + gated compressor (exact at this T)
+
+L00 r128 hash  cos=0.98319 route_ov=1.00 experts=302 t=75s
+L01 r128 hash  cos=0.97996 route_ov=1.00 experts=297 t=148s
+L02 r4   hash  cos=0.97791 route_ov=1.00 experts=309 t=222s
+L03 r128 score cos=0.97195 route_ov=0.55 experts=184 t=266s
+     U3: subs=338 miss_pol=74 miss_base=198
+L04 r4   score cos=0.97648 route_ov=0.66 experts=165 t=309s
+     U3: subs=252 miss_pol=82 miss_base=174
+L05 r128 score cos=0.97216 route_ov=0.57 experts=168 t=350s
+     U3: subs=322 miss_pol=75 miss_base=190
+L06 r4   score cos=0.96423 route_ov=0.57 experts=155 t=392s
+     U3: subs=321 miss_pol=65 miss_base=165
+L07 r128 score cos=0.95301 route_ov=0.62 experts=199 t=442s
+     U3: subs=253 miss_pol=92 miss_base=202
+L08 r4   score cos=0.94416 route_ov=0.57 experts=204 t=495s
+     U3: subs=285 miss_pol=79 miss_base=223
+L09 r128 score cos=0.92315 route_ov=0.62 experts=153 t=539s
+     U3: subs=255 miss_pol=54 miss_base=144
+L10 r4   score cos=0.90311 route_ov=0.56 experts=166 t=581s
+     U3: subs=297 miss_pol=68 miss_base=175
+L11 r128 score cos=0.88769 route_ov=0.58 experts=187 t=623s
+     U3: subs=304 miss_pol=76 miss_base=185
+L12 r4   score cos=0.88792 route_ov=0.64 experts=172 t=669s
+     U3: subs=209 miss_pol=84 miss_base=166
+L13 r128 score cos=0.88157 route_ov=0.62 experts=159 t=711s
+     U3: subs=257 miss_pol=73 miss_base=172
+L14 r4   score cos=0.88674 route_ov=0.56 experts=180 t=756s
+     U3: subs=289 miss_pol=78 miss_base=181
+L15 r128 score cos=0.88794 route_ov=0.57 experts=168 t=801s
+     U3: subs=295 miss_pol=55 miss_base=165
+L16 r4   score cos=0.88696 route_ov=0.61 experts=143 t=843s
+     U3: subs=268 miss_pol=63 miss_base=144
+L17 r128 score cos=0.88202 route_ov=0.63 experts=139 t=883s
+     U3: subs=243 miss_pol=62 miss_base=145
+L18 r4   score cos=0.87813 route_ov=0.56 experts=156 t=925s
+     U3: subs=304 miss_pol=60 miss_base=153
+L19 r128 score cos=0.86406 route_ov=0.55 experts=152 t=973s
+     U3: subs=313 miss_pol=60 miss_base=143
+L20 r4   score cos=0.84065 route_ov=0.52 experts=160 t=1017s
+     U3: subs=299 miss_pol=58 miss_base=163
+L21 r128 score cos=0.83097 route_ov=0.53 experts=165 t=1060s
+     U3: subs=313 miss_pol=71 miss_base=169
+L22 r4   score cos=0.80141 route_ov=0.58 experts=155 t=1105s
+     U3: subs=274 miss_pol=61 miss_base=140
+L23 r128 score cos=0.83232 route_ov=0.70 experts=187 t=1156s
+     U3: subs=169 miss_pol=116 miss_base=203
+L24 r4   score cos=0.83243 route_ov=0.65 experts=174 t=1202s
+     U3: subs=212 miss_pol=91 miss_base=180
+L25 r128 score cos=0.85648 route_ov=0.70 experts=178 t=1249s
+     U3: subs=165 miss_pol=107 miss_base=184
+L26 r4   score cos=0.85606 route_ov=0.68 experts=160 t=1296s
+     U3: subs=200 miss_pol=89 miss_base=162
+L27 r128 score cos=0.85184 route_ov=0.65 experts=152 t=1343s
+     U3: subs=185 miss_pol=86 miss_base=145
+L28 r4   score cos=0.85792 route_ov=0.68 experts=144 t=1386s
+     U3: subs=155 miss_pol=85 miss_base=139
+L29 r128 score cos=0.86815 route_ov=0.66 experts=209 t=1434s
+     U3: subs=194 miss_pol=123 miss_base=217
+L30 r4   score cos=0.85271 route_ov=0.67 experts=155 t=1483s
+     U3: subs=161 miss_pol=83 miss_base=144
+L31 r128 score cos=0.85135 route_ov=0.68 experts=193 t=1533s
+     U3: subs=164 miss_pol=119 miss_base=208
+L32 r4   score cos=0.85127 route_ov=0.63 experts=182 t=1580s
+     U3: subs=199 miss_pol=101 miss_base=197
+L33 r128 score cos=0.85221 route_ov=0.66 experts=218 t=1631s
+     U3: subs=200 miss_pol=129 miss_base=255
+L34 r4   score cos=0.85130 route_ov=0.69 experts=138 t=1677s
+     U3: subs=148 miss_pol=87 miss_base=142
+L35 r128 score cos=0.86666 route_ov=0.75 experts=209 t=1732s
+     U3: subs=152 miss_pol=146 miss_base=249
+L36 r4   score cos=0.86214 route_ov=0.68 experts=152 t=1777s
+     U3: subs=152 miss_pol=92 miss_base=153
+L37 r128 score cos=0.86773 route_ov=0.70 experts=183 t=1826s
+     U3: subs=138 miss_pol=105 miss_base=172
+L38 r4   score cos=0.86635 route_ov=0.73 experts=158 t=1873s
+     U3: subs=144 miss_pol=93 miss_base=147
+L39 r128 score cos=0.86707 route_ov=0.64 experts=192 t=1924s
+     U3: subs=153 miss_pol=105 miss_base=176
+L40 r4   score cos=0.86786 route_ov=0.68 experts=169 t=1973s
+     U3: subs=128 miss_pol=97 miss_base=155
+L41 r128 score cos=0.87110 route_ov=0.69 experts=194 t=2026s
+     U3: subs=143 miss_pol=115 miss_base=185
+L42 r4   score cos=0.86858 route_ov=0.69 experts=150 t=2078s
+     U3: subs=129 miss_pol=95 miss_base=140
+L43 r128 score cos=0.87302 route_ov=0.68 experts=205 t=2129s
+     U3: subs=130 miss_pol=127 miss_base=202
+L44 r4   score cos=0.87189 route_ov=0.69 experts=183 t=2183s
+     U3: subs=158 miss_pol=105 miss_base=174
+L45 r128 score cos=0.87065 route_ov=0.68 experts=179 t=2237s
+     U3: subs=124 miss_pol=120 miss_base=186
+L46 r4   score cos=0.86813 route_ov=0.66 experts=161 t=2285s
+     U3: subs=152 miss_pol=94 miss_base=157
+L47 r128 score cos=0.86552 route_ov=0.63 experts=186 t=2335s
+     U3: subs=153 miss_pol=111 miss_base=175
+L48 r4   score cos=0.86727 route_ov=0.67 experts=177 t=2386s
+     U3: subs=107 miss_pol=109 miss_base=159
+L49 r128 score cos=0.86392 route_ov=0.68 experts=183 t=2440s
+     U3: subs=127 miss_pol=127 miss_base=186
+L50 r4   score cos=0.86156 route_ov=0.69 experts=165 t=2490s
+     U3: subs=101 miss_pol=90 miss_base=139
+L51 r128 score cos=0.85726 route_ov=0.66 experts=187 t=2541s
+     U3: subs=159 miss_pol=114 miss_base=182
+L52 r4   score cos=0.86281 route_ov=0.65 experts=178 t=2593s
+     U3: subs=163 miss_pol=105 miss_base=169
+L53 r128 score cos=0.80883 route_ov=0.67 experts=215 t=2643s
+     U3: subs=180 miss_pol=131 miss_base=245
+L54 r4   score cos=0.74126 route_ov=0.69 experts=152 t=2691s
+     U3: subs=112 miss_pol=87 miss_base=140
+L55 r128 score cos=0.73943 route_ov=0.68 experts=178 t=2742s
+     U3: subs=181 miss_pol=115 miss_base=181
+L56 r4   score cos=0.74617 route_ov=0.71 experts=152 t=2789s
+     U3: subs=162 miss_pol=86 miss_base=146
+L57 r128 score cos=0.76307 route_ov=0.65 experts=197 t=2838s
+     U3: subs=178 miss_pol=113 miss_base=197
+L58 r4   score cos=0.76575 route_ov=0.58 experts=154 t=2885s
+     U3: subs=209 miss_pol=78 miss_base=146
+L59 r128 score cos=0.76775 route_ov=0.73 experts=198 t=2940s
+     U3: subs=139 miss_pol=136 miss_base=222
+L60 r4   score cos=0.79939 route_ov=0.73 experts=185 t=2989s
+     U3: subs=128 miss_pol=110 miss_base=173
+
+--- perplexity (eval positions: second half, step 1) ---
+
+REF   mean NLL = 2.6233 nats  ppl = 13.78
+QUANT mean NLL = 2.8209 nats  ppl = 16.79
+top1 agreement at eval positions: 44/63
+U3 totals (score layers, quant stream): subs=11645  fetches 5412 vs baseline 10129  (46.6% fetch reduction)
+total time: 3072s
