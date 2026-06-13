@@ -3,7 +3,7 @@
 # measure context-locality / cold-token fraction (E16). 512-token windows for
 # a longer locality signal.
 cd "$(dirname "$0")"
-while [ ! -f E15_DONE ]; do sleep 60; done
+while [ ! -f E15_DONE ] || [ ! -f SURROGATE_DONE ]; do sleep 60; done
 echo "[$(date +%H:%M:%S)] START E16-routedump off8000" >> overnight_queue.log
 ROUTE_DUMP=route_off8000.bin ACT_DUMP=acts_T512_off8000.bin nice -n 5 ./ppl_stack_route 512 61 8000 0 0.10 12 >> route_run8000.txt 2>&1
 echo "[$(date +%H:%M:%S)] route off8000 exit=$?" >> overnight_queue.log

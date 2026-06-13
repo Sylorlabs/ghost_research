@@ -23,3 +23,10 @@ HYST_DONE
 engine_weights/
 forge
 ppl_stack_actdump
+*_DONE
+*.log
+bench_gpu
+bench_gpu[0-9]
+route_*.bin
+acts_*.bin
+*.npy
