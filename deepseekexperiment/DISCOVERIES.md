@@ -73,3 +73,14 @@ One line per discovery, newest at the bottom of each section. Full detail in
   CLEARS the 20 target IN AGGREGATE (not single-stream latency). B=32/4K-ctx KV
   ~1.2GB fits 16GB. GATE: optimized kernel efficiency (naive=20 Gw/s; need
   >=300 Gw/s for ~8+ tps, ceiling 1100). [bench_gpu + model]
+- GPU resident-VRAM result (`bench_gpu2.zig`, gpu.benchResidentGEMV): putting
+  weights in DEVICE_LOCAL VRAM (ReBAR, upload once) = 124 Gw/s single-plane,
+  6.1x the naive PCIe shader (20.4). VRAM residency is the big lever.
+- BUT honest apples-to-apples: P3 = 3 planes -> 41 Gw/s P3-equiv, which is 2.6x
+  SLOWER than the 12-core CPU (107 Gw/s P3). The naive shader (per-bit branching,
+  f32 acts, 1 thread/row, low occupancy) loses to the CPU. The GPU is NOT a free
+  win with this kernel.
+- Optimized P3-popcount ceiling (VRAM bandwidth-bound, 15.4GB/tok @ 448GB/s) =
+  ~29 tps = 8.6x the CPU compute floor — but ONLY for VRAM-resident data (8GB);
+  600GB experts stream over PCIe (batch-amortized). GATE: build the optimized
+  popcount/high-occupancy/packed-act kernel; current naive one isn't enough.
