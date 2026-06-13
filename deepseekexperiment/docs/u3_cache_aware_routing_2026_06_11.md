@@ -84,9 +84,19 @@ Findings:
    gap roughly unchanged (+0.312 vs +0.277 baseline, same band as the
    eps=0.10 point on tech text) and top-1 UP (53 vs 50). The lever
    transfers across domains.
-5. eps=0.40 and cap=8/eps=0.25 probes queued (chains 4-5); the no-policy
-   T=128 anchor decides whether eps=0.25 is a net quality REPAIR
-   (gap below baseline) — pending.
+5. **ANCHOR LANDED (17:26): no-policy T=128 gap = +0.162 nats (top-1
+   49/63). The repair claim is CONFIRMED**: eps=0.25 (+0.104) and cap=8
+   (+0.116) both beat running no policy at all; timid configs
+   (eps 0.05-0.10, +0.22..0.26) are WORSE than no policy. Full ordering:
+   aggressive/recency substitution > no policy > timid substitution —
+   consistent with hysteresis suppressing flip-noise only when committed.
+   Error bar: cross-run REF wobble is ±0.015 nats (float accumulation
+   order), so the 0.058 repair margin is ~2x noise; the 6-point ordering
+   pattern is the stronger evidence. eps=0.40 (chain 4) probes for the
+   cliff; cap8/eps0.25 (chain 5) probes max-repair-min-RAM.
+   Engine policy decision: recency-weighted substitution at aggressive
+   eps — simultaneously the I/O lever and a quality patch recovering
+   ~1/3 of the XOR tax.
 
 ## Next
 
