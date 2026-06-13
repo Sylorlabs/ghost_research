@@ -84,3 +84,15 @@ One line per discovery, newest at the bottom of each section. Full detail in
   ~29 tps = 8.6x the CPU compute floor — but ONLY for VRAM-resident data (8GB);
   600GB experts stream over PCIe (batch-amortized). GATE: build the optimized
   popcount/high-occupancy/packed-act kernel; current naive one isn't enough.
+- GPU OPTIMIZED KERNEL (2026-06-13): per-element batched GEMM, weights resident
+  in VRAM, scales ~linearly with batch: B=32->741 Gw/s (2.3x CPU), B=64->1487
+  (4.6x), B=128->2955 Gw/s (9.2x CPU) = P3 985 = 26.1 tps COMPUTE floor. BEATS
+  the CPU and CLEARS 20 tps on the compute axis. (Tiled kernel worse: cuts
+  occupancy. Per-element wins via thread count; ~91% of fp32 peak at B=128.)
+- BUT honest system reconciliation: compute floor BROKEN (3.4->26 tps), yet the
+  SYSTEM is still FETCH-bound. At B=128 the expert union saturates (~300/layer),
+  so batching amortizes fetch only ~2.5x -> 3.7GB/token. From NTFS (1.08GB/s) =
+  0.29 tps; fast NVMe (7GB/s) = 1.9 tps; RAM (40GB/s, needs ~600GB) = 11 tps.
+  => 20 tps now needs (GPU compute, DONE) + (experts in ~600GB fast RAM, HARDWARE).
+  The 16GB box stays fetch-bound ~0.29 tps regardless of the GPU. The wall is
+  now cleanly MEMORY CAPACITY, not compute and not algorithm.
