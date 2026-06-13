@@ -555,6 +555,7 @@ const ExpertWork = struct {
 };
 
 const SHARED: usize = std.math.maxInt(usize);
+const DROP: usize = std.math.maxInt(usize) - 1; // top-k-reduced (skipped) expert slot
 
 fn expertName(buf: []u8, layer: usize, eid: usize, which: u8) []const u8 {
     if (eid == SHARED) {
@@ -676,6 +677,8 @@ pub fn main() !void {
     if (args.next()) |a| cache_cap = try std.fmt.parseInt(usize, a, 10);
     if (args.next()) |a| sub_eps = try std.fmt.parseFloat(f32, a);
     if (args.next()) |a| n_threads = try std.fmt.parseInt(u32, a, 10);
+    var topk_use: usize = TOPK; // arg8: route to only top-N of the top-6 (cuts active params)
+    if (args.next()) |a| topk_use = try std.fmt.parseInt(usize, a, 10);
     std.debug.assert(ntok % 128 == 0);
 
     // ACT_DUMP=<path>: dump ref-stream post-ffn_norm activations (the exact
@@ -720,6 +723,7 @@ pub fn main() !void {
     try stdout.print("=== E11: full V4 stack with MLA attention — standalone perplexity A/B ===\n", .{});
     try stdout.print("T={d} real text tokens (stream offset {d}) | ref(f32) vs quant(H+P{d}refit weights, int8 acts)\n", .{ ntok, tok_offset, W_PLANES });
     if (cache_cap > 0) try stdout.print("U3 cache-aware routing ON (quant stream, score layers): LRU cap={d}/layer, eps={d:.2}\n", .{ cache_cap, sub_eps });
+    if (topk_use < TOPK) try stdout.print("TOPK-REDUCED: routing to top-{d} of {d} experts (active params x{d:.2})\n", .{ topk_use, TOPK, @as(f32, @floatFromInt(topk_use)) / TOPK });
     try stdout.print("attention: MLA + window-{d} + gated compressor (exact at this T)\n\n", .{WIN});
 
     // hidden states: [t][stream][HCDIM] flattened
@@ -1051,12 +1055,35 @@ pub fn main() !void {
                         if (lruTouch(&lru_pol, &lru_pol_ts, &lru_pol_n, cache_cap, routing[t][s][k], t)) u3_miss_pol += 1;
                     }
                 }
+                // TOPK_USE: keep only the top-N routed experts by score, zero
+                // the rest (simulates top-N routing -> cuts active params/token
+                // = the fundamental fetch driver). Hash layers exempt.
+                if (topk_use < TOPK and !is_hash) {
+                    var sc: [TOPK]f32 = undefined;
+                    for (0..TOPK) |k| sc[k] = scores[routing[t][s][k]];
+                    // find threshold = the topk_use-th largest score
+                    var kept: usize = 0;
+                    while (kept < TOPK - topk_use) : (kept += 1) {
+                        var mink: usize = 0;
+                        var minv: f32 = std.math.inf(f32);
+                        for (0..TOPK) |k| {
+                            if (sc[k] < minv) {
+                                minv = sc[k];
+                                mink = k;
+                            }
+                        }
+                        sc[mink] = std.math.inf(f32); // mark dropped (sentinel)
+                    }
+                    for (0..TOPK) |k| {
+                        if (sc[k] == std.math.inf(f32)) routing[t][s][k] = DROP; // dropped marker
+                    }
+                }
                 var wsum: f32 = 0;
                 for (0..TOPK) |k| {
-                    route_w[t][s][k] = scores[routing[t][s][k]];
+                    route_w[t][s][k] = if (routing[t][s][k] == DROP) 0 else scores[routing[t][s][k]];
                     wsum += route_w[t][s][k];
                 }
-                for (0..TOPK) |k| route_w[t][s][k] = route_w[t][s][k] / wsum * ROUTE_SCALE;
+                for (0..TOPK) |k| route_w[t][s][k] = if (wsum > 0) route_w[t][s][k] / wsum * ROUTE_SCALE else 0;
             }
             var ov: usize = 0;
             for (0..TOPK) |a| {
@@ -1096,6 +1123,7 @@ pub fn main() !void {
             for (0..2) |s| {
                 for (0..TOPK) |k| {
                     const eid = routing[t][s][k];
+                    if (eid == DROP) continue; // top-k-reduced: not fetched/computed
                     const gop = try works.getOrPut(eid);
                     if (!gop.found_existing) {
                         gop.value_ptr.* = try alloc.create(ExpertWork);
