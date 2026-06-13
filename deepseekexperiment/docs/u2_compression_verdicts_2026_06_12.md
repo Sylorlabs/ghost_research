@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-12
 **Code:** `u2_expert_spectrum.py`, `b8_per_expert_rank.py`, `b5_activation_manifold.py`
-**Raw outputs:** `u2_spectrum_L30_w1.txt` (+ L10/w2 variants as queue completes),
+**Raw outputs:** `u2_spectrum_L{30,10}_w1.txt`, `u2_spectrum_L30_w2.txt` — L10 and w2 confirm the same flat spectrum (L10 w1: rel-err 0.887 @ k=1024; w2: 0.577 even at k=2048 of 3072). Flatness is universal across layers and matrix classes.,
 `b8_results.txt`, `b5_results.txt`, saved basis `u2_basis_L30_w1.npy`
 
 ## U2 — cross-expert shared subspace: DEAD

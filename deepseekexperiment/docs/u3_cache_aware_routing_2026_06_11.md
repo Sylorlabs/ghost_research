@@ -50,6 +50,44 @@ at essentially flat quality, from a routing-policy change alone — no format
 change, no retraining. Compounds with expert compression (U2): smaller
 experts → more cache slots per GB → more residents to substitute toward.
 
+## Sweep results (2026-06-12, T=128 screening, offset 8000 unless noted)
+
+All runs self-controlled (each carries its own f32 ref stream); gap =
+QUANT NLL − REF NLL. T=128 numbers are not comparable to T=256 (different
+eval tokens; cold-start cache bias understates steady-state savings —
+no-policy and cap=64 anchors at T=128 pending).
+
+| config | fetch cut | gap (nats) | top-1 |
+|---|---|---|---|
+| eps=0.05 cap=128 | 12.2% | +0.219 | 52/63 |
+| eps=0.10 cap=128 | 18.4% | +0.257 | 46/63 |
+| **eps=0.25 cap=128** | **34.0%** | **+0.104** | 48/63 |
+| eps=0.10 cap=256 | 15.1% | +0.234 | 47/63 |
+| **eps=0.10 cap=8** | 7.8% | **+0.116** | 50/63 |
+| wiki, no policy | — | +0.277 | 50/63 |
+| wiki, eps=0.10 cap=128 | 20.2% | +0.312 | 53/63 |
+
+Findings:
+
+1. **Quality is non-monotonic in eps**: timid substitution (0.05-0.10)
+   costs ~0.22-0.26 nats; aggressive (0.25) costs only 0.104 while cutting
+   34% of fetches. More substitution = more stabilization.
+2. **Hysteresis isolation (cap=8)**: an 8-slot recency set delivers near-
+   best quality (+0.116) with negligible fetch savings (7.8%) and FEWER
+   substitutions than worse-scoring configs. The quality mechanism is
+   substituting toward the *immediately recent* experts (temporal
+   coherence), separable from caching. Engine design: recency-WEIGHTED
+   substitution inside a large cache (combine both measured effects).
+3. **Capacity**: policy value-add is largest at small/mid cap; at cap=256
+   plain LRU already covers the working set (relative savings shrink).
+4. **Cross-domain replication (wiki)**: 20.2% fetch cut at eps=0.10 with
+   gap roughly unchanged (+0.312 vs +0.277 baseline, same band as the
+   eps=0.10 point on tech text) and top-1 UP (53 vs 50). The lever
+   transfers across domains.
+5. eps=0.40 and cap=8/eps=0.25 probes queued (chains 4-5); the no-policy
+   T=128 anchor decides whether eps=0.25 is a net quality REPAIR
+   (gap below baseline) — pending.
+
 ## Next
 
 - Sweep cap (128, 192) and eps (0.05, 0.2, 0.3) in T=128 screening mode
