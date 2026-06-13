@@ -59,3 +59,12 @@ One line per discovery, newest at the bottom of each section. Full detail in
   need fewer layers, the compute floor rises. Untested (needs retraining-free
   exit signal). [queued]
 - Precision-tier self-speculation (1-bit draft, P3 verify). [idea]
+
+## GPU (2026-06-13, NEW — the compute-floor lever, CONFIRMED promising)
+- GPU 1-bit GEMV benchmark (`bench_gpu.zig`, RX 5700 XT, naive shader +
+  re-upload every call + float math): 20.4 Gw/s = 1.9x CPU-XNOR already. [bench_gpu]
+- VRAM-resident packed-XNOR memory-bound ceiling ~415 Gw/s (~39x CPU) -> compute
+  floor could move 3.4 -> ~30-70 tps with an optimized kernel.
+- CAVEAT: 600GB experts don't fit 8GB VRAM; PCIe (16GB/s) bottlenecks the full
+  model, amortized only by batching. Resident rate applies to the core + batch
+  working set. Next: optimized packed-XNOR resident-weight kernel + batched GEMM.
