@@ -352,10 +352,13 @@ fn quantGemvInto(wq: ss.Mat, x: []const f32, y: []f32, scratch: []f32) void {
 }
 
 fn prepQuant(alloc: std.mem.Allocator, w: ss.Mat) !ss.Mat {
+    return prepQuantN(alloc, w, W_PLANES);
+}
+fn prepQuantN(alloc: std.mem.Allocator, w: ss.Mat, planes: usize) !ss.Mat {
     const wrot = ss.Mat{ .data = try alloc.dupe(f32, w.data), .rows = w.rows, .cols = w.cols };
     defer alloc.free(wrot.data);
     ss.rotateRows(wrot, ss.hadamardChunkFor(w.cols));
-    return try ss.quantizeBitplanesRefit(alloc, wrot, 64, W_PLANES, REFIT_ALT);
+    return try ss.quantizeBitplanesRefit(alloc, wrot, 64, planes, REFIT_ALT);
 }
 
 // ---------- threaded GEMM over positions ----------
@@ -552,6 +555,7 @@ const ExpertUse = struct {
 const ExpertWork = struct {
     eid: usize,
     uses: std.ArrayListUnmanaged(ExpertUse) = .{},
+    planes: usize = W_PLANES, // frequency-precision: hot=P3, cold=P1
 };
 
 const SHARED: usize = std.math.maxInt(usize);
@@ -598,9 +602,9 @@ fn runExpertInner(ctx: *ExpertCtx) !void {
     var wq2: ?ss.Mat = null;
     var wq3: ?ss.Mat = null;
     if (need_q) {
-        wq1 = try prepQuant(alloc, w1);
-        wq2 = try prepQuant(alloc, w2);
-        wq3 = try prepQuant(alloc, w3);
+        wq1 = try prepQuantN(alloc, w1, ctx.work.planes);
+        wq2 = try prepQuantN(alloc, w2, ctx.work.planes);
+        wq3 = try prepQuantN(alloc, w3, ctx.work.planes);
     }
     defer if (wq1) |m| alloc.free(m.data);
     defer if (wq2) |m| alloc.free(m.data);
@@ -679,6 +683,8 @@ pub fn main() !void {
     if (args.next()) |a| n_threads = try std.fmt.parseInt(u32, a, 10);
     var topk_use: usize = TOPK; // arg8: route to only top-N of the top-6 (cuts active params)
     if (args.next()) |a| topk_use = try std.fmt.parseInt(usize, a, 10);
+    var freq_topn: usize = 0; // arg9: frequency-precision — top-N experts/layer at P3, rest at P1 (0=off)
+    if (args.next()) |a| freq_topn = try std.fmt.parseInt(usize, a, 10);
     std.debug.assert(ntok % 128 == 0);
 
     // ACT_DUMP=<path>: dump ref-stream post-ffn_norm activations (the exact
@@ -724,6 +730,7 @@ pub fn main() !void {
     try stdout.print("T={d} real text tokens (stream offset {d}) | ref(f32) vs quant(H+P{d}refit weights, int8 acts)\n", .{ ntok, tok_offset, W_PLANES });
     if (cache_cap > 0) try stdout.print("U3 cache-aware routing ON (quant stream, score layers): LRU cap={d}/layer, eps={d:.2}\n", .{ cache_cap, sub_eps });
     if (topk_use < TOPK) try stdout.print("TOPK-REDUCED: routing to top-{d} of {d} experts (active params x{d:.2})\n", .{ topk_use, TOPK, @as(f32, @floatFromInt(topk_use)) / TOPK });
+    if (freq_topn > 0) try stdout.print("FREQ-PRECISION: top-{d} experts/layer at P{d}, rest at P1\n", .{ freq_topn, W_PLANES });
     try stdout.print("attention: MLA + window-{d} + gated compressor (exact at this T)\n\n", .{WIN});
 
     // hidden states: [t][stream][HCDIM] flattened
@@ -1137,6 +1144,24 @@ pub fn main() !void {
                     gop.value_ptr.*.* = .{ .eid = SHARED };
                 }
                 try gop.value_ptr.*.uses.append(alloc, .{ .tok = t, .stream = s, .weight = 1.0 });
+            }
+        }
+
+        // FREQ-PRECISION: hot experts (top-N by batch usage) keep P3, cold -> P1.
+        if (freq_topn > 0 and !is_hash) {
+            var counts = std.ArrayListUnmanaged(usize){};
+            defer counts.deinit(alloc);
+            var it_c = works.valueIterator();
+            while (it_c.next()) |wp| {
+                if (wp.*.eid == SHARED) continue;
+                try counts.append(alloc, wp.*.uses.items.len);
+            }
+            std.mem.sort(usize, counts.items, {}, comptime std.sort.desc(usize));
+            const thresh: usize = if (counts.items.len > freq_topn) counts.items[freq_topn] else 0;
+            var it_p = works.valueIterator();
+            while (it_p.next()) |wp| {
+                if (wp.*.eid == SHARED) continue; // shared expert always P3
+                wp.*.planes = if (wp.*.uses.items.len > thresh) W_PLANES else 1;
             }
         }
 
