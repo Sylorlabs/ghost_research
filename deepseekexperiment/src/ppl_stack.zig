@@ -685,6 +685,10 @@ pub fn main() !void {
     if (args.next()) |a| topk_use = try std.fmt.parseInt(usize, a, 10);
     var freq_topn: usize = 0; // arg9: frequency-precision — top-N experts/layer at P3, rest at P1 (0=off)
     if (args.next()) |a| freq_topn = try std.fmt.parseInt(usize, a, 10);
+    var gplanes: usize = W_PLANES; // arg10: global bit-planes for experts (lean-er: 2=P2, 1=P1)
+    if (args.next()) |a| gplanes = try std.fmt.parseInt(usize, a, 10);
+    var lean_from: usize = N_LAYERS; // arg11: layers >= this run at 1 plane (per-layer lean test); default off
+    if (args.next()) |a| lean_from = try std.fmt.parseInt(usize, a, 10);
     std.debug.assert(ntok % 128 == 0);
 
     // ACT_DUMP=<path>: dump ref-stream post-ffn_norm activations (the exact
@@ -730,7 +734,9 @@ pub fn main() !void {
     try stdout.print("T={d} real text tokens (stream offset {d}) | ref(f32) vs quant(H+P{d}refit weights, int8 acts)\n", .{ ntok, tok_offset, W_PLANES });
     if (cache_cap > 0) try stdout.print("U3 cache-aware routing ON (quant stream, score layers): LRU cap={d}/layer, eps={d:.2}\n", .{ cache_cap, sub_eps });
     if (topk_use < TOPK) try stdout.print("TOPK-REDUCED: routing to top-{d} of {d} experts (active params x{d:.2})\n", .{ topk_use, TOPK, @as(f32, @floatFromInt(topk_use)) / TOPK });
-    if (freq_topn > 0) try stdout.print("FREQ-PRECISION: top-{d} experts/layer at P{d}, rest at P1\n", .{ freq_topn, W_PLANES });
+    if (freq_topn > 0) try stdout.print("FREQ-PRECISION: top-{d} experts/layer at P{d}, rest at P1\n", .{ freq_topn, gplanes });
+    if (gplanes != W_PLANES) try stdout.print("LEAN: global expert planes = P{d} ({d:.2} bits/w)\n", .{ gplanes, @as(f32, @floatFromInt(gplanes)) + 0.25 });
+    if (lean_from < N_LAYERS) try stdout.print("LEAN-FROM: layers >= {d} forced to P1\n", .{lean_from});
     try stdout.print("attention: MLA + window-{d} + gated compressor (exact at this T)\n\n", .{WIN});
 
     // hidden states: [t][stream][HCDIM] flattened
@@ -1147,21 +1153,33 @@ pub fn main() !void {
             }
         }
 
-        // FREQ-PRECISION: hot experts (top-N by batch usage) keep P3, cold -> P1.
-        if (freq_topn > 0 and !is_hash) {
-            var counts = std.ArrayListUnmanaged(usize){};
-            defer counts.deinit(alloc);
-            var it_c = works.valueIterator();
-            while (it_c.next()) |wp| {
-                if (wp.*.eid == SHARED) continue;
-                try counts.append(alloc, wp.*.uses.items.len);
-            }
-            std.mem.sort(usize, counts.items, {}, comptime std.sort.desc(usize));
-            const thresh: usize = if (counts.items.len > freq_topn) counts.items[freq_topn] else 0;
-            var it_p = works.valueIterator();
-            while (it_p.next()) |wp| {
-                if (wp.*.eid == SHARED) continue; // shared expert always P3
-                wp.*.planes = if (wp.*.uses.items.len > thresh) W_PLANES else 1;
+        // Per-expert bit allocation:
+        //  - gplanes: global default plane count (lean test: 2=P2, 1=P1)
+        //  - lean_from: layers >= this index forced to 1 plane (per-layer lean test)
+        //  - freq_topn: top-N experts/layer at gplanes, rest at 1 plane
+        const layer_planes: usize = if (!is_hash and layer >= lean_from) 1 else gplanes;
+        if (!is_hash) {
+            if (freq_topn > 0) {
+                var counts = std.ArrayListUnmanaged(usize){};
+                defer counts.deinit(alloc);
+                var it_c = works.valueIterator();
+                while (it_c.next()) |wp| {
+                    if (wp.*.eid == SHARED) continue;
+                    try counts.append(alloc, wp.*.uses.items.len);
+                }
+                std.mem.sort(usize, counts.items, {}, comptime std.sort.desc(usize));
+                const thresh: usize = if (counts.items.len > freq_topn) counts.items[freq_topn] else 0;
+                var it_p = works.valueIterator();
+                while (it_p.next()) |wp| {
+                    if (wp.*.eid == SHARED) continue;
+                    wp.*.planes = if (wp.*.uses.items.len > thresh) layer_planes else 1;
+                }
+            } else if (layer_planes != W_PLANES) {
+                var it_p = works.valueIterator();
+                while (it_p.next()) |wp| {
+                    if (wp.*.eid == SHARED) continue;
+                    wp.*.planes = layer_planes;
+                }
             }
         }
 
