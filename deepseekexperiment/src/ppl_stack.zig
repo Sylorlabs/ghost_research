@@ -688,6 +688,13 @@ pub fn main() !void {
     } else |_| {}
     defer if (act_dump) |f| f.close();
 
+    var route_dump: ?std.fs.File = null;
+    if (std.process.getEnvVarOwned(alloc, "ROUTE_DUMP")) |p| {
+        route_dump = try std.fs.cwd().createFile(p, .{});
+        alloc.free(p);
+    } else |_| {}
+    defer if (route_dump) |f| f.close();
+
     var ckpt_name_buf: [128]u8 = undefined;
     const ckpt_name = try std.fmt.bufPrint(&ckpt_name_buf, "ppl_ckpt_T{d}_off{d}_cap{d}.bin", .{ ntok, tok_offset, cache_cap });
     const ckpt_want = CkptHeader{
@@ -1058,6 +1065,21 @@ pub fn main() !void {
                 }
             }
             route_overlap_sum += @as(f64, @floatFromInt(ov)) / TOPK;
+        }
+
+        // ROUTE_DUMP: per-layer, per-token ref-stream routed expert ids
+        // (records: layer u32, tok u32, TOPK u32 expert ids) for
+        // context-locality / cold-token-fraction analysis.
+        if (route_dump) |f| {
+            if (!is_hash) {
+                var rec: [2 + TOPK]u32 = undefined;
+                rec[0] = @intCast(layer);
+                for (0..ntok) |t| {
+                    rec[1] = @intCast(t);
+                    for (0..TOPK) |k| rec[2 + k] = @intCast(routing[t][0][k]);
+                    try f.writeAll(std.mem.sliceAsBytes(rec[0..]));
+                }
+            }
         }
 
         // expert work list
