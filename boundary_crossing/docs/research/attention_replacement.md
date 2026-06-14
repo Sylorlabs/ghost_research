@@ -255,9 +255,41 @@ shows the committee climbing rung by rung. Online prequential, 500k runes.
 - Each rung is a genuinely different *composed* feature, O(1)/step, no attention/softmax/n². The ladder localizes the
   depth: most of it is the phrase abstraction, a little more from concepts, then diminishing returns.
 
+## Probe 8 — `lm_bpc.zig` + `gpt2_bpb.py`: vs a STOLEN GPT-2, the fair metric (bits-per-byte)
+
+Instead of training a transformer (Micah: "steal one from HuggingFace"), we pull a pretrained **GPT-2** and compare on
+**bits-per-byte (BPB)** — the tokenization-agnostic capability metric: whoever encodes the same held-out bytes in fewer
+bits wins, regardless of token vs rune granularity. Held-out = a 172 KB **Austen** slice; our stack warm-starts on
+Melville+Shakespeare+Tolstoy (**disjoint**) and the GPT-2 is frozen (pretrained on billions of tokens). Our model is an
+interpolated hierarchical backoff (rune orders 1–5 + phrase + concept), CPU, tens of MB.
+
+### Results (BPB, lower = better; same 172 KB held-out)
+
+| model | BPB | notes |
+|---|---:|---|
+| **distilgpt2** (82M, frozen) | **2.0241** | pretrained on billions of tokens |
+| our stack — **frozen** (warm-start only) | 2.2917 | raw transfer, no adaptation |
+| our stack — **prequential** (continual) | **2.0551** | learns from the stream as it reads (our mode) |
+| *gpt2* (124M, frozen) | *pending* | stronger baseline |
+
+- **Raw frozen capability: the transformer wins** (distilgpt2 2.02 vs our 2.29, ~13%) — as expected; a real LM
+  pretrained on billions of tokens out-transfers our 2 MB warm-start. **This is the honest "they're better at capability."**
+- **With continual learning** (our cheap structural advantage — the count tables adapt to Austen as they read it), the
+  gap nearly closes: **our 2.0551 vs distilgpt2 2.0241 (~1.5%)** — *a tiny CPU, no-GPU, no-LLM, tens-of-MB stack within
+  1.5% of an 82M-parameter transformer on bits-per-byte.*
+- Caveat (honest): the Gutenberg text has hard line-wrapping that inflates BPB for **both** (same bytes, so fair, but
+  the absolute ~2.0 is high); and our prequential mode adapts on the held-out while GPT-2 is frozen — that's *our* value
+  prop (continual learning), stated plainly, not hidden.
+
+**The settled answer to "is the committee better than attention?"**: on *raw capability*, **no** — a real transformer is
+better (probe 5 hinted it; probe 8 measures it: ~13% on frozen BPB). On *cost + continual learning + competitiveness at
+tiny scale*, **yes** — we sit within ~1.5% of a small GPT-2 on the fair metric while running on a CPU in seconds at tens
+of MB, and we keep learning with no forgetting. That is the true, defensible claim.
+
 ## Status
-Probes 1–7 done, measured, committed — including a self-correction (probe 5) and real depth wins (probes 6–7, +23% rel
-from hierarchical composition, saturating at ~3 levels). The whole
+Probes 1–8 done, measured, committed — including a self-correction (probe 5), real depth wins (probes 6–7, +23% rel,
+saturating ~3 levels), and a **stolen-GPT-2 head-to-head** (probe 8): transformer wins raw capability (~13% BPB), our
+continual stack within ~1.5% at a fraction of the cost. The whole
 arc, honestly: (1) attention's soft routing → hashing, O(n), probe 1; (2) sharp recall/induction → exact discrete
 address, O(1), unbounded capacity where continuous replacements crater, probe 2 (decisive); (3) both jobs as one O(n)
 streaming predictor, probe 3; (4) a sigil committee that beats a single attention head online, no softmax, probe 4;
