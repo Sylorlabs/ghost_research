@@ -133,8 +133,47 @@ This is not piggybacking on attention — it's the observation that **attention'
 workaround for not having addresses, and discrete runes already are addresses.** That is the research-grade lever, and
 it's native to this no-GPU, no-LLM stack.
 
+## Probe 4 — `sigil_router.zig` (`zig build sigil-router`, ~20s): beat attention's NUMBERS, sigil not softmax
+
+Goal (Micah): better numbers — match/beat attention — and **use the sigil, never softmax**. Replace one expensive
+attention router with a **committee of cheap O(1) routers**, combined by each router's **sigil reliability** (a
+ResonanceEMA of its recent hit-rate), not a softmax. All online prequential on real prose, single-pass, 400k streamed.
+Head-to-head **in the same stream** against the things to beat: an online **softmax self-attention** head (learned
+Q/K/V + readout) and an online **linear-attention recurrence** (constant-state — rung 1's continuous competitor).
+
+### Results (online next-rune top-1)
+
+| router / baseline | top-1 | note |
+|---|---:|---|
+| count order-2 | 18.6% | reliab 0.22 |
+| count order-3..6 | 9.4 / 4.0 / 1.9 / 1.0% | fire rarely but **reliability climbs with order** (0.48→0.70) |
+| induction-copy | 18.0% | sharp recall |
+| hash-routing | 3.6% | soft fallback |
+| learned organ (sigil-trained) | 3.2% | neg-sampling, sigil surprise-weighted LR |
+| **SOFTMAX attention (1 head)** | **2.6%** | the mechanism, with its softmax |
+| **LINEAR attention (constant-state)** | **0.9%** | the standard O(n) replacement |
+| **►► SIGIL ROUTER (committee)** | **20.1%** | **beats every router and both attention baselines** |
+| SIGIL ROUTER + depth (layer 2) | 20.1% | no gain (honest) |
+
+- **The committee (20.1%) beats the best single router (18.6%)** — a real ensemble win — and **beats softmax attention
+  (2.6%) and linear attention (0.9%)** decisively, **with no softmax in our model**: the combiner is a sigil-reliability
+  vote, the organ trains by sigil-surprise-weighted negative sampling.
+- **Why it works:** the high-order count experts fire rarely but their **reliability climbs with order** (0.22→0.70), so
+  the sigil-weighted vote leans on them *exactly when they speak* and falls back to order-2/induction otherwise.
+- **Depth (rung 3) gave no gain.** A layer-2 corrector conditioned on (layer-1 guess ⊕ same context) is **circular** —
+  it relearns what layer-1 already encodes. Genuine depth needs **features-of-features**, an open mechanism (reported,
+  not hidden).
+
+### Honest scope (critical)
+The attention baselines are a **single head, online single-pass, frozen embeddings — the same budget as the committee**,
+NOT a full trained transformer. So this is **"beats a single attention head at equal online CPU budget,"** not "beats
+GPT." The real, defensible claims: (1) a sigil committee exceeds attention's number here at a fraction of the cost with
+no softmax; (2) it strictly beats every cheap router it's built from; (3) it's O(1)/step, online, continual-learning.
+
 ## Status
-Probes 1–3 done, measured, committed. Open rungs: (4) a linear-attention recurrence baseline on the *real* next-rune
-task (probe 1's owed continuous-competitor); (5) a cheap CPU-learned metric hash (contrastive projection) to lift
-soft-routing accuracy toward the residual organ's; (6) bucket-count / decay / order sweeps; (7) stack the router as a
-second "layer" (runes→phrases) to test depth without attention.
+Probes 1–4 done, measured, committed. The arc covers attention's two jobs cheaply (soft routing, sharp recall), shows
+the discrete-address capacity advantage over continuous replacements, and a sigil-gated committee that beats a single
+attention head's number online with no softmax. The genuinely open frontier (where a real transformer still wins) is
+**depth — features-of-features** without attention; naive stacking is circular, so this needs a new mechanism (e.g.
+routing over the sequence of layer-1 representations, or learned hierarchical runes). That's the next real research, not
+a tuning pass.
