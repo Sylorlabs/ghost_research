@@ -91,6 +91,7 @@ pub fn build(b: *std.Build) void {
         .{ "learned-organ", "learned_organ.zig", "Add the missing organ: cheap learned readout (neg-sampling SGD, CPU) — lookup vs retrieval vs LEARNING on unseen contexts, no GPU, no LLM" },
         .{ "layers", "layers.zig", "Layer ablation: n-rune context (memorization) vs learned generalization organ — the sparsity principle + organ decomposition, no LLM" },
         .{ "richer-organ", "richer_organ.zig", "The richer organ: a learned MLP encoder over long context vs linear vs counting, next-rune, CPU/backprop, no GPU, no LLM" },
+        .{ "sigil-organ", "sigil_organ.zig", "SIGIL not softmax: ReZero-residual learned organ (surprise-weighted LR) + selective prediction — CPU, no LLM" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
         const rc = b.addRunArtifact(e);
