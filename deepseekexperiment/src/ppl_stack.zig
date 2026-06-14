@@ -230,6 +230,24 @@ fn fp8Nearest(a: f32) f32 {
 }
 
 // fused quant-dequant with per-64 power-of-2 (ue8m0) scales, on dims [0..n)
+// KV-dissection: quantize the KV latent to kv_bits. >=8 -> existing fp8 path
+// (baseline, unchanged). <8 -> int-N per-block absmax (does halving KV below
+// fp8 cost quality? if not -> smaller KV -> bigger batch -> more amortization).
+var kv_bits: usize = 8;
+fn kvQuant(v: []f32) void {
+    if (kv_bits >= 8) return fp8Sim(v);
+    const levels: f32 = @floatFromInt((@as(usize, 1) << @intCast(kv_bits - 1)) - 1);
+    var i: usize = 0;
+    while (i < v.len) : (i += ACT_BLOCK) {
+        const end = @min(i + ACT_BLOCK, v.len);
+        var amax: f32 = 0;
+        for (v[i..end]) |x| amax = @max(amax, @abs(x));
+        if (amax == 0) continue;
+        const scale = amax / levels;
+        for (v[i..end]) |*x| x.* = @round(x.* / scale) * scale;
+    }
+}
+
 fn fp8Sim(v: []f32) void {
     var i: usize = 0;
     while (i < v.len) : (i += ACT_BLOCK) {
@@ -482,7 +500,7 @@ fn compressorPrefill(alloc: std.mem.Allocator, pool: *std.Thread.Pool, cw: CompW
         }
         rmsNormApply(dst, cw.norm);
         ropeApply(dst[NOPE..HD], b * ratio, false);
-        fp8Sim(dst[0..NOPE]);
+        kvQuant(dst[0..NOPE]);
     }
     return comp;
 }
@@ -689,6 +707,7 @@ pub fn main() !void {
     if (args.next()) |a| gplanes = try std.fmt.parseInt(usize, a, 10);
     var lean_from: usize = N_LAYERS; // arg11: layers >= this run at 1 plane (per-layer lean test); default off
     if (args.next()) |a| lean_from = try std.fmt.parseInt(usize, a, 10);
+    if (args.next()) |a| kv_bits = try std.fmt.parseInt(usize, a, 10); // arg12: KV latent bits (8=fp8 baseline, <8=int-N)
     std.debug.assert(ntok % 128 == 0);
 
     // ACT_DUMP=<path>: dump ref-stream post-ffn_norm activations (the exact
@@ -907,7 +926,7 @@ pub fn main() !void {
                 const kvh = kvr[t * HD .. (t + 1) * HD];
                 rmsNormApply(kvh, kv_norm);
                 ropeApply(kvh[NOPE..HD], t, false);
-                fp8Sim(kvh[0..NOPE]);
+                kvQuant(kvh[0..NOPE]);
             }
             // compressor
             const comp = try compressorPrefill(alloc, &pool, .{
