@@ -202,10 +202,43 @@ CPU — multi-head × multi-epoch, frozen PPMI embeddings, an **FFN** (real tran
   linear-only readout (added the FFN). After all fixes attention still plateaus ~2.8% — but the fact that it can't fit
   *train* means the bottleneck is **my CPU attention training**, not a proven structural defeat.
 
+## Probe 6 — `hier_runes.zig` (`zig build hier-runes`, ~15s): DEPTH via composition (and it works)
+
+The giant swing at the open frontier — **depth without attention**. Compose discovered units bottom-up: **bytes →
+runes → phrases → concepts**, each level a *feature-of-features* (a phrase is a learned unit over runes, a concept over
+phrases — three BPE levels). For each rune position we know the last **completed** phrase id and concept id (causal,
+abstract, long-range context). Predict next-rune from a sigil committee of: rune order-2, rune order-3, **phrase-
+conditioned**, **concept-conditioned**. Online prequential, 500k runes.
+
+### Results (online next-rune top-1)
+
+| expert | top-1 |
+|---|---:|
+| E0 rune order-2 | 23.4% |
+| E1 rune order-3 | 13.1% |
+| **E2 phrase-conditioned (level 2)** | **21.0%** |
+| **E3 concept-conditioned (level 3)** | **20.2%** |
+| rune-only committee (E0+E1) | 24.2% |
+| **►► full hierarchical committee** | **26.9%** |
+
+- **Depth helps: 24.2% → 26.9% (+2.7, +11% relative).** The abstract phrase/concept experts (21%, 20%) are nearly as
+  strong as the local n-gram *on their own* and capture **different** signal, so combining lifts the committee.
+- **Why this is real depth (unlike probe 4's circular stacking):** the higher levels are **genuinely different composed
+  features**, not a re-conditioning on the same context. A phrase/concept is an abstraction *over* the runes — exactly
+  the features-of-features a transformer's layers build, here by discrete composition, **O(1)/step, no attention, no
+  softmax, no n².**
+- **Causal:** the context is the *previous completed* phrase/concept (determined by runes strictly before the predicted
+  position) — no future leakage.
+
+This is the depth lever that was missing. It's the honest **positive** after probe 5's honest **negative** (the inflated
+multiple): depth-by-hierarchy adds signal that flat counting can't reach, cheaply.
+
 ## Status
-Probes 1–5 done, measured, committed — including the honest **self-correction** of the headline multiple. The solid,
-defensible results: discrete-address **capacity** advantage over continuous replacements (probe 2, decisive), the
-**cost** asymptotics (n² vs n/1), **continual learning**, and a cheap committee that's competitive at tiny scale. The
-genuinely open frontier (where a real transformer still wins) is **depth — features-of-features**: naive stacking is
-circular (probe 4), so it needs a new mechanism — learned **hierarchical runes** (runes→phrases→concepts), or routing
-over the sequence of layer-1 representations. That, plus a properly-trained transformer baseline, is the next real work.
+Probes 1–6 done, measured, committed — including a self-correction (probe 5) and a real depth win (probe 6). The whole
+arc, honestly: (1) attention's soft routing → hashing, O(n), probe 1; (2) sharp recall/induction → exact discrete
+address, O(1), unbounded capacity where continuous replacements crater, probe 2 (decisive); (3) both jobs as one O(n)
+streaming predictor, probe 3; (4) a sigil committee that beats a single attention head online, no softmax, probe 4;
+(5) **verification** correcting the multiple from "15–20×" to "~3× vs an attention I can't certify as strong — cheaper +
+continual + competitive at tiny scale," probe 5; (6) **depth via hierarchical runes, +2.7, it works**, probe 6. Open
+next: couple the levels more richly (joint phrase×concept×rune keys), more levels, and a properly-trained transformer
+baseline to make the capability comparison unimpeachable.

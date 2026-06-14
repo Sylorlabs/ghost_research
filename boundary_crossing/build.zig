@@ -97,6 +97,7 @@ pub fn build(b: *std.Build) void {
         .{ "induction-lm", "induction_lm.zig", "Synthesis: induction-copy (sharp recall) + hash-routing (soft) as ONE O(n) streaming next-rune predictor on real prose — attention's jobs without n², CPU, no GPU/LLM" },
         .{ "sigil-router", "sigil_router.zig", "SIGIL-gated committee of cheap routers (count backoff + induction + hash + organ) vs softmax/linear attention — beat attention's numbers, no softmax, CPU, no GPU/LLM" },
         .{ "attn-verify", "attn_verify.zig", "Verify the committee>attention gap: strengthen attention (multi-head × multi-epoch, frozen held-out) and find the TRUE multiple, CPU, no GPU/LLM" },
+        .{ "hier-runes", "hier_runes.zig", "Depth via composition: hierarchical runes (bytes→runes→phrases→concepts) for multi-scale next-rune — does abstract context help, no attention, CPU, no GPU/LLM" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
         const rc = b.addRunArtifact(e);
