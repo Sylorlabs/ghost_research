@@ -427,3 +427,28 @@ activations + dumped experts.
   scale-fix ~1.7x smaller than source, never the 10x needed to fit. Conversion axis closed
   at its theoretical limit. Achievability = hardware (fast memory for the ~464-653GB bank),
   proven by THEOREM not just failed attempts.
+
+## MAD-SCIENTIST BATTERY (2026-06-14, e29 + entropy coding) — all dense, one over-claim corrected
+Micah: "you ran out of ideas, try riskier mad-scientist experiments." Ran a battery; all
+confirm the model is information-DENSE (no exploitable concentration anywhere):
+- ADAPTIVE-K (e29A): gate route-weights by rank = 0.30/0.20/0.16/0.13/0.11/0.10 — nearly
+  FLAT. 90% of route weight needs 5.48 of 6 experts -> 1.09x. Load-balancing training
+  deliberately spreads routing; no "easy token needs fewer experts." DEAD.
+- PER-MATRIX SENSITIVITY (e29B): w1/w2/w3 equally bit-hungry (3-bit out-cos 0.954/0.950/
+  0.960). No imbalance -> adaptive per-matrix precision DEAD.
+- LOSSLESS ENTROPY CODING (zstd): CAUTION TALE. Whole-file/region samples gave 1.59x-4.3x
+  and I briefly claimed "free storage exists." CLEAN per-tensor: fp4 expert WEIGHTS = 1.030x
+  (nibble entropy 3.884/4 bits = near-max-entropy, INCOMPRESSIBLE). The apparent gain was
+  SCALE tensors (7.3x but only ~6% of bytes) + headers. Net free storage ~negligible.
+  "Weights are noise" CONFIRMED at source. Lesson: isolate the variable (tensor type) before
+  claiming; a dirty sample over-claimed 4x.
+- UNIFYING MECHANISM (measured from many angles): gaussian weights (incompressible) +
+  RMSNorm-flat activations (2.4x, kills AWQ/column-sampling) + flat load-balanced gate
+  (kills adaptive-k) + high-dim Hessian (kills GPTQ/projection/low-rank) + no near-duplicate
+  activations (kills reuse) + no cheap approximation (kills spec-decode self-draft). V4 Pro
+  is an unusually well-balanced, information-dense model; no wasteful concentration to exploit
+  without retraining.
+- REMAINING REAL LEVERS (complete set): scale-packing fix (e23 ~1.3x) + Lloyd/trellis quant
+  (~1.4x, Shannon-bounded) + resident-core+stream (2x) + MTP (1.8x) + batching (offline).
+  Everything else tested DEAD by measurement. Achievability = hardware (fast memory for the
+  bank) OR accept lower quality (P2 ~2.25 b/w) for more speed -- the "pay tax later" knob.
