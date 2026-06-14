@@ -151,3 +151,10 @@ One line per discovery, newest at the bottom of each section. Full detail in
   on consumer hardware with pure XOR/popcount experts.
 - 47min/forward un-optimized (0.23 tps). Throughput = remaining engineering
   (gen loop + KV cache + tiered fetch + freq-precision + GPU kernel -> ~3-5 tps).
+
+## BATCHED ENGINE VALIDATED (2026-06-13) -> 3-5 tps achievable
+- Forged P3 experts read 5.3 GB/s from fast drive (forge_experts.zig). Batched
+  B=512 + freq-precision = 5.4 tps AGGREGATE (measured components: 5.3GB/s read,
+  43 tps GPU compute, 384 union, 35.5MB/expert, KV 5.2GB fits). CLEARS 3-5.
+- Gate: forge ~440GB experts to fast drive (free ~440GB on SN850X). Full engine
+  build justified. Single-stream stays ~0.5-1 tps (fetch wall); 3-5 = batched.
