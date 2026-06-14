@@ -233,8 +233,31 @@ conditioned**, **concept-conditioned**. Online prequential, 500k runes.
 This is the depth lever that was missing. It's the honest **positive** after probe 5's honest **negative** (the inflated
 multiple): depth-by-hierarchy adds signal that flat counting can't reach, cheaply.
 
+## Probe 7 — `hier_deep.zig` (`zig build hier-deep`, ~15s): push the depth (ablation ladder)
+
+Pushed probe 6 further: **4 composed levels** (runes→phrases→concepts→super-concepts) + deeper local context (o2/o3/o4)
++ richer **joint couplings** (phrase×2-runes, concept×phrase) + long-range induction, as an **ablation ladder** that
+shows the committee climbing rung by rung. Online prequential, 500k runes.
+
+| rung (each adds a depth feature) | committee top-1 | Δ |
+|---|---:|---:|
+| rune o2 only | 23.4% | — |
+| + deeper local (o3, o4) | 24.3% | +0.9 |
+| **+ phrase (L2)** | **28.1%** | **+3.8** |
+| + concept (L3) | 28.6% | +0.5 |
+| + super (L4) | 28.3% | −0.3 |
+| + induction (long-range) | 28.8% | +0.6 |
+
+- **Depth climbs 23.4% → 28.8% (+5.4, +23% relative).** The **phrase level is the workhorse** (+3.8); the single expert
+  `phrase(prevP, r1, r2)` scores 24.2% *alone* — beating the rune order-2 n-gram.
+- **Honest saturation:** the 4th level (super-concept) gives **no gain** (−0.3). Depth-by-hierarchy pays off for ~3
+  levels on this data/scale, then flattens — reported, not hidden.
+- Each rung is a genuinely different *composed* feature, O(1)/step, no attention/softmax/n². The ladder localizes the
+  depth: most of it is the phrase abstraction, a little more from concepts, then diminishing returns.
+
 ## Status
-Probes 1–6 done, measured, committed — including a self-correction (probe 5) and a real depth win (probe 6). The whole
+Probes 1–7 done, measured, committed — including a self-correction (probe 5) and real depth wins (probes 6–7, +23% rel
+from hierarchical composition, saturating at ~3 levels). The whole
 arc, honestly: (1) attention's soft routing → hashing, O(n), probe 1; (2) sharp recall/induction → exact discrete
 address, O(1), unbounded capacity where continuous replacements crater, probe 2 (decisive); (3) both jobs as one O(n)
 streaming predictor, probe 3; (4) a sigil committee that beats a single attention head online, no softmax, probe 4;
