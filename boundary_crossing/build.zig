@@ -102,6 +102,7 @@ pub fn build(b: *std.Build) void {
         .{ "lm-bpc", "lm_bpc.zig", "Our rune stack vs a stolen GPT-2: bits-per-byte on the same held-out text (interpolated hierarchical backoff, prequential) — the fair capability metric, CPU, no GPU/LLM" },
         .{ "lm-bpc2", "lm_bpc2.zig", "Phase 1: interpolated absolute discounting (≈Kneser-Ney) to close the BPB gap to gpt2 — arg1=warm-start MB for data scaling, CPU, no GPU/LLM" },
         .{ "lm-bpc3", "lm_bpc3.zig", "Option 1: abs-disc + kNN/LSH embedding smoothing — the cheap-generalization BPB ceiling vs gpt2 (de-wrapped 1.0499), CPU, no GPU/LLM" },
+        .{ "lm-bpc4", "lm_bpc4.zig", "Option 2: abs-disc + kNN over a LEARNED encoder (CBOW neg-sampling, no softmax) — does a learned key close the BPB gap to gpt2, CPU, no GPU/LLM" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
         const rc = b.addRunArtifact(e);
