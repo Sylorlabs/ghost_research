@@ -7,3 +7,14 @@ math_hypotheses
 math_hypotheses.o
 logs/
 state/
+# large downloaded/generated corpora (not source — regenerate via the probes)
+corpus/webster1913.txt
+corpus/wordnet31.tar.gz
+corpus/dict/
+corpus/code_corpus.zig.txt
+corpus/chinese.txt
+corpus/emoji_symbols.txt
+corpus/code_cpp.txt
+corpus/code_py.txt
+corpus/code_ts.txt
+corpus/mixed_poly.txt
