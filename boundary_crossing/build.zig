@@ -94,6 +94,7 @@ pub fn build(b: *std.Build) void {
         .{ "sigil-organ", "sigil_organ.zig", "SIGIL not softmax: ReZero-residual learned organ (surprise-weighted LR) + selective prediction — CPU, no LLM" },
         .{ "attention-replacement", "attention_replacement.zig", "Replace attention: exact n-gram vs softmax self-attention vs HASH-routing (O(1) soft content-addressing) — next-rune, CPU, no GPU/LLM" },
         .{ "induction-recall", "induction_recall.zig", "Associative-recall capacity race: discrete-address vs softmax vs linear-attention vs LSH — the induction head as content addressing, CPU, no GPU/LLM" },
+        .{ "induction-lm", "induction_lm.zig", "Synthesis: induction-copy (sharp recall) + hash-routing (soft) as ONE O(n) streaming next-rune predictor on real prose — attention's jobs without n², CPU, no GPU/LLM" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
         const rc = b.addRunArtifact(e);

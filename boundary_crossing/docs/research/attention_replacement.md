@@ -92,10 +92,49 @@ The induction head is just **content-addressed recall**. The cheap **continuous*
 **capacity for O(n)**; **discrete-rune addressing keeps BOTH — unbounded recall AND O(1) — because a rune is already an
 address.** That is the structural lever every continuous attention-replacement misses, and it's native to this stack.
 
+## Probe 3 — `induction_lm.zig` (`zig build induction-lm`, ~6s): the synthesis on real prose
+
+Wire attention's two jobs into ONE **O(n) streaming** next-rune predictor on real prose (Austen/Melville/Shakespeare/
+Tolstoy), **prequential** eval (predict-then-update online — leak-free by construction, and the project's continual-
+learning setup). The induction memory is a recency/copy backoff: for orders K=8..2 keep `map[hash(last K runes)] = the
+rune that LAST followed that context`; predict the longest match = "copy the continuation of the longest earlier context"
+= an induction head as a streaming hashmap, O(1)/step. 600k runes streamed, 547k scored after warmup.
+
+### Results (online next-rune top-1)
+
+| model | overall | long-range slice (order≥5 repeat existed, 33k pos) |
+|---|---:|---:|
+| order-2 count n-gram | 17.1% | 38.7% |
+| **induction recency-copy** | **17.8%** | **50.3%** |
+| hash-routing soft | 2.0% | — |
+| **combined O(n) stack** (long-copy ▸ count ▸ hash) | **18.5%** | 50.3% |
+
+- **The induction-copy memory beats the count n-gram overall** (17.8 vs 17.1) and **by +11.6 points on the long-range
+  slice** (50.3 vs 38.7) — exactly the repeated phrases/names the order-2 n-gram is structurally blind to. It reaches
+  them at **O(1)/step**; attention would pay O(n²).
+- **The combined stack (18.5%) beats the n-gram (17.1%)**, all O(n) streaming, updating online (continual learning, no
+  forgetting), constant work per step.
+- (Online prequential numbers run higher than probe 1's held-out split because the model accumulates stats over 547k
+  positions and scores all runes, not the top-400; the relative ordering is the point.)
+
+This is **attention's capability shape — long-range copy + soft routing — without its cost**: O(n), no learned Q/K, no
+softmax, no n², and it learns as it streams.
+
+## The thesis (three probes, measured)
+
+Attention does two things: **soft content routing** and **sharp content recall (induction)**. Both cost O(n²) on
+transformers because dense tokens are address-less. On a **discrete-rune** substrate, runes *are* addresses, so:
+- soft routing → **hashed content-addressing** (probe 1): O(n), matches a single attention head, no learned Q/K;
+- sharp recall → **exact addressing** (probe 2): O(1), **unbounded** capacity where the constant-state replacement
+  (linear attention / SSM) craters at m≈D;
+- together (probe 3): one **O(n) streaming** predictor that captures long-range copy + soft routing on real prose.
+
+This is not piggybacking on attention — it's the observation that **attention's expensive all-pairs routing is a
+workaround for not having addresses, and discrete runes already are addresses.** That is the research-grade lever, and
+it's native to this no-GPU, no-LLM stack.
+
 ## Status
-Probes 1–2 done, measured, committed. The two halves of attention's job are now both covered cheaply on a discrete-rune
-substrate: **soft routing** (probe 1, hashed content-addressing, O(n), ≥ a single attention head) and **sharp recall /
-induction** (probe 2, exact address, O(1), unbounded capacity where the constant-state replacement craters). Open rungs:
-(3) synthesis — wire exact-address induction memory + n-gram + hash-routing into one O(n) next-rune layer on real prose
-and measure the long-range-copy contribution; (4) bucket-count / decay / key sweeps; (5) a cheap CPU-learned metric hash
-to lift soft-routing accuracy toward the residual organ's.
+Probes 1–3 done, measured, committed. Open rungs: (4) a linear-attention recurrence baseline on the *real* next-rune
+task (probe 1's owed continuous-competitor); (5) a cheap CPU-learned metric hash (contrastive projection) to lift
+soft-routing accuracy toward the residual organ's; (6) bucket-count / decay / order sweeps; (7) stack the router as a
+second "layer" (runes→phrases) to test depth without attention.
