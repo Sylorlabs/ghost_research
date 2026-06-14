@@ -345,3 +345,34 @@ real experts, honest overhead (f32 scale/256 = 0.125 b/w):
 - NEXT conversion lever to measure (could stack toward ~2.5 b/w eff): ADAPTIVE
   precision across matrix-types (w1/w2/w3), layers (depth), and expert temperature --
   spend bits where sensitive. Not "compressing noise" -- allocating bits by impact.
+
+## SELF-SPECULATION DEAD (2026-06-14, spec_accept.log) — no cheap draft tracks the model
+Tested spec-decode-as-fetch-amortization: a cheap RAM-resident/low-fetch draft proposes
+K tokens, the big model verifies all K in ONE batched fetch -> single-stream fetch
+amortized ~K x IF draft acceptance is high. Measured cheap-draft quality (T=64, off8000,
+full 61 layers); full-model f32 baseline ppl = 24.23:
+    draft                       f32 ppl   note
+    shared-expert only (resident)  561     23x worse than full -> terrible predictor
+    top-1 routed expert            194     8x worse
+    P1 full model (1-bit)          213     9x worse; agreement w/ f32-full only 29%
+- VERDICT: every cheap DERIVATIVE of the model (fewer experts / fewer bits) is a BAD
+  predictor of the full model -> low acceptance -> self-speculation gives ~nothing.
+  Exactly what weights-are-noise/experts-distinct predicts: the model has NO cheap
+  approximation; its quality is genuinely spread across all 6 experts at >=P3. The only
+  trained draft is the MTP head (~1.8x, in shard 64) -- it works because it was TRAINED
+  as a draft, unlike these derived ones. Standard spec-decode needs a separately-trained
+  small model = not available (no retraining).
+- THE INTERACTIVE FLOOR (first-principles, post-measurement): per token ~24B routed-expert
+  params, freshly selected from a 283GB bank (P3), CHANGE every token -> can't be cached
+  (bank >> 16GB; useful caps need ~278GB) and can't be approximated (just measured). Must
+  fetch ~10GB/token: fast drive 0.5 tps, slow 0.12 tps. 20 tps needs the 283GB bank
+  resident in fast memory = not this machine. Wall is hardware-shape, not algorithmic.
+- Levers that survive (don't need a cheap approximation): resident-core+stream-routed
+  (~2x), MTP (1.8x), Lloyd (1.2x), batching (offline aggregate). Stack to low-single-digit
+  interactive / multi-tps offline.
+- OPEN (Micah's reframe): the meaning is RELATIONAL (vectors + relations), not in weights.
+  Weight relations tested dead (U2/E15/B5). UNTESTED = ACTIVATION-vector relations at
+  runtime (e26): if related tokens give related hidden states, computation is REUSABLE
+  (cache hit skips fetch+compute). Measuring now via ACT_DUMP geometry.
+- GOTCHA logged: ppl_stack checkpoint key (T/off/cap/eps) omits topk/gplanes -> different
+  draft configs collide on ckpt; safe only because completion auto-deletes it. Add to key.
