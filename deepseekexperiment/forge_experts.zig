@@ -10,11 +10,12 @@ pub fn main() !void {
     var args = std.process.args(); _ = args.skip();
     const layer: usize = if (args.next()) |a| try std.fmt.parseInt(usize, a, 10) else 30;
     const planes: usize = if (args.next()) |a| try std.fmt.parseInt(usize, a, 10) else 3;
+    const outdir: []const u8 = if (args.next()) |a| a else "engine_weights";
 
     const st = try safetensors.SafetensorsFile.load(alloc, ss.shardPath(layer + 2));
     defer st.deinit();
-    var pb: [128]u8 = undefined;
-    const outp = try std.fmt.bufPrint(&pb, "engine_weights/L{d}_experts_P{d}.bin", .{ layer, planes });
+    var pb: [256]u8 = undefined;
+    const outp = try std.fmt.bufPrint(&pb, "{s}/L{d}_experts_P{d}.bin", .{ outdir, layer, planes });
     const f = try std.fs.cwd().createFile(outp, .{});
     defer f.close();
     var timer = try std.time.Timer.start();

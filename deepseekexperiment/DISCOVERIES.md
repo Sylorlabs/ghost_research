@@ -262,3 +262,29 @@ whole speed problem analytically. No more projection — these are the binding f
 - BOTTOM LINE: intelligence is solved (XOR survives, +0.1 nats, "Paris"); compute
   is solved (GPU 26 tps, batched path validated); the residual is PURELY storage
   capacity x bandwidth. It is a hardware-shape problem now, not a math problem.
+
+## STREAMING ENGINE ON THE SLOW NVME — overlap MEASURED (2026-06-14, bench_stream)
+Built the missing integration test (bench_stream.zig) and ran it on a REAL forged
+layer copied to the slow drive (/mnt/corpus/engine_test/L30_experts_P3.bin, 14.27GB,
+no source deleted). Answers the one unknown behind every tps projection: does disk
+read run at full speed CONCURRENTLY with GPU compute?
+- solo disk read (O_DIRECT, 3 passes / 42GB)  = 1.23 GB/s  (honest sustained QLC;
+  dd's earlier 1.5 caught the SLC cache region).
+- solo GPU batched XNOR (tiled shader, B=64)   = 405 Gw/s (1-plane) / 125 eff P3.
+- CONCURRENT disk + GPU                          = 1.23 GB/s = **100% of solo**.
+  => read/compute OVERLAP IS REAL, zero contention. The B x bw / W projection holds.
+- Disk-bound confirmed even at the modest tiled rate: per-step compute (top-6/token)
+  P3 ~304s vs disk read (all 384 experts/layer) ~673s; P1 compute ~29s vs disk 203s.
+  Disk dominates at every precision -> GPU speed does not gate; bigger batch is free.
+- MEASURED aggregate tps from the slow NVME = B x 1.23 / W:
+    B=512:  P3 0.78 | mix 1.63 | P1 2.52     B=1024:  P3 1.6 | mix 3.3 | P1 5.0
+  Scales linearly in B until 16GB caps KV+acts (MLA KV ~4.7KB/tok -> B=1024 @ 2k ctx
+  ~ <10GB, room to spare). So batch is the live lever on this drive.
+- Slow-drive WRITE measured = 147 MB/s (14GB copy in 94.8s; QLC post-SLC). Forging
+  the full model TO this drive is write-bound: P1 250GB ~28min, P3 812GB ~90min
+  (plus forge compute). Inference READS at 1.23 GB/s though -- write cost is one-time.
+- "ENGINEER IT BETTER" path now measured & concrete: (1) delete source -> forge P1
+  (250GB) or mix (387GB) to slow drive; (2) run batched engine at B=1024-2048 ->
+  ~3-10 tps aggregate (P1 degraded / mix near-full quality). Gate remains: 74GB free
+  can't hold even P1 (250GB) -> needs the source deleted (user-authorized, irreversible).
+  Dual-drive parallel read deferred (fast drive only 9.7GB free -> negligible add).
