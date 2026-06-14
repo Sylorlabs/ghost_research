@@ -313,3 +313,35 @@ supposed to be fewer bits. Found the waste in packBitplanesRefit (signal_surviva
   per 256-block to match (forge + ppl_stack/gpu/chat_v4 unpack change).
 - This reopens "full P3 on the slow drive" as feasible & clean -- the option that
   looked impossible (870GB, deadlock, collateral) was an artifact of f32-per-64 scales.
+
+## BEYOND-XOR CONVERSION FRONTIER (2026-06-14, e24) — real but ~1.2x, source kept
+User reframe: we are DISK/fetch-bound, compute is ~free (GPU 2-7x > disk), so pick the
+format by RATE-DISTORTION not XNOR-friendliness -- "beyond XOR" is allowed (costlier
+decode but smaller = net win). Also: KEEP the source (don't delete, may want later).
+Measured bitplanes vs Lloyd-Max scalar (adaptive k-means, real distribution) on 12
+real experts, honest overhead (f32 scale/256 = 0.125 b/w):
+    format        b/w     cos      fullGB   B512 tps
+    bitplane P2   2.250   0.93612  435      1.35
+    bitplane P3   3.375   0.97327  653      0.92   <- current quality bar
+    bitplane P4   4.500   0.98607  870      0.70
+    lloyd N=4     2.125   0.93961  411      1.43
+    lloyd N=6     2.710   0.97065  524      1.14
+    lloyd N=8     3.125   0.98261  604      0.99   <- beats P3 at fewer bits
+    lloyd N=16    4.125   0.99519  798      0.76
+- BEYOND-XOR CONFIRMED: Lloyd-Max beats bitplanes per bit everywhere (N=8 0.9826 @
+  3.125 > P3 0.9733 @ 3.375). To MATCH the P3 bar, Lloyd needs ~2.75 b/w vs 3.375 =
+  ~19% smaller, ~1.2x faster, SAME quality, free. Decode = table lookup << disk, fine.
+- MAGNITUDE is ~1.2x, capped by weights-are-noise entropy floor (consistent w/ e21's
+  ~1.15x). NOT an order-of-magnitude win. Real, modest, stacks with the scale fix.
+- "FREE STORAGE while keeping source" -> NOT achievable: source (806GB) is near the
+  entropy floor (noise, ~no lossless recompression), and even the smallest good lossy
+  forge (Lloyd N=4 411GB) cannot fit in the ~70GB free alongside the 806GB source.
+  Keeping source AND a full forged model exceeds the machine's storage, period.
+- "PAY TAX LATER": can forge aggressive-low (N=4 2.1 b/w 411GB cos 0.94 ~1.4 tps) for
+  max speed/min size, recover ~40% via U3 routing. Partial; still won't fit by source.
+- STORAGE FORK is unavoidable (any one must give): add a drive | eventually replace
+  source | forge only part. Conversion improves the speed/quality knob (~1.2x) but
+  does not dissolve the capacity wall while the 806GB source is retained.
+- NEXT conversion lever to measure (could stack toward ~2.5 b/w eff): ADAPTIVE
+  precision across matrix-types (w1/w2/w3), layers (depth), and expert temperature --
+  spend bits where sensitive. Not "compressing noise" -- allocating bits by impact.
