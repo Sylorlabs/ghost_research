@@ -376,3 +376,25 @@ full 61 layers); full-model f32 baseline ppl = 24.23:
   (cache hit skips fetch+compute). Measuring now via ACT_DUMP geometry.
 - GOTCHA logged: ppl_stack checkpoint key (T/off/cap/eps) omits topk/gplanes -> different
   draft configs collide on ckpt; safe only because completion auto-deletes it. Add to key.
+
+## ACTIVATION-VECTOR RELATIONS (2026-06-14, e26) — structure real, but not fetch-reducing
+Micah's principle: meaning is RELATIONAL (vectors + relations between them), not in
+weights -> dissect the activation-vector geometry at runtime for computation reuse.
+Measured on real MoE-input vectors (post-ffn-norm), T=128 off8000, all 61 layers:
+- CAUSAL REUSE: for each token, best cosine to a PAST token's hidden state. Hits at
+  cos>0.90 = **0.00 at EVERY layer**; NN-mean (best match) ~0.62. Output reuse needs
+  ~0.98 to be safe -> caching expert outputs by input vector is DEAD (no near-duplicates).
+- BUT STRUCTURE IS REAL: NN-mean 0.62 vs ~0.03 for random 7168-d gaussians = ~50 sigma
+  more correlated. Activations are strongly ANISOTROPIC (cone-like), meanCos rises with
+  depth 0.10(L1)->0.34(L60). Micah is RIGHT the vectors relate -- but the relation is a
+  shared GLOBAL direction, not token-specific similarity, so it doesn't reduce fetch.
+- dim90 ~85/7168 is NOT low-dim: capped by n=128 tokens (max 127); 85 of 127 available
+  dims hold 90% energy = activations FILL their span (high-dim), corroborating B5. True
+  intrinsic dim unmeasurable here (needs ~70k tokens; refused the small-sample mirage).
+- VERDICT: the activation-relational axis is high-entropy too (like weights). Every
+  probeable axis -- weights, weight-relations, activation-manifold, activation-relations,
+  cheap-drafts, reuse, early-exit -- is exhausted by MEASUREMENT. No software lever breaks
+  the fetch wall by an order of magnitude. CONVERGED: achievability is hardware-shape.
+  Software ceiling ~ resident-core(2x) x MTP(1.8x) x Lloyd(1.2x) ~ 4x -> ~1 tps interactive
+  (capacity-gated) / multi-tps offline-batch. 20 tps interactive needs the 283GB bank in
+  fast memory = consumer hardware add (RAM or fast NVMe), not a missing algorithm.
