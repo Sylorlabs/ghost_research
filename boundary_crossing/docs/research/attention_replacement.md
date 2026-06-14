@@ -170,10 +170,42 @@ NOT a full trained transformer. So this is **"beats a single attention head at e
 GPT." The real, defensible claims: (1) a sigil committee exceeds attention's number here at a fraction of the cost with
 no softmax; (2) it strictly beats every cheap router it's built from; (3) it's O(1)/step, online, continual-learning.
 
+## Probe 5 — `attn_verify.zig` (`zig build attn-verify`, ~30s): VERIFYING the multiple (and correcting it)
+
+Micah asked to *verify the "15–20×" is true*. It interrogates the claim by **strengthening attention** as far as fair on
+CPU — multi-head × multi-epoch, frozen PPMI embeddings, an **FFN** (real transformer block, not pool+linear), and
+**scaled sinusoidal positional encoding** — on a clean offline held-out split, swept against the count/committee.
+
+### Results (FROZEN held-out, no leakage)
+
+| | top-1 |
+|---|---:|
+| count order-2 | 8.3% |
+| committee (count backoff) | 8.6% |
+| best attention (swept: 1–8 heads × 8–24 epochs, +FFN, +posenc) | **2.8%** |
+
+**The "15–20×" was inflated.** Two corrections, both measured:
+1. It bundled the committee's **continual-learning edge** (it adapts on the test stream; frozen attention can't) and
+   compared to the **weakest** baseline (linear attention 0.9%). On a fair frozen split the multiple is **~3×**, not 15–20×.
+2. **Even ~3× is not a clean capability KO.** My from-scratch CPU attention **cannot fit the training set above ~4%** in
+   *any* config tried — so I **cannot certify it as a strong attention baseline**. A deep, well-optimized transformer
+   (learned embeddings, many layers, Adam/warmup) would very likely beat counting at scale.
+
+### What's true vs not (the honest verdict)
+- **True / defensible:** at this tiny CPU scale, exact **counting out-predicts the attention I can train** (next-rune is
+  memorization-heavy; counting is exact where pooling blurs), and the committee is **far cheaper (O(1)/O(n) vs O(n²)) and
+  continually learning**.
+- **Not proven:** that any of this beats a *real* transformer on raw capability. The honest headline is **"cheaper +
+  continual + competitive at tiny scale,"** NOT "15–20× better than attention."
+- Bugs/handicaps found and fixed during verification (each was making attention look artificially weak): no positional
+  encoding (permutation-blind), positional encoding **swamping** content (scale mismatch with L2-normed embeddings),
+  linear-only readout (added the FFN). After all fixes attention still plateaus ~2.8% — but the fact that it can't fit
+  *train* means the bottleneck is **my CPU attention training**, not a proven structural defeat.
+
 ## Status
-Probes 1–4 done, measured, committed. The arc covers attention's two jobs cheaply (soft routing, sharp recall), shows
-the discrete-address capacity advantage over continuous replacements, and a sigil-gated committee that beats a single
-attention head's number online with no softmax. The genuinely open frontier (where a real transformer still wins) is
-**depth — features-of-features** without attention; naive stacking is circular, so this needs a new mechanism (e.g.
-routing over the sequence of layer-1 representations, or learned hierarchical runes). That's the next real research, not
-a tuning pass.
+Probes 1–5 done, measured, committed — including the honest **self-correction** of the headline multiple. The solid,
+defensible results: discrete-address **capacity** advantage over continuous replacements (probe 2, decisive), the
+**cost** asymptotics (n² vs n/1), **continual learning**, and a cheap committee that's competitive at tiny scale. The
+genuinely open frontier (where a real transformer still wins) is **depth — features-of-features**: naive stacking is
+circular (probe 4), so it needs a new mechanism — learned **hierarchical runes** (runes→phrases→concepts), or routing
+over the sequence of layer-1 representations. That, plus a properly-trained transformer baseline, is the next real work.
