@@ -127,3 +127,10 @@ One line per discovery, newest at the bottom of each section. Full detail in
   frequency-precision (2.1x for +0.037). Lesson: usage-weighted precision >
   uniform — degrade COLD experts (low weight), not all. Per-layer deep-P1
   (lean-from-40/30) running to test if depth adds slack beyond usage-weighting.
+- DEEP-LAYER LEAN DEAD (2026-06-13, lean_from40.txt): layers 40-60 at P1 = ppl
+  20.59 vs all-P3 16.53 = +0.31 nats. Deep layers do NOT tolerate 1-bit — they're
+  the sensitive cascade region (E11). Depth gives no slack.
+- BIT-PRECISION MAP COMPLETE: only usage-weighted (frequency-precision, cold
+  experts->P1) works = 2.1x/+0.037 nats. Uniform-P2 dominated (1.44x/+0.11);
+  depth-based dead (+0.31). Leanness must target rarely-routed experts, not whole
+  layers or blanket cuts. ONE confirmed bit lever: ~2x.
