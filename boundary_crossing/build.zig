@@ -92,6 +92,7 @@ pub fn build(b: *std.Build) void {
         .{ "layers", "layers.zig", "Layer ablation: n-rune context (memorization) vs learned generalization organ — the sparsity principle + organ decomposition, no LLM" },
         .{ "richer-organ", "richer_organ.zig", "The richer organ: a learned MLP encoder over long context vs linear vs counting, next-rune, CPU/backprop, no GPU, no LLM" },
         .{ "sigil-organ", "sigil_organ.zig", "SIGIL not softmax: ReZero-residual learned organ (surprise-weighted LR) + selective prediction — CPU, no LLM" },
+        .{ "attention-replacement", "attention_replacement.zig", "Replace attention: exact n-gram vs softmax self-attention vs HASH-routing (O(1) soft content-addressing) — next-rune, CPU, no GPU/LLM" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
         const rc = b.addRunArtifact(e);
