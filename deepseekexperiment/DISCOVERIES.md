@@ -179,3 +179,15 @@ One line per discovery, newest at the bottom of each section. Full detail in
 - CATCH: codebook quant breaks the XNOR popcount kernel (lookup vs popcount) ->
   different/slower compute, but fetch is binding (GPU has compute headroom), so
   the fetch win holds. Worth wiring into the engine.
+
+## E21 CORRECTION (2026-06-13): optimal-quant lever is ~1.15x, not the ~1.3x I eyeballed
+- Full table: bitplane P3 0.9812@3.25b; Lloyd-Max 0.9921@3.13b, 0.9563@2.13b;
+  VQ d=2/8bit 0.9976@4.13b (near-lossless), VQ d=4/8bit 0.9638@2.13b.
+- Lloyd-Max matches P3 fidelity (0.9812) at ~2.83 bits = **1.15x fetch reduction**,
+  free, same quality (interpolated; I'd wrongly eyeballed 1.3x — corrected).
+- VQ near-lossless at 4 bits but not better per-bit at the low rate that matters.
+- HONEST: optimal quantization IS a real lever (beats greedy bitplanes), but
+  modest (~1.15x) AND breaks the XNOR popcount kernel (codebook lookup), so it
+  trades a fetch win for slower compute. Real but small; stacks with the others.
+- Standing lesson reaffirmed: "no structure" != "no headroom" (the lever exists),
+  but measure the magnitude before claiming it (1.15x not 1.3x).
