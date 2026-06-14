@@ -201,3 +201,14 @@ One line per discovery, newest at the bottom of each section. Full detail in
 - vs frequency-precision (+0.037 for 2x fetch): KV-dissection is a worse trade,
   but a DIFFERENT axis (batch size vs fetch bytes) so they stack if the +0.11 is
   acceptable. Activations have a little squeeze left below fp8, but not free.
+
+## EARLY-EXIT DEAD (2026-06-13, e22) — speed lever B
+- Consecutive-layer activation cosine: rises 0.52->0.81 by L9, then PLATEAUS
+  ~0.79-0.83 through L12-30 (no convergence; L28->29=0.76, even falling). The
+  representation keeps transforming every layer -> no skippable late layers ->
+  early-exit weak. Corroborates depth-leaning (deep layers load-bearing). Every
+  layer is doing real work. (Measured L0-30; trend + depth result say no.)
+- Speed levers remaining: MTP (~1.8x, big build), batched engine (validated),
+  KV-4bit batch (2x, +0.11 nat trade), optimal-quant fetch (1.15x). Tax-payoff:
+  refit-alternations (running), U3 (~40%, confirmed), optimal-quant (same-bits
+  quality gain).

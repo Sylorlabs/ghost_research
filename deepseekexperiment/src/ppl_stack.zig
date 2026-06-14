@@ -37,7 +37,7 @@ const SINKHORN_ITERS = 20;
 const VOCAB = 129280;
 const ACT_BLOCK = 64;
 const W_PLANES = 3;
-const REFIT_ALT = 0; // refit-only (alternations cost too much at this scale)
+var REFIT_ALT: usize = 0; // refit alternations (arg13): error-feedback re-greedy passes, XNOR-native quality
 
 const QR_RANK = 1536;
 const HD = 512; // head_dim, also MQA kv dim
@@ -708,6 +708,7 @@ pub fn main() !void {
     var lean_from: usize = N_LAYERS; // arg11: layers >= this run at 1 plane (per-layer lean test); default off
     if (args.next()) |a| lean_from = try std.fmt.parseInt(usize, a, 10);
     if (args.next()) |a| kv_bits = try std.fmt.parseInt(usize, a, 10); // arg12: KV latent bits (8=fp8 baseline, <8=int-N)
+    if (args.next()) |a| REFIT_ALT = try std.fmt.parseInt(usize, a, 10); // arg13: refit alternations (tax payoff)
     std.debug.assert(ntok % 128 == 0);
 
     // ACT_DUMP=<path>: dump ref-stream post-ffn_norm activations (the exact
