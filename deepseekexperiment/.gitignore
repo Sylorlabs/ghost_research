@@ -30,3 +30,6 @@ bench_gpu[0-9]
 route_*.bin
 acts_*.bin
 *.npy
+chat_v4
+chat_v4_out.txt
+tok_test
