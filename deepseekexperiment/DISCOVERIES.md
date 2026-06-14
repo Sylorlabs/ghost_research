@@ -115,3 +115,10 @@ One line per discovery, newest at the bottom of each section. Full detail in
   can't hold it. Honest stacked 16GB ceiling rises to ~3-6 tps (MTP 1.8x x
   freq-precision 2x x U3 1.3x x fast-drive placement), measured-grounded, still
   not 20 (session working set needs RAM). MTP port now justified.
+- FREQUENCY-PRECISION CONFIRMED (2026-06-13, freqprec_*.txt): top-64 experts/layer
+  at P3 + cold at P1 = 53% fewer fetch bytes (~2.1x) for only +0.037 nats over the
+  all-P3 quant (ppl 16.53->16.94). top-32 too aggressive (+0.26 nats). Cold experts
+  tolerate 1-bit (low routing weight). REAL measured fetch lever ~2x.
+- LEAN-BIT SWEEP running: P2-global (1.6x leaner, end-to-end test never done) +
+  per-layer lean-from-{40,30} (how deep layers tolerate P1). The XOR insight applied
+  per-layer to attack bytes-per-expert.

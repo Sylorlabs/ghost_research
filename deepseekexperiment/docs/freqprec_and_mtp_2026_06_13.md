@@ -17,10 +17,16 @@ rank experts by usage, top-N -> W_PLANES, rest -> 1 plane. Shared expert always 
 So top-64 = ~2.1x fewer fetch bytes, with 72% of token-routings still hitting
 P3-quality experts. The cold 28% hit P1 (0.798 cosine/matmul, the gaussian wall).
 
-**Quality cost (PPL run, freqprec_{64,32}.txt):** measured vs all-P3 baseline
-(QUANT ppl 16.53 @ T=128 off8000). [RESULTS PENDING — run in progress]
-Decision rule: if top-64 keeps QUANT ppl within ~5% of 16.53, frequency-precision
-is a confirmed ~2x fetch lever at negligible quality cost.
+**Quality cost (MEASURED, freqprec_{64,32}.txt) vs all-P3 quant (ppl 16.53, gap +0.162 nats):**
+| config | QUANT ppl | gap vs own ref | extra vs all-P3 |
+|---|---|---|---|
+| top-64 P3 / rest P1 | 16.94 | +0.199 | **+0.037 nats** |
+| top-32 P3 / rest P1 | 21.48 | +0.42 | +0.26 nats |
+
+**VERDICT: CONFIRMED at top-64 — ~2.1x fewer fetch bytes for +0.037 nats** (cold
+experts tolerate 1-bit; they carry little routing weight). top-32 too aggressive.
+Frequency-precision is a real, measured fetch lever. Stacks with the lean-bit
+(per-layer P2) result and the others.
 
 ## Experiment 2: MTP speculative decode (SCOPED + ESTIMATED, full port deferred)
 The checkpoint ships a trained MTP head (mtp.0.*, shard 64): a full transformer
