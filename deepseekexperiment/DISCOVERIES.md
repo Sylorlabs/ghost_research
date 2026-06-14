@@ -134,3 +134,12 @@ One line per discovery, newest at the bottom of each section. Full detail in
   experts->P1) works = 2.1x/+0.037 nats. Uniform-P2 dominated (1.44x/+0.11);
   depth-based dead (+0.31). Leanness must target rarely-routed experts, not whole
   layers or blanket cuts. ONE confirmed bit lever: ~2x.
+- HASH-ROUTING CONVERSION DEAD (2026-06-13): per-token-id routing consistency on
+  coherent text = 0.34 (0% of tokens route >=0.9 consistently, 3% >=0.7). Score
+  routing is genuinely context-dependent (that's why DeepSeek score-routes layers
+  3-60, hash-routes only 0-2). Converting to fixed token->expert mis-routes ~66%
+  of slots -> tax too large to pay back. ARCHITECTURAL PRINCIPLE (measured across
+  ~12 changes): the only "tax you can pay back" is on things the model barely uses
+  (cold experts, +0.037 nats). Everything load-bearing (context routing, all 6
+  experts, deep layers, weights) resists restructuring. V4 is maximally-tight;
+  no architectural slack without retraining.
