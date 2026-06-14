@@ -158,3 +158,12 @@ One line per discovery, newest at the bottom of each section. Full detail in
   43 tps GPU compute, 384 union, 35.5MB/expert, KV 5.2GB fits). CLEARS 3-5.
 - Gate: forge ~440GB experts to fast drive (free ~440GB on SN850X). Full engine
   build justified. Single-stream stays ~0.5-1 tps (fetch wall); 3-5 = batched.
+
+## WEIGHTS ARE NOISE (2026-06-13) — representation space CLOSED
+- e20: real expert statistically INDISTINGUISHABLE from gaussian noise (WHT top-1%
+  8.36 vs 8.37, autocorr ~0, kurtosis +0.10, only 2.9% row-norm var captured by P3).
+- Trained weights are maximum-entropy -> ALL representation math precluded (linear/
+  spectral are rotations, gaussian-invariant; nonlinear precluded by high-dim
+  manifold). Can't compress white noise. sqrt(2/pi) was the first sign. This is WHY
+  the model is strong + incompressible. NO new math remains. Path = systems (batched
+  engine, KV-dissection on activations) + hardware, not representation.
