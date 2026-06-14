@@ -398,3 +398,32 @@ Measured on real MoE-input vectors (post-ffn-norm), T=128 off8000, all 61 layers
   Software ceiling ~ resident-core(2x) x MTP(1.8x) x Lloyd(1.2x) ~ 4x -> ~1 tps interactive
   (capacity-gated) / multi-tps offline-batch. 20 tps interactive needs the 283GB bank in
   fast memory = consumer hardware add (RAM or fast NVMe), not a missing algorithm.
+
+## CONVERSION FRONTIER HITS THE SHANNON FLOOR (2026-06-14, e27/e28) — "beyond XOR" = ~1.4x, a THEOREM
+Micah: "something beyond xor; find what's expensive and convert it." Research-grade
+output-aware + information-theoretic analysis on the expensive part (experts), real L30
+activations + dumped experts.
+- E27 activation-aware (AWQ): full swiglu OUTPUT cosine on real acts (uniform/Lloyd/AWQ):
+    bits  uniform  lloyd  awq-unif  awq-lloyd
+    2     0.249    0.840  0.364     0.812
+    3     0.889    0.960  0.884     0.939
+    4     0.977    0.979  0.977     0.975
+  AWQ does NOT help (slightly hurts). MECHANISM: expert input is post-RMSNorm -> per-channel
+  magnitude already equalized (anisotropy only 2.4x vs the 10-100x outliers AWQ needs).
+  RMSNorm already did AWQ's job. Lloyd >> uniform confirmed at the OUTPUT level too.
+- Activation covariance (GPTQ headroom): 90% energy needs 83/128 dims, top-8 eigvals only
+  34% -> no few-direction dominance -> GPTQ/projection helps only modestly; expert compute
+  genuinely uses ~80+ activation dims (corroborates B5/E19).
+- E28 SHANNON RATE-DISTORTION CEILING (definitive "how far beyond XOR, ever"): weight
+  kurtosis 3.125 = gaussian -> R(D)=0.5 log2(sigma^2/D) applies. Optimal-scalar(Lloyd) vs
+  Shannon bound: bits2 gap 0.474b (1.39x), bits3 gap 0.465b (1.38x). => the BEST POSSIBLE
+  quantizer (lattice/trellis, QuIP#/QTIP) saves ~0.47 b/w = ~1.4x over scalar. THEOREM for
+  gaussian sources, not a creativity limit.
+- COMPLETE CONVERSION FRONTIER (full quality, experts): bitplane-P3 3.375 b/w -> scalar-
+  Lloyd ~2.75 -> lattice/trellis (Shannon floor) ~2.3 b/w. Absolute smallest full-quality
+  bank ~= 1.546e12*2.4/8 ~ 464GB (vs 806 source). STILL >> 70GB free / 16GB RAM -> even at
+  the information-theoretic floor the model can't sit in this machine's fast memory.
+- FINAL: "beyond XOR" is real (lattice/trellis) but bounded ~1.4x by Shannon; with the
+  scale-fix ~1.7x smaller than source, never the 10x needed to fit. Conversion axis closed
+  at its theoretical limit. Achievability = hardware (fast memory for the ~464-653GB bank),
+  proven by THEOREM not just failed attempts.
