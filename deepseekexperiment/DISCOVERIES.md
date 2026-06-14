@@ -288,3 +288,28 @@ read run at full speed CONCURRENTLY with GPU compute?
   ~3-10 tps aggregate (P1 degraded / mix near-full quality). Gate remains: 74GB free
   can't hold even P1 (250GB) -> needs the source deleted (user-authorized, irreversible).
   Dual-drive parallel read deferred (fast drive only 9.7GB free -> negligible add).
+
+## P3 SCALE-PACKING WASTE FIXED (2026-06-14, e23) — full P3 now FITS the slow drive
+Investigated why forged P3 (870GB) is BIGGER than the fp4 source (806GB) when P3 is
+supposed to be fewer bits. Found the waste in packBitplanesRefit (signal_survival.zig):
+- format = 3 sign-plane bits/w (=3.0 b/w, correct) + ONE f32 scale per (plane x
+  64-block) = 3*32/64 = **1.5 b/w of scales** -> total **4.5 b/w > fp4's 4.25**.
+  The scales cost half-again as much as the data. That is the entire mystery.
+- FIX = coarsen the scale block (one f32 per 256 weights, not 64). bits/w = P + P*S/B.
+- MEASURED on 12 real experts (layer 30, 3072x7168), cosine/matmul vs fp4:
+    block 64  (now): cos 0.97475  4.50 b/w  870GB  (> source)
+    block 128:       cos 0.97376  3.75 b/w  725GB
+    block 256:       cos 0.97327  3.375 b/w 653GB   <-- recommended
+    block 512:       cos 0.97302  3.19 b/w  617GB
+  block 64->256 costs 0.0015 cosine (0.15%, << the +0.1-nat XOR tax & run noise) for
+  a 25% size cut. Confirms prior "block 16-256 fidelity-free" on real experts.
+- IMPACT: full-quality P3 at block 256 = **653GB < 806GB source**. Re-forging at
+  block 256 means forged/layer (10.7GB) < source shard (12.6GB) -> delete-as-we-forge
+  FREES ~1.9GB/layer (no deadlock), fits the slow drive with ~213GB to spare, and
+  needs ZERO collateral deletion (no pagefile/games/corpus). Final quality = full P3.
+- Further options (more margin, slightly more code): fp16 scales (block256 -> 617GB),
+  block512 (617GB). fp8 scales REJECTED (scale magnitudes need >fp8 precision; block-
+  coarsening is the proven-safe lever, fp8 unproven). Engine kernel must read scales
+  per 256-block to match (forge + ppl_stack/gpu/chat_v4 unpack change).
+- This reopens "full P3 on the slow drive" as feasible & clean -- the option that
+  looked impossible (870GB, deadlock, collateral) was an artifact of f32-per-64 scales.
