@@ -221,3 +221,44 @@ One line per discovery, newest at the bottom of each section. Full detail in
 - TAX-PAYOFF MAP: refit-alternations dead; U3 hysteresis ~40% (confirmed, free);
   Lloyd-Max/VQ better quantizer (~0.011/matmul) but breaks XNOR kernel (GPU path).
   Paying off tax = U3 + quantizer-family-switch, not tuning bitplanes harder.
+- refit_alt=4 (refit_4.txt) CONFIRMS: QUANT ppl 16.51, 48/63 top1 — identical to
+  alt=2 (16.48) and baseline (16.53). 2 vs 4 error-feedback passes: no difference.
+  Refit-alternations fully closed.
+
+## THE STORAGE-BANDWIDTH WALL (2026-06-14) — the real, final gate, MEASURED
+Routing skew (route_coherent.log, T=512) + drive bandwidths (O_DIRECT) settle the
+whole speed problem analytically. No more projection — these are the binding facts.
+- ROUTE SKEW: every score-routed layer touches 258-383 of 384 experts over 512
+  tokens (early layers 383/384). Over real context you touch ~ALL experts per
+  layer. route_ov ~0.73-0.85 is TEMPORAL locality (the ~1.3x U3 cache lever), NOT
+  spatial sparsity. => the working set CANNOT shrink to a small resident hot-set.
+- DRIVE BANDWIDTH (cold, O_DIRECT, measured today):
+    FAST  WD_BLACK SN850X  (mounted /)           = 5.0 GB/s
+    SLOW  Kingston SNV3S1000G (/mnt/corpus, holds 806GB source) = 1.1 GB/s
+- FREE SPACE: fast / = 9.7 GB ; slow /mnt/corpus = 74 GB. (Fast drive is 559GB
+  total, 521GB used by OS+games — cannot free ~250GB+ there without nuking system.)
+- WORKING SET (full 58 MoE layers; one P3 layer measured = 14GB):
+    uniform P3 (validated quality, +0.1 nats) = 812 GB
+    freq-precision mix (hot P3 / cold P1, 2.1x) = ~387 GB
+    uniform P1 (1-bit, degraded quality)        = 250 GB
+- HARD FACT: even the SMALLEST full working set (P1, 250GB) exceeds ALL free fast
+  storage (84GB combined). You cannot hold a full-quality model on this machine's
+  free space, and routing forbids keeping only a small subset. The wall is
+  fast-storage CAPACITY, and it is absolute on the current disks.
+- AGGREGATE TPS = B x bandwidth / W (read-bound, compute overlaps), B=512:
+    on FAST 5.0GB/s:  P3 3.2 tps | mix 6.6 tps | P1 10.2 tps   (but won't FIT)
+    on SLOW 1.1GB/s:  P3 0.7 tps | mix 1.5 tps | P1 2.3 tps
+- THE ONLY WAYS THROUGH (all measured, none "data center"):
+  1. Delete 806GB source -> slow drive gains ~880GB free -> forge full P3 (812GB)
+     to slow drive -> ~0.7 tps full quality; or P1 (250GB) -> ~2.3 tps degraded.
+     IRREVERSIBLE (source is the only copy; safe forge-then-delete impossible at
+     84GB free -> would be delete-as-we-forge, per-shard). NEEDS user authorization.
+  2. Add ONE consumer NVMe (1-2TB, ~$100-150) -> forge freq-mix (387GB) to it ->
+     ~6.6 tps full quality. Consumer hardware, not data center. CLEANEST path.
+  3. 20 tps goal: B x bw / W = 20 -> at B=512, mix 387GB needs 15 GB/s ~= 3x NVMe
+     RAID0 (consumer) OR larger B with more RAM (aggregate-throughput, not single-
+     stream latency). Single-stream interactive latency at 20 tps needs the whole
+     working set readable per-token-fast = ~387GB in RAM/VRAM = not this machine.
+- BOTTOM LINE: intelligence is solved (XOR survives, +0.1 nats, "Paris"); compute
+  is solved (GPU 26 tps, batched path validated); the residual is PURELY storage
+  capacity x bandwidth. It is a hardware-shape problem now, not a math problem.
