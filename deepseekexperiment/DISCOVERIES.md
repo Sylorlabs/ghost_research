@@ -122,3 +122,8 @@ One line per discovery, newest at the bottom of each section. Full detail in
 - LEAN-BIT SWEEP running: P2-global (1.6x leaner, end-to-end test never done) +
   per-layer lean-from-{40,30} (how deep layers tolerate P1). The XOR insight applied
   per-layer to attack bytes-per-expert.
+- LEAN-BIT P2-GLOBAL (2026-06-13, lean_P2.txt): all experts at 2-bit = ppl 18.35
+  vs all-P3 16.53 = +0.11 nats for only 1.44x fewer bytes. DOMINATED by
+  frequency-precision (2.1x for +0.037). Lesson: usage-weighted precision >
+  uniform — degrade COLD experts (low weight), not all. Per-layer deep-P1
+  (lean-from-40/30) running to test if depth adds slack beyond usage-weighting.
