@@ -191,3 +191,13 @@ One line per discovery, newest at the bottom of each section. Full detail in
   trades a fetch win for slower compute. Real but small; stacks with the others.
 - Standing lesson reaffirmed: "no structure" != "no headroom" (the lever exists),
   but measure the magnitude before claiming it (1.15x not 1.3x).
+
+## KV-DISSECTION (2026-06-13, kv_4.txt) — real but NOT free
+- 4-bit KV latent (below the fp8 baseline): QUANT ppl 18.20 vs fp8 16.53 = +0.11
+  nats. Halving KV below fp8 costs ~the whole XOR tax again. A throughput/quality
+  TRADE: ~2x batch headroom (-> ~2x aggregate tps) for +0.11 nats. NOT the free 2x
+  hoped. DeepSeek's fp8 KV was near the floor (unlike weights, where fp4 was the
+  design point). 3-bit pending (will be worse).
+- vs frequency-precision (+0.037 for 2x fetch): KV-dissection is a worse trade,
+  but a DIFFERENT axis (batch size vs fetch bytes) so they stack if the +0.11 is
+  acceptable. Activations have a little squeeze left below fp8, but not free.
