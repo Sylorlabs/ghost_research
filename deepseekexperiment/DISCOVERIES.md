@@ -167,3 +167,15 @@ One line per discovery, newest at the bottom of each section. Full detail in
   manifold). Can't compress white noise. sqrt(2/pi) was the first sign. This is WHY
   the model is strong + incompressible. NO new math remains. Path = systems (batched
   engine, KV-dissection on activations) + hardware, not representation.
+
+## OPTIMAL QUANTIZATION beats bitplanes (2026-06-13, e21) — Micah was right
+- Lloyd-Max optimal scalar quant: 0.9921 @ 3.13 bits vs bitplane P3 0.9812 @ 3.25.
+  To MATCH P3 fidelity, Lloyd-Max needs ~2.5 bits -> ~1.3x fetch reduction, FREE,
+  SAME quality. VQ/codebook (computing) typically beats scalar -> possibly more.
+- KEY CORRECTION: "weights are noise" precludes STRUCTURE-exploitation, NOT
+  quantizer-optimality. Greedy bitplanes don't hit the gaussian rate-distortion
+  limit; Lloyd-Max/VQ get closer. Two different axes — I over-extended the noise
+  result. Real ~1.3x fetch lever, stacks with freq-precision/etc.
+- CATCH: codebook quant breaks the XNOR popcount kernel (lookup vs popcount) ->
+  different/slower compute, but fetch is binding (GPU has compute headroom), so
+  the fetch win holds. Worth wiring into the engine.
