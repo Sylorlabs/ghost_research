@@ -100,6 +100,7 @@ pub fn build(b: *std.Build) void {
         .{ "hier-runes", "hier_runes.zig", "Depth via composition: hierarchical runes (bytes→runes→phrases→concepts) for multi-scale next-rune — does abstract context help, no attention, CPU, no GPU/LLM" },
         .{ "hier-deep", "hier_deep.zig", "Push depth: 4 composed levels + deeper local + joint couplings + induction, ablation ladder showing the committee climb — no attention, CPU, no GPU/LLM" },
         .{ "lm-bpc", "lm_bpc.zig", "Our rune stack vs a stolen GPT-2: bits-per-byte on the same held-out text (interpolated hierarchical backoff, prequential) — the fair capability metric, CPU, no GPU/LLM" },
+        .{ "lm-bpc2", "lm_bpc2.zig", "Phase 1: interpolated absolute discounting (≈Kneser-Ney) to close the BPB gap to gpt2 — arg1=warm-start MB for data scaling, CPU, no GPU/LLM" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
         const rc = b.addRunArtifact(e);
