@@ -58,17 +58,44 @@ strawman) vs hash-routing, on next-rune over forged runes (Austen/Melville/Shake
   (4.1% vs 2.5%), so the honest menu is: **hash-routing = zero-learning, O(n), cheapest; residual organ = cheap-learning,
   O(n), stronger**. Both beat a single attention head here.
 
-## The decisive next test (probe 2): associative recall / induction
+## Probe 2 — `induction_recall.zig` (`zig build induction-recall`, ~6s): the decisive capacity race
 
-Next-rune over prose is dominated by local n-grams, so it under-tests routing. The benchmark the entire
-attention-replacement field uses to separate **real** replacements from fakes is **associative recall / induction**:
-the sequence contains `… a b … a ?` and the model must recall `b` by matching the earlier `a`. This is exactly where
-**softmax attention shines** (sharp content-based retrieval) and **linear attention / SSMs struggle** (bounded state).
-Our claim to test: **discrete rune addresses give exact-match recall** that should hold up where soft linear methods
-fail. If hash/exact-address routing handles induction as well as softmax — and far better than a linear-attention
-recurrence — that is the research-grade result. Probe 2 builds this synthetic task with perfect ground truth.
+Next-rune over prose is dominated by local n-grams, so it under-tests routing. The benchmark the entire field uses to
+separate **real** attention-replacements from fakes is **associative recall / induction**: store m (key→value) pairs,
+then recall the value for a query key. This is attention's signature **in-context** skill (the "induction head"), and
+exactly where **softmax shines** and **constant-state replacements (linear attention / SSMs) fail** (bounded state).
+
+Four associative memories, **none learned** (fixed random embeddings → a clean *capacity* comparison), sweeping load m:
+A exact discrete hash table · B softmax-as-memory (keep all keys) · C linear outer-product memory `M=Σkᵢ⊗vᵢ`
+(the constant-state O(n) replacement) · D LSH address. D=64, VSYM=512, 16 LSH bits, 4000 trials/point.
+
+### Results (recall accuracy vs load m)
+
+| m | A exact | B softmax | C linear (const-state, ≈D=64) | D LSH(16b) |
+|---:|---:|---:|---:|---:|
+| 4–64 | 100% | 100% | 100% → 99.9% | ~100% |
+| 96 | 100% | 100% | 99.1% | 99.5% |
+| 128 | 100% | 100% | 97.1% | 99.6% |
+| 192 | 100% | 100% | 85.4% | 99.3% |
+| 256 | 100% | 100% | 72.2% | 99.1% |
+| 384 | **100%** | **100%** | **48.5%** | **98.7%** |
+
+- **A exact (discrete-rune address): 100% at every load**, O(1)/query, **unbounded capacity, no learning, no n².** This
+  is precisely the induction head that attention spends O(n²) + training to acquire — discrete runes get it for free.
+- **C linear / constant-state — the standard cheap "attention replacement" — collapses as m→D** (100%→48.5%): the
+  bounded-state **capacity wall** the SSM literature warns about, reproduced. A fixed D×D state can't hold many bindings.
+- **B softmax keeps full recall but pays O(m)** state/compute (24,576 muls/query at m=384) — that's attention's cost.
+- **D LSH: O(1) like exact, holds ~99%** (collision-limited; more bits → more capacity).
+
+### The conclusion (research-grade)
+The induction head is just **content-addressed recall**. The cheap **continuous** replacements (linear/SSM) trade
+**capacity for O(n)**; **discrete-rune addressing keeps BOTH — unbounded recall AND O(1) — because a rune is already an
+address.** That is the structural lever every continuous attention-replacement misses, and it's native to this stack.
 
 ## Status
-Probe 1 done, measured, committed. Open rungs: (2) induction/associative-recall benchmark, (3) linear-attention
-recurrence baseline (the real O(n) competitor), (4) bucket-count / decay / key-construction sweeps, (5) a learned-metric
-hash (cheap CPU projection trained contrastively) to lift the soft-routing accuracy toward the residual organ's.
+Probes 1–2 done, measured, committed. The two halves of attention's job are now both covered cheaply on a discrete-rune
+substrate: **soft routing** (probe 1, hashed content-addressing, O(n), ≥ a single attention head) and **sharp recall /
+induction** (probe 2, exact address, O(1), unbounded capacity where the constant-state replacement craters). Open rungs:
+(3) synthesis — wire exact-address induction memory + n-gram + hash-routing into one O(n) next-rune layer on real prose
+and measure the long-range-copy contribution; (4) bucket-count / decay / key sweeps; (5) a cheap CPU-learned metric hash
+to lift soft-routing accuracy toward the residual organ's.
