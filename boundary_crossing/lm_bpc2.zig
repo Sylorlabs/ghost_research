@@ -144,6 +144,37 @@ fn bump(a: std.mem.Allocator, map: *CT, key: u64, r: u32) !void {
     if (!ie.found_existing) ie.value_ptr.* = 0;
     ie.value_ptr.* += 1;
 }
+// de-wrap: collapse single '\n' (hard line wrap) to ' ', keep '\n\n' (paragraph) — matches gpt2_bpb's de-wrap exactly
+fn dewrapBytes(a: std.mem.Allocator, b0: []const u8) ![]u8 {
+    // pass 1: normalize CRLF→LF (drop '\r'), matching gpt2_bpb's .replace('\r\n','\n')
+    var tmp = try a.alloc(u8, b0.len);
+    var n: usize = 0;
+    for (b0) |c| if (c != '\r') {
+        tmp[n] = c;
+        n += 1;
+    };
+    const b = tmp[0..n];
+    var out = try a.alloc(u8, b.len);
+    var w: usize = 0;
+    var i: usize = 0;
+    while (i < b.len) {
+        if (b[i] == '\n' and i + 1 < b.len and b[i + 1] == '\n') {
+            out[w] = '\n';
+            out[w + 1] = '\n';
+            w += 2;
+            i += 2;
+        } else if (b[i] == '\n') {
+            out[w] = ' ';
+            w += 1;
+            i += 1;
+        } else {
+            out[w] = b[i];
+            w += 1;
+            i += 1;
+        }
+    }
+    return out[0..w];
+}
 fn ngKey(R: []const u32, p: usize, k: usize) u64 {
     if (k == 0) return 0xABCDEF; // global unigram context
     var h: u64 = 1469598103934665603 ^ (k *% 1000003);
@@ -206,12 +237,14 @@ pub fn main() !void {
     const dir = "/home/micah/Desktop/Sylorlabs/ghost_research/corpus";
 
     var trainMB: usize = 0; // 0 = use the 3 books fully
+    var dewrap = false; // arg2 == "dw" → collapse hard line-wraps (formatting control)
     {
         const args = try std.process.argsAlloc(a);
         if (args.len > 1) trainMB = try std.fmt.parseInt(usize, args[1], 10);
+        if (args.len > 2 and std.mem.eql(u8, args[2], "dw")) dewrap = true;
     }
 
-    try o.print("=== LM-BPC2 — Phase 1: interpolated ABSOLUTE DISCOUNTING (≈ Kneser-Ney). Fair BPB vs gpt2 1.9105 / distilgpt2 2.0241 ===\n\n", .{});
+    try o.print("=== LM-BPC2 — Phase 1: interpolated ABSOLUTE DISCOUNTING (≈ Kneser-Ney). dewrap={} ===\n\n", .{dewrap});
 
     var tr = std.ArrayList(u8).init(a);
     for ([_][]const u8{ "moby_dick.txt", "shakespeare.txt", "tolstoy.txt" }) |fnm| {
@@ -221,11 +254,15 @@ pub fn main() !void {
         try tr.appendSlice(try f.readToEndAlloc(a, 1 << 30));
     }
     const cap: usize = if (trainMB > 0) trainMB * 1_000_000 else tr.items.len;
-    const TRB = tr.items[0..@min(cap, tr.items.len)];
+    var TRB = tr.items[0..@min(cap, tr.items.len)];
     const hp = try std.fs.path.join(a, &.{ dir, "heldout_eval.txt" });
     const hf = try std.fs.openFileAbsolute(hp, .{});
-    const HB = try hf.readToEndAlloc(a, 1 << 30);
+    var HB = try hf.readToEndAlloc(a, 1 << 30);
     hf.close();
+    if (dewrap) { // formatting control: collapse hard line-wraps in BOTH warm-start and held-out
+        TRB = try dewrapBytes(a, TRB);
+        HB = try dewrapBytes(a, HB);
+    }
 
     var trU = try a.alloc(u32, TRB.len);
     for (0..TRB.len) |i| trU[i] = TRB[i];
@@ -308,8 +345,11 @@ pub fn main() !void {
     try o.print("warm-start {d:.1} MB ({d} runes) → held-out {d} bytes / {d} runes ({d:.2} B/rune), rune vocab {d}.\n\n", .{ @as(f64, @floatFromInt(TRB.len)) / 1e6, TR.len, nbytes, EV.len, @as(f64, @floatFromInt(nbytes)) / @as(f64, @floatFromInt(EV.len)), V });
     const bf = frozenBits / @as(f64, @floatFromInt(nbytes));
     const bp = preqBits / @as(f64, @floatFromInt(nbytes));
+    // FAIR gpt2 baseline depends on formatting: 1.0499 on de-wrapped (flowing) text, 1.9105 on wrapped (which fragments
+    // gpt2's context — an unfair confound we caught with the de-wrap control). Compare against the matching setting.
+    const gpt2 = if (dewrap) @as(f64, 1.0499) else @as(f64, 1.9105);
     try o.print("  OUR FROZEN (warm-start only)      BPB = {d:.4}\n", .{bf});
     try o.print("  OUR PREQUENTIAL (continual)       BPB = {d:.4}   (rune-ppl {d:.1})\n\n", .{ bp, std.math.exp(preqBits / @as(f64, @floatFromInt(scored)) * std.math.ln2) });
-    try o.print("  baselines:  gpt2-124M 1.9105   distilgpt2 2.0241   (lm_bpc Phase-0 was frozen 2.2917 / preq 2.0551)\n", .{});
-    try o.print("  Δ vs gpt2: frozen {s}{d:.4}, prequential {s}{d:.4}  (negative = we BEAT gpt2)\n", .{ if (bf - 1.9105 >= 0) "+" else "", bf - 1.9105, if (bp - 1.9105 >= 0) "+" else "", bp - 1.9105 });
+    try o.print("  gpt2-124M baseline ({s}) = {d:.4}\n", .{ if (dewrap) "de-wrapped / FAIR flowing text" else "WRAPPED — confounded, gpt2's context is fragmented", gpt2 });
+    try o.print("  Δ vs gpt2: frozen {s}{d:.4}, prequential {s}{d:.4}  (negative = we beat gpt2; on FAIR text gpt2 wins big)\n", .{ if (bf - gpt2 >= 0) "+" else "", bf - gpt2, if (bp - gpt2 >= 0) "+" else "", bp - gpt2 });
 }
