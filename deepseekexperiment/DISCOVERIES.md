@@ -212,3 +212,12 @@ One line per discovery, newest at the bottom of each section. Full detail in
   KV-4bit batch (2x, +0.11 nat trade), optimal-quant fetch (1.15x). Tax-payoff:
   refit-alternations (running), U3 (~40%, confirmed), optimal-quant (same-bits
   quality gain).
+
+## REFIT-ALTERNATIONS DEAD (2026-06-14, refit_2.txt) — tax-payoff A
+- refit_alt=2: QUANT ppl 16.48 vs alt=0 baseline 16.53 = -0.05 (within +-0.015 nat
+  REF noise) = NEGLIGIBLE. More error-feedback re-greedy passes don't pay off the
+  XOR tax; bitplanes + 1 refit already hit the structural optimum. Free XNOR-native
+  tax-payoff is exhausted.
+- TAX-PAYOFF MAP: refit-alternations dead; U3 hysteresis ~40% (confirmed, free);
+  Lloyd-Max/VQ better quantizer (~0.011/matmul) but breaks XNOR kernel (GPU path).
+  Paying off tax = U3 + quantizer-family-switch, not tuning bitplanes harder.
