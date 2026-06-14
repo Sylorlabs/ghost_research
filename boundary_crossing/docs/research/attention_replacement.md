@@ -267,29 +267,33 @@ interpolated hierarchical backoff (rune orders 1–5 + phrase + concept), CPU, t
 
 | model | BPB | notes |
 |---|---:|---|
-| **distilgpt2** (82M, frozen) | **2.0241** | pretrained on billions of tokens |
+| **gpt2** (124M, frozen) | **1.9105** | strongest; pretrained on billions of tokens |
+| distilgpt2 (82M, frozen) | 2.0241 | small transformer |
+| our stack — **prequential** (continual) | 2.0551 | learns from the stream as it reads (our mode) |
 | our stack — **frozen** (warm-start only) | 2.2917 | raw transfer, no adaptation |
-| our stack — **prequential** (continual) | **2.0551** | learns from the stream as it reads (our mode) |
-| *gpt2* (124M, frozen) | *pending* | stronger baseline |
 
-- **Raw frozen capability: the transformer wins** (distilgpt2 2.02 vs our 2.29, ~13%) — as expected; a real LM
-  pretrained on billions of tokens out-transfers our 2 MB warm-start. **This is the honest "they're better at capability."**
-- **With continual learning** (our cheap structural advantage — the count tables adapt to Austen as they read it), the
-  gap nearly closes: **our 2.0551 vs distilgpt2 2.0241 (~1.5%)** — *a tiny CPU, no-GPU, no-LLM, tens-of-MB stack within
-  1.5% of an 82M-parameter transformer on bits-per-byte.*
-- Caveat (honest): the Gutenberg text has hard line-wrapping that inflates BPB for **both** (same bytes, so fair, but
-  the absolute ~2.0 is high); and our prequential mode adapts on the held-out while GPT-2 is frozen — that's *our* value
-  prop (continual learning), stated plainly, not hidden.
+Ordering: **gpt2 1.91 < distilgpt2 2.02 ≈ our-prequential 2.06 < our-frozen 2.29.**
 
-**The settled answer to "is the committee better than attention?"**: on *raw capability*, **no** — a real transformer is
-better (probe 5 hinted it; probe 8 measures it: ~13% on frozen BPB). On *cost + continual learning + competitiveness at
-tiny scale*, **yes** — we sit within ~1.5% of a small GPT-2 on the fair metric while running on a CPU in seconds at tens
-of MB, and we keep learning with no forgetting. That is the true, defensible claim.
+- **Raw capability: the transformer wins.** gpt2-124M (1.91) beats our best (prequential 2.06) by **~7%**, and our
+  frozen (2.29) by **~20%**. A real LM pretrained on billions of tokens out-transfers our 2 MB warm-start. **This is the
+  honest "they're better at capability" — measured, not hand-waved.**
+- **Continual learning shrinks the gap to the small model:** our prequential stack (2.0551) is within **~1.5% of
+  distilgpt2** (2.0241) — a CPU, no-GPU, no-LLM, tens-of-MB stack in the same ballpark as an 82M transformer — but the
+  proper **gpt2-124M still pulls ~7% ahead**.
+- Caveat (honest): Gutenberg line-wrapping inflates BPB for **all** (same bytes = fair, but absolute ~2.0 is high); our
+  prequential mode adapts on the held-out while GPT-2 is frozen — that's *our* value prop (continual learning), stated
+  plainly.
+
+**The settled answer to "is the stack better than attention/transformers?"**: on **raw capability, NO** — a real
+transformer is better (gpt2-124M by ~7% BPB; ~20% vs our frozen). On **cost + continual learning + competitiveness at
+tiny scale, YES** — we're within ~1.5% of a small GPT-2 and ~7% of the full one, on a CPU in seconds at tens of MB, with
+no forgetting. That is the true, defensible claim — and it's the corrected, measured version of the earlier "15–20×."
 
 ## Status
 Probes 1–8 done, measured, committed — including a self-correction (probe 5), real depth wins (probes 6–7, +23% rel,
-saturating ~3 levels), and a **stolen-GPT-2 head-to-head** (probe 8): transformer wins raw capability (~13% BPB), our
-continual stack within ~1.5% at a fraction of the cost. The whole
+saturating ~3 levels), and a **stolen-GPT-2 head-to-head** (probe 8): gpt2-124M wins raw capability (~7% BPB over our
+best, ~20% over frozen), our continual stack within ~1.5% of distilgpt2, all at a fraction of the cost. The honest
+overall verdict: **transformers win capability; we win cost + continual-learning + competitive-at-tiny-scale.** The whole
 arc, honestly: (1) attention's soft routing → hashing, O(n), probe 1; (2) sharp recall/induction → exact discrete
 address, O(1), unbounded capacity where continuous replacements crater, probe 2 (decisive); (3) both jobs as one O(n)
 streaming predictor, probe 3; (4) a sigil committee that beats a single attention head online, no softmax, probe 4;
