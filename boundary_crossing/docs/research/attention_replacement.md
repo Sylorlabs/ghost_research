@@ -289,6 +289,21 @@ transformer is better (gpt2-124M by ~7% BPB; ~20% vs our frozen). On **cost + co
 tiny scale, YES** — we're within ~1.5% of a small GPT-2 and ~7% of the full one, on a CPU in seconds at tens of MB, with
 no forgetting. That is the true, defensible claim — and it's the corrected, measured version of the earlier "15–20×."
 
+### ⚠️ CORRECTION (probe 8b / lm_bpc2): the wrapped comparison above was CONFOUNDED — gpt2 wins ~40% on fair text
+The held-out is Gutenberg text with **hard line-wrapping** (CRLF ~every 50 chars), which **fragments gpt2's context** and
+inflates its BPB. A de-wrap control (collapse single newlines to flowing text, identically for both models) exposes it:
+
+| setting | gpt2-124M | our frozen | our prequential |
+|---|---:|---:|---:|
+| wrapped (confounded) | 1.9105 | 1.8302 | 1.7030 |
+| **de-wrapped (fair, flowing)** | **1.0499** | 1.7768 | 1.6465 |
+
+gpt2 drops **1.91 → 1.05** un-fragmented; our count model barely moves (1.83 → 1.78). On **fair flowing text gpt2 beats
+us by ~40%** (1.05 vs 1.65–1.78), **despite** our domain advantage (warm-start on 19th-c lit, test on Austen; gpt2 is
+out-of-domain). **"We beat gpt2" was wrong — a formatting artifact.** Phase-1 smoothing (absolute discounting, frozen
+2.29 → 1.78) + data scaling were real gains for *our* model but do NOT close the capability gap. A real transformer wins
+capability by a large margin; the cheap count stack plateaus well above it on fair text. This is the honest result.
+
 ## Status
 Probes 1–8 done, measured, committed — including a self-correction (probe 5), real depth wins (probes 6–7, +23% rel,
 saturating ~3 levels), and a **stolen-GPT-2 head-to-head** (probe 8): gpt2-124M wins raw capability (~7% BPB over our
