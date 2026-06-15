@@ -469,3 +469,14 @@ Built the integrated tiered engine (disk->RAM->VRAM->compute). doc: docs/tiered_
   fit, not optional. Disk-bound confirmed; per-dispatch overhead must be amortized (batch
   uploads). This is the MAX the memory hierarchy allows for full-intelligence streaming on
   16GB; more needs the bank in fast memory (hardware), not software.
+
+## ENGINE OVERLAP CONFIRMED FULL + batched-path note (2026-06-15, stream_engine)
+Tried the batched-upload optimization (offer a). Result: the stable g.dispatch path (persistent
+VRAM buffers, alloc-once) already overlaps FULLY -- fast SN850X 5.27 GB/s under GPU load (>= the
+5.0 solo; earlier 4.0-4.3 was cold-cache variance). Final measured engine: B=512 -> 3.1 tps,
+B=1024 -> 6.2 tps (block-64 P3); scale-fix block-256 -> ~4.1 / ~8.2. Correctness 1.000000.
+The batched-RESIDENT GEMM path (benchResidentGEMM in a loop) is UNSTABLE -- it alloc/frees VRAM
+buffers per call -> GPU context-loss at B>=512, and slower. Not needed (dispatch already full
+overlap); a true batched path needs persistent reused buffers. gpu.zig: RESIDENT_GEN flag added
+to skip CPU weight-gen. NEXT real win = scale-fix block-256 forge (1.33x + makes the 17.6GB core
+fit 16GB RAM).

@@ -113,8 +113,9 @@ pub fn main() !void {
     var rd = Reader{ .path = path, .passes = n_layers, .bytes = std.atomic.Value(u64).init(0), .done = std.atomic.Value(bool).init(false) };
     var timer = try std.time.Timer.start();
     const th = try std.Thread.spawn(.{}, streamLayer, .{&rd});
-    // compute tier: upload fixed expert weights to VRAM + XNOR dot, repeatedly (no CPU
-    // weight-gen -> clean disk<->GPU overlap, the realistic per-expert engine path).
+    // compute tier: g.dispatch reuses persistent VRAM buffers (alloc-once) -> stable,
+    // realistic per-expert upload+XNOR; keeps the disk reader near full bandwidth.
+    // (benchResidentGEMM alloc/frees buffers per call -> unstable, context-loss at B>=512.)
     var gpu_calls: u64 = 0;
     while (!rd.done.load(.acquire)) {
         try g.dispatch(id, od, xin, yg, w);

@@ -5,6 +5,10 @@ const c = @cImport({
     @cInclude("vulkan/vulkan.h");
 });
 
+// When false, benchResidentGEMM skips CPU weight-generation (resident-timing only).
+// The streaming engine sets this false so its compute loop doesn't starve the disk reader.
+pub var RESIDENT_GEN: bool = true;
+
 pub const GPUAccelerator = struct {
     allocator: std.mem.Allocator,
     
@@ -542,21 +546,25 @@ pub const GPUAccelerator = struct {
         try self.createBuffer(in_bytes, c.VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, HV, &inb, &inm);
         try self.createBuffer(w_bytes, c.VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VRAM, &wb, &wm);
         try self.createBuffer(out_bytes, c.VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, HV, &ob, &om);
-        var wp: ?*anyopaque = null;
-        _ = c.vkMapMemory(self.device, wm, 0, w_bytes, 0, &wp);
-        const wbp: [*]u8 = @ptrCast(wp.?);
-        var seed: u64 = 0x99;
-        var i: usize = 0;
-        while (i < w_bytes) : (i += 12) {
-            seed = seed *% 0x9E3779B97F4A7C15 +% 1;
-            const lo: u32 = @truncate(seed);
-            const hi: u32 = @truncate(seed >> 32);
-            const sc: f32 = 0.05;
-            @memcpy(wbp[i .. i + 4], std.mem.asBytes(&lo));
-            @memcpy(wbp[i + 4 .. i + 8], std.mem.asBytes(&hi));
-            @memcpy(wbp[i + 8 .. i + 12], std.mem.asBytes(&sc));
+        // weight-gen is CPU-heavy (O(w_bytes) per call); skip it when the engine just
+        // needs the resident-weight timing (no CPU contention with the disk reader).
+        if (RESIDENT_GEN) {
+            var wp: ?*anyopaque = null;
+            _ = c.vkMapMemory(self.device, wm, 0, w_bytes, 0, &wp);
+            const wbp: [*]u8 = @ptrCast(wp.?);
+            var seed: u64 = 0x99;
+            var i: usize = 0;
+            while (i < w_bytes) : (i += 12) {
+                seed = seed *% 0x9E3779B97F4A7C15 +% 1;
+                const lo: u32 = @truncate(seed);
+                const hi: u32 = @truncate(seed >> 32);
+                const sc: f32 = 0.05;
+                @memcpy(wbp[i .. i + 4], std.mem.asBytes(&lo));
+                @memcpy(wbp[i + 4 .. i + 8], std.mem.asBytes(&hi));
+                @memcpy(wbp[i + 8 .. i + 12], std.mem.asBytes(&sc));
+            }
+            c.vkUnmapMemory(self.device, wm);
         }
-        c.vkUnmapMemory(self.device, wm);
         var ip: ?*anyopaque = null;
         _ = c.vkMapMemory(self.device, inm, 0, in_bytes, 0, &ip);
         const ifp: [*]f32 = @ptrCast(@alignCast(ip.?));
