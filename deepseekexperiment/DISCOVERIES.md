@@ -452,3 +452,20 @@ confirm the model is information-DENSE (no exploitable concentration anywhere):
   (~1.4x, Shannon-bounded) + resident-core+stream (2x) + MTP (1.8x) + batching (offline).
   Everything else tested DEAD by measurement. Achievability = hardware (fast memory for the
   bank) OR accept lower quality (P2 ~2.25 b/w) for more speed -- the "pay tax later" knob.
+
+## TIERED STREAMING ENGINE — BUILT, TESTED, MEASURED (2026-06-15, stream_engine.zig)
+Micah: "make it fit entirely in storage, fetch into RAM, disburse into VRAM/CPU cache."
+Built the integrated tiered engine (disk->RAM->VRAM->compute). doc: docs/tiered_streaming_engine_2026_06_15.md
+- COMPUTE TIER CORRECT: GPU shader vs CPU reference on identical packed weights = cosine
+  1.000000. (Shader is binary-weight x fp-activation dot, matches the real format.)
+- OVERLAP MEASURED on real forged experts: fast SN850X 4.0-4.3 GB/s under GPU load (~85% of
+  5.0 solo; gap = per-dispatch upload overhead, batching recovers it -> bench_stream 100%).
+  Slow Kingston 0.69 GB/s under load.
+- AGGREGATE TPS (measured, block-64 P3, full model 870GB/step): fast NVMe B=512 2.4-2.5 /
+  B=1024 4.7-5.0 ; interactive B=1 (active 6/384, ~14GB/tok) 0.37. With scale-fix (653GB)
+  x1.33 -> ~3.2 / ~6.3 / ~0.49.
+- SYSTEMS FINDING: the P3 always-active core is 17.6GB > 16GB RAM -> can't be fully resident
+  at P3; the scale-fix (block-256 ~13GB) or Lloyd core is REQUIRED for the resident tier to
+  fit, not optional. Disk-bound confirmed; per-dispatch overhead must be amortized (batch
+  uploads). This is the MAX the memory hierarchy allows for full-intelligence streaming on
+  16GB; more needs the bank in fast memory (hardware), not software.
