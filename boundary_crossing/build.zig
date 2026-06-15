@@ -106,6 +106,7 @@ pub fn build(b: *std.Build) void {
         .{ "lm-bpc5", "lm_bpc5.zig", "DATA SCALING: sweep warm-start size over ~40MB of novels — is the gap to gpt2 a data problem? arg1=MB, CPU, no GPU/LLM" },
         .{ "lm-kernel", "lm_kernel.zig", "Math encoder: random Fourier features (RBF kernel approx) + trained readout, interpolated with counts vs gpt2, CPU, no GPU/LLM" },
         .{ "lm-bpc6", "lm_bpc6.zig", "EQUAL DATA: count model on the SAME 8MB file as the from-scratch GPT — fair head-to-head, CPU, no GPU/LLM" },
+        .{ "lm-mixed", "lm_mixed.zig", "Byte-native count model on English+Chinese mixed: BPB per language, CPU, no GPU/LLM" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
         const rc = b.addRunArtifact(e);
