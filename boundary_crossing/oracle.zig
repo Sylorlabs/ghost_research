@@ -51,6 +51,7 @@ fn lower(s: []const u8) []const u8 {
 const WNode = struct { word: []const u8, hyper: u32 };
 var wn_data: std.AutoHashMap(u32, WNode) = undefined;
 var wn_index: std.StringHashMap([]u32) = undefined;
+var wn_meron: std.AutoHashMap(u32, []u32) = undefined; // synset → its HAS-PART/MEMBER/SUBSTANCE target synsets (curated)
 fn firstWordClean(w: []const u8) []const u8 {
     const b = A.alloc(u8, w.len) catch return w;
     for (0..w.len) |i| b[i] = if (w[i] == '_') ' ' else lo(w[i]);
@@ -73,16 +74,20 @@ fn wnParseData(line: []const u8) void {
     if (pcnt_idx >= toks.items.len) return;
     const pcnt = std.fmt.parseInt(usize, toks.items[pcnt_idx], 10) catch return;
     var hyper: u32 = 0;
+    var parts = std.ArrayList(u32).init(A);
     var p: usize = 0;
     while (p < pcnt) : (p += 1) {
         const base = pcnt_idx + 1 + p * 4;
         if (base + 1 >= toks.items.len) break;
-        if (std.mem.eql(u8, toks.items[base], "@") or std.mem.eql(u8, toks.items[base], "@i")) {
+        const sym = toks.items[base];
+        if (hyper == 0 and (std.mem.eql(u8, sym, "@") or std.mem.eql(u8, sym, "@i")))
             hyper = std.fmt.parseInt(u32, toks.items[base + 1], 10) catch 0;
-            break;
-        }
+        // %p part-meronym, %m member-meronym, %s substance-meronym → "this synset HAS-PART target" (curated HAS-A)
+        if (std.mem.eql(u8, sym, "%p") or std.mem.eql(u8, sym, "%m") or std.mem.eql(u8, sym, "%s"))
+            parts.append(std.fmt.parseInt(u32, toks.items[base + 1], 10) catch continue) catch {};
     }
     wn_data.put(offset, .{ .word = firstWordClean(word), .hyper = hyper }) catch {};
+    if (parts.items.len > 0) wn_meron.put(offset, parts.items) catch {};
 }
 fn wnParseIndex(line: []const u8) void {
     if (line.len == 0 or line[0] == ' ') return;
@@ -144,6 +149,69 @@ fn wnChainStr(x: []const u8) ?[]const u8 {
 }
 fn wnKnown(x: []const u8) bool {
     return wn_index.contains(x);
+}
+// curated HAS-PART, with INHERITANCE: a synset's own meronyms + every ancestor's meronyms (a car is-a vehicle,
+// a vehicle has-part wheel ⇒ a car has-part wheel). Real sound inference over the curated graph, not a hardcoded list.
+fn partsOf(word: []const u8) []const u8 {
+    const senses = wn_index.get(word) orelse return "";
+    if (senses.len == 0) return "";
+    var out = std.ArrayList(u8).init(A);
+    var seen = std.StringHashMap(void).init(A);
+    var cur = senses[0];
+    var depth: usize = 0;
+    var picked: usize = 0;
+    while (depth < 30 and picked < 8) : (depth += 1) {
+        if (wn_meron.get(cur)) |parts| for (parts) |ps| {
+            if (wn_data.get(ps)) |pn| if (!seen.contains(pn.word)) {
+                seen.put(pn.word, {}) catch {};
+                if (out.items.len > 0) out.appendSlice(", ") catch {};
+                out.appendSlice(pn.word) catch {};
+                picked += 1;
+                if (picked >= 8) break;
+            };
+        };
+        const node = wn_data.get(cur) orelse break;
+        if (node.hyper == 0) break;
+        cur = node.hyper;
+    }
+    return out.items;
+}
+// noun match tolerant of plural 's' (wheel ≈ wheels) — naive but real, no hardcoded word list
+fn nounEq(a0: []const u8, b0: []const u8) bool {
+    var a1 = a0;
+    var b1 = b0;
+    if (a1.len > 3 and a1[a1.len - 1] == 's') a1 = a1[0 .. a1.len - 1];
+    if (b1.len > 3 and b1[b1.len - 1] == 's') b1 = b1[0 .. b1.len - 1];
+    return std.mem.eql(u8, a1, b1);
+}
+// does the meronym word (maybe multi-word, e.g. "car door") match the asked part (e.g. "door")? full or last-word
+fn partMatch(mword: []const u8, q: []const u8) bool {
+    if (nounEq(mword, q)) return true;
+    var it = std.mem.tokenizeScalar(u8, mword, ' ');
+    var lastw: []const u8 = "";
+    while (it.next()) |w| lastw = w;
+    return lastw.len > 0 and nounEq(lastw, q);
+}
+// does X have-part Y? walk X's senses + is-a chain checking meronyms; return the derivation proof or null
+fn hasPartChain(x: []const u8, y: []const u8) ?[]const u8 {
+    const senses = wn_index.get(x) orelse return null;
+    for (senses) |s0| {
+        var cur = s0;
+        var depth: usize = 0;
+        while (depth < 30) : (depth += 1) {
+            if (wn_meron.get(cur)) |parts| for (parts) |ps| {
+                if (wn_data.get(ps)) |pn| if (partMatch(pn.word, y)) {
+                    if (cur == s0) return fmt("{s} has-part {s} (WordNet, curated)", .{ x, pn.word });
+                    const anc = wn_data.get(cur).?.word;
+                    return fmt("{s} is-a {s}, and {s} has-part {s} (WordNet, inherited)", .{ x, anc, anc, pn.word });
+                };
+            };
+            const node = wn_data.get(cur) orelse break;
+            if (node.hyper == 0) break;
+            cur = node.hyper;
+        }
+    }
+    return null;
 }
 
 // ─────────────────────────── Webster 1913 definitions ───────────────────────────
@@ -333,6 +401,22 @@ fn divisorCount(n: u64) u64 {
     };
     return c;
 }
+fn gcd(a0: u64, b0: u64) u64 {
+    var x = a0;
+    var y = b0;
+    while (y != 0) {
+        const t = y;
+        y = x % y;
+        x = t;
+    }
+    return x;
+}
+// n is a Fibonacci number iff 5n²+4 or 5n²−4 is a perfect square (computed, exact for n < ~1.9e9)
+fn isFib(n: u64) bool {
+    if (n > 1_900_000_000) return false;
+    const f = 5 * n * n;
+    return isSquare(f + 4) or (f >= 4 and isSquare(f - 4));
+}
 // the discovered identity (real_invention.zig): odd #divisors  ⟺  perfect square. We verify it over [1,4096).
 fn identityHoldsOverDomain() bool {
     var n: u64 = 1;
@@ -395,6 +479,38 @@ fn subject(ws: [][]const u8) []const u8 {
     }
     return "";
 }
+fn isStop(w: []const u8) bool {
+    inline for (.{ "what", "is", "are", "a", "an", "the", "of", "does", "do", "it", "have", "has", "having", "parts", "part", "made", "contain", "contains", "kind", "and", "or", "in", "to", "many", "much", "how" }) |s|
+        if (std.mem.eql(u8, w, s)) return true;
+    return false;
+}
+// owner/part split for HAS-PART questions: relation word (have/parts/made/contain) separates owner (before) from
+// part (after). "does a car have wheels" → car / wheels.  "what does a king have" → king / (none).  "parts of a car" → car / (none).
+fn ownerPart(ws: [][]const u8) struct { owner: []const u8, part: []const u8 } {
+    var ri: ?usize = null;
+    for (ws, 0..) |w, i| {
+        inline for (.{ "have", "has", "having", "parts", "part", "made", "contain", "contains" }) |r|
+            if (std.mem.eql(u8, w, r)) {
+                ri = i;
+                break;
+            };
+        if (ri != null) break;
+    }
+    if (ri == null) return .{ .owner = subject(ws), .part = "" };
+    var before: []const u8 = "";
+    var i: usize = 0;
+    while (i < ri.?) : (i += 1) if (!isStop(ws[i])) {
+        before = ws[i];
+    };
+    var after: []const u8 = "";
+    i = ri.? + 1;
+    while (i < ws.len) : (i += 1) if (!isStop(ws[i])) {
+        after = ws[i];
+        break;
+    };
+    if (before.len > 0) return .{ .owner = before, .part = after }; // "X have/parts Y"
+    return .{ .owner = after, .part = "" }; // "parts OF a X" — owner came after the relation word
+}
 
 // ─────────────────────────── opinion-from-knowledge ───────────────────────────
 // try to DERIVE an is-a opinion: X is-a G (Webster genus), and G is-a Y (WordNet) ⇒ X is probably a Y
@@ -450,15 +566,28 @@ fn answer(q: []const u8) Answer {
         if (has(ws, "prime")) return known(if (isPrime(n)) "yes" else "no", "computed", fmt("trial division: {d} is {s}prime", .{ n, if (isPrime(n)) "" else "not " }));
         if (has(ws, "square")) return known(if (isSquare(n)) "yes" else "no", "computed", fmt("{d} = isqrt² check → {s} a perfect square", .{ n, if (isSquare(n)) "is" else "is not" }));
         if (has(ws, "even")) return known(if (n % 2 == 0) "yes" else "no", "computed", fmt("{d} mod 2 = {d}", .{ n, n % 2 }));
+        if (has(ws, "odd")) return known(if (n % 2 == 1) "yes" else "no", "computed", fmt("{d} mod 2 = {d}", .{ n, n % 2 }));
+        if (has(ws, "fibonacci") or has(ws, "fib")) return known(if (isFib(n)) "yes" else "no", "computed", fmt("5·{d}²±4 perfect-square test", .{n}));
         if (has(ws, "divisors") or has(ws, "factors")) {
             const dc = divisorCount(n);
             return known(fmt("{d}", .{dc}), "computed", fmt("counted divisors of {d}", .{n}));
+        }
+        // two-number relations: find a second integer after the first
+        var n2: ?u64 = null;
+        var k = fi + 1;
+        while (k < ws.len) : (k += 1) if (parseU(ws[k])) |v| {
+            n2 = v;
+            break;
+        };
+        if (n2) |m| {
+            if (has(ws, "divisible") or has(ws, "multiple")) return known(if (m != 0 and n % m == 0) "yes" else "no", "computed", fmt("{d} mod {d} = {d}", .{ n, m, if (m == 0) 0 else n % m }));
+            if (has(ws, "gcd") or has(ws, "common")) return known(fmt("{d}", .{gcd(n, m)}), "computed", fmt("Euclid's algorithm on {d}, {d}", .{ n, m }));
         }
     };
     // identity question: "is odd-divisors the same as square" / "for all n"
     if ((has(ws, "divisors") or has(ws, "identity")) and (has(ws, "always") or has(ws, "all"))) {
         if (identityHoldsOverDomain())
-            return opinion("likely yes for all n — it's Fermat's divisor-pairing theorem", "KNOWN: verified that (odd #divisors ⟺ perfect square) for every n in [1,4096); beyond that range it is unverified here (a conjecture from the proven domain)");
+            return opinion("likely yes for all n — but only verified on a bounded range", "KNOWN: I checked (odd #divisors ⟺ perfect square) for EVERY n in [1,4096) and it held without exception; beyond that range it is unverified — this answer is an extrapolation from the proven domain, NOT a proof");
     }
 
     // ── STRING ATOMS ──
@@ -511,31 +640,43 @@ fn answer(q: []const u8) Answer {
     }
 
     // ── DEFINE / WHAT IS X / ATTRIBUTES ──
-    if (has(ws, "what") or has(ws, "define") or (has(ws, "does") and (has(ws, "have") or has(ws, "has")))) {
+    // ── HAS-PART / ATTRIBUTES: "does a car have wheels", "what does a king have", "what is a car made of", "parts of a car" ──
+    if (has(ws, "have") or has(ws, "has") or has(ws, "parts") or has(ws, "made") or has(ws, "contain") or has(ws, "contains")) {
+        const op = ownerPart(ws);
+        const owner = op.owner;
+        if (owner.len == 0) return refuse("what should I look up the parts of?");
+        if (op.part.len > 0) { // yes/no: does owner have part?
+            if (hasPartChain(owner, op.part)) |pf| return known("yes", "WordNet (curated HAS-PART)", pf);
+            const at0 = attributesOf(owner);
+            if (at0.len > 0 and std.mem.indexOf(u8, at0, op.part) != null)
+                return known("yes", "corpus-attested (possessive usage)", fmt("\"{s}'s {s}\" attested in the corpus", .{ owner, op.part }));
+            if (wnKnown(owner))
+                return refuse(fmt("I can't confirm a {s} has a {s} — it's not among {s}'s curated parts. (Curated HAS-PART is incomplete, so I won't assert 'no' either — I just don't know.)", .{ owner, op.part, owner }));
+            return refuse(fmt("I don't have \"{s}\" in my curated knowledge, so I can't verify its parts.", .{owner}));
+        }
+        const cp = partsOf(owner); // list parts: curated (with inheritance) first, then corpus-attested
+        if (cp.len > 0) return known(fmt("a {s} has: {s}", .{ owner, cp }), "WordNet (curated HAS-PART, incl. inherited)", fmt("meronyms of {s} and the kinds it inherits from", .{owner}));
+        const at = attributesOf(owner);
+        if (at.len > 0) return known(fmt("a {s} has: {s}", .{ owner, at }), "corpus-attested (possessive usage in literature)", fmt("found \"{s}'s …\" patterns in the corpus", .{owner}));
+        return refuse(fmt("I have no verified parts for \"{s}\".", .{owner}));
+    }
+
+    // ── DEFINE / WHAT IS X ──
+    if (has(ws, "what") or has(ws, "define")) {
         const s = subject(ws);
         if (s.len == 0) return refuse("define what?");
-        // attributes: "what does a king have"
-        if (has(ws, "have") or has(ws, "has")) {
-            const at = attributesOf(s);
-            if (at.len > 0) return known(fmt("a {s} has: {s}", .{ s, at }), "corpus-attested (possessive usage in literature)", fmt("found \"{s}'s …\" patterns in the corpus", .{s}));
-        }
         if (dict.get(s)) |d| {
             const syn = if (d.syns.len > 0) fmt(" (also: {s})", .{d.syns}) else "";
             return known(fmt("a {s} is a {s}{s} — \"{s}\"", .{ s, d.genus, syn, d.gloss }), "Webster 1913", fmt("genus extracted from the definition gloss", .{}));
         }
         if (taught.get(s)) |g| return known(fmt("a {s} is a {s}", .{ s, g }), "taught by you", "from the knowledge base you extended");
-        // opinion fallback: build from WordNet chain if any
         if (wnChainStr(s)) |ch| return opinion(fmt("I don't have a definition, but its kind-chain is: {s}", .{ch}), fmt("KNOWN: {s} (WordNet IS-A chain)", .{ch}));
         return refuse(fmt("I have no verified definition of \"{s}\".", .{s}));
     }
 
-    // ── SUBJECTIVE / UNGROUNDED → refuse (or thin opinion if a known fact is touched) ──
-    inline for (.{ "beautiful", "best", "should", "feel", "meaning", "love", "happy", "good", "evil", "will", "future", "evolve", "think", "opinion", "believe" }) |sub| {
-        if (has(ws, sub)) {
-            return refuse("that's a matter of opinion or an open/unverifiable question — I won't pass a guess off as knowledge. Ask me something I can verify, or ask explicitly for my opinion on a topic I have facts about.");
-        }
-    }
-    return refuse("I couldn't map that to anything I can verify. Try: \"is a king a person?\", \"what is a whale?\", \"what's 12 times 8?\", \"is 17 prime?\", \"what does a king have?\", \"does `ls` succeed?\", or teach me \"a quokka is a marsupial\".");
+    // No source could verify or derive an answer. Refusal is EMERGENT — not a keyword blacklist: I tried every
+    // knowledge source and inference I have and none of them produced a verified or derivable answer.
+    return refuse("I have nothing verified that answers this, and I can't derive it from what I know — so I won't guess. (I tried: curated IS-A & HAS-PART, definitions, arithmetic/number-theory, real execution, attested attributes, taught facts, and inference over them.)");
 }
 
 fn render(o: anytype, ans: Answer) !void {
@@ -561,6 +702,7 @@ pub fn main() !void {
     // WordNet
     wn_data = std.AutoHashMap(u32, WNode).init(A);
     wn_index = std.StringHashMap([]u32).init(A);
+    wn_meron = std.AutoHashMap(u32, []u32).init(A);
     if (std.fs.openFileAbsolute(C ++ "dict/data.noun", .{})) |f| {
         defer f.close();
         const buf = try f.readToEndAlloc(A, 1 << 30);

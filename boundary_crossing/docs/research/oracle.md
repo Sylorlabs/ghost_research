@@ -19,9 +19,22 @@ An interactive REPL. Every answer is one of three:
   written to the knowledge store). Cites the knowns it was built from.
 - **[REFUSED]** — nothing verifiable, nothing derivable. Honest "I can't verify that" (the anti-hallucination move).
 
-Unified sources: **WordNet** curated IS-A (proof chains) · **Webster 1913** definitions/genus · exact **arithmetic** &
-string atoms · **number-theory** predicates (+ an identity proved over [1,4096)) · **real terminal execution** (safe,
-read-only whitelist) · **corpus-attested** possessive attributes · a **taught-fact** store you extend live. CPU, no LLM.
+Unified sources: **WordNet** curated IS-A (proof chains) **and HAS-PART (meronyms) with inheritance** · **Webster 1913**
+definitions/genus · exact **arithmetic** & string atoms · **number-theory** (prime/square/odd/divisors, **fibonacci,
+divisibility, gcd**, + an identity verified over [1,4096)) · **real terminal execution** (safe, read-only whitelist) ·
+**corpus-attested** possessive attributes · a **taught-fact** store you extend live. CPU, no LLM.
+
+## Real, not hardcoded (the discipline)
+The three verdicts are **not** keyword rules — they emerge from whether a real source can verify or derive an answer:
+- **Refusal is emergent.** There is no list of "subjective words" that triggers a refusal. The oracle *tries every source
+  and inference it has*; if none produces a verified or derivable answer, it refuses. "How will computers evolve?" refuses
+  because nothing answered it — not because "evolve" is blacklisted.
+- **Opinion is derived, not canned.** The identity opinion says only what it actually did ("verified for every n in
+  [1,4096); beyond that it's an extrapolation, not a proof") — no hardcoded "it's Fermat's theorem" label.
+- **Known is computed/looked-up, never asserted.** Every [KNOWN] traces to a source or a computation.
+- **Inference is sound and shown.** "Does a car have wheels?" → *yes — car is-a motor vehicle, motor vehicle has-part
+  wheel* (inherited, multi-step, derived — it was never told this directly). When curated data can't confirm, it says
+  **"I don't know"** rather than asserting a false "no".
 
 ## Measured (transcript)
 ```
@@ -30,13 +43,18 @@ is a dog a plant?        → [KNOWN] no     | WordNet | dog has no chain reachin
 what is a whale?         → [KNOWN] a whale is a mammal — "Any aquatic mammal of the order Cetacea…" | Webster 1913
 what's 12 times 8?       → [KNOWN] 96     | computed | exact arithmetic
 is 17 prime?             → [KNOWN] yes    | computed | trial division
-what does a king have?   → [KNOWN] palace, son, daughter, tent, ship | corpus-attested ("king's …")
+what does a car have?    → [KNOWN] accelerator, air bag, automobile engine, bumper, car door… | WordNet HAS-PART (+inherited)
+does a car have wheels?  → [KNOWN] yes | car is-a motor vehicle, and motor vehicle has-part wheel  (derived, inherited)
+does a king have a body? → [KNOWN] yes | king is-a person, and person has-part human body          (derived, inherited)
+does a car have feathers? → [REFUSED] I can't confirm it — and I won't assert "no" either; I just don't know
+is 144 a fibonacci number? → [KNOWN] yes | computed (5·144²±4 square test)
+gcd of 48 and 36?        → [KNOWN] 12 | computed (Euclid)
 does `test -f build.zig` succeed? → [KNOWN] succeeds | real execution | ran it → exit 0
 does `rm -rf /tmp/x` succeed?     → [REFUSED] I won't run that — safe read-only commands only
-is this poem beautiful?  → [REFUSED] that's opinion/unverifiable — I won't pass a guess off as knowledge
-how will computers evolve? → [REFUSED] (same — honest, no fabrication)
-is odd-divisors always the same as square? → [OPINION] likely yes (Fermat) | derived: verified for all n in
-                                              [1,4096); beyond that it's a conjecture from the proven domain
+is this poem beautiful?  → [REFUSED] emergent: neither term is in any source — nothing verified or derivable
+how will computers evolve? → [REFUSED] emergent: I tried every source/inference; none answered — no fabrication
+is odd-divisors always the same as square? → [OPINION] likely for all n, but only verified on a bounded range |
+                              derived: checked every n in [1,4096) without exception; beyond that = extrapolation, not proof
 a quokka is a marsupial  → [KNOWN] learned | taught by you
 what is a quokka?        → [KNOWN] a quokka is a marsupial | taught by you
 is a quokka an animal?   → [KNOWN] yes | taught + WordNet | quokka is-a marsupial; marsupial → … → animal
@@ -54,6 +72,12 @@ separate; provenance is on every line.
   hard-"proved" label.
 - The **opinion-from-knowledge** layer is minimal (extrapolation beyond a verified domain; is-a composition via
   Webster-genus + WordNet chain). Broad-future / subjective opinion ("how will computers evolve") has **no verified
-  knowledge base yet** → it refuses. Building those knowledge domains — and richer derivation (multi-step inference over
-  the unified store, HAS-PART/meronym relations, more verifiers) — is the **next step**: grow the *knowing* region so the
-  part that must be guessed shrinks to only the genuinely unknowable.
+  knowledge base yet** → it refuses (emergently, not by blacklist).
+- **Question parsing is still grammar-based** (recognizing "is a X a Y", "does X have Y", "gcd of N and M"). The
+  *knowledge and the verdicts* are real and unhardcoded; the *parser* that maps English to a query is the next thing to
+  make learned (the `intent_trained.zig` perceptron is the path) rather than pattern-matched.
+- **Growth so far** (real, curated/computed, no hardcoded facts): curated HAS-PART with **inherited-property inference**
+  (sound multi-step derivation over the meronym + is-a graphs) and expanded number theory (fibonacci/divisibility/gcd).
+  **Next:** more relations (antonyms, member/substance distinctions, holonyms), cross-source inference (combine IS-A +
+  HAS-PART + definition in one derivation), a learned question-parser, and more verifiers — each one moves a slice of the
+  world from *guess* to *know*, shrinking the must-guess region toward only the genuinely unknowable.
