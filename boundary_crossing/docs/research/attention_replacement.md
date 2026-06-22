@@ -347,10 +347,42 @@ The "it's a data problem" follow-up: stream a large EN+ZH corpus through the abs
   system during training**; basic GEMM works but the training kernels hang the display GPU. That comparison needs a
   stable GPU box; see `nanogpt_bpb.py`, GPU-ready for one.)
 
+## Probe 11 — `stream_fast.zig`: fixed-memory streaming, scaled — and the COUNT-MODEL FLOOR
+The clean, fast version: **pre-allocated open-addressing hash tables** (flat RAM from byte 0, no allocator churn, no
+pruning; collisions merge counts gracefully like a count-min sketch). Streams clean literary English, interpolated
+absolute discounting, orders 0–5. RAM **dead flat ~1.1 GB** the whole run (CK=2²⁴ slots/order).
+
+| streamed (clean EN) | EN BPB | RSS |
+|---:|---:|---:|
+| 10 MB | 1.825 | 1.1 GB |
+| 27 MB | 1.617 | 1.1 GB |
+| 44 MB | 1.575 | 1.1 GB |
+| 59 MB | **1.553** | 1.1 GB |
+
+- **Flat RAM works** and BPB drops **monotonically** with data (no saturation, given big-enough tables). The fast
+  fixed-memory design scales to whatever RAM allows. (An earlier smaller-table run rose after 35 MB — that was table
+  saturation, fixed by bigger tables; and `bigcorpus` random Gutenberg was dirty (Italian Dante, poetry) and diluted
+  the literary model — excluded.)
+- **But the curve is decelerating toward a floor:** −0.02 BPB per 9 MB and shrinking at 59 MB. Extrapolation lands
+  around the well-known **count-model floor (~1.3–1.45 bpc on English)** — *above* gpt2's fair **1.05**.
+
+### The reconciled, honest verdict (the whole arc)
+- **Small / equal data:** the count architecture **wins** (probe 9: 8 MB → 1.82 vs from-scratch GPT 2.26).
+- **Scaling data (flat RAM):** the count model **keeps improving** toward its floor (probe 11: 1.55 at 59 MB, still
+  dropping but decelerating).
+- **A fully-pretrained gpt2 (1.05)** sits **below the count-model floor** — reaching it needs the **learned
+  generalization** a neural net has, which pure counting structurally lacks. *That* is the architecture difference data
+  alone doesn't erase at the top end.
+- So **"it's a data problem"** is right in the regime below the floor's data requirement (where we win/improve), but
+  there's a **count-model floor (~1.3–1.45) that data can't break** — crossing it to 1.05 is the neural generalization.
+
 ## Status
-Probes 1–10 done, measured, committed — including a self-correction (probe 5), depth wins (probes 6–7), the stolen-GPT-2
-confound (probe 8b), the **equal-data fair fight (probe 9): same 8MB, count model 1.82 vs from-scratch GPT 2.26**, and
-**bounded streaming + data scaling (probe 10): EN BPB 1.65→1.54 over 20→57MB at flat memory, still dropping**.
+Probes 1–11 done, measured, committed. The complete honest comparison: at **equal/small data the count architecture
+wins** (1.82 vs 2.26 at 8 MB); **scaling data at flat RAM keeps lowering BPB** (1.55 at 59 MB, fast version, dead-flat
+1.1 GB); a **pretrained gpt2 (1.05) is below the count floor (~1.3–1.45)** — that last gap is neural generalization, not
+data. Wins: data-efficiency, cost, O(n)/O(1) routing, continual learning, multilingual (EN 1.65 / ZH 2.19), unbounded
+discrete-address recall. Open: a cheap *learned* generalizer to cross the count floor (the residual/kernel attempts
+failed); GB-scale clean data + a real GPU box for the transformer side (this machine's AMD gfx1010 ROCm crashes on training).
 Earlier stolen-GPT-2 note (unequal data, kept for record): gpt2-124M wins raw capability (~7% BPB over our
 best, ~20% over frozen), our continual stack within ~1.5% of distilgpt2, all at a fraction of the cost. The honest
 overall verdict: **at EQUAL data we win; the pretrained transformer's edge is DATA, not architecture.** The whole
