@@ -14,7 +14,7 @@ const std = @import("std");
 const C = "/home/micah/Desktop/Sylorlabs/ghost_research/corpus/";
 
 // ─────────────────────────── epistemic core ───────────────────────────
-const Status = enum { known, opinion, refused };
+const Status = enum { known, opinion, refused, meta };
 const Answer = struct {
     status: Status,
     text: []const u8,
@@ -30,6 +30,9 @@ fn opinion(t: []const u8, derived: []const u8) Answer {
 fn refuse(t: []const u8) Answer {
     return .{ .status = .refused, .text = t };
 }
+fn meta(t: []const u8) Answer { // social / meta reply — NOT a knowledge claim, so it carries no epistemic tag
+    return .{ .status = .meta, .text = t };
+}
 
 var A: std.mem.Allocator = undefined;
 fn lo(c: u8) u8 {
@@ -40,6 +43,13 @@ fn isAlpha(c: u8) bool {
 }
 fn fmt(comptime f: []const u8, args: anytype) []const u8 {
     return std.fmt.allocPrint(A, f, args) catch "?";
+}
+fn art(w: []const u8) []const u8 { // "a" / "an" by first letter — kills the "a instrument" / "a animal" look
+    if (w.len == 0) return "a";
+    return switch (lo(w[0])) {
+        'a', 'e', 'i', 'o', 'u' => "an",
+        else => "a",
+    };
 }
 fn lower(s: []const u8) []const u8 {
     const b = A.alloc(u8, s.len) catch return s;
@@ -52,6 +62,7 @@ const WNode = struct { word: []const u8, hyper: u32 };
 var wn_data: std.AutoHashMap(u32, WNode) = undefined;
 var wn_index: std.StringHashMap([]u32) = undefined;
 var wn_meron: std.AutoHashMap(u32, []u32) = undefined; // synset → its HAS-PART/MEMBER/SUBSTANCE target synsets (curated)
+var wn_holo: std.AutoHashMap(u32, []u32) = undefined; // synset → the WHOLES it is a part/member/substance OF (holonyms)
 fn firstWordClean(w: []const u8) []const u8 {
     const b = A.alloc(u8, w.len) catch return w;
     for (0..w.len) |i| b[i] = if (w[i] == '_') ' ' else lo(w[i]);
@@ -75,6 +86,7 @@ fn wnParseData(line: []const u8) void {
     const pcnt = std.fmt.parseInt(usize, toks.items[pcnt_idx], 10) catch return;
     var hyper: u32 = 0;
     var parts = std.ArrayList(u32).init(A);
+    var wholes = std.ArrayList(u32).init(A);
     var p: usize = 0;
     while (p < pcnt) : (p += 1) {
         const base = pcnt_idx + 1 + p * 4;
@@ -82,12 +94,15 @@ fn wnParseData(line: []const u8) void {
         const sym = toks.items[base];
         if (hyper == 0 and (std.mem.eql(u8, sym, "@") or std.mem.eql(u8, sym, "@i")))
             hyper = std.fmt.parseInt(u32, toks.items[base + 1], 10) catch 0;
-        // %p part-meronym, %m member-meronym, %s substance-meronym → "this synset HAS-PART target" (curated HAS-A)
+        // %p/%m/%s = this synset HAS-PART target (meronym); #p/#m/#s = this synset is part OF target (holonym)
         if (std.mem.eql(u8, sym, "%p") or std.mem.eql(u8, sym, "%m") or std.mem.eql(u8, sym, "%s"))
             parts.append(std.fmt.parseInt(u32, toks.items[base + 1], 10) catch continue) catch {};
+        if (std.mem.eql(u8, sym, "#p") or std.mem.eql(u8, sym, "#m") or std.mem.eql(u8, sym, "#s"))
+            wholes.append(std.fmt.parseInt(u32, toks.items[base + 1], 10) catch continue) catch {};
     }
     wn_data.put(offset, .{ .word = firstWordClean(word), .hyper = hyper }) catch {};
     if (parts.items.len > 0) wn_meron.put(offset, parts.items) catch {};
+    if (wholes.items.len > 0) wn_holo.put(offset, wholes.items) catch {};
 }
 fn wnParseIndex(line: []const u8) void {
     if (line.len == 0 or line[0] == ' ') return;
@@ -147,6 +162,13 @@ fn wnChainStr(x: []const u8) ?[]const u8 {
     }
     return s.items;
 }
+fn wnParent(x: []const u8) ?[]const u8 { // immediate curated hypernym (the kind it most directly is)
+    const senses = wn_index.get(x) orelse return null;
+    if (senses.len == 0) return null;
+    var ch = std.ArrayList([]const u8).init(A);
+    wnChainFrom(senses[0], &ch);
+    return if (ch.items.len == 0) null else ch.items[0];
+}
 fn wnKnown(x: []const u8) bool {
     return wn_index.contains(x);
 }
@@ -173,6 +195,26 @@ fn partsOf(word: []const u8) []const u8 {
         const node = wn_data.get(cur) orelse break;
         if (node.hyper == 0) break;
         cur = node.hyper;
+    }
+    return out.items;
+}
+// holonyms: the wholes this word is a part/member/substance OF ("what is a wheel part of" → car, …)
+fn holonymsOf(word: []const u8) []const u8 {
+    const senses = wn_index.get(word) orelse return "";
+    var out = std.ArrayList(u8).init(A);
+    var seen = std.StringHashMap(void).init(A);
+    var picked: usize = 0;
+    for (senses) |s0| {
+        if (wn_holo.get(s0)) |wh| for (wh) |hw| {
+            if (wn_data.get(hw)) |hn| if (!seen.contains(hn.word)) {
+                seen.put(hn.word, {}) catch {};
+                if (out.items.len > 0) out.appendSlice(", ") catch {};
+                out.appendSlice(hn.word) catch {};
+                picked += 1;
+                if (picked >= 6) break;
+            };
+        };
+        if (picked >= 6) break;
     }
     return out.items;
 }
@@ -309,8 +351,14 @@ fn extractGloss(body: []const u8) []const u8 {
         if (std.mem.indexOfScalar(u8, g, ')')) |p| g = std.mem.trim(u8, g[p + 1 ..], " ");
     }
     if (std.mem.startsWith(u8, g, "1. ")) g = std.mem.trim(u8, g[3..], " ");
-    inline for (.{ "\"", " -- ", "Etym", "Syn.", " [" }) |cut| {
+    inline for (.{ "\"", " -- ", "Etym", "Syn.", " [", "Note:", "  2.", " 2. " }) |cut| {
         if (std.mem.indexOf(u8, g, cut)) |at| g = std.mem.trim(u8, g[0..at], " ");
+    }
+    // trim to a clean sentence boundary so a definition never cuts off mid-word
+    if (g.len > 200) {
+        var p: usize = @min(g.len, 220);
+        while (p > 60) : (p -= 1) if (g[p - 1] == '.') break;
+        if (p > 60) g = std.mem.trim(u8, g[0..p], " ");
     }
     return g;
 }
@@ -555,6 +603,37 @@ fn deriveIsA(x: []const u8, y: []const u8) ?Answer {
 }
 
 // ─────────────────────────── handlers (each verifies; returns null if it can't apply) ───────────────────────────
+const CAPS =
+    \\I'm a knowing engine — I only assert what I can verify, and I label everything [KNOWN] / [OPINION] / [REFUSED].
+    \\Try me with:
+    \\  • is a king a person?            (curated IS-A, shows the proof chain)
+    \\  • what is a whale?  /  define knife   (definitions)
+    \\  • does a car have wheels?  /  what does a king have?   (HAS-PART, with inheritance + cross-source)
+    \\  • is a wheel part of a car?      (reverse part-of)
+    \\  • what's 12 times 8?  /  100 divided by 4  /  is 17 prime?  /  gcd of 48 and 36   (computed)
+    \\  • which is bigger, 5 or 8?       (comparison)
+    \\  • does `ls` succeed?             (I actually run safe read-only commands)
+    \\  • teach me: "a quokka is a marsupial"   then ask "is a quokka an animal?"
+    \\Ask me something open or subjective and I'll tell you honestly that I can't verify it. ('route <q>' shows how I parse it.)
+;
+fn hSocial(q: []const u8, ws: [][]const u8) ?Answer {
+    _ = q;
+    const w0 = ws[0];
+    inline for (.{ "hi", "hello", "hey", "yo", "sup", "hiya", "howdy", "greetings", "hello!" }) |g|
+        if (std.mem.eql(u8, w0, g)) return meta("Hey — I'm an oracle that only says what it can verify. Ask me something, or type 'help' to see what I can do.");
+    inline for (.{ "thanks", "thank", "thx", "ty", "cheers", "appreciated" }) |t|
+        if (std.mem.eql(u8, w0, t)) return meta("Anytime.");
+    if (std.mem.eql(u8, w0, "help") or std.mem.eql(u8, w0, "commands")) return meta(CAPS);
+    // "what can you do" / "what do you know"
+    if (has(ws, "you") and (has(ws, "can") or has(ws, "do")) and (has(ws, "what") or has(ws, "things"))) return meta(CAPS);
+    if ((std.mem.eql(u8, w0, "how") and has(ws, "you")) or (std.mem.eql(u8, w0, "how") and has(ws, "going"))) return meta("Running fine — every answer measured, nothing guessed. What do you want to know?");
+    return null;
+}
+fn isPronoun(w: []const u8) bool {
+    inline for (.{ "you", "i", "it", "we", "they", "he", "she", "me", "us", "them", "this", "that", "who", "what", "everything", "anything", "something", "nothing" }) |p|
+        if (std.mem.eql(u8, w, p)) return true;
+    return false;
+}
 fn isWh(w: []const u8) bool {
     inline for (.{ "who", "what", "whats", "which", "where", "when", "why", "how", "whos", "does", "do", "is", "are", "can" }) |x|
         if (std.mem.eql(u8, w, x)) return true;
@@ -568,7 +647,7 @@ fn hTeach(q: []const u8, ws: [][]const u8) ?Answer {
         const gen = ws[i + 2];
         if (subj.len >= 2 and gen.len >= 2 and !has(ws, "what")) {
             taught.put(A.dupe(u8, subj) catch subj, A.dupe(u8, gen) catch gen) catch {};
-            return known(fmt("learned: a {s} is a {s}.", .{ subj, gen }), "taught by you", "stored in the knowledge base (provenance: you)");
+            return known(fmt("learned: {s} {s} is {s} {s}.", .{ art(subj), subj, art(gen), gen }), "taught by you", "stored in the knowledge base (provenance: you)");
         }
     };
     return null;
@@ -584,16 +663,45 @@ fn hAction(q: []const u8) ?Answer {
     return null;
 }
 fn hArith(ws: [][]const u8) ?Answer {
-    const fi = firstInt(ws) orelse return null;
-    if (fi + 2 >= ws.len) return null;
-    const a1 = parseU(ws[fi]) orelse return null;
-    const op = ws[fi + 1];
-    const a2 = parseU(ws[fi + 2]) orelse return null;
-    var r: ?u64 = null;
-    if (std.mem.eql(u8, op, "+") or std.mem.eql(u8, op, "plus")) r = a1 + a2;
-    if (std.mem.eql(u8, op, "minus") or std.mem.eql(u8, op, "-")) r = if (a1 >= a2) a1 - a2 else 0;
-    if (std.mem.eql(u8, op, "times") or std.mem.eql(u8, op, "x") or std.mem.eql(u8, op, "*")) r = a1 * a2;
-    if (r) |v| return known(fmt("{d}", .{v}), "computed", fmt("exact arithmetic: {d} {s} {d} = {d}", .{ a1, op, a2, v }));
+    var nums: [6]u64 = undefined;
+    var cnt: usize = 0;
+    for (ws) |w| if (parseU(w)) |v| {
+        if (cnt < nums.len) {
+            nums[cnt] = v;
+            cnt += 1;
+        }
+    };
+    if (cnt == 0) return null;
+    if (has(ws, "squared")) return known(fmt("{d}", .{nums[0] * nums[0]}), "computed", fmt("{d}² = {d}", .{ nums[0], nums[0] * nums[0] }));
+    if (has(ws, "cubed")) return known(fmt("{d}", .{nums[0] * nums[0] * nums[0]}), "computed", fmt("{d}³", .{nums[0]}));
+    if (cnt < 2) return null;
+    const a = nums[0];
+    const b = nums[1];
+    if (has(ws, "power") or has(ws, "exponent")) {
+        if (b > 63) return refuse("that exponent would overflow my 64-bit integers — I won't return an approximate answer.");
+        var r: u64 = 1;
+        var i: u64 = 0;
+        var overflow = false;
+        while (i < b) : (i += 1) {
+            const m = @mulWithOverflow(r, a);
+            if (m[1] != 0) {
+                overflow = true;
+                break;
+            }
+            r = m[0];
+        }
+        if (overflow) return refuse("that result overflows 64-bit integers — I won't give an approximate answer.");
+        return known(fmt("{d}", .{r}), "computed", fmt("{d} ^ {d} = {d}", .{ a, b, r }));
+    }
+    if (has(ws, "plus") or has(ws, "add") or has(ws, "sum") or has(ws, "+")) return known(fmt("{d}", .{a + b}), "computed", fmt("{d} + {d} = {d}", .{ a, b, a + b }));
+    if (has(ws, "minus") or has(ws, "subtract") or has(ws, "difference") or has(ws, "-"))
+        return if (a >= b) known(fmt("{d}", .{a - b}), "computed", fmt("{d} - {d} = {d}", .{ a, b, a - b })) else known(fmt("-{d}", .{b - a}), "computed", fmt("{d} - {d} = -{d}", .{ a, b, b - a }));
+    if (has(ws, "times") or has(ws, "multiplied") or has(ws, "product") or has(ws, "x") or has(ws, "*")) return known(fmt("{d}", .{a * b}), "computed", fmt("{d} × {d} = {d}", .{ a, b, a * b }));
+    if (has(ws, "divided") or has(ws, "over") or has(ws, "divide") or has(ws, "/")) {
+        if (b == 0) return known("undefined", "computed", "division by zero is undefined");
+        if (a % b == 0) return known(fmt("{d}", .{a / b}), "computed", fmt("{d} ÷ {d} = {d}", .{ a, b, a / b }));
+        return known(fmt("{d} remainder {d}", .{ a / b, a % b }), "computed", fmt("{d} ÷ {d} = {d} r{d}", .{ a, b, a / b, a % b }));
+    }
     return null;
 }
 fn hNumProp(ws: [][]const u8) ?Answer {
@@ -618,6 +726,15 @@ fn hNumProp(ws: [][]const u8) ?Answer {
     if (n2) |m| {
         if (has(ws, "divisible") or has(ws, "multiple")) return known(if (m != 0 and n % m == 0) "yes" else "no", "computed", fmt("{d} mod {d} = {d}", .{ n, m, if (m == 0) 0 else n % m }));
         if (has(ws, "gcd") or has(ws, "common")) return known(fmt("{d}", .{gcd(n, m)}), "computed", fmt("Euclid's algorithm on {d}, {d}", .{ n, m }));
+        if (has(ws, "lcm")) return known(fmt("{d}", .{n / gcd(n, m) * m}), "computed", fmt("lcm via n·m/gcd on {d}, {d}", .{ n, m }));
+        const bigger = has(ws, "bigger") or has(ws, "larger") or has(ws, "greater") or has(ws, "biggest") or has(ws, "more") or has(ws, "max");
+        const smaller = has(ws, "smaller") or has(ws, "less") or has(ws, "lesser") or has(ws, "smallest") or has(ws, "fewer") or has(ws, "min");
+        if (bigger or smaller) {
+            if (has(ws, "which") or has(ws, "what") or has(ws, "bigger of") or has(ws, "biggest") or has(ws, "smallest"))
+                return known(fmt("{d}", .{if (bigger) @max(n, m) else @min(n, m)}), "computed", fmt("compared {d} and {d}", .{ n, m }));
+            const yes = (bigger and n > m) or (smaller and n < m);
+            return known(if (n == m) "they're equal" else (if (yes) "yes" else "no"), "computed", fmt("{d} vs {d}", .{ n, m }));
+        }
     }
     return null;
 }
@@ -647,6 +764,7 @@ fn hIsA(ws: [][]const u8, routed: bool) ?Answer {
     // floor holds even when the learned router mis-routes here — it prevents a confident-wrong answer on a non-is-a sentence.
     if (!(has(ws, "is") or has(ws, "are"))) return null;
     if (has(ws, "what") or has(ws, "define")) return null;
+    if (has(ws, "part") and has(ws, "of")) return null; // "is X part of Y" is HAS-PART, not IS-A
     // LEARNED slots first (subject/object tagger); fall back to the first/last-noun heuristic if it abstains
     const sl = slotsFromWs(ws);
     var x: []const u8 = sl.subj;
@@ -659,17 +777,54 @@ fn hIsA(ws: [][]const u8, routed: bool) ?Answer {
         y = nouns.items[nouns.items.len - 1];
     }
     if (std.mem.eql(u8, x, y)) return null;
+    if (isPronoun(x) or isPronoun(y)) return null; // "are you alive" / "is it good" aren't curated IS-A questions
+    // plural tolerance: "are dogs animals" → dog / animal
+    if (!wnKnown(x) and !taught.contains(x) and wnKnown(sing(x))) x = sing(x);
+    if (!wnKnown(y) and wnKnown(sing(y))) y = sing(y);
     if (wnIsA(x, y)) |chain| return known("yes", "WordNet (curated IS-A)", chain);
     if (taught.get(x)) |g| {
         if (std.mem.eql(u8, g, y)) return known("yes", "taught by you", fmt("you told me: {s} is-a {s}", .{ x, y }));
         if (wnIsA(g, y)) |ch| return known("yes", "taught + WordNet", fmt("you taught {s} is-a {s}; {s}", .{ x, g, ch }));
     }
-    if (wnKnown(x) and wnKnown(y)) return known("no", "WordNet (curated IS-A)", fmt("{s} has no hypernym chain reaching {s}", .{ x, y }));
+    if (wnKnown(x) and wnKnown(y)) return known("no", "WordNet (curated IS-A)", fmt("no hypernym chain reaches {s}; {s} is classified as: {s}", .{ y, x, wnChainStr(x) orelse x }));
     if (deriveIsA(x, y)) |op| return op;
-    return refuse(fmt("I can't verify whether a {s} is a {s} — neither is in my curated knowledge.", .{ x, y }));
+    return refuse(fmt("I can't verify whether {s} {s} is {s} {s} — neither is in my curated knowledge.", .{ art(x), x, art(y), y }));
 }
 fn hHasPart(ws: [][]const u8, routed: bool) ?Answer {
-    if (!routed and !(has(ws, "have") or has(ws, "has") or has(ws, "parts") or has(ws, "made") or has(ws, "contain") or has(ws, "contains"))) return null;
+    if (!routed and !(has(ws, "have") or has(ws, "has") or has(ws, "parts") or has(ws, "part") or has(ws, "made") or has(ws, "contain") or has(ws, "contains"))) return null;
+    // REVERSE relation: "is a wheel part of a car" → does the car (after "of") have-part the wheel (before "part")?
+    if (has(ws, "part") and has(ws, "of") and !has(ws, "parts")) {
+        var pi: usize = 0;
+        for (ws, 0..) |w, i| if (std.mem.eql(u8, w, "part")) {
+            pi = i;
+            break;
+        };
+        var X: []const u8 = "";
+        var i: usize = 0;
+        while (i < pi) : (i += 1) if (!isStop(ws[i]) and !std.mem.eql(u8, ws[i], "part")) {
+            X = ws[i];
+        };
+        var Y: []const u8 = "";
+        var sawOf = false;
+        i = pi;
+        while (i < ws.len) : (i += 1) {
+            if (std.mem.eql(u8, ws[i], "of")) sawOf = true else if (sawOf and !isStop(ws[i])) {
+                Y = ws[i];
+                break;
+            }
+        }
+        if (X.len > 0 and Y.len > 0) { // "is X part of Y" → does Y have-part X
+            if (hasPartChain(Y, X)) |pf| return known("yes", "WordNet (curated HAS-PART)", pf);
+            if (hasPartGeneralize(Y, X)) |pf| return known("yes", "cross-source inference (HAS-PART + IS-A)", pf);
+            if (wnKnown(Y)) return refuse(fmt("I can't confirm {s} {s} is part of {s} {s} — it's not among {s}'s curated parts (which are incomplete), so I won't assert it either way.", .{ art(X), X, art(Y), Y, Y }));
+            return null;
+        }
+        if (X.len > 0 and Y.len == 0) { // "what is X part of" → list X's holonyms
+            const hs = holonymsOf(X);
+            if (hs.len > 0) return known(fmt("{s} {s} is part of: {s}", .{ art(X), X, hs }), "WordNet (curated part-of / holonym)", fmt("holonym links for {s}", .{X}));
+            if (wnKnown(X)) return refuse(fmt("I don't have curated part-of links for {s} {s}.", .{ art(X), X }));
+        }
+    }
     // LEARNED slots first; fall back to the structural owner/part split
     const sl = slotsFromWs(ws);
     const op = ownerPart(ws);
@@ -687,26 +842,41 @@ fn hHasPart(ws: [][]const u8, routed: bool) ?Answer {
         return null;
     }
     const cp = partsOf(owner);
-    if (cp.len > 0) return known(fmt("a {s} has: {s}", .{ owner, cp }), "WordNet (curated HAS-PART, incl. inherited)", fmt("meronyms of {s} and the kinds it inherits from", .{owner}));
+    if (cp.len > 0) return known(fmt("{s} {s} has: {s}", .{ art(owner), owner, cp }), "WordNet (curated HAS-PART, incl. inherited)", fmt("meronyms of {s} and the kinds it inherits from", .{owner}));
     const at = attributesOf(owner);
-    if (at.len > 0) return known(fmt("a {s} has: {s}", .{ owner, at }), "corpus-attested (possessive usage in literature)", fmt("found \"{s}'s …\" patterns in the corpus", .{owner}));
+    if (at.len > 0) return known(fmt("{s} {s} has: {s}", .{ art(owner), owner, at }), "corpus-attested (possessive usage in literature)", fmt("found \"{s}'s …\" patterns in the corpus", .{owner}));
     return null;
 }
 fn sing(w: []const u8) []const u8 { // naive singularize: drop a trailing plural 's' (whales→whale)
     return if (w.len > 3 and w[w.len - 1] == 's') w[0 .. w.len - 1] else w;
 }
+// is the extracted Webster genus a REAL noun (not a verb/junk like computer→"computes", engine→"pronounced")?
+fn genusOk(s: []const u8, g: []const u8) bool {
+    if (g.len < 3 or std.mem.eql(u8, g, s)) return false;
+    if (std.mem.endsWith(u8, g, "ed") or std.mem.endsWith(u8, g, "ing")) return false; // pronounced, computing…
+    return wnKnown(g); // must exist as a noun in WordNet
+}
 fn hDefine(ws: [][]const u8, routed: bool) ?Answer {
     if (!routed and !(has(ws, "what") or has(ws, "define"))) return null;
+    // "the meaning/purpose/point OF X" asks for significance, not a dictionary genus → not answerable here (refuse)
+    if ((has(ws, "meaning") or has(ws, "purpose") or has(ws, "point") or has(ws, "significance")) and has(ws, "of") and !has(ws, "part")) return null;
+    if ((has(ws, "part") or has(ws, "made")) and has(ws, "of")) return null; // "what is X part of / made of" → HAS-PART, not a definition
     const sl = slotsFromWs(ws); // LEARNED subject; fall back to the heuristic
     var s = if (sl.subj.len > 0) sl.subj else subject(ws);
     if (s.len == 0) return null;
     if (!dict.contains(s) and !taught.contains(s) and !wnKnown(s) and (dict.contains(sing(s)) or taught.contains(sing(s)) or wnKnown(sing(s)))) s = sing(s);
     if (dict.get(s)) |d| {
-        const syn = if (d.syns.len > 0) fmt(" (also: {s})", .{d.syns}) else "";
-        return known(fmt("a {s} is a {s}{s} — \"{s}\"", .{ s, d.genus, syn, d.gloss }), "Webster 1913", "genus extracted from the definition gloss");
+        if (genusOk(s, d.genus)) { // Webster genus is a clean noun → use it + the gloss
+            const syn = if (d.syns.len > 0) fmt(" (also: {s})", .{d.syns}) else "";
+            return known(fmt("{s} {s} is {s} {s}{s} — \"{s}\"", .{ art(s), s, art(d.genus), d.genus, syn, d.gloss }), "Webster 1913", "genus extracted from the definition gloss");
+        }
+        // Webster genus is junk (verb/archaic) → prefer WordNet's clean curated kind; else give the gloss with no claimed genus
+        if (wnParent(s)) |p| return known(fmt("{s} {s} is {s} {s}", .{ art(s), s, art(p), p }), "WordNet (curated IS-A)", wnChainStr(s) orelse "curated hypernym");
+        if (d.gloss.len > 0) return known(fmt("{s} {s}: \"{s}\"", .{ art(s), s, d.gloss }), "Webster 1913", "definition gloss (no clean genus extracted)");
     }
-    if (taught.get(s)) |g| return known(fmt("a {s} is a {s}", .{ s, g }), "taught by you", "from the knowledge base you extended");
-    if (wnChainStr(s)) |ch| return opinion(fmt("I don't have a definition, but its kind-chain is: {s}", .{ch}), fmt("KNOWN: {s} (WordNet IS-A chain)", .{ch}));
+    if (taught.get(s)) |g| return known(fmt("{s} {s} is {s} {s}", .{ art(s), s, art(g), g }), "taught by you", "from the knowledge base you extended");
+    // Webster lacks it (e.g. modern words) but WordNet has it → a real CURATED definition from the immediate kind
+    if (wnParent(s)) |p| return known(fmt("{s} {s} is {s} {s}", .{ art(s), s, art(p), p }), "WordNet (curated IS-A)", wnChainStr(s) orelse "curated hypernym");
     return refuse(fmt("I have no verified definition of \"{s}\".", .{s}));
 }
 
@@ -810,8 +980,13 @@ fn genCorpus(ph: *std.ArrayList([]const u8), lb: *std.ArrayList(u8)) void {
             add(ph, lb, fmt("what is {s} plus {s}", .{ m1, m2 }), .arith);
             add(ph, lb, fmt("{s} times {s}", .{ m1, m2 }), .arith);
             add(ph, lb, fmt("what is {s} minus {s}", .{ m1, m2 }), .arith);
+            add(ph, lb, fmt("what is {s} divided by {s}", .{ m1, m2 }), .arith);
+            add(ph, lb, fmt("{s} divided by {s}", .{ m1, m2 }), .arith);
             add(ph, lb, fmt("is {s} divisible by {s}", .{ m1, m2 }), .numprop);
             add(ph, lb, fmt("gcd of {s} and {s}", .{ m1, m2 }), .numprop);
+            add(ph, lb, fmt("which is bigger {s} or {s}", .{ m1, m2 }), .numprop);
+            add(ph, lb, fmt("which is smaller {s} or {s}", .{ m1, m2 }), .numprop);
+            add(ph, lb, fmt("is {s} bigger than {s}", .{ m1, m2 }), .numprop);
         }
         add(ph, lb, fmt("is {s} prime", .{m1}), .numprop);
         add(ph, lb, fmt("is {s} even", .{m1}), .numprop);
@@ -819,6 +994,7 @@ fn genCorpus(ph: *std.ArrayList([]const u8), lb: *std.ArrayList(u8)) void {
         add(ph, lb, fmt("is {s} a square", .{m1}), .numprop);
         add(ph, lb, fmt("is {s} fibonacci", .{m1}), .numprop);
         add(ph, lb, fmt("how many divisors does {s} have", .{m1}), .numprop);
+        add(ph, lb, fmt("what is {s} squared", .{m1}), .arith);
     }
     for (CMD) |c| {
         add(ph, lb, fmt("does {s} work", .{c}), .action);
@@ -1069,6 +1245,7 @@ fn tryCascade(q: []const u8, ws: [][]const u8) ?Answer {
 fn answer(q: []const u8) Answer {
     const ws = words(q);
     if (ws.len == 0) return refuse("(empty)");
+    if (hSocial(q, ws)) |a| return a; // greetings / thanks / help — courteous, not a knowledge claim
     last_intent = classifyIntent(q); // LEARNED routing decides which handler to try first
     const routed = dispatch(last_intent, q, ws);
     if (routed) |a| if (a.status != .refused) return a; // confident learned-routed answer wins
@@ -1079,10 +1256,15 @@ fn answer(q: []const u8) Answer {
 }
 
 fn render(o: anytype, ans: Answer) !void {
+    if (ans.status == .meta) { // social/meta: plain reply, no epistemic tag (it isn't a knowledge claim)
+        try o.print("{s}\n", .{ans.text});
+        return;
+    }
     const tag = switch (ans.status) {
         .known => "[KNOWN]  ",
         .opinion => "[OPINION]",
         .refused => "[REFUSED]",
+        .meta => unreachable,
     };
     try o.print("{s} {s}\n", .{ tag, ans.text });
     if (ans.source.len > 0) try o.print("          source: {s}\n", .{ans.source});
@@ -1102,6 +1284,7 @@ pub fn main() !void {
     wn_data = std.AutoHashMap(u32, WNode).init(A);
     wn_index = std.StringHashMap([]u32).init(A);
     wn_meron = std.AutoHashMap(u32, []u32).init(A);
+    wn_holo = std.AutoHashMap(u32, []u32).init(A);
     if (std.fs.openFileAbsolute(C ++ "dict/data.noun", .{})) |f| {
         defer f.close();
         const buf = try f.readToEndAlloc(A, 1 << 30);

@@ -95,6 +95,21 @@ nouns via the *context* (a token right after "have" is an object, whatever the w
 operands without a positional rule. Deterministic extraction remains as a fallback when the tagger abstains, so nothing
 regresses. Net: intent **and** operands are both learned and measured — the routing layer is no longer hand-written.
 
+## Scaled up + hardened for chat
+Widened relations and math, and hunted the BS a user would hit by pushing it:
+- **Relations:** curated **HAS-PART** (with inheritance), **cross-source** HAS-PART→IS-A, **holonyms / part-of**
+  (`what is a wheel part of` → wheeled vehicle, steering system) and **reverse part-of** (`is a wheel part of a car?`).
+- **Math:** + − × ÷ (with remainder), powers (`7 squared`, `2 to the power of 10`), signed subtraction, gcd/lcm,
+  divisibility, prime/square/odd/even/fibonacci, and comparison (`which is bigger, 5 or 8?`).
+- **Definitions hardened:** article agreement (a/an), gloss trimmed to a clean sentence, and — crucially — a junk
+  Webster genus (e.g. *computer → "computes"*, *engine → "pronounced"*) is rejected and replaced by WordNet's clean
+  curated kind (*a computer is a machine*). Modern words Webster 1913 lacks get a real WordNet definition. A "no" now
+  shows the actual classification (`apple → edible fruit → produce → food`) so it's defensible, not a black box.
+- **Social, not a knowledge claim:** greetings/thanks/help get a courteous reply rendered with **no epistemic tag**.
+- **BS floors (a misroute/odd input costs a refusal, never a falsehood):** "what is the meaning of life" refuses (it
+  does *not* define "life"); pronouns aren't is-a subjects ("are you alive" refuses cleanly); a teach can't start with a
+  question word; an is-a needs a copula; "part of"/"made of" never get hijacked by the definition handler.
+
 ## The quarantine (the core discipline)
 Only the **teach** path and verified lookups write to the knowledge store. **Opinions are computed on the fly and never
 written** — so a guess can never later be mistaken for knowledge. The three states are visually and structurally
