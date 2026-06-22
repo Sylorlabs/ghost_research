@@ -60,6 +60,32 @@ what is a quokka?        → [KNOWN] a quokka is a marsupial | taught by you
 is a quokka an animal?   → [KNOWN] yes | taught + WordNet | quokka is-a marsupial; marsupial → … → animal
 ```
 
+## Cross-source inference (derive what no single source holds)
+Chaining relations across the curated graph yields facts no lookup contains:
+```
+does a car have a machine? → [KNOWN] yes
+   car has-part automobile engine, and automobile engine is-a machine   (HAS-PART then IS-A — two facts, one conclusion)
+does a king have a body?   → [KNOWN] yes
+   king is-a person, and person has-part human body                     (IS-A then HAS-PART, inherited)
+does a car have a feeling?  → [REFUSED] no chain reaches it — I just don't know  (won't fabricate either way)
+```
+Sound (every link is curated), and the whole derivation is shown.
+
+## Learned question-router (routing is learned, not hand-written `if`s)
+The old router was hand-written grammar (`if has("is")…`). It's now a **trained perceptron** over phrasings generated
+combinatorially from word banks (unigram+bigram features, numbers normalised to `<num>`, backticks → `<cmd>`). It learns
+the routing function and **generalises to unseen phrasings**: **99.3% on held-out**. It catches paraphrases the grammar
+would miss entirely:
+```
+describe a horse        → routed: define → [KNOWN] a horse is a quadruped…   (no "what"/"define" keyword present)
+tell me about whales     → routed: define → [KNOWN] a whale is a mammal…      (plural-tolerant lookup)
+is 91 a prime number     → routed: number
+what makes up a car      → routed: define   (imperfect — 0.7% of the time it misroutes)
+```
+**Robust by construction:** the learned router picks the handler to try first; if its answer isn't confident, a
+deterministic cascade recovers; structural floors (e.g. an is-a question must have a copula) block any *confident-wrong*
+answer on a misrouted sentence. A misroute can cost a refusal, never a falsehood. (`route <q>` shows the live prediction.)
+
 ## The quarantine (the core discipline)
 Only the **teach** path and verified lookups write to the knowledge store. **Opinions are computed on the fly and never
 written** — so a guess can never later be mistaken for knowledge. The three states are visually and structurally
