@@ -555,8 +555,14 @@ fn deriveIsA(x: []const u8, y: []const u8) ?Answer {
 }
 
 // ─────────────────────────── handlers (each verifies; returns null if it can't apply) ───────────────────────────
+fn isWh(w: []const u8) bool {
+    inline for (.{ "who", "what", "whats", "which", "where", "when", "why", "how", "whos", "does", "do", "is", "are", "can" }) |x|
+        if (std.mem.eql(u8, w, x)) return true;
+    return false;
+}
 fn hTeach(q: []const u8, ws: [][]const u8) ?Answer {
     if (std.mem.indexOf(u8, q, "?") != null) return null;
+    if (ws.len > 0 and isWh(ws[0])) return null; // a teach is a DECLARATIVE statement, never a question ("who is a king")
     for (ws, 0..) |w, i| if (std.mem.eql(u8, w, "is") and i + 2 < ws.len and isArticle(ws[i + 1]) and i >= 1) {
         const subj = ws[i - 1];
         const gen = ws[i + 2];
@@ -641,11 +647,17 @@ fn hIsA(ws: [][]const u8, routed: bool) ?Answer {
     // floor holds even when the learned router mis-routes here — it prevents a confident-wrong answer on a non-is-a sentence.
     if (!(has(ws, "is") or has(ws, "are"))) return null;
     if (has(ws, "what") or has(ws, "define")) return null;
-    var nouns = std.ArrayList([]const u8).init(A);
-    for (ws) |w| if (!isArticle(w) and !std.mem.eql(u8, w, "is") and !std.mem.eql(u8, w, "are") and !std.mem.eql(u8, w, "kind") and !std.mem.eql(u8, w, "of")) nouns.append(w) catch {};
-    if (nouns.items.len < 2) return null;
-    const x = nouns.items[0];
-    const y = nouns.items[nouns.items.len - 1];
+    // LEARNED slots first (subject/object tagger); fall back to the first/last-noun heuristic if it abstains
+    const sl = slotsFromWs(ws);
+    var x: []const u8 = sl.subj;
+    var y: []const u8 = sl.obj;
+    if (x.len == 0 or y.len == 0) {
+        var nouns = std.ArrayList([]const u8).init(A);
+        for (ws) |w| if (!isArticle(w) and !std.mem.eql(u8, w, "is") and !std.mem.eql(u8, w, "are") and !std.mem.eql(u8, w, "kind") and !std.mem.eql(u8, w, "of")) nouns.append(w) catch {};
+        if (nouns.items.len < 2) return null;
+        x = nouns.items[0];
+        y = nouns.items[nouns.items.len - 1];
+    }
     if (std.mem.eql(u8, x, y)) return null;
     if (wnIsA(x, y)) |chain| return known("yes", "WordNet (curated IS-A)", chain);
     if (taught.get(x)) |g| {
@@ -658,17 +670,20 @@ fn hIsA(ws: [][]const u8, routed: bool) ?Answer {
 }
 fn hHasPart(ws: [][]const u8, routed: bool) ?Answer {
     if (!routed and !(has(ws, "have") or has(ws, "has") or has(ws, "parts") or has(ws, "made") or has(ws, "contain") or has(ws, "contains"))) return null;
+    // LEARNED slots first; fall back to the structural owner/part split
+    const sl = slotsFromWs(ws);
     const op = ownerPart(ws);
-    const owner = op.owner;
+    const owner = if (sl.subj.len > 0) sl.subj else op.owner;
+    const part = if (sl.obj.len > 0) sl.obj else op.part;
     if (owner.len == 0) return null;
-    if (op.part.len > 0) {
-        if (hasPartChain(owner, op.part)) |pf| return known("yes", "WordNet (curated HAS-PART)", pf);
-        if (hasPartGeneralize(owner, op.part)) |pf| return known("yes", "cross-source inference (HAS-PART + IS-A)", pf);
+    if (part.len > 0) {
+        if (hasPartChain(owner, part)) |pf| return known("yes", "WordNet (curated HAS-PART)", pf);
+        if (hasPartGeneralize(owner, part)) |pf| return known("yes", "cross-source inference (HAS-PART + IS-A)", pf);
         const at0 = attributesOf(owner);
-        if (at0.len > 0 and std.mem.indexOf(u8, at0, op.part) != null)
-            return known("yes", "corpus-attested (possessive usage)", fmt("\"{s}'s {s}\" attested in the corpus", .{ owner, op.part }));
+        if (at0.len > 0 and std.mem.indexOf(u8, at0, part) != null)
+            return known("yes", "corpus-attested (possessive usage)", fmt("\"{s}'s {s}\" attested in the corpus", .{ owner, part }));
         if (wnKnown(owner))
-            return refuse(fmt("I can't confirm a {s} has a {s} — it's not among {s}'s curated parts. (Curated HAS-PART is incomplete, so I won't assert 'no' either — I just don't know.)", .{ owner, op.part, owner }));
+            return refuse(fmt("I can't confirm a {s} has a {s} — it's not among {s}'s curated parts. (Curated HAS-PART is incomplete, so I won't assert 'no' either — I just don't know.)", .{ owner, part, owner }));
         return null;
     }
     const cp = partsOf(owner);
@@ -682,7 +697,8 @@ fn sing(w: []const u8) []const u8 { // naive singularize: drop a trailing plural
 }
 fn hDefine(ws: [][]const u8, routed: bool) ?Answer {
     if (!routed and !(has(ws, "what") or has(ws, "define"))) return null;
-    var s = subject(ws);
+    const sl = slotsFromWs(ws); // LEARNED subject; fall back to the heuristic
+    var s = if (sl.subj.len > 0) sl.subj else subject(ws);
     if (s.len == 0) return null;
     if (!dict.contains(s) and !taught.contains(s) and !wnKnown(s) and (dict.contains(sing(s)) or taught.contains(sing(s)) or wnKnown(sing(s)))) s = sing(s);
     if (dict.get(s)) |d| {
@@ -774,7 +790,12 @@ fn genCorpus(ph: *std.ArrayList([]const u8), lb: *std.ArrayList(u8)) void {
         add(ph, lb, fmt("define {s}", .{n1}), .define);
         add(ph, lb, fmt("what does {s} mean", .{n1}), .define);
         add(ph, lb, fmt("tell me about {s}", .{n1}), .define);
+        add(ph, lb, fmt("tell me about a {s}", .{n1}), .define);
         add(ph, lb, fmt("describe a {s}", .{n1}), .define);
+        add(ph, lb, fmt("describe {s}", .{n1}), .define);
+        add(ph, lb, fmt("whats a {s}", .{n1}), .define);
+        add(ph, lb, fmt("who is {s}", .{n1}), .define);
+        add(ph, lb, fmt("who is a {s}", .{n1}), .define);
         add(ph, lb, fmt("what does a {s} have", .{n1}), .haspart);
         add(ph, lb, fmt("what parts does a {s} have", .{n1}), .haspart);
         add(ph, lb, fmt("parts of a {s}", .{n1}), .haspart);
@@ -846,6 +867,175 @@ fn trainRouter() f64 {
     };
     const held = N - ntr;
     return if (held == 0) 0 else 100.0 * @as(f64, @floatFromInt(correct)) / @as(f64, @floatFromInt(held));
+}
+
+// ─────────────────────────── learned slot extractor (per-token role tagging) ───────────────────────────
+// Which token is the SUBJECT vs the OBJECT vs a NUMBER — learned, not hand-coded "first noun / last noun". A per-token
+// perceptron over context features (the token, its neighbours, position). Trained on the same generated phrasings,
+// auto-labelled because we know which filler is which. Generalises to unseen nouns via the CONTEXT (prev=have→object).
+const NROLE = 4; // 0 none, 1 subject, 2 object, 3 num
+var svocab: std.StringHashMap(u32) = undefined;
+var svcount: u32 = 0;
+var sweights: []f32 = undefined;
+fn sAdd(ids: *std.ArrayList(u32), key: []const u8, add: bool) void {
+    if (svocab.get(key)) |id| {
+        ids.append(id) catch {};
+    } else if (add) {
+        svocab.put(A.dupe(u8, key) catch return, svcount) catch return;
+        ids.append(svcount) catch {};
+        svcount += 1;
+    }
+}
+fn slotFeats(ws: [][]const u8, i: usize, add: bool) []u32 {
+    var ids = std.ArrayList(u32).init(A);
+    const w = normTok(ws[i]);
+    const prev = if (i > 0) normTok(ws[i - 1]) else "^";
+    const next = if (i + 1 < ws.len) normTok(ws[i + 1]) else "$";
+    sAdd(&ids, fmt("w={s}", .{w}), add);
+    sAdd(&ids, fmt("p={s}", .{prev}), add);
+    sAdd(&ids, fmt("n={s}", .{next}), add);
+    sAdd(&ids, fmt("pn={s}|{s}", .{ prev, next }), add);
+    if (i == 0) sAdd(&ids, "i0", add);
+    if (i + 1 == ws.len) sAdd(&ids, "iL", add);
+    return ids.items;
+}
+fn predictRole(ids: []const u32) u8 {
+    var best: u8 = 0;
+    var bs: f32 = -1e30;
+    var c: u8 = 0;
+    while (c < NROLE) : (c += 1) {
+        var s: f32 = 0;
+        for (ids) |f| s += sweights[@as(usize, c) * svcount + f];
+        if (s > bs) {
+            bs = s;
+            best = c;
+        }
+    }
+    return best;
+}
+fn roleOf(ws: [][]const u8, i: usize) u8 {
+    return predictRole(slotFeats(ws, i, false));
+}
+// the learned operands: first token tagged SUBJECT, first tagged OBJECT
+fn slotsFromWs(ws: [][]const u8) struct { subj: []const u8, obj: []const u8 } {
+    var subj: []const u8 = "";
+    var obj: []const u8 = "";
+    for (ws, 0..) |w, i| {
+        const r = roleOf(ws, i);
+        if (r == 1 and subj.len == 0) subj = w;
+        if (r == 2 and obj.len == 0) obj = w;
+    }
+    return .{ .subj = subj, .obj = obj };
+}
+fn genSlotCorpus(ph: *std.ArrayList([]const u8), sj: *std.ArrayList([]const u8), ob: *std.ArrayList([]const u8)) void {
+    const N = [_][]const u8{ "king", "dog", "car", "bird", "tree", "whale", "knife", "ship", "horse", "house", "queen", "lion", "clock", "boat" };
+    const N2 = [_][]const u8{ "animal", "person", "vehicle", "tool", "plant", "thing", "wheel", "engine", "wing" };
+    const NM = [_][]const u8{ "3", "7", "12", "17", "100" };
+    const OOS = [_][]const u8{ "life", "future", "technology", "art" };
+    const add = struct {
+        fn f(p: *std.ArrayList([]const u8), s: *std.ArrayList([]const u8), o: *std.ArrayList([]const u8), phrase: []const u8, subj: []const u8, obj: []const u8) void {
+            p.append(phrase) catch {};
+            s.append(subj) catch {};
+            o.append(obj) catch {};
+        }
+    }.f;
+    for (N) |n1| {
+        for (N2) |n2| {
+            add(ph, sj, ob, fmt("a {s} is a {s}", .{ n1, n2 }), n1, n2);
+            add(ph, sj, ob, fmt("{s} is a {s}", .{ n1, n2 }), n1, n2);
+            add(ph, sj, ob, fmt("is a {s} a {s}", .{ n1, n2 }), n1, n2);
+            add(ph, sj, ob, fmt("is {s} a {s}", .{ n1, n2 }), n1, n2);
+            add(ph, sj, ob, fmt("is a {s} a kind of {s}", .{ n1, n2 }), n1, n2);
+            add(ph, sj, ob, fmt("does a {s} have a {s}", .{ n1, n2 }), n1, n2);
+            add(ph, sj, ob, fmt("does a {s} have {s}", .{ n1, n2 }), n1, n2);
+        }
+        add(ph, sj, ob, fmt("what is a {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("what is {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("define {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("what does {s} mean", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("tell me about {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("tell me about a {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("describe a {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("describe {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("whats a {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("who is {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("who is a {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("what does a {s} have", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("what parts does a {s} have", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("parts of a {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("what is a {s} made of", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("how many letters in {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("reverse {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("first letter of {s}", .{n1}), n1, "");
+        add(ph, sj, ob, fmt("last letter of {s}", .{n1}), n1, "");
+    }
+    for (NM) |m| {
+        add(ph, sj, ob, fmt("is {s} prime", .{m}), "", "");
+        add(ph, sj, ob, fmt("is {s} fibonacci", .{m}), "", "");
+        add(ph, sj, ob, fmt("gcd of {s} and {s}", .{ m, m }), "", "");
+    }
+    for (OOS) |o| {
+        add(ph, sj, ob, fmt("how will {s} evolve", .{o}), "", "");
+        add(ph, sj, ob, fmt("is this {s} beautiful", .{o}), "", "");
+    }
+}
+fn labelToken(tok: []const u8, subjF: []const u8, objF: []const u8) u8 {
+    var dig = tok.len > 0;
+    for (tok) |c| if (c < '0' or c > '9') {
+        dig = false;
+        break;
+    };
+    if (dig) return 3;
+    if (subjF.len > 0 and std.mem.eql(u8, tok, subjF)) return 1;
+    if (objF.len > 0 and std.mem.eql(u8, tok, objF)) return 2;
+    return 0;
+}
+// train the per-token tagger; return accuracy on CONTENT tokens (gold != none) of held-out phrases (the meaningful metric)
+fn trainSlots() f64 {
+    svocab = std.StringHashMap(u32).init(A);
+    svcount = 0;
+    var ph = std.ArrayList([]const u8).init(A);
+    var sj = std.ArrayList([]const u8).init(A);
+    var ob = std.ArrayList([]const u8).init(A);
+    genSlotCorpus(&ph, &sj, &ob);
+    const NP = ph.items.len;
+    var tf = std.ArrayList([]u32).init(A);
+    var tl = std.ArrayList(u8).init(A);
+    var tp = std.ArrayList(usize).init(A);
+    for (0..NP) |i| {
+        const ws = words(ph.items[i]);
+        for (ws, 0..) |w, j| {
+            tf.append(slotFeats(ws, j, true)) catch {};
+            tl.append(labelToken(w, sj.items[i], ob.items[i])) catch {};
+            tp.append(i) catch {};
+        }
+    }
+    sweights = A.alloc(f32, NROLE * svcount) catch return 0;
+    @memset(sweights, 0);
+    var isTest = A.alloc(bool, NP) catch return 0;
+    @memset(isTest, false);
+    var pidx = A.alloc(usize, NP) catch return 0;
+    for (0..NP) |i| pidx[i] = i;
+    var prng = std.Random.DefaultPrng.init(0x5107ACED);
+    prng.random().shuffle(usize, pidx);
+    for (pidx[NP * 8 / 10 ..]) |p| isTest[p] = true;
+    const T = tf.items.len;
+    for (0..30) |_| for (0..T) |t| {
+        if (isTest[tp.items[t]]) continue;
+        const pred = predictRole(tf.items[t]);
+        const gold = tl.items[t];
+        if (pred != gold) for (tf.items[t]) |f| {
+            sweights[@as(usize, gold) * svcount + f] += 1;
+            sweights[@as(usize, pred) * svcount + f] -= 1;
+        };
+    };
+    var corr: usize = 0;
+    var tot: usize = 0;
+    for (0..T) |t| if (isTest[tp.items[t]] and tl.items[t] != 0) {
+        tot += 1;
+        if (predictRole(tf.items[t]) == tl.items[t]) corr += 1;
+    };
+    return if (tot == 0) 0 else 100.0 * @as(f64, @floatFromInt(corr)) / @as(f64, @floatFromInt(tot));
 }
 
 // ─────────────────────────── the query router ───────────────────────────
@@ -975,9 +1165,10 @@ pub fn main() !void {
     }
     taught = std.StringHashMap([]const u8).init(A);
     const route_acc = trainRouter(); // learned question-router: trained perceptron over generated phrasings
+    const slot_acc = trainSlots(); // learned slot tagger: which token is subject/object/number
 
     try o.print("ready: {d} WordNet synsets, {d} Webster definitions, {d:.1} MB literary corpus.\n", .{ wn_data.count(), dict.count(), @as(f64, @floatFromInt(corpus.len)) / 1e6 });
-    try o.print("learned router: trained on generated phrasings → {d:.1}% on held-out unseen phrasings ({d} features).\n", .{ route_acc, rvcount });
+    try o.print("learned router: {d:.1}% held-out intent ({d} feats) · learned slots: {d:.1}% held-out subject/object/number ({d} feats).\n", .{ route_acc, rvcount, slot_acc, svcount });
     try o.print("ask me anything ('why' = last proof, 'route <q>' = show the learned intent, 'quit'). I only assert what I can verify.\n\n", .{});
 
     const stdin = std.io.getStdIn().reader();

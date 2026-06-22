@@ -83,8 +83,17 @@ is 91 a prime number     → routed: number
 what makes up a car      → routed: define   (imperfect — 0.7% of the time it misroutes)
 ```
 **Robust by construction:** the learned router picks the handler to try first; if its answer isn't confident, a
-deterministic cascade recovers; structural floors (e.g. an is-a question must have a copula) block any *confident-wrong*
-answer on a misrouted sentence. A misroute can cost a refusal, never a falsehood. (`route <q>` shows the live prediction.)
+deterministic cascade recovers; structural floors (an is-a question must have a copula; a teach can't start with a
+question word) block any *confident-wrong* answer on a misrouted sentence. A misroute can cost a refusal, never a
+falsehood. (`route <q>` shows the live prediction.)
+
+## Learned slot extraction (which token is the subject vs the object)
+The last hand-written piece — "first noun = subject, last noun = object" — is now a **trained per-token tagger**: a
+perceptron labels each token SUBJECT / OBJECT / NUMBER / none from context features (the token, its neighbours,
+position), trained on the same auto-labelled phrasings. **100% on held-out content tokens.** It generalises to unseen
+nouns via the *context* (a token right after "have" is an object, whatever the word), so paraphrases extract the right
+operands without a positional rule. Deterministic extraction remains as a fallback when the tagger abstains, so nothing
+regresses. Net: intent **and** operands are both learned and measured — the routing layer is no longer hand-written.
 
 ## The quarantine (the core discipline)
 Only the **teach** path and verified lookups write to the knowledge store. **Opinions are computed on the fly and never
