@@ -108,6 +108,8 @@ pub fn build(b: *std.Build) void {
         .{ "lm-bpc6", "lm_bpc6.zig", "EQUAL DATA: count model on the SAME 8MB file as the from-scratch GPT — fair head-to-head, CPU, no GPU/LLM" },
         .{ "lm-mixed", "lm_mixed.zig", "Byte-native count model on English+Chinese mixed: BPB per language, CPU, no GPU/LLM" },
         .{ "stream-lm", "stream_lm.zig", "Bounded-memory streaming count LM on big EN+ZH: flat RAM + data-scaling curve, CPU, no GPU/LLM" },
+        .{ "stream-fast", "stream_fast.zig", "Fixed-memory streaming count LM (flat RAM, scales): data-scaling curve toward gpt2 1.0499, CPU, no GPU/LLM" },
+        .{ "oracle", "oracle.zig", "The KNOWING engine: unified verified-knowledge oracle (KNOWN/OPINION/REFUSED + provenance), interactive REPL, no LLM" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
         const rc = b.addRunArtifact(e);
