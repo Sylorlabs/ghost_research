@@ -6,24 +6,34 @@ import sys, math, time, torch, torch.nn as nn, torch.nn.functional as F
 TRAIN = sys.argv[1] if len(sys.argv) > 1 else "../corpus/train_dw_8mb.txt"
 HELD = sys.argv[2] if len(sys.argv) > 2 else "../corpus/heldout_eval_dw.txt"
 STEPS = int(sys.argv[3]) if len(sys.argv) > 3 else 3000
-BLOCK, NEMB, NLAYER, NHEAD, BATCH = 128, 192, 4, 6, 32
+DEV = "cuda" if torch.cuda.is_available() else "cpu"
+# scale the model to the device: a real GPU (ROCm on the RX 5700) lets us use a proper transformer
+if DEV == "cuda":
+    BLOCK, NEMB, NLAYER, NHEAD, BATCH = 256, 384, 6, 6, 64
+else:
+    BLOCK, NEMB, NLAYER, NHEAD, BATCH = 128, 192, 4, 6, 32
 torch.manual_seed(0)
-torch.set_num_threads(torch.get_num_threads())
 
-data = torch.tensor(list(open(TRAIN, "rb").read()), dtype=torch.long)
-held = torch.tensor(list(open(HELD, "rb").read()), dtype=torch.long)
-print(f"train {len(data)} bytes  held-out {len(held)} bytes  model: {NLAYER}L/{NEMB}d/{NHEAD}h block {BLOCK}")
+data = torch.frombuffer(bytearray(open(TRAIN, "rb").read()), dtype=torch.uint8).long()
+held = torch.frombuffer(bytearray(open(HELD, "rb").read()), dtype=torch.uint8).long()
+print(f"device={DEV} ({torch.cuda.get_device_name(0) if DEV=='cuda' else 'CPU'})  train {len(data)} bytes  held-out {len(held)} bytes  model: {NLAYER}L/{NEMB}d/{NHEAD}h block {BLOCK}")
 
-class Block(nn.Module):
+class Block(nn.Module):  # MANUAL attention (matmul+softmax only) — avoids the fused SDPA kernel that hangs gfx1010 ROCm
     def __init__(s):
         super().__init__()
         s.ln1, s.ln2 = nn.LayerNorm(NEMB), nn.LayerNorm(NEMB)
-        s.attn = nn.MultiheadAttention(NEMB, NHEAD, batch_first=True)
+        s.qkv = nn.Linear(NEMB, 3 * NEMB)
+        s.proj = nn.Linear(NEMB, NEMB)
         s.mlp = nn.Sequential(nn.Linear(NEMB, 4 * NEMB), nn.GELU(), nn.Linear(4 * NEMB, NEMB))
     def forward(s, x, mask):
-        h = s.ln1(x)
-        a, _ = s.attn(h, h, h, attn_mask=mask, need_weights=False)
-        x = x + a
+        B, T, C = x.shape
+        hd = C // NHEAD
+        qkv = s.qkv(s.ln1(x)).view(B, T, 3, NHEAD, hd).permute(2, 0, 3, 1, 4)  # 3,B,nh,T,hd
+        q, k, v = qkv[0], qkv[1], qkv[2]
+        att = (q @ k.transpose(-2, -1)) * (1.0 / (hd ** 0.5)) + mask  # B,nh,T,T (mask broadcasts)
+        att = torch.softmax(att, dim=-1)
+        a = (att @ v).transpose(1, 2).contiguous().view(B, T, C)
+        x = x + s.proj(a)
         return x + s.mlp(s.ln2(x))
 
 class GPT(nn.Module):
@@ -42,14 +52,14 @@ class GPT(nn.Module):
             x = b(x, mask)
         return s.head(s.lnf(x))
 
-model = GPT()
+model = GPT().to(DEV)
 print(f"params: {sum(p.numel() for p in model.parameters())/1e6:.2f}M")
 opt = torch.optim.AdamW(model.parameters(), lr=3e-4, weight_decay=0.1)
 
 def get_batch():
     ix = torch.randint(0, len(data) - BLOCK - 1, (BATCH,))
-    x = torch.stack([data[i:i + BLOCK] for i in ix])
-    y = torch.stack([data[i + 1:i + 1 + BLOCK] for i in ix])
+    x = torch.stack([data[i:i + BLOCK] for i in ix]).to(DEV)
+    y = torch.stack([data[i + 1:i + 1 + BLOCK] for i in ix]).to(DEV)
     return x, y
 
 @torch.no_grad()
@@ -62,13 +72,13 @@ def eval_bpb():
     i = 0
     while i < len(held) - 1:
         end = min(i + BLOCK, len(held))
-        win = held[i:end].unsqueeze(0)
+        win = held[i:end].unsqueeze(0).to(DEV)
         logits = model(win)[0]
         lo = max(prev - i, 0)
-        for t in range(lo, end - i - 1):
-            lp = F.log_softmax(logits[t], -1)
-            nll += -lp[held[i + t + 1]].item()
-            n += 1
+        lp = F.log_softmax(logits[lo:end - i - 1], -1)            # all scored positions at once
+        tgt = held[i + lo + 1:end].to(DEV)
+        nll += -lp.gather(1, tgt.unsqueeze(1)).sum().item()
+        n += int(tgt.numel())
         prev = end
         if end == len(held):
             break
