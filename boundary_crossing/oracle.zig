@@ -213,6 +213,36 @@ fn hasPartChain(x: []const u8, y: []const u8) ?[]const u8 {
     }
     return null;
 }
+// does a synset's IS-A chain reach Y? (walks hypernyms from the synset offset — no string lookup, plural-tolerant)
+fn synsetReaches(off: u32, y: []const u8) bool {
+    var ch = std.ArrayList([]const u8).init(A);
+    wnChainFrom(off, &ch);
+    for (ch.items) |n| if (partMatch(n, y)) return true;
+    return false;
+}
+// CROSS-SOURCE inference: chain HAS-PART then IS-A. "a car has an engine" — not a direct part, but a car
+// has-part an *automobile engine*, and an automobile engine IS-A engine. Two relations, one conclusion no single
+// lookup holds. Sound (both links curated), and the whole derivation is shown.
+fn hasPartGeneralize(x: []const u8, y: []const u8) ?[]const u8 {
+    const senses = wn_index.get(x) orelse return null;
+    for (senses) |s0| {
+        var cur = s0;
+        var depth: usize = 0;
+        while (depth < 30) : (depth += 1) {
+            if (wn_meron.get(cur)) |parts| for (parts) |ps| {
+                if (wn_data.get(ps)) |pn| if (!partMatch(pn.word, y) and synsetReaches(ps, y)) {
+                    if (cur == s0) return fmt("{s} has-part {s}, and {s} is-a {s} (WordNet — cross-source: HAS-PART then IS-A)", .{ x, pn.word, pn.word, y });
+                    const anc = wn_data.get(cur).?.word;
+                    return fmt("{s} is-a {s}, {s} has-part {s}, and {s} is-a {s} (WordNet — cross: IS-A + HAS-PART + IS-A)", .{ x, anc, anc, pn.word, pn.word, y });
+                };
+            };
+            const node = wn_data.get(cur) orelse break;
+            if (node.hyper == 0) break;
+            cur = node.hyper;
+        }
+    }
+    return null;
+}
 
 // ─────────────────────────── Webster 1913 definitions ───────────────────────────
 const Def = struct { pos: []const u8, gloss: []const u8, genus: []const u8, syns: []const u8 };
@@ -647,6 +677,7 @@ fn answer(q: []const u8) Answer {
         if (owner.len == 0) return refuse("what should I look up the parts of?");
         if (op.part.len > 0) { // yes/no: does owner have part?
             if (hasPartChain(owner, op.part)) |pf| return known("yes", "WordNet (curated HAS-PART)", pf);
+            if (hasPartGeneralize(owner, op.part)) |pf| return known("yes", "cross-source inference (HAS-PART + IS-A)", pf);
             const at0 = attributesOf(owner);
             if (at0.len > 0 and std.mem.indexOf(u8, at0, op.part) != null)
                 return known("yes", "corpus-attested (possessive usage)", fmt("\"{s}'s {s}\" attested in the corpus", .{ owner, op.part }));
