@@ -320,9 +320,37 @@ the GPT's 17 CPU-minutes. **Transformers are data-hungry**; gpt2's apparent supe
 pretraining**, not its architecture — exactly the "it's a data problem" hypothesis, confirmed. (Caveat: GPT still slowly
 converging at 3500 steps; an extended run checks its plateau, but at equal data + far more compute, counting wins.)
 
+## Probe 10 — bounded-memory STREAMING + data scaling (`stream_lm.zig`): more data → lower BPB at flat RAM
+The "it's a data problem" follow-up: stream a large EN+ZH corpus through the abs-disc rune n-gram, keeping memory
+**bounded** by pruning singleton high-order contexts (the no-data-center thesis — GB in, MB resident). English held-out
+(Austen, clean), Chinese held-out (clean 12% split of 《红楼梦》), per-language BPB at intervals.
+
+**Data scaling continues, no plateau** (budget 4M context entries):
+
+| streamed | EN BPB | entries |
+|---:|---:|---:|
+| 20 MB | 1.652 | 3.5M |
+| 28 MB | 1.616 | 3.1M |
+| 40 MB | 1.572 | 3.2M |
+| 57 MB | **1.536** | 3.4M |
+
+- **More data keeps lowering BPB** (1.65 → 1.54 over 20→57MB) while the **context-entry count stays bounded** (~3.5M,
+  pruned) — exactly the thesis: data helps, model size flat. The trajectory is still dropping (no plateau), extrapolating
+  toward the gpt2 reference (1.05) with more data.
+- **Memory can be held truly flat**: at a tight budget (600K entries) RSS stayed **flat ~960 MB** start to finish.
+- **Honest implementation caveats:** the count tables use a per-context hashmap + a general-purpose allocator that
+  *retains* freed pages, so at a large budget RSS *creeps* (to ~5 GB) even though the logical model is bounded; and the
+  allocator/pruning make it **slow**. The clean fix is a **fixed-size table or count-min sketch** (truly flat RSS, much
+  faster) — that, plus more downloaded text, is what's needed to push to GB-scale. On this machine (15 GB RAM / ~4 GB
+  free, no usable GPU, ~59 MB text on hand) we are **data- and RAM-limited**, not idea-limited.
+- (GPU note: the from-scratch transformer side can't scale here — the AMD RX 5700 / gfx1010 ROCm path **crashes the
+  system during training**; basic GEMM works but the training kernels hang the display GPU. That comparison needs a
+  stable GPU box; see `nanogpt_bpb.py`, GPU-ready for one.)
+
 ## Status
-Probes 1–9 done, measured, committed — including a self-correction (probe 5), depth wins (probes 6–7), the stolen-GPT-2
-confound (probe 8b), and the **equal-data fair fight (probe 9): same 8MB, count model 1.82 vs from-scratch GPT 2.26**.
+Probes 1–10 done, measured, committed — including a self-correction (probe 5), depth wins (probes 6–7), the stolen-GPT-2
+confound (probe 8b), the **equal-data fair fight (probe 9): same 8MB, count model 1.82 vs from-scratch GPT 2.26**, and
+**bounded streaming + data scaling (probe 10): EN BPB 1.65→1.54 over 20→57MB at flat memory, still dropping**.
 Earlier stolen-GPT-2 note (unequal data, kept for record): gpt2-124M wins raw capability (~7% BPB over our
 best, ~20% over frozen), our continual stack within ~1.5% of distilgpt2, all at a fraction of the cost. The honest
 overall verdict: **at EQUAL data we win; the pretrained transformer's edge is DATA, not architecture.** The whole
