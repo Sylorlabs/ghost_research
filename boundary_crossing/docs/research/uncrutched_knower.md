@@ -161,6 +161,41 @@ where one *does* exist (number theory, terminal exit codes) the project's invent
 external grounding, not on a cleverer internal check. `refine.zig` added; `conjecture.zig` now reports correlated
 vs decorrelated verifiers head-to-head.
 
+## Round 3: the external "world" verifier — a decisive, fundamental negative (`verify_world.zig`)
+
+The conjecture loop needs a verifier *external* to the definitional text. The candidate: **extensional usage
+grounding** — IS-A is "every dog is an animal", so verify B→P by whether B's *usage* (how it behaves in running
+prose) is asymmetrically **contained** in P's (Distributional Inclusion Hypothesis). One uniform measure, every
+pair, **no hardcoded structure** — no patterns, POS, lists, or ontology. The usage model is built from running
+prose (literary corpora), decorrelated from the definitional witnesses.
+
+**Result: it fails, and the calibration shows *why* — the signal does not exist.** On real IS-A pairs the
+inclusion is **symmetric**, not asymmetric:
+
+```
+dog → animal : 0.055 / 0.051     oak  → tree   : 0.195 / 0.197
+rose→ flower : 0.068 / 0.064     ship → vessel : 0.290 / 0.289
+                                 wine → drink  : 0.186 / 0.188
+```
+
+`incl(hyponym→hypernym) ≈ incl(hypernym→hyponym)` for every pair; ranking conjectures by the score gives
+top-1000 7.2% ≈ bottom-1000 7.6% (zero discrimination). **The Distributional Inclusion Hypothesis is empirically
+false here**: "dog" and "animal" appear in *mutually similar* contexts, not *nested* ones. Distribution conflates
+"similar to" with "is subsumed by."
+
+**The deep boundary this establishes.** The extensional fact that defines IS-A — *the set of dogs ⊆ the set of
+animals* — is about **referents in the world**, not about word co-occurrence statistics. Text *describes* the
+world but its distributional statistics **do not encode set-inclusion**. So a text-only "world" cannot be the
+external verifier for IS-A direction. Verifying IS-A needs one of: (i) **hardcoded structure** (WordNet/patterns
+— rejected by the project's premise), or (ii) genuine **referents** — perception, a world model, or instance-level
+extension ("Lassie is a dog" ∧ "Lassie is an animal" ⇒ dog ⊆ animal). Pure distributional usage gives neither.
+This is consistent across every distributional attempt in this project (generator 3%, graph-coherence 4.4%,
+usage-inclusion symmetric) — distribution is a *similarity* signal, never a *subsumption* one.
+
+**Constructive next step** (instance-extension grounding): mine instance→type assertions for named entities and
+verify type⊆type by **instance-set inclusion** — the one text-derivable signal that is asymmetric by construction.
+It is still text (and likely sparse/correlated), but it is the honest next thing short of perception.
+
 ## Honest limitations / open frontier
 - Grounded precision caps **~44%** due to **systematic** (not random) noise: word-sense collisions + abstract-hub
   attachments shared by all text sources. The next real lever is **sense disambiguation + extensional grounding**
