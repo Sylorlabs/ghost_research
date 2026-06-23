@@ -6,6 +6,7 @@
 const std = @import("std");
 const KB = "/home/micah/Desktop/Sylorlabs/ghost_research/corpus/grounded_isa.tsv";
 const KB_CLEAN = "/home/micah/Desktop/Sylorlabs/ghost_research/corpus/grounded_clean.tsv";
+const KB_GENUS = "/home/micah/Desktop/Sylorlabs/ghost_research/corpus/clean_isa.tsv"; // Wiktionary head-noun + primacy WSD
 var A: std.mem.Allocator = undefined;
 
 var isa: std.StringHashMap(std.ArrayList([]const u8)) = undefined; // learned (grounded) hypernyms
@@ -25,8 +26,8 @@ fn addEdge(map: *std.StringHashMap(std.ArrayList([]const u8)), x: []const u8, y:
     known_word.put(A.dupe(u8, y) catch return, {}) catch {};
 }
 fn loadKB() !usize {
-    // prefer the refined (abstract-hub-demoted) graph if present, else the raw grounded graph
-    const f = std.fs.openFileAbsolute(KB_CLEAN, .{}) catch try std.fs.openFileAbsolute(KB, .{});
+    // prefer the clean Wiktionary-genus graph (head-noun + primacy WSD), else refined grounded, else raw
+    const f = std.fs.openFileAbsolute(KB_GENUS, .{}) catch (std.fs.openFileAbsolute(KB_CLEAN, .{}) catch try std.fs.openFileAbsolute(KB, .{}));
     defer f.close();
     const buf = try f.readToEndAlloc(A, 1 << 30);
     var n: usize = 0;
@@ -45,7 +46,7 @@ fn loadKB() !usize {
 // BFS over learned ∪ taught; returns the path of words and whether a taught edge was used.
 const Path = struct { words: [][]const u8, taught_used: bool };
 fn chain(x: []const u8, y: []const u8) ?Path {
-    const MAXD = 3; // shallow-ish: enough for taught→learned composition, short enough to limit noise-bridged false certainty
+    const MAXD = 5; // the genus graph is cleaner (44% + dominant-sense) so deeper composition reaches roots safely
     var parent = std.StringHashMap([]const u8).init(A);
     var via_taught = std.StringHashMap(void).init(A);
     var frontier = std.ArrayList([]const u8).init(A);

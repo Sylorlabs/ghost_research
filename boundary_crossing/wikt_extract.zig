@@ -12,6 +12,7 @@ var skip_ns = false;
 var english = false;
 var noun = false;
 var emitted = false;
+var gcount: usize = 0;
 var seen: usize = 0;
 var nemit: usize = 0;
 
@@ -134,16 +135,16 @@ fn emitGloss(gloss_raw: []const u8) void {
     if (s.len < 4 or std.mem.indexOfScalar(u8, s, ' ') == null) return;
     out.writer().print("{s} is {s}\n", .{ title, s }) catch {};
     nemit += 1;
-    emitted = true;
+    emitted = true; gcount += 1;
 }
 
 fn processLine(line: []const u8) void {
-    const t = std.mem.trim(u8, line, " \r");
     if (std.mem.indexOf(u8, line, "<page>") != null) {
         skip_ns = false;
         english = false;
         noun = false;
         emitted = false;
+        gcount = 0;
         title = "";
     }
     if (std.mem.indexOf(u8, line, "<title>")) |tp| {
@@ -155,7 +156,13 @@ fn processLine(line: []const u8) void {
             if (!skip_ns) seen += 1;
         }
     }
-    if (skip_ns or emitted) return;
+    if (skip_ns or gcount >= 6) return;
+    // strip a leading "<text ...>" tag so headers glued to it (Wiktionary does "<text ...>==English==") are seen
+    var work = line;
+    if (std.mem.indexOf(u8, line, "<text")) |tp| {
+        if (std.mem.indexOfScalarPos(u8, line, tp, '>')) |gt| work = line[gt + 1 ..];
+    }
+    const t = std.mem.trim(u8, work, " \r");
     // language / POS headers
     if (std.mem.startsWith(u8, t, "===")) { // level-3+ POS header
         noun = std.mem.indexOf(u8, t, "Noun") != null;

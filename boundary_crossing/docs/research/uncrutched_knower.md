@@ -278,6 +278,30 @@ Understands: `is a dog an animal?` · `what is a cathedral?` · teach it `a pood
 frontier), so KNOWN proofs occasionally route through a noisy intermediate (`dog → cat → animal`) — the answer is
 usually right, the path shows the seams; coverage is ~6k concepts so out-of-graph queries REFUSE.
 
+## Round 5: the hard fix — "what is a dog → mammal" (`clean_genus.zig`)
+
+Chatting with the knower exposed that the cross-source grounded graph was a noisy lookup table: `what is a dog`
+returned `common`, and `dog → animal` was absent (it only chained via a junk `cat` intermediate). The honest
+rebuild — clean head-noun genus extraction, no hardcoded POS or connective list:
+
+1. **Head noun, not first content word.** The genus is the NP-final noun: "a domesticated carnivorous **mammal**".
+2. **Discovered connectives.** "kind/type/member" are partitives, detected by a high "followed-by-of" rate (not a
+   handed list): "a *kind of* animal" → head = animal; "*mammal* of the family" keeps mammal (low of-rate).
+3. **Primacy WSD.** Wiktionary lists the basic sense first, so earlier glosses get more weight — `dog`'s 1st gloss
+   "A mammal" beats its slang senses (feet/person). Disambiguation via *sense order*, not in-degree (which picked
+   the generic hub `person`).
+4. **The real unlock — a parser bug.** Wiktionary glues `==English==` onto the `<text …>` XML tag, so the
+   header-at-line-start check silently dropped ~80% of words (`mammal`, `knife`, `guitar`, `vertebrate` all
+   missing → `dog → mammal` dead-ended). Stripping the tag took coverage **87k → 477k** definitions and completed
+   the chains.
+
+**Result (Wiktionary, full coverage):** precision **46.3%** (was 32%), recall **34.4%** (was 4–9%). Live chat:
+`dog → mammal → animal`, `knife → weapon → tool`, `guitar → instrument`, `physicist → person`, `rose → plant`,
+all KNOWN with proof; `moon → cheese`, `dog → car` REFUSED. The graph is `corpus/clean_isa.tsv`; the oracle loads
+it. Honest residue: a few stubborn words (`cat`'s animal gloss is still mis-parsed → `cat → program`; `city →
+sometime`), occasional adjective tails in chains (`oak → tree → taller`), and ~46% precision means some edges are
+still wrong — but the common-word core is now a real knower, tested before being called ready.
+
 ## Honest limitations / open frontier
 - Grounded precision caps **~44%** due to **systematic** (not random) noise: word-sense collisions + abstract-hub
   attachments shared by all text sources. The next real lever is **sense disambiguation + extensional grounding**
