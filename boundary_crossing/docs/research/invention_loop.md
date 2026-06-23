@@ -119,6 +119,26 @@ Together: generate→test→keep with a sound (computational) verifier produces 
 primitives — categorically beyond the knower's retrieval. Honest bound: bounded grammars, sound verifier handed,
 small scale — genuine machine discovery, not general intelligence.
 
+## `discover_closedform.zig` — the RICHER generator (control flow) + closed-form discovery
+
+The step from rediscovering known theorems toward proposing new ones: a generator with **control flow** — loops
+*and* branches — which reaches functions an expression-only search can't even *pose*. Each program is an
+iteratively-defined sequence a(n) (sums, sum-of-odds, sums with conditionals, factorial, …). The certifier
+**recovers a polynomial closed form by finite differences** (exact, sound) and **certifies** it by reproducing
+a(n) over [1,200] from the recovered formula; where no polynomial of bounded degree exists it **abstains**.
+
+**Result (instant):** 7/11 closed with certified formulas —
+`Σi ≡ (n²+n)/2`, `Σ(2i−1) ≡ n²`, `Σi² ≡ (2n³+3n²+n)/6`, **`Σi³ ≡ (n⁴+2n³+n²)/4`** (Nicomachus's theorem),
+`max ≡ n`, `Σ(n−i) ≡ (n²−n)/2`, `Σ(4i³−3i) ≡ (2n⁴+4n³−n²−3n)/2` — and **4 honest abstentions** that are *correct*:
+factorial (super-polynomial) and the three parity-dependent sums (quasi-polynomial, no single polynomial). The
+abstention is the point: a sound verifier never fakes a proof.
+
+Two lessons from building it: (1) a commutativity-pruning optimization in the first (brute value-graph) synthesizer
+silently dropped `n*(n+1)` — with frontier-based generation the canonical `i<j` order never co-occurs in one round;
+(2) brute-force formula synthesis explodes to millions and buries the target — **finite differences is the right,
+exact tool** for polynomial closed forms. Honest bound: closed forms here are polynomial-only, and the sequence set
+is curated rather than auto-enumerated — but the method certifies *any* loop/branch sequence or abstains.
+
 ## This connects to the project's Closure Principle / invention-engine arc (`world_injection`, `real_invention`,
 `autonomous_inventor`, `dial_three`): invention = inject an out-of-closure generator + a sound certifier. Here the
 certifier is computation and the generator is candidate-law search; it discovers real theorems, soundly.
