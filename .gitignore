@@ -24,5 +24,6 @@ corpus/wiki_simple_defs.txt
 corpus/wikt_defs.txt
 corpus/grounded_isa.tsv
 corpus/conjectured_isa.tsv
+corpus/grounded_clean.tsv
 corpus/bigcorpus/
 corpus/biglit/
