@@ -243,6 +243,19 @@ and artifacts (`refer→may` from disambiguation pages, `http→ref` from citati
 3. **Generator precision ~8%** because "extension in a biased corpus" ⊋ "universal IS-A" (Wikipedia's lawyers
    really are mostly politicians) plus extraction artifacts.
 
+**Scaling law (directionality vs data, full English Wikipedia, `instances.zig <N> <corpus>`):**
+| lines | entities | assertions | directionality | judgeable pairs |
+|---|---|---|---|---|
+| 250K | 144K | 394K | 63.7% | 1,299 |
+| 1M | 623K | 1.85M | 66.9% | 3,885 |
+| 2.5M | 1.59M | 4.63M | 68.5% | 6,445 |
+| 5M | 3.19M | 9.32M | 69.4% | 8,949 |
+| 7.08M (full) | 4.47M | 13.3M | 69.8% | 10,487 |
+
+Directionality rises monotonically **63.7% → 69.8%** over 28× data but **decelerates toward a ~70% asymptote** —
+the label-frequency confound is a structural ceiling data cannot break. Coverage (judgeable pairs) scales ~linearly
+(8×). The honest scaling law: **more data buys coverage freely and accuracy with diminishing returns to ~70%.**
+
 **Verdict.** Instance-extension is the **first no-hardcoding signal that is asymmetric, better-than-chance, and
 scales** — a genuine step past the distributional wall, vindicating that *referents*, not co-occurrence, carry
 IS-A. But at ~70% directional and ~29% coverage it is a *weak* world-signal: text names referents too rarely and
@@ -250,6 +263,20 @@ labels them by convention, not taxonomy. The clean conclusion of the whole arc: 
 the world's extension** — enough for a measurable signal, not enough for reliable IS-A. Stronger grounding
 (perception / interaction / a structured instance store) is the true ceiling-breaker; instance-extension is the
 best a CPU-text system can do, and we measured exactly how far that is.
+
+## Chatting with the knower
+
+`oracle_grounded.zig` is an interactive natural-language REPL over the self-learned grounded graph (no WordNet).
+Build & run:
+```
+zig build-exe oracle_grounded.zig -O ReleaseFast -femit-bin=/tmp/og && /tmp/og
+```
+It loads `corpus/grounded_clean.tsv` (falls back to `grounded_isa.tsv`) and answers in three states with a proof
+chain: **KNOWN** (verified), **CONJECTURE** (labelled analogy guess, never asserted), **REFUSED** (no basis).
+Understands: `is a dog an animal?` · `what is a cathedral?` · teach it `a poodle is a dog` · `why` (last proof) ·
+`quit`. Composition works (`poodle → dog → … → animal`). Honest note: the graph is ~32–44% precise (cross-source
+frontier), so KNOWN proofs occasionally route through a noisy intermediate (`dog → cat → animal`) — the answer is
+usually right, the path shows the seams; coverage is ~6k concepts so out-of-graph queries REFUSE.
 
 ## Honest limitations / open frontier
 - Grounded precision caps **~44%** due to **systematic** (not random) noise: word-sense collisions + abstract-hub

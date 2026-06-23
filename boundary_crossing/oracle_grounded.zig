@@ -45,7 +45,7 @@ fn loadKB() !usize {
 // BFS over learned ∪ taught; returns the path of words and whether a taught edge was used.
 const Path = struct { words: [][]const u8, taught_used: bool };
 fn chain(x: []const u8, y: []const u8) ?Path {
-    const MAXD = 2; // shallow: deep composition over a ~30-40% base manufactures false certainty (oak→high→sea→animal)
+    const MAXD = 3; // shallow-ish: enough for taught→learned composition, short enough to limit noise-bridged false certainty
     var parent = std.StringHashMap([]const u8).init(A);
     var via_taught = std.StringHashMap(void).init(A);
     var frontier = std.ArrayList([]const u8).init(A);
@@ -127,17 +127,18 @@ fn art(w: []const u8) []const u8 {
     };
 }
 fn ask(o: anytype, x: []const u8, y: []const u8) !void {
-    try o.print("you> is {s} {s} {s} {s}?\n", .{ art(x), x, art(y), y });
     if (chain(x, y)) |p| {
         var buf = std.ArrayList(u8).init(A);
         for (p.words, 0..) |w, i| {
             if (i > 0) buf.appendSlice(" → ") catch {};
             buf.appendSlice(w) catch {};
         }
-        const src = if (p.taught_used) "taught + learned graph" else "learned graph (grounded: Wikipedia ∩ Webster/literature)";
-        try o.print("[KNOWN]   yes\n          source: {s}\n          proof:  {s}\n", .{ src, buf.items });
+        last_why = buf.items;
+        const src = if (p.taught_used) "taught + learned graph" else "learned graph (grounded: Wikipedia ∩ Webster ∩ Wiktionary)";
+        try o.print("[KNOWN]   yes — {s} {s} is {s} {s}\n          source: {s}\n          proof:  {s}\n", .{ art(x), x, art(y), y, src, buf.items });
     } else if (conjecture(x, y)) |c| {
-        try o.print("[CONJECTURE] maybe — this is a GUESS by analogy, not verified.\n          basis:  {s} is also {s} {s} (shares '{s}' with {s}); promote only if a source confirms it.\n", .{ x, art(y), y, c.h, c.sib });
+        last_why = std.fmt.allocPrint(A, "guess by analogy: {s} shares '{s}' with {s} (which is {s} {s})", .{ x, c.h, c.sib, art(y), y }) catch "guess by analogy";
+        try o.print("[CONJECTURE] maybe ({s} {s} → {s} {s}) — a GUESS by analogy, not verified.\n          basis:  shares '{s}' with {s}; only a source can promote it to KNOWN.\n", .{ art(x), x, art(y), y, c.h, c.sib });
     } else if (!known_word.contains(x) and !taught.contains(x)) {
         try o.print("[REFUSED] I've never encountered '{s}' in anything I learned — I won't guess.\n", .{x});
     } else {
@@ -149,6 +150,97 @@ fn teach(o: anytype, x: []const u8, y: []const u8) !void {
     try o.print("you> (teach) {s} {s} is {s} {s}\n[KNOWN]   learned: stored (provenance: you)\n", .{ art(x), x, art(y), y });
 }
 
+var last_why: []const u8 = "(nothing asked yet)";
+// function/relational words skipped when pulling the two concepts out of a sentence (mechanism, not knowledge)
+fn isFnWord(w: []const u8) bool {
+    inline for (.{ "a", "an", "the", "is", "are", "was", "were", "be", "been", "does", "do", "did", "can", "could", "has", "have", "had", "kind", "kinds", "sort", "type", "types", "of", "any", "some", "it", "this", "that", "what", "whats", "which", "who", "define", "why", "to", "as", "or", "and", "really", "actually", "maybe", "you", "i", "me", "really", "just", "even", "also", "still" }) |s|
+        if (std.mem.eql(u8, w, s)) return true;
+    return false;
+}
+fn lcdup(s: []const u8) []const u8 {
+    const b = A.alloc(u8, s.len) catch return s;
+    for (s, 0..) |c, i| b[i] = if (c >= 'A' and c <= 'Z') c + 32 else c;
+    return b;
+}
+// "what is X" — walk X's hypernym chain and report what it is
+fn defineQ(o: anytype, x: []const u8) !void {
+    var cur = x;
+    var buf = std.ArrayList(u8).init(A);
+    var depth: usize = 0;
+    var seen = std.StringHashMap(void).init(A);
+    while (depth < 2) : (depth += 1) { // "what is X" — the immediate kind(s), kept short to avoid wandering into noise
+        if (seen.contains(cur)) break;
+        seen.put(cur, {}) catch {};
+        const ps = taught.get(cur) orelse isa.get(cur) orelse break;
+        if (ps.items.len == 0) break;
+        if (depth > 0) buf.appendSlice(" → ") catch {};
+        buf.appendSlice(ps.items[0]) catch {};
+        cur = ps.items[0];
+    }
+    if (buf.items.len > 0) {
+        last_why = buf.items;
+        try o.print("[KNOWN]   {s} {s} is {s} {s}\n          source: learned graph (grounded: Wikipedia ∩ Webster ∩ Wiktionary)\n          proof:  {s} → {s}\n", .{ art(x), x, art(buf.items), firstWord(buf.items), x, buf.items });
+    } else if (known_word.contains(x) or taught.contains(x)) {
+        try o.print("[REFUSED] I've seen '{s}' but haven't learned what kind of thing it is.\n", .{x});
+    } else try o.print("[REFUSED] I've never encountered '{s}'.\n", .{x});
+}
+fn firstWord(s: []const u8) []const u8 {
+    const sp = std.mem.indexOfScalar(u8, s, ' ') orelse return s;
+    return s[0..sp];
+}
+// parse a free-text line and dispatch; returns false to quit
+fn handle(o: anytype, raw: []const u8) !bool {
+    const has_q = std.mem.indexOfScalar(u8, raw, '?') != null;
+    var words = std.ArrayList([]const u8).init(A);
+    var copula_at: ?usize = null;
+    var tok = std.ArrayList(u8).init(A);
+    var i: usize = 0;
+    while (i <= raw.len) : (i += 1) {
+        const c: u8 = if (i < raw.len) raw[i] else ' ';
+        if ((c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or c == '\'') {
+            tok.append(if (c >= 'A' and c <= 'Z') c + 32 else c) catch {};
+        } else if (tok.items.len > 0) {
+            const w = A.dupe(u8, tok.items) catch tok.items;
+            if (copula_at == null and (std.mem.eql(u8, w, "is") or std.mem.eql(u8, w, "are") or std.mem.eql(u8, w, "was") or std.mem.eql(u8, w, "were"))) copula_at = words.items.len;
+            words.append(w) catch {};
+            tok.clearRetainingCapacity();
+        }
+    }
+    if (words.items.len == 0) return true;
+    const w0 = words.items[0];
+    if (std.mem.eql(u8, w0, "quit") or std.mem.eql(u8, w0, "exit") or std.mem.eql(u8, w0, "bye")) {
+        try o.print("bye.\n", .{});
+        return false;
+    }
+    if (std.mem.eql(u8, w0, "why")) {
+        try o.print("          {s}\n", .{last_why});
+        return true;
+    }
+    // content nouns = non-function words
+    var nouns = std.ArrayList([]const u8).init(A);
+    for (words.items) |w| if (!isFnWord(w) and w.len >= 2) nouns.append(w) catch {};
+
+    // "what is X" / "define X"
+    if (std.mem.eql(u8, w0, "what") or std.mem.eql(u8, w0, "whats") or std.mem.eql(u8, w0, "define")) {
+        if (nouns.items.len >= 1) try defineQ(o, nouns.items[nouns.items.len - 1]) else try o.print("define what?\n", .{});
+        return true;
+    }
+    const is_question = has_q or std.mem.eql(u8, w0, "is") or std.mem.eql(u8, w0, "are") or std.mem.eql(u8, w0, "was") or std.mem.eql(u8, w0, "does") or std.mem.eql(u8, w0, "do") or std.mem.eql(u8, w0, "can") or std.mem.eql(u8, w0, "could");
+    if (is_question) {
+        if (nouns.items.len >= 2) {
+            try ask(o, nouns.items[0], nouns.items[nouns.items.len - 1]);
+        } else try o.print("ask me like: \"is a dog an animal?\"\n", .{});
+        return true;
+    }
+    // declarative with a copula → teach (X is a Y)
+    if (copula_at != null and nouns.items.len >= 2) {
+        try teach(o, nouns.items[0], nouns.items[nouns.items.len - 1]);
+        return true;
+    }
+    try o.print("try: \"is a dog an animal?\"  ·  \"a poodle is a dog\" (teach)  ·  \"what is a cathedral?\"  ·  why  ·  quit\n", .{});
+    return true;
+}
+
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
@@ -158,81 +250,33 @@ pub fn main() !void {
     taught = std.StringHashMap(std.ArrayList([]const u8)).init(A);
     known_word = std.StringHashMap(void).init(A);
 
-    try o.print("=== THE GROUNDED ORACLE — knowledge LEARNED from raw text, not handed (no WordNet) ===\n", .{});
+    try o.print("════════════════════════════════════════════════════════════════════════\n", .{});
+    try o.print("  THE GROUNDED KNOWER — everything it knows it LEARNED from raw text itself\n", .{});
+    try o.print("  (streamed Wikipedia + Wiktionary + Webster; no WordNet, no patterns, no LLM)\n", .{});
+    try o.print("════════════════════════════════════════════════════════════════════════\n", .{});
     const n = try loadKB();
     buildChildren();
-    try o.print("loaded {d} grounded IS-A edges ({d} concepts) — self-learned from Wikipedia+Webster+Wiktionary, cross-source verified.\n", .{ n, isa.count() });
-    try o.print("(three epistemic states: KNOWN = grounded/proven · CONJECTURE = labeled guess, NOT trusted · REFUSED.\n grounded graph ~30-44%% precise vs WordNet — the cross-source frontier; queries below hit its real core.)\n\n", .{});
+    try o.print("  knowledge: {d} cross-source-verified IS-A edges over {d} concepts.\n", .{ n, isa.count() });
+    try o.print("  I answer in three states and always show my reasoning:\n", .{});
+    try o.print("    [KNOWN]      verified — with a proof chain\n", .{});
+    try o.print("    [CONJECTURE] a labelled guess by analogy — never passed off as fact\n", .{});
+    try o.print("    [REFUSED]    I won't guess when I have no basis\n", .{});
+    try o.print("  talk to me:  \"is a dog an animal?\"  ·  \"what is a cathedral?\"  ·  teach me: \"a poodle is a dog\"\n", .{});
+    try o.print("               \"why\" = last proof  ·  \"quit\" to leave\n\n", .{});
 
-    try o.print("──────── 1. it KNOWS what it learned (answers with a provenance chain) ────────\n", .{});
-    try ask(o, "oak", "tree");
-    try ask(o, "cathedral", "church");
-    try ask(o, "lieutenant", "officer");
-    try ask(o, "loch", "lake");
-    try ask(o, "guild", "association");
-    try ask(o, "breakfast", "meal");
-
-    try o.print("\n──────── 2. it ABSTAINS when it can't verify (knower, not guesser) ────────\n", .{});
-    try ask(o, "oak", "animal"); // no learned path
-    try ask(o, "blarnac", "tree"); // never encountered
-    try ask(o, "breakfast", "vehicle");
-
-    try o.print("\n──────── 3. it GUESSES out loud — CONJECTURE by analogy, labeled, never passed off as fact ────────\n", .{});
-    try o.print("(invention fuel: a hypothesis is a guess. It's marked [CONJECTURE] and only a source can promote it to KNOWN.)\n", .{});
-    try ask(o, "raven", "bird");
-    try ask(o, "robin", "animal");
-    try ask(o, "trout", "fish");
-
-    try o.print("\n──────── 4. memorization-proof COMPOSITION over the LEARNED graph (no WordNet) ────────\n", .{});
-    try o.print("(teach a brand-new word, then ask a consequence it was never told — only real composition can answer)\n", .{});
-    try teach(o, "blorch", "oak");
-    try ask(o, "blorch", "tree"); // blorch→oak (taught) → tree (learned)  ⇒ KNOWN
-    try ask(o, "blorch", "animal"); // no path ⇒ REFUSED
-
-    // show a few multi-hop chains the learned graph already contains (composition without teaching)
-    try o.print("\n──────── 5. multi-hop chains discovered in the learned graph ────────\n", .{});
-    var shown: usize = 0;
-    var it = isa.iterator();
-    while (it.next()) |e| {
-        if (shown >= 8) break;
-        const x = e.key_ptr.*;
-        // walk best-first to depth, print if ≥2 hops
-        var cur = x;
-        var buf = std.ArrayList(u8).init(A);
-        buf.appendSlice(x) catch {};
-        var d: usize = 0;
-        var seen = std.StringHashMap(void).init(A);
-        while (d < 5) : (d += 1) {
-            if (seen.contains(cur)) break;
-            seen.put(cur, {}) catch {};
-            const ps = isa.get(cur) orelse break;
-            if (ps.items.len == 0) break;
-            cur = ps.items[0];
-            buf.appendSlice(" → ") catch {};
-            buf.appendSlice(cur) catch {};
-        }
-        if (d >= 2) {
-            try o.print("    {s}\n", .{buf.items});
-            shown += 1;
-        }
-    }
-
-    // optional interactive: read "x|y" or "teach x|y" lines from stdin
     const stdin = std.io.getStdIn();
+    const interactive = stdin.isTty();
     var br = std.io.bufferedReader(stdin.reader());
     var line = std.ArrayList(u8).init(A);
-    if (stdin.isTty() == false) {
-        while (true) {
-            line.clearRetainingCapacity();
-            br.reader().streamUntilDelimiter(line.writer(), '\n', null) catch break;
-            const t = std.mem.trim(u8, line.items, " \r");
-            if (t.len == 0) continue;
-            const teach_pref = std.mem.startsWith(u8, t, "teach ");
-            const body = if (teach_pref) t[6..] else t;
-            const bar = std.mem.indexOfScalar(u8, body, '|') orelse continue;
-            const x = std.mem.trim(u8, body[0..bar], " ");
-            const y = std.mem.trim(u8, body[bar + 1 ..], " ");
-            if (teach_pref) try teach(o, x, y) else try ask(o, x, y);
+    if (interactive) try o.print("you> ", .{});
+    while (true) {
+        line.clearRetainingCapacity();
+        br.reader().streamUntilDelimiter(line.writer(), '\n', null) catch break;
+        const t = std.mem.trim(u8, line.items, " \r\t");
+        if (t.len > 0) {
+            const keep = try handle(o, t);
+            if (!keep) break;
         }
+        if (interactive) try o.print("\nyou> ", .{});
     }
 }

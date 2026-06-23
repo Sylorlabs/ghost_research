@@ -30,6 +30,8 @@ fn isBoundary(w: []const u8) bool {
     return false;
 }
 
+var g_limit: usize = 0; // 0 = no limit; else process only the first N lines (for scale curves)
+var g_lines: usize = 0;
 // subject and type id spaces
 var sid: std.StringHashMap(u32) = undefined;
 var ttab: std.ArrayList([]const u8) = undefined; // type id -> string
@@ -85,6 +87,8 @@ fn mineFile(path: []const u8) void {
     var toks = std.ArrayList([]const u8).init(A); // slices into lbuf (reused per line — no per-token arena dupes)
     var lbuf = std.ArrayList(u8).init(A);
     while (lines.next()) |line| {
+        if (g_limit != 0 and g_lines >= g_limit) break;
+        g_lines += 1;
         toks.clearRetainingCapacity();
         lbuf.clearRetainingCapacity();
         for (line) |ch| lbuf.append(if (isAlpha(ch)) lc(ch) else ' ') catch {};
@@ -276,8 +280,15 @@ pub fn main() !void {
         try o.print("usage: instances <corpus.txt> [more...]\n", .{});
         return;
     }
-    try o.print("[1] mining instance→type assertions from {d} corpus file(s)…\n", .{args.len - 1});
-    for (args[1..]) |p| mineFile(p);
+    var files = std.ArrayList([]const u8).init(A);
+    for (args[1..]) |a| {
+        if (a.len > 0 and a[0] >= '0' and a[0] <= '9') {
+            g_limit = std.fmt.parseInt(usize, a, 10) catch 0;
+        } else files.append(a) catch {};
+    }
+    if (g_limit != 0) try o.print("[scale] line limit = {d}\n", .{g_limit});
+    try o.print("[1] mining instance→type assertions from {d} corpus file(s)…\n", .{files.items.len});
+    for (files.items) |p| mineFile(p);
     loadWordNet();
     try o.print("    subjects(entities) {d} · types {d} · assertions {d}\n\n", .{ sid.count(), ttab.items.len, n_assert });
 
