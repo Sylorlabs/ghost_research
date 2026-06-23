@@ -357,6 +357,21 @@ pub fn main() !void {
     // ── throwaway yardstick: how much of WordNet's IS-A did we recover? (WordNet loaded ONLY here, then discarded) ──
     try o.print("\n── WordNet recall (throwaway benchmark — not used by the engine) ──\n", .{});
     try wordnetRecall(o);
+
+    // dump learned IS-A edges (subject<TAB>hypernym) for cross-source GROUNDING (Webster+literature witness)
+    {
+        const f = std.fs.createFileAbsolute("/tmp/src_lit.tsv", .{}) catch return;
+        defer f.close();
+        var bw = std.io.bufferedWriter(f.writer());
+        var n: usize = 0;
+        var it = isa.iterator();
+        while (it.next()) |e| for (e.value_ptr.*) |y| {
+            bw.writer().print("{s}\t{s}\n", .{ e.key_ptr.*, y }) catch {};
+            n += 1;
+        };
+        bw.flush() catch {};
+        try o.print("  [dumped {d} learned edges → /tmp/src_lit.tsv]\n", .{n});
+    }
 }
 
 // Loads WordNet purely to score recall, then it is never used again (the engine will not depend on it).
