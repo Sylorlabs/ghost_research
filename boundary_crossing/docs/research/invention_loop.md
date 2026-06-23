@@ -50,6 +50,31 @@ general intelligence.
    done in `dial_three`; an open combinatorial conjecture next), where there is no stored answer to retrieve —
    the cleanest possible separation of invention from lookup.
 
-This connects to the project's Closure Principle / invention-engine arc (`world_injection`, `real_invention`,
+## `feature_invent.zig` — invent the vocabulary too
+
+The first loop discovered laws among a *handed* feature list. This one removes that: the only handed things are
+primitive ops. It **generates candidate feature-programs** over n from a tiny grammar (atoms `n, isqrt, d, σ, ω,
+digitsum, popcount`; ops `% · isqrt²· * + −`; tests `==n, ==0, ==1, even, odd`), runs each over [2,100000], and
+**dedups by behavior** — same behavior + different program = a *discovered identity*; the distinct behaviors are
+the *invented predicates*. Then law-discovery runs over the invented predicates, verified by computation.
+
+**Result:** 217 value-programs → 868 candidate predicates → **262 distinct invented features** (503 degenerate
+dropped, 320 program-pairs collapsed as identities); 34,191 law candidates generated, **34,191 refuted by
+counterexample**, 742 survived. The headline — **it rediscovered Fermat's theorem from primitives**, as a
+certified behavioral identity (neither side hand-written):
+```
+isqrt(n)^2 == n   ≡   d(n) is odd        (perfect square ⟺ odd number of divisors — Fermat)
+```
+plus `d(n) % 4 == 1 ⟹ isqrt(n)^2 == n`, `isqrt(n)^2 == n ⟹ sigma(n) is odd`, `digitsum(n) % 6 == 0 ⟹ n % 3 == 0`,
+and `isqrt(n)^2 is even ⟺ isqrt(n) is even` (x² even ⟺ x even). So **both the vocabulary and the laws are invented**
+from primitive ops; a lookup system returns only what it was told — this generated two never-written programs and
+proved they encode the same theorem.
+
+**Honest bound:** the primitive *sensors* (`d`, `σ`, `ω`, `digitsum` — loop-based) are still given as atoms; the
+*predicates over them* are invented, not the sensors themselves. The grammar is shallow (depth-bounded), and some
+survivors are shallow (`X==n ⟹ n even`). Genuine invention within a primitive basis — not unbounded creativity,
+but categorically past lookup.
+
+## This connects to the project's Closure Principle / invention-engine arc (`world_injection`, `real_invention`,
 `autonomous_inventor`, `dial_three`): invention = inject an out-of-closure generator + a sound certifier. Here the
 certifier is computation and the generator is candidate-law search; it discovers real theorems, soundly.
