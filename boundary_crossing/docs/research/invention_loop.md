@@ -91,6 +91,34 @@ random baseline at every L (F 1.7–2.8 → 5–14). For L=73: a specific 73-cha
 specialized search. These are *modest* certified lower bounds, not records — but they are genuine invention (no
 lookup possible) with a sound verifier, which is the whole point: the artifact could not have been retrieved.
 
+## `invent_sensors.zig` — invent the SENSORS too (remove the last handed thing)
+
+The feature-inventor still took `d(n)`, `σ(n)`, `isqrt(n)` as given atoms. This removes them: the only primitives
+are arithmetic (`+ × % <`) and one control construct — a bounded **loop-fold** `acc = ⊕_{i=1..n, cond(i,n)}
+term(i,n)`. Searching the template's (cond, term, ⊕) choices, the instantiations *are* the sensors:
+`sum_{i|n} 1 = d(n)`, `sum_{i|n} i = σ(n)`, `max{i : i²≤n} = isqrt(n)` — recognised by matching computed behavior,
+not handed. **Result:** 48 instantiations → 28 distinct invented sensors; d, σ, isqrt all recovered; then **Fermat
+re-certified using the invented sensors** (`(invented isqrt)² == n ⟺ (invented d) odd`, over [2,3000]). End to end:
+sensors, predicates, and laws all invented from arithmetic + iteration.
+
+## `invent_compound.zig` — COMPOUNDING (staged invention)
+
+Each round builds features from the previous round's, so later rounds reach laws earlier ones can't express. Set up
+so the demonstration is unambiguous: round 1 uses atoms only (`n, isqrt, d, σ, digitsum, popcount`) and cannot
+express "square" (which needs `isqrt·isqrt`); round 2 adds compound features `a∘b`. **Result:** round 1 = 13
+features / 2 laws → round 2 = 76 features / 170 laws (**+63 features, +168 laws from compounding**), and **Fermat
+(`isqrt(n)·isqrt(n) == n ⟺ d(n) odd`) is unlocked only in round 2** because "square" is a round-2 compound. Later
+inventions built on earlier ones.
+
+## The three-way answer to "lookup or invention"
+1. **Genuinely-unknown target** (`labs_search`): certified artifacts for open lengths — nothing to retrieve.
+2. **Invent the vocabulary** (`feature_invent`) and even the **sensors** (`invent_sensors`): only arithmetic +
+   a loop handed; predicates, sensors, and Fermat all invented.
+3. **Compounding** (`invent_compound`): staged invention reaching laws one round can't.
+Together: generate→test→keep with a sound (computational) verifier produces new, certified knowledge from
+primitives — categorically beyond the knower's retrieval. Honest bound: bounded grammars, sound verifier handed,
+small scale — genuine machine discovery, not general intelligence.
+
 ## This connects to the project's Closure Principle / invention-engine arc (`world_injection`, `real_invention`,
 `autonomous_inventor`, `dial_three`): invention = inject an out-of-closure generator + a sound certifier. Here the
 certifier is computation and the generator is candidate-law search; it discovers real theorems, soundly.
