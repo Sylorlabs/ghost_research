@@ -165,6 +165,30 @@ the identities are true and auto-proven but routine algebra, not deep theorems. 
 certify → surface, with honest abstention) is the result; pointed at a richer space (several variables, recursion,
 number-theoretic predicates) the same loop would reach less-trivial statements.
 
+## Richer spaces — same enumerate→certify→surface loop, three new program spaces
+
+Pointing the loop at richer spaces is where elementary rediscovery reaches non-trivial territory.
+
+**#2 `divisor_discover.zig` — number-theoretic (Dirichlet convolutions).** Sums over the *divisors* of n,
+`f(n) = Σ_{d|n} term(d, n/d)` with terms from `{d, n/d, 1, φ(d), μ(d), d(d), σ(d)}`, matched to recognizable
+targets and certified over [1,3000]. Rediscovered **real theorems** (not algebra): `Σ_{d|n} φ(d) = n` (Gauss),
+`Σ_{d|n} μ(d) = [n==1]`, `Σ_{d|n} μ(d)·(n/d) = φ(n)` (Möbius inversion), `Σ_{d|n} d = σ(n)`. 12 certified, 44
+abstentions. **This is the strongest result of the arc** — genuine number theory, posed from primitives and proven.
+
+**#1 `double_discover.zig` — multiple variables (double sums).** `a(n) = Σ_{i,j=1..n, rel(i,j)} term(i,j)` over
+relations `{all, i<j, i≤j, i==j, i>j}`; recover polynomial closed form, certify. 752/800 certified. Two indices
+let it pose what one index can't: **reflection/symmetry identities** like `Σ_{i>j} i²j ≡ Σ_{i>j} i²(i−j)` (true by
+`j↔i−j`), `Σ i ≡ Σ j`, `Σ (i−j) ≡ 0` — all certified.
+
+**#3 `recur_discover.zig` — recursion.** Enumerate order-1/2 recurrences; recover a **polynomial or geometric**
+closed form, certify, else abstain. `f(n)=f(n−1)+n ≡ (n²+n)/2`, `f(n)=2f(n−1)+1 ≡ 2ⁿ−1`, `f(n)=3f(n−1)+2 ≡ 3ⁿ−1`,
+`f(n)=2f(n−1) ≡ 2ⁿ`. 100 recurrences → 18 polynomial + 11 geometric closed forms; **Fibonacci and factorial
+honestly left open** (no polynomial/geometric form). Honest bound: the certifier handles polynomial + single
+geometric; sums-of-geometrics and φⁿ-type forms are abstained, not faked.
+
+Across all three: the same generate→test→keep loop with a sound verifier, pointed at richer spaces, reaches from
+elementary sums up to classical number-theoretic theorems — and abstains wherever it cannot certify.
+
 ## This connects to the project's Closure Principle / invention-engine arc (`world_injection`, `real_invention`,
 `autonomous_inventor`, `dial_three`): invention = inject an out-of-closure generator + a sound certifier. Here the
 certifier is computation and the generator is candidate-law search; it discovers real theorems, soundly.
