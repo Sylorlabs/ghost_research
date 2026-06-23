@@ -75,6 +75,22 @@ proved they encode the same theorem.
 survivors are shallow (`X==n ⟹ n even`). Genuine invention within a primitive basis — not unbounded creativity,
 but categorically past lookup.
 
+## `labs_search.zig` — generate→test→keep at a GENUINELY-UNKNOWN target (no lookup possible)
+
+The cleanest separation of invention from lookup: a target with no stored answer. Low-Autocorrelation Binary
+Sequences (LABS) — find a ±1 sequence of length L minimizing off-peak autocorrelation energy E(s), maximizing
+merit factor F = L²/(2E). The optimal F is an **open research problem for L > ~66**, so for those lengths nothing —
+no text, table, or knower — contains the answer; a good sequence must be *invented* by search and *certified* by
+exact computation. Stochastic local search (generate neighbours → test exact energy → keep best, multi-start).
+
+**Result** (seed-fixed, 0.6 s): found the **Barker-13 optimum F=14.08** where the answer is known (validates the
+loop); produced **certified sequences for L=73/91/101 (open) at F≈5**, each rechecked by recomputing E; beat the
+random baseline at every L (F 1.7–2.8 → 5–14). For L=73: a specific 73-char ±1 string with E=532, certified.
+
+**Honest scope:** simple local search reaches F≈5 at large L; state-of-the-art LABS solvers reach ~8–9 with heavy
+specialized search. These are *modest* certified lower bounds, not records — but they are genuine invention (no
+lookup possible) with a sound verifier, which is the whole point: the artifact could not have been retrieved.
+
 ## This connects to the project's Closure Principle / invention-engine arc (`world_injection`, `real_invention`,
 `autonomous_inventor`, `dial_three`): invention = inject an out-of-closure generator + a sound certifier. Here the
 certifier is computation and the generator is candidate-law search; it discovers real theorems, soundly.
