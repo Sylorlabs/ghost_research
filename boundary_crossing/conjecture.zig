@@ -11,6 +11,7 @@ const KMUL: u64 = 10_000_000;
 const MIN_SUPPORT = 3; // ≥ this many siblings must share a parent before we conjecture it for another sibling
 const MAXKIDS = 120; // skip over-generic hubs (noise magnets) with more children than this
 const TEST_VOTES = 2; // a conjecture is CONFIRMED only if ≥ this many independent witnesses attest it
+const COH_MIN = 2; // decorrelated verifier: B must share ≥ this many OTHER supercategories with P's known members
 
 var vocab: std.ArrayList([]const u8) = undefined;
 var id_of: std.StringHashMap(u32) = undefined;
@@ -183,8 +184,8 @@ pub fn main() !void {
     id_of = std.StringHashMap(u32).init(A);
 
     try o.print("=== CONJECTURE → test → KNOWN  (guessing as the engine of invention) ===\n\n", .{});
-    var G = loadGraph(C ++ "grounded_isa.tsv") orelse {
-        try o.print("no grounded_isa.tsv — run ground first.\n", .{});
+    var G = loadGraph(C ++ "grounded_clean.tsv") orelse loadGraph(C ++ "grounded_isa.tsv") orelse {
+        try o.print("no grounded graph — run ground/refine first.\n", .{});
         return;
     };
     var witnesses = std.ArrayList(Graph).init(A);
@@ -258,26 +259,65 @@ pub fn main() !void {
         }
     }
 
+    // DECORRELATED verifier: extensional coherence. Promote B→P iff B shares ≥COH_MIN OTHER supercategories with
+    // P's known members (B is embedded in the graph the way a P is) — a computed structural test, NOT "a text
+    // source attested it", so it does not inherit the witnesses' correlated noise.
+    var typCache = std.AutoHashMap(u32, *std.AutoHashMap(u32, void)).init(A);
+    const typParents = struct {
+        fn get(cache: *std.AutoHashMap(u32, *std.AutoHashMap(u32, void)), cof: *std.AutoHashMap(u32, std.ArrayList(u32)), g: *Graph, P: u32) *std.AutoHashMap(u32, void) {
+            const c = cache.getOrPut(P) catch unreachable;
+            if (c.found_existing) return c.value_ptr.*;
+            const s = A.create(std.AutoHashMap(u32, void)) catch unreachable;
+            s.* = std.AutoHashMap(u32, void).init(A);
+            c.value_ptr.* = s;
+            var cnt = std.AutoHashMap(u32, u32).init(A);
+            if (cof.get(P)) |kids| for (kids.items) |ch| if (g.adj.get(ch)) |ps| for (ps.items) |q| {
+                if (q == P) continue;
+                const e = cnt.getOrPut(q) catch continue;
+                if (!e.found_existing) e.value_ptr.* = 0;
+                e.value_ptr.* += 1;
+            };
+            var it = cnt.iterator();
+            while (it.next()) |e| if (e.value_ptr.* >= 2) s.put(e.key_ptr.*, {}) catch {};
+            return s;
+        }
+    }.get;
+    var coh = std.ArrayList([2]u32).init(A);
+    var coh_new = std.ArrayList([2]u32).init(A);
+    for (conj.items) |e| {
+        const typ = typParents(&typCache, &childrenOf, &G, e[1]);
+        if (typ.count() == 0) continue;
+        var overlap: usize = 0;
+        if (G.adj.get(e[0])) |ps| for (ps.items) |q| if (typ.contains(q)) {
+            overlap += 1;
+        };
+        if (overlap >= COH_MIN) {
+            coh.append(e) catch {};
+            if (!G.hasEdge(e[0], e[1])) coh_new.append(e) catch {};
+        }
+    }
+
     const pAll = precEdges(conj.items);
     const pConf = precEdges(confirmed.items);
-    try o.print("──────────── does TESTING beat untested guessing? (precision vs WordNet) ────────────\n", .{});
-    try o.print("  conjectured (guesses)         {d:>6} edges · {d:>5}/{d:<6} = {d:.1}%\n", .{ conj.items.len, pAll[0], pAll[1], pct(pAll[0], pAll[1]) });
-    try o.print("  CONFIRMED by a witness (KNOWN){d:>6} edges · {d:>5}/{d:<6} = {d:.1}%\n", .{ confirmed.items.len, pConf[0], pConf[1], pct(pConf[0], pConf[1]) });
-    try o.print("  → invention yield: {d} confirmed edges NOT in the grounded base = NEW verified knowledge\n", .{confirmed_new.items.len});
+    const pCoh = precEdges(coh.items);
+    try o.print("──────────── which verifier promotes good guesses? (precision vs WordNet) ────────────\n", .{});
+    try o.print("  conjectured (raw guesses)              {d:>6} edges · {d:>5}/{d:<6} = {d:.1}%\n", .{ conj.items.len, pAll[0], pAll[1], pct(pAll[0], pAll[1]) });
+    try o.print("  CORRELATED test (≥2 text witnesses)    {d:>6} edges · {d:>5}/{d:<6} = {d:.1}%\n", .{ confirmed.items.len, pConf[0], pConf[1], pct(pConf[0], pConf[1]) });
+    try o.print("  DECORRELATED test (extensional coh.)   {d:>6} edges · {d:>5}/{d:<6} = {d:.1}%\n", .{ coh.items.len, pCoh[0], pCoh[1], pct(pCoh[0], pCoh[1]) });
+    try o.print("  → coherence invention yield: {d} confirmed edges NOT in grounded base = NEW verified knowledge\n", .{coh_new.items.len});
 
-    // persist promoted conjectures
     {
         const f = std.fs.createFileAbsolute(C ++ "conjectured_isa.tsv", .{}) catch return;
         defer f.close();
         var bw = std.io.bufferedWriter(f.writer());
-        for (confirmed.items) |e| bw.writer().print("{s}\t{s}\n", .{ vocab.items[e[0]], vocab.items[e[1]] }) catch {};
+        for (coh.items) |e| bw.writer().print("{s}\t{s}\n", .{ vocab.items[e[0]], vocab.items[e[1]] }) catch {};
         bw.flush() catch {};
-        try o.print("\n  [persisted {d} promoted (conjectured→confirmed) edges → {s}conjectured_isa.tsv]\n", .{ confirmed.items.len, C });
+        try o.print("\n  [persisted {d} coherence-promoted edges → {s}conjectured_isa.tsv]\n", .{ coh.items.len, C });
     }
 
-    try o.print("\n  sample INVENTIONS (guessed by analogy, NOT in grounded base, confirmed by a witness ⇒ KNOWN):\n", .{});
+    try o.print("\n  sample INVENTIONS (guessed by analogy, NOT in grounded base, coherence-confirmed ⇒ KNOWN):\n", .{});
     var shown: usize = 0;
-    for (confirmed_new.items) |e| {
+    for (coh_new.items) |e| {
         if (shown >= 15) break;
         const wn = if (wnHas(vocab.items[e[0]]) and wnHas(vocab.items[e[1]]) and wnReaches(vocab.items[e[0]], vocab.items[e[1]])) "  ✓WN" else "";
         try o.print("    {s} → {s}{s}\n", .{ vocab.items[e[0]], vocab.items[e[1]], wn });

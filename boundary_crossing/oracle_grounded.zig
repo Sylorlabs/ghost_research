@@ -5,6 +5,7 @@
 //! Build: zig build-exe oracle_grounded.zig -O ReleaseFast -femit-bin=/tmp/og && /tmp/og
 const std = @import("std");
 const KB = "/home/micah/Desktop/Sylorlabs/ghost_research/corpus/grounded_isa.tsv";
+const KB_CLEAN = "/home/micah/Desktop/Sylorlabs/ghost_research/corpus/grounded_clean.tsv";
 var A: std.mem.Allocator = undefined;
 
 var isa: std.StringHashMap(std.ArrayList([]const u8)) = undefined; // learned (grounded) hypernyms
@@ -24,7 +25,8 @@ fn addEdge(map: *std.StringHashMap(std.ArrayList([]const u8)), x: []const u8, y:
     known_word.put(A.dupe(u8, y) catch return, {}) catch {};
 }
 fn loadKB() !usize {
-    const f = try std.fs.openFileAbsolute(KB, .{});
+    // prefer the refined (abstract-hub-demoted) graph if present, else the raw grounded graph
+    const f = std.fs.openFileAbsolute(KB_CLEAN, .{}) catch try std.fs.openFileAbsolute(KB, .{});
     defer f.close();
     const buf = try f.readToEndAlloc(A, 1 << 30);
     var n: usize = 0;

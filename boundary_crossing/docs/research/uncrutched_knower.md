@@ -133,6 +133,34 @@ Generated corpora and `*.tsv` are git-ignored (regenerate via the probes).
 
 ---
 
+## Refinements (round 2): attacking systematic noise + decorrelated verification
+
+Two attempts on the systematic-noise ceiling, both measured, both honest.
+
+**(a) Abstract-hub demotion (`refine.zig`) — small real win.** Discovered signal, no hardcoded list: abstract
+relational nouns are overwhelmingly followed by **"of"** ("the act **of**", "a kind **of** Y") while concrete
+hubs (animal, tree, bird) are not. Demoting hypernyms with a high corpus "followed-by-of" rate removes the
+connective attachments (`kind`, `type`, `part`, `member`, `inhabitant`, `follower` — all the "X is a *kind* **of**
+Y" pattern where the *real* hypernym is Y). At a conservative threshold (of-rate > 0.80): precision **31.4% → 32.3%**,
+758 connective edges removed; the oracle now loads this cleaned graph (`grounded_clean.tsv`). *Honest limits:* the
+gain is modest because (i) WordNet *credits* abstract chains (it has its own upper-ontology `part→portion→thing`),
+so the metric under-rewards the cleanup; (ii) word-sense errors and generic hubs (`common`, `people`) are untouched.
+The bigger win is **retargeting** ("X is a kind **of** Y" ⇒ X→Y), which needs the post-"of" target from the source — future work.
+
+**(b) Decorrelated conjecture verifier (`conjecture.zig`) — honest negative.** The witness-reach test failed
+because text witnesses share noise. Replacing it with a *structurally different* verifier — **extensional
+coherence** (promote B→P only if B shares ≥2 *other* supercategories with P's known members; a computed graph test,
+not "a source said it") — did **not** help: raw guesses 4.0% · correlated witness test 5.1% · decorrelated
+coherence test **4.4%** (all ≈ random). **Finding: graph-internal invention cannot exceed its base-graph quality** —
+the noise propagates through both the analogy *and* any internal verifier, because both read the same noisy edges.
+This confirms the deep requirement: invention-by-analogy needs a verifier **external to the text/graph entirely**
+(world / computation / execution), exactly as hypothesized. No such verifier exists for arbitrary concept IS-A;
+where one *does* exist (number theory, terminal exit codes) the project's invention loop already works.
+
+**Net:** the knower's grounded core is now slightly cleaner (32.3%); invention beyond grounding remains gated on
+external grounding, not on a cleverer internal check. `refine.zig` added; `conjecture.zig` now reports correlated
+vs decorrelated verifiers head-to-head.
+
 ## Honest limitations / open frontier
 - Grounded precision caps **~44%** due to **systematic** (not random) noise: word-sense collisions + abstract-hub
   attachments shared by all text sources. The next real lever is **sense disambiguation + extensional grounding**
