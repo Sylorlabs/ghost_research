@@ -196,6 +196,61 @@ usage-inclusion symmetric) — distribution is a *similarity* signal, never a *s
 verify type⊆type by **instance-set inclusion** — the one text-derivable signal that is asymmetric by construction.
 It is still text (and likely sparse/correlated), but it is the honest next thing short of perception.
 
+## Round 4: instance-extension grounding — the first asymmetric IS-A signal (`instances.zig`)
+
+After distributional usage inclusion failed (symmetric), the honest next signal is **instance-extension**: IS-A is
+extensional (set of dogs ⊆ set of animals), so mine **instance→type** assertions ("Einstein is a physicist",
+"Einstein is a scientist") and verify **T1 ⊆ T2 by SUBJECT-SET inclusion** — the entities text predicates of T1
+are also predicated T2. This is asymmetric **by construction** (instance sets nest) and grounds in *referents*,
+not co-occurrence. One uniform measure, no hardcoded structure.
+
+**Mining (scale).**
+| corpus | entities | types | instance→type assertions |
+|---|---|---|---|
+| Simple Wikipedia | 206,857 | 16,746 | 511,748 |
+| **English Wikipedia** (1.2 GB defs, 7.07M lines) | **4,468,260** | **120,223** | **13,301,835** |
+
+**The headline — DIRECTIONALITY ACCURACY** (over WordNet IS-A pairs present in the data, does
+`incl(hyponym→hypernym) > incl(hypernym→hyponym)`?):
+
+| corpus | decisive pairs | **correct** | backwards | no-overlap |
+|---|---|---|---|---|
+| Simple Wikipedia | 1,069 | **65.5%** | 369 | 7,506 |
+| English Wikipedia | 10,475 | **69.8%** | 3,166 | 26,207 |
+
+**This is the first real positive.** Distributional usage inclusion was a flat ~50% (symmetric — no direction);
+instance-extension is **65.5% → 69.8%, and improves with data** (26× more text → +4.3 points *and* 10× more
+judgeable pairs). The signal genuinely carries IS-A direction, grounded in referents, with zero hardcoded structure.
+
+**Calibration (full enwiki), `incl(hypo→hyper)/incl(hyper→hypo)`** — works for multiply-labeled entities, fails on
+label-frequency confounds:
+```
+physicist→scientist 0.020/0.011 ✓   poet→writer 0.192/0.080 ✓   painter→artist 0.074/0.055 ✓   dog→animal 0.010/0.005 ✓
+city→place 0.067/0.125 ✗ (backwards)   town→place 0.036/0.168 ✗   village→settlement 0.012/0.158 ✗
+```
+
+**Generator precision vs WordNet (sweep, full enwiki):** 5.2–9.8% (minsup 3–10 × incl 0.4–0.7). Sample discovered
+edges carry instance evidence: real (`telugu→language`✓, `racehorse→thoroughbred`, `golfer→professional`,
+`emeritus→professor`, `midfielder→football`), corpus-extensional (`lawyer→politician` — true *of Wikipedia*),
+and artifacts (`refer→may` from disambiguation pages, `http→ref` from citations, `gram→negative`).
+
+**Three honest limits this study establishes:**
+1. **Confounded direction (~70%, not ~95%).** Direction is governed by *which label is applied more often* among
+   shared entities, not pure taxonomy: professions align (the broader term is used more — scientist > physicist),
+   geography inverts ("place/settlement" are rarer labels whose instances nest inside "city"). 30% backwards.
+2. **Sparse.** Only ~29% of WordNet pairs are even judgeable (71% have zero instance overlap) — most entities are
+   *not* multiply-labeled even across 4.5M of them. Extension is real but thin in text.
+3. **Generator precision ~8%** because "extension in a biased corpus" ⊋ "universal IS-A" (Wikipedia's lawyers
+   really are mostly politicians) plus extraction artifacts.
+
+**Verdict.** Instance-extension is the **first no-hardcoding signal that is asymmetric, better-than-chance, and
+scales** — a genuine step past the distributional wall, vindicating that *referents*, not co-occurrence, carry
+IS-A. But at ~70% directional and ~29% coverage it is a *weak* world-signal: text names referents too rarely and
+labels them by convention, not taxonomy. The clean conclusion of the whole arc: **text is a thin, biased trace of
+the world's extension** — enough for a measurable signal, not enough for reliable IS-A. Stronger grounding
+(perception / interaction / a structured instance store) is the true ceiling-breaker; instance-extension is the
+best a CPU-text system can do, and we measured exactly how far that is.
+
 ## Honest limitations / open frontier
 - Grounded precision caps **~44%** due to **systematic** (not random) noise: word-sense collisions + abstract-hub
   attachments shared by all text sources. The next real lever is **sense disambiguation + extensional grounding**
