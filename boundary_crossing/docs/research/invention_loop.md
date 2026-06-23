@@ -139,6 +139,32 @@ silently dropped `n*(n+1)` — with frontier-based generation the canonical `i<j
 exact tool** for polynomial closed forms. Honest bound: closed forms here are polynomial-only, and the sequence set
 is curated rather than auto-enumerated — but the method certifies *any* loop/branch sequence or abstains.
 
+## `auto_discover.zig` — point the generator at itself (rediscovery → proposal)
+
+Instead of curating sequences, **enumerate the whole loop/branch program space**: `a(n) = Σ_{i=1..n, cond(i)}
+term(i,n)` for every `term` (a small expression grammar over `i, n`, behavior-deduped) × every branch condition
+(parity, mod 3), and run the certifier over all of them. The certifier now also detects **quasi-polynomial** closed
+forms (period 2/3) so branch-conditioned programs can close, not just abstain.
+
+**Result (0.3 s, nothing hand-picked):** 520 distinct terms × 6 conditions = **3120 programs** → **497 plain
+polynomial closed forms certified** (correct Faulhaber up to degree 5, e.g. `Σi⁴ = (6n⁵+15n⁴+10n³−n)/30`), **2455
+quasi-polynomial**, **168 honest abstentions** (no closed form of degree ≤6). And it surfaces **discovered
+identities** — equalities between structurally different loops that it *proved* (both certified to the same closed
+form), e.g. (hand-verified):
+- `Σ(i+n) ≡ Σ(3i−1)` both `= (3n²+n)/2`
+- `Σ(i+i·n) ≡ Σ(3i²−i·n)` both `= n(n+1)²/2`
+- `Σ(i−n) ≡ Σ(1−i)` both `= (n−n²)/2`
+
+This is rediscovery turning into proposal: the machine poses thousands of programs and keeps only what it can
+certify, including equalities nobody handed it. Build lesson: an early identity pass used an `i128→i64`-truncated
+behavior hash and produced *false* identities (`Σ(i²−i⁵) ≡ Σ(i+i⁵)`); grouping by the *exact rendered closed form*
+instead is collision-free and sound.
+
+**Honest bound:** the discoveries are *elementary* — low-degree polynomial/quasi-polynomial sums of one variable;
+the identities are true and auto-proven but routine algebra, not deep theorems. The *machinery* (enumerate →
+certify → surface, with honest abstention) is the result; pointed at a richer space (several variables, recursion,
+number-theoretic predicates) the same loop would reach less-trivial statements.
+
 ## This connects to the project's Closure Principle / invention-engine arc (`world_injection`, `real_invention`,
 `autonomous_inventor`, `dial_three`): invention = inject an out-of-closure generator + a sound certifier. Here the
 certifier is computation and the generator is candidate-law search; it discovers real theorems, soundly.
