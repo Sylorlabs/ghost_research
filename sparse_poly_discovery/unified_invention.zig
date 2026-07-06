@@ -329,7 +329,7 @@ fn certify(
     // escape: lifts held-out to ≥COVER from below COVER (same thresholds as invention_engine)
     const escape = cov_after >= COVER and cov_before < COVER;
     const certified = escape and r2 < R2_MAX;
-    const ok = certified and eqtax.gatePromote(grid, lib, cand, Y, certified);
+    const ok = certified and eqtax.gatePromoteEx(grid, lib, cand, Y, certified, cov_before, cov_after);
     return .{
         .ok = ok,
         .cov_before = cov_before,

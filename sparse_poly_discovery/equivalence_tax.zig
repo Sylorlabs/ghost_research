@@ -8,6 +8,7 @@ const std = @import("std");
 const ui = @import("unified_invention.zig");
 const e2 = @import("open_invention_e2.zig");
 const e5 = @import("open_invention_e5.zig");
+const ledger = @import("invention_ledger.zig");
 
 pub const BASIS_VERSION: u32 = 3;
 pub const COVER = ui.COVER_THRESHOLD;
@@ -360,6 +361,36 @@ pub fn isBasisRemix(
     return witnessRemix(grid, lib, cand, Y).verdict == .remix;
 }
 
+pub fn gatePromoteEx(
+    grid: []const [8]u8,
+    lib: []const ui.Feature,
+    cand: ui.Feature,
+    Y: []const f64,
+    cert_ok: bool,
+    cov_before: f64,
+    cov_after: f64,
+) bool {
+    if (!cert_ok) return false;
+    if (!strict_enabled) {
+        ledger.recordPromoteUnchecked(cand, true, cov_before, cov_after);
+        return true;
+    }
+    stats.checked += 1;
+    const w = witnessRemix(grid, lib, cand, Y);
+    if (tax_log_n < MAX_TAX_LOG) {
+        tax_log[tax_log_n] = w;
+        tax_log_n += 1;
+    }
+    const survivor = w.verdict == .novel;
+    ledger.recordPromote(cand, true, survivor, BASIS_VERSION, @intFromEnum(w.primary_family), w.test_acc, cov_before, cov_after);
+    if (!survivor) {
+        stats.remix_blocked += 1;
+        return false;
+    }
+    stats.novel_allowed += 1;
+    return true;
+}
+
 pub fn gatePromote(
     grid: []const [8]u8,
     lib: []const ui.Feature,
@@ -367,20 +398,7 @@ pub fn gatePromote(
     Y: []const f64,
     cert_ok: bool,
 ) bool {
-    if (!cert_ok) return false;
-    if (!strict_enabled) return true;
-    stats.checked += 1;
-    const w = witnessRemix(grid, lib, cand, Y);
-    if (tax_log_n < MAX_TAX_LOG) {
-        tax_log[tax_log_n] = w;
-        tax_log_n += 1;
-    }
-    if (w.verdict == .remix) {
-        stats.remix_blocked += 1;
-        return false;
-    }
-    stats.novel_allowed += 1;
-    return true;
+    return gatePromoteEx(grid, lib, cand, Y, cert_ok, 0, 0);
 }
 
 pub const ColFamily = enum {
