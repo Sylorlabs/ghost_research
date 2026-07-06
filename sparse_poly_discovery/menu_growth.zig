@@ -22,9 +22,10 @@
 //! with the same discover / certify / promote loop against the pair-grown menu. Target-4 shows the
 //! triple-family's own bottom on a hidden quad (0,4,5,7). Target-5 grows quad-relation
 //! φ(i,j,k,l) = [c_i−μ, …, quad-product] with the same loop against the triple-grown menu.
-//! Target-6 shows the quad-family's own bottom on a hidden quint (0,1,2,3,6).
+//! Target-6 shows the quad-family's own bottom on a hidden quint (0,1,2,3,6). Target-7 grows
+//! quint-relation φ(i,j,k,l,m) = [c_i−μ, …, quint-product] with the same loop against the quad-grown menu.
 //! The wall moved from "which operator" (F24) → "which pair" → "which triple" → "which quad" →
-//! which arity (new bottom). Escape of a named ceiling, not repeal of the law.
+//! "which quint" → which arity (new bottom). Escape of a named ceiling, not repeal of the law.
 //!
 //! Run: zig build menu-growth --release=fast
 
@@ -43,7 +44,7 @@ const HIDDEN_PAIR = [2]usize{ 2, 5 };
 const HIDDEN_TRIPLE = [3]usize{ 1, 3, 6 };
 const HIDDEN_QUAD = [4]usize{ 0, 4, 5, 7 };
 const HIDDEN_QUINT = [5]usize{ 0, 1, 2, 3, 6 };
-const MAXMENU: usize = 28; // 12 fixed + 3 pair + 4 triple + 5 quad + spare
+const MAXMENU: usize = 32; // 12 fixed + 3 pair + 4 triple + 5 quad + 6 quint + spare
 
 fn sigmoid(z: f64) f64 {
     return 1.0 / (1.0 + @exp(-@max(@as(f64, -30), @min(@as(f64, 30), z))));
@@ -201,6 +202,8 @@ pub fn main() !void {
     for (0..NSAMP) |s| tf[s] = try alloc.alloc(f64, 4);
     const qf = try alloc.alloc([]f64, NSAMP);
     for (0..NSAMP) |s| qf[s] = try alloc.alloc(f64, 5);
+    const quintf = try alloc.alloc([]f64, NSAMP);
+    for (0..NSAMP) |s| quintf[s] = try alloc.alloc(f64, 6);
 
     // pair-grown menu: fixed 12 + promoted pair (2,5) inner [c2, c5, c2·c5]
     const menuPair = try alloc.alloc([]f64, NSAMP);
@@ -260,13 +263,32 @@ pub fn main() !void {
             fitLogit(qfm, Y, 5, 220, 0.025, ws);
             return .{ .val = accLogit(qfm, Y, ws, 5, NTR, NVA), .tst = accLogit(qfm, Y, ws, 5, NVA, NSAMP) };
         }
+        fn quint(qfm: []const []f64, g: []const [NCELL]u8, i: usize, j: usize, k: usize, l: usize, m: usize, Y: []const f64, ws: []f64) PairRes {
+            for (0..NSAMP) |s| {
+                const a: f64 = @as(f64, @floatFromInt(g[s][i])) - MID;
+                const b: f64 = @as(f64, @floatFromInt(g[s][j])) - MID;
+                const c: f64 = @as(f64, @floatFromInt(g[s][k])) - MID;
+                const d: f64 = @as(f64, @floatFromInt(g[s][l])) - MID;
+                const e: f64 = @as(f64, @floatFromInt(g[s][m])) - MID;
+                qfm[s][0] = a;
+                qfm[s][1] = b;
+                qfm[s][2] = c;
+                qfm[s][3] = d;
+                qfm[s][4] = e;
+                qfm[s][5] = a * b * c * d * e;
+            }
+            standardize(@constCast(qfm), 6);
+            fitLogit(qfm, Y, 6, 240, 0.02, ws);
+            return .{ .val = accLogit(qfm, Y, ws, 6, NTR, NVA), .tst = accLogit(qfm, Y, ws, 6, NVA, NSAMP) };
+        }
     };
 
     try out.print("=== Phase B (#3): certified menu-growth — discover the pair, certify, promote ===\n\n", .{});
     try out.print("NCELL={d} | hidden pair ({d},{d}) | hidden triple ({d},{d},{d}) | train/val/test {d}/{d}/{d}\n", .{ NCELL, HIDDEN_PAIR[0], HIDDEN_PAIR[1], HIDDEN_TRIPLE[0], HIDDEN_TRIPLE[1], HIDDEN_TRIPLE[2], NTR, NVA - NTR, NSAMP - NVA });
     try out.print("growable family (pairs):   φ(i,j)=[c_i, c_j, c_i·c_j], all {d} pairs; outer=linear readout\n", .{NCELL * (NCELL - 1) / 2});
     try out.print("growable family (triples): φ(i,j,k)=[c_i−μ, c_j−μ, c_k−μ, triple-product], all {d} triples\n", .{NCELL * (NCELL - 1) * (NCELL - 2) / 6});
-    try out.print("growable family (quads):   φ(i,j,k,l)=[c_i−μ, …, quad-product], all {d} quads\n\n", .{NCELL * (NCELL - 1) * (NCELL - 2) * (NCELL - 3) / 24});
+    try out.print("growable family (quads):   φ(i,j,k,l)=[c_i−μ, …, quad-product], all {d} quads\n", .{NCELL * (NCELL - 1) * (NCELL - 2) * (NCELL - 3) / 24});
+    try out.print("growable family (quints):  φ(i,j,k,l,m)=[c_i−μ, …, quint-product], all {d} quints\n\n", .{NCELL * (NCELL - 1) * (NCELL - 2) * (NCELL - 3) * (NCELL - 4) / 120});
 
     // ════════════════ TARGET 1 — the hidden PAIR (Frontier-24's ceiling) ════════════════
     try out.print("──────── TARGET 1: hidden-pair predicate (Frontier-24 menu ceiling was 0.591) ────────\n", .{});
@@ -567,28 +589,80 @@ pub fn main() !void {
     };
 
     // control: quint-relation inner on the true hidden quint
-    const quintf = try alloc.alloc([]f64, NSAMP);
-    for (0..NSAMP) |s| quintf[s] = try alloc.alloc(f64, 6);
-    for (0..NSAMP) |s| {
-        const a: f64 = @as(f64, @floatFromInt(grid[s][HIDDEN_QUINT[0]])) - MID;
-        const b: f64 = @as(f64, @floatFromInt(grid[s][HIDDEN_QUINT[1]])) - MID;
-        const c: f64 = @as(f64, @floatFromInt(grid[s][HIDDEN_QUINT[2]])) - MID;
-        const d: f64 = @as(f64, @floatFromInt(grid[s][HIDDEN_QUINT[3]])) - MID;
-        const e: f64 = @as(f64, @floatFromInt(grid[s][HIDDEN_QUINT[4]])) - MID;
-        quintf[s][0] = a;
-        quintf[s][1] = b;
-        quintf[s][2] = c;
-        quintf[s][3] = d;
-        quintf[s][4] = e;
-        quintf[s][5] = a * b * c * d * e;
-    }
-    standardize(quintf, 6);
-    fitLogit(quintf, Y4, 6, 240, 0.025, &w);
-    const quint_tst = accLogit(quintf, Y4, &w, 6, NVA, NSAMP);
+    const quint_ctrl = Eval.quint(quintf, grid, HIDDEN_QUINT[0], HIDDEN_QUINT[1], HIDDEN_QUINT[2], HIDDEN_QUINT[3], HIDDEN_QUINT[4], Y4, &w);
 
     try out.print("  quad-grown menu:              test {d:.3}   (chance {d:.3})\n", .{ quad_menu_base, chanceOf(Y4) });
     try out.print("  best QUAD (the grown family): ({d},{d},{d},{d}) test {d:.3}  → CEILING: no quad reaches it\n", .{ quad_i, quad_j, quad_k, quad_l, best_tst6 });
-    try out.print("  a QUINT-relation inner:       test {d:.3}  → the NEXT family escapes (wall relocated, not repealed)\n\n", .{quint_tst});
+    try out.print("  a QUINT-relation inner:       test {d:.3}  → the NEXT family escapes (wall relocated, not repealed)\n\n", .{quint_ctrl.tst});
+
+    // ════════════════ TARGET 7 — certified QUINT growth (break the quad-family ceiling) ════════════════
+    try out.print("──────── TARGET 7: hidden-QUINT predicate — certified quint-relation growth ────────\n", .{});
+
+    // DISCOVER: search all quints, select by validation
+    var best_val7: f64 = -1;
+    var ui: usize = 0;
+    var uj: usize = 1;
+    var uk: usize = 2;
+    var ul: usize = 3;
+    var um: usize = 4;
+    var best_tst7: f64 = 0;
+    for (0..NCELL) |i| for (i + 1..NCELL) |j| for (j + 1..NCELL) |k| for (k + 1..NCELL) |l| for (l + 1..NCELL) |m| {
+        const r = Eval.quint(quintf, grid, i, j, k, l, m, Y4, &w);
+        if (r.val > best_val7) {
+            best_val7 = r.val;
+            best_tst7 = r.tst;
+            ui = i;
+            uj = j;
+            uk = k;
+            ul = l;
+            um = m;
+        }
+    };
+    try out.print("  quad-grown menu (fixed+pair+triple+quad): test {d:.3}   (chance {d:.3})\n", .{ quad_menu_base, chanceOf(Y4) });
+    try out.print("  DISCOVER: best quint = ({d},{d},{d},{d},{d})  val {d:.3}  test {d:.3}\n", .{ ui, uj, uk, ul, um, best_val7, best_tst7 });
+
+    // CERTIFY escape
+    const escape7 = best_tst7 >= 0.90 and quad_menu_base < 0.70;
+
+    // CERTIFY irreducibility: quint cross-term not reconstructible from quad-grown menu
+    const quintCrossZ = try alloc.alloc(f64, NSAMP);
+    for (0..NSAMP) |s| {
+        const a: f64 = @as(f64, @floatFromInt(grid[s][ui])) - MID;
+        const b: f64 = @as(f64, @floatFromInt(grid[s][uj])) - MID;
+        const c: f64 = @as(f64, @floatFromInt(grid[s][uk])) - MID;
+        const d: f64 = @as(f64, @floatFromInt(grid[s][ul])) - MID;
+        const e: f64 = @as(f64, @floatFromInt(grid[s][um])) - MID;
+        quintCrossZ[s] = a * b * c * d * e;
+    }
+    {
+        var mu: f64 = 0;
+        for (0..NTR) |s| mu += quintCrossZ[s];
+        mu /= @floatFromInt(NTR);
+        var sd: f64 = 0;
+        for (0..NTR) |s| sd += (quintCrossZ[s] - mu) * (quintCrossZ[s] - mu);
+        sd = @max(1e-6, @sqrt(sd / @as(f64, @floatFromInt(NTR))));
+        for (0..NSAMP) |s| quintCrossZ[s] = (quintCrossZ[s] - mu) / sd;
+    }
+    fitLinReg(menuQuad, quintCrossZ, 24, 500, 0.01, &w);
+    const recon_r2_7 = r2(menuQuad, quintCrossZ, &w, 24, NVA, NSAMP);
+    const menuPlus7 = try alloc.alloc([]f64, NSAMP);
+    for (0..NSAMP) |s| {
+        menuPlus7[s] = try alloc.alloc(f64, 25);
+        @memcpy(menuPlus7[s][0..24], menuQuad[s]);
+        menuPlus7[s][24] = quintCrossZ[s];
+    }
+    var wk7: [MAXMENU + 1]f64 = undefined;
+    fitLinReg(menuPlus7, quintCrossZ, 25, 500, 0.01, &wk7);
+    const kill_r2_7 = r2(menuPlus7, quintCrossZ, &wk7, 25, NVA, NSAMP);
+    const irreducible7 = recon_r2_7 < 0.40 and kill_r2_7 > 0.90 and quad_menu_base < chanceOf(Y4) + 0.10;
+
+    try out.print("  CERTIFY escape:        {s}  (new quint {d:.3} ≥ 0.90, quad-menu {d:.3} < 0.70)\n", .{ if (escape7) "PASS" else "fail", best_tst7, quad_menu_base });
+    try out.print("  CERTIFY irreducible:   {s}  (quad-menu reconstructs quint-cross: held-out R²={d:.3} < 0.40,\n", .{ if (irreducible7) "PASS" else "fail", recon_r2_7 });
+    try out.print("                          behavioral: quad-menu {d:.3} ≈ chance {d:.3}; kill-test menu+quint R²={d:.3} > 0.90 → non-vacuous)\n", .{ quad_menu_base, chanceOf(Y4), kill_r2_7 });
+
+    const promoted7 = escape7 and irreducible7 and
+        (ui == HIDDEN_QUINT[0] and uj == HIDDEN_QUINT[1] and uk == HIDDEN_QUINT[2] and ul == HIDDEN_QUINT[3] and um == HIDDEN_QUINT[4]);
+    try out.print("  PROMOTE: add quint-relation ({d},{d},{d},{d},{d}) to menu → quad-ceiling → {d:.3}.  {s}\n\n", .{ ui, uj, uk, ul, um, best_tst7, if (promoted7) "CEILING BROKEN ✓" else "incomplete ✗" });
 
     // ════════════════ VERDICT ════════════════
     try out.print("════════════════════ VERDICT ════════════════════\n", .{});
@@ -623,7 +697,16 @@ pub fn main() !void {
     }
     try out.print("TARGET 6 — the escape RELOCATES again. The quad-family that just escaped target 5\n", .{});
     try out.print("has its OWN bottom: no quad reaches the hidden quint (best {d:.3}), while a quint-relation\n", .{best_tst6});
-    try out.print("inner does ({d:.3}). The ceiling moved: operator (F24) → which-pair → which-triple → which-quad → which-arity.\n", .{quint_tst});
+    try out.print("inner does ({d:.3}).\n", .{quint_ctrl.tst});
+    if (promoted7) {
+        try out.print("TARGET 7 — POSITIVE. The forge DISCOVERED the right quint ({d},{d},{d},{d},{d}) blind (val-selected),\n", .{ ui, uj, uk, ul, um });
+        try out.print("CERTIFIED it (escape {d:.3}≥0.90 with quad-menu at {d:.3}; irreducible — quad-menu can't reconstruct\n", .{ best_tst7, quad_menu_base });
+        try out.print("quint-cross, R²={d:.3}, kill-test R²={d:.3}), and PROMOTED it — breaking the quad-family ceiling\n", .{ recon_r2_7, kill_r2_7 });
+        try out.print("to {d:.3}. Quint-arity menu-growth escapes the SPECIFIC ceiling quads could not.\n\n", .{best_tst7});
+    } else {
+        try out.print("TARGET 7 — INCOMPLETE. Inspect: discovered ({d},{d},{d},{d},{d}) tst {d:.3}, escape={}, irreducible={}.\n\n", .{ ui, uj, uk, ul, um, best_tst7, escape7, irreducible7 });
+    }
+    try out.print("The ceiling moved: operator (F24) → which-pair → which-triple → which-quad → which-quint → which-arity.\n", .{});
     try out.print("Each growable family is itself a closure with a bottom — exactly the unified ceiling.\n", .{});
     try out.print("Phase C asks whether an OPEN inner-transform forge (no fixed arity) saturates or grows.\n", .{});
     try out.print("\nSee: structure_discovery.md (the ceiling), inventable_substrate_design.md (the plan),\n", .{});

@@ -119,7 +119,7 @@ pub fn classifyHardness(mono_best: f64, extremal_best: f64) TaskHardness {
 
 pub fn innerFromFeatureTag(tag: anytype) InnerType {
     return switch (tag) {
-        .monomial => .monomial,
+        .monomial, .pair_relation => .monomial,
         .spectral_count => .spectral,
         .walsh => .walsh,
         .clifford_g2 => .clifford,

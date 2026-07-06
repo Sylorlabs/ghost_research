@@ -1,10 +1,12 @@
-//! Fork 5 — unified invention loop: monomial forge → operator menu → world pool (mod_p).
+//! Fork 5 — unified invention loop: forge → pair-router → conditional Walsh → menu → world.
 //!
-//! Takes a structured target predicate description, then escalates through three discovery
+//! Takes a structured target predicate description, then escalates through staged discovery
 //! mechanisms with one certifier (escape ≥0.90 held-out AND irreducible R²<0.40):
 //!   1. Inner-transform monomial forge (inner_forge.zig substrate)
-//!   2. Operator menu: spectral / Walsh / Clifford (operator_menu.zig)
-//!   3. World pool: divisibility on grid-derived integers (invention_engine / world_injection)
+//!   2. Pair hardness router (correlation rank + one verify) — RQ1++ step 3
+//!   3. Walsh χ_S correlation argmax when hardness = q38_compound — RQ1++ step 4
+//!   4. Operator menu: spectral / Walsh / Clifford (operator_menu.zig)
+//!   5. World pool: divisibility on grid-derived integers (invention_engine / world_injection)
 //!
 //! Compare against inner_forge-only baseline to show what the unified loop unlocks.
 //!
@@ -12,6 +14,8 @@
 
 const std = @import("std");
 pub const guide = @import("learned_candidate_guide.zig");
+const hr = @import("hardness_router.zig");
+const oml = @import("operator_menu_lib.zig");
 
 const SilentOut = struct {
     fn print(_: @This(), _: []const u8, _: anytype) !void {}
@@ -30,6 +34,8 @@ const MAXFEAT: usize = 32;
 const MAXDEG: usize = 4;
 const COVER: f64 = 0.90;
 const R2_MAX: f64 = 0.40;
+const MONO_SATURATE: f64 = 0.55;
+const SINGLE_SUFFICIENT: f64 = 0.70;
 
 const WORLD_POOL = [_]usize{ 2, 3, 5, 7, 11, 13 };
 const NPOOL = WORLD_POOL.len;
@@ -136,6 +142,7 @@ fn label(g: [NCELL]u8, spec: TargetSpec) f64 {
 
 const FeatureTag = enum {
     monomial,
+    pair_relation,
     spectral_count,
     walsh,
     clifford_g2,
@@ -143,8 +150,9 @@ const FeatureTag = enum {
     world_sign_mod,
 };
 
-const Feature = union(FeatureTag) {
+pub const Feature = union(FeatureTag) {
     monomial: u8,
+    pair_relation: struct { i: usize, j: usize },
     spectral_count: f64,
     walsh: u8,
     clifford_g2: void,
@@ -152,7 +160,7 @@ const Feature = union(FeatureTag) {
     world_sign_mod: usize,
 };
 
-pub const Source = enum { base, forge, menu, world };
+pub const Source = enum { base, forge, pair, walsh, menu, world };
 
 pub const BenchmarkSummary = struct {
     forge_solved: usize,
@@ -164,11 +172,16 @@ pub const BenchmarkSummary = struct {
     final_nlib: usize,
 };
 
-const source_name = [_][]const u8{ "base", "forge", "menu", "world" };
+const source_name = [_][]const u8{ "base", "forge", "pair", "walsh", "menu", "world" };
+
+fn pairProduct(g: [NCELL]u8, i: usize, j: usize) f64 {
+    return (@as(f64, @floatFromInt(g[i])) - MID) * (@as(f64, @floatFromInt(g[j])) - MID);
+}
 
 fn evalFeature(f: Feature, g: [NCELL]u8) f64 {
     return switch (f) {
         .monomial => |m| phi(g, m),
+        .pair_relation => |ij| pairProduct(g, ij.i, ij.j),
         .spectral_count => |w| @cos(w * countGE(g)),
         .walsh => |S| chi(S, signPattern(g)),
         .clifford_g2 => cliffordG2(g),
@@ -180,6 +193,7 @@ fn evalFeature(f: Feature, g: [NCELL]u8) f64 {
 fn featureKey(buf: []u8, f: Feature) []const u8 {
     switch (f) {
         .monomial => |m| return std.fmt.bufPrint(buf, "φ(0x{X:0>2})", .{m}) catch "φ",
+        .pair_relation => |ij| return std.fmt.bufPrint(buf, "φ({d},{d})", .{ ij.i, ij.j }) catch "pair",
         .spectral_count => |omega| return std.fmt.bufPrint(buf, "cos(ω·count),ω={d:.3}", .{omega}) catch "spectral",
         .walsh => |S| return std.fmt.bufPrint(buf, "χ{{S=0x{X:0>2}}}", .{S}) catch "χ",
         .clifford_g2 => return "sin(θ(v1-v0))",
@@ -194,6 +208,7 @@ fn featuresEqual(a: Feature, b: Feature) bool {
     if (at != bt) return false;
     return switch (a) {
         .monomial => |m| b.monomial == m,
+        .pair_relation => |ij| b.pair_relation.i == ij.i and b.pair_relation.j == ij.j,
         .spectral_count => |wa| @abs(wa - b.spectral_count) < 1e-6,
         .walsh => |S| b.walsh == S,
         .clifford_g2 => true,
@@ -435,6 +450,120 @@ fn targetHardness(grid: []const [NCELL]u8, Y: []const f64, feat: []f64) guide.Ta
     const mono = probeMonomialHardness(grid, Y, feat);
     const ext = probeExtremalHardness(grid, Y, feat);
     return guide.classifyHardness(mono.best, ext.best);
+}
+
+fn pairProductCorr(grid: []const [NCELL]u8, Y: []const f64, i: usize, j: usize) f64 {
+    var sum_xy: f64 = 0;
+    var sum_x: f64 = 0;
+    var sum_y: f64 = 0;
+    var sum_x2: f64 = 0;
+    var sum_y2: f64 = 0;
+    const n: f64 = @floatFromInt(NVA - NTR);
+    for (NTR..NVA) |s| {
+        const x = pairProduct(grid[s], i, j);
+        const y = Y[s];
+        sum_xy += x * y;
+        sum_x += x;
+        sum_y += y;
+        sum_x2 += x * x;
+        sum_y2 += y * y;
+    }
+    const num = n * sum_xy - sum_x * sum_y;
+    const den = @sqrt(@max(1e-12, (n * sum_x2 - sum_x * sum_x) * (n * sum_y2 - sum_y * sum_y)));
+    return @abs(num / den);
+}
+
+fn discoverPair(grid: []const [NCELL]u8, Y: []const f64, feat_scratch: []f64) struct { i: usize, j: usize, val: f64 } {
+    var best_i: usize = 0;
+    var best_j: usize = 1;
+    var best_corr: f64 = -1;
+    for (0..NCELL) |i| for (i + 1..NCELL) |j| {
+        const c = pairProductCorr(grid, Y, i, j);
+        if (c > best_corr) {
+            best_corr = c;
+            best_i = i;
+            best_j = j;
+        }
+    };
+    for (0..NSAMP) |s| feat_scratch[s] = pairProduct(grid[s], best_i, best_j);
+    return .{ .i = best_i, .j = best_j, .val = valAccSingle(feat_scratch, Y) };
+}
+
+fn probeEscalationHardness(cov_frozen: f64, grid: []const [NCELL]u8, Y: []const f64, feat: []f64) struct { mono_best: f64, extremal_best: f64, task_class: hr.TaskClass } {
+    const ext = probeExtremalHardness(grid, Y, feat);
+    const tc: hr.TaskClass = if (cov_frozen >= SINGLE_SUFFICIENT or ext.best >= SINGLE_SUFFICIENT)
+        .single_sufficient
+    else if (cov_frozen <= MONO_SATURATE and ext.best <= MONO_SATURATE)
+        .q38_compound
+    else
+        .unknown;
+    return .{ .mono_best = cov_frozen, .extremal_best = ext.best, .task_class = tc };
+}
+
+fn tryPairRouter(
+    X: [][]f64,
+    grid: []const [NCELL]u8,
+    lib: []Feature,
+    nlib: *usize,
+    Y: []const f64,
+    feat_scratch: []f64,
+    w: []f64,
+    out: anytype,
+) !bool {
+    const pair = discoverPair(grid, Y, feat_scratch);
+    const cand: Feature = .{ .pair_relation = .{ .i = pair.i, .j = pair.j } };
+    if (hasFeature(lib[0..nlib.*], cand)) return false;
+    const cert = certify(X, grid, lib[0..nlib.*], cand, Y, feat_scratch, w);
+    var keybuf: [48]u8 = undefined;
+    const kname = featureKey(&keybuf, cand);
+    if (cert.ok) {
+        lib[nlib.*] = cand;
+        nlib.* += 1;
+        try out.print("    PAIR: +{s} escape {d:.2}→{d:.2}, R²={d:.2} → PROMOTE\n", .{ kname, cert.cov_before, cert.cov_after, cert.r2 });
+        return true;
+    }
+    try out.print("    PAIR: best {s} val={d:.2} escape {d:.2} R²={d:.2} → not certified\n", .{ kname, pair.val, cert.cov_after, cert.r2 });
+    return false;
+}
+
+fn tryConditionalWalsh(
+    X: [][]f64,
+    grid: []const [NCELL]u8,
+    lib: []Feature,
+    nlib: *usize,
+    Y: []const f64,
+    feat_scratch: []f64,
+    w: []f64,
+    out: anytype,
+) !bool {
+    const cov_frozen = coverage(X, grid, lib[0..nlib.*], Y, w);
+    const hp = probeEscalationHardness(cov_frozen, grid, Y, feat_scratch);
+    if (hp.task_class != .q38_compound) {
+        try out.print("    WALSH: skipped (class={s}, mono={d:.2} ext={d:.2})\n", .{
+            switch (hp.task_class) {
+                .single_sufficient => "single_sufficient",
+                .q38_compound => "q38_compound",
+                .unknown => "unknown",
+            },
+            hp.mono_best,
+            hp.extremal_best,
+        });
+        return false;
+    }
+    const wal = oml.discoverWalsh(grid, Y, feat_scratch, NTR, NVA, NSAMP);
+    const cand: Feature = .{ .walsh = wal.bestS };
+    if (hasFeature(lib[0..nlib.*], cand)) return false;
+    const cert = certify(X, grid, lib[0..nlib.*], cand, Y, feat_scratch, w);
+    var keybuf: [48]u8 = undefined;
+    const kname = featureKey(&keybuf, cand);
+    if (cert.ok) {
+        lib[nlib.*] = cand;
+        nlib.* += 1;
+        try out.print("    WALSH: +{s} escape {d:.2}→{d:.2}, R²={d:.2} → PROMOTE (q38)\n", .{ kname, cert.cov_before, cert.cov_after, cert.r2 });
+        return true;
+    }
+    try out.print("    WALSH: best {s} val={d:.2} escape {d:.2} R²={d:.2} → not certified\n", .{ kname, wal.val, cert.cov_after, cert.r2 });
+    return false;
 }
 
 fn tryOperatorMenu(
@@ -911,6 +1040,26 @@ pub fn runFullBenchmark(alloc: std.mem.Allocator, out: anytype, seed: u64, verbo
         }
         if (verbose) try out.print("    forge saturated at {d:.3}\n", .{cov0});
 
+        if (tryPairRouter(X, grid, &lib, &nlib, Y[t], phiTgt, &w, out) catch false) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y[t], &w);
+            if (cov0 >= COVER) {
+                unified_cov[t] = cov0;
+                solved_by[t] = .pair;
+                if (verbose) try out.print("    SOLVED by PAIR at {d:.3}\n", .{cov0});
+                continue;
+            }
+        }
+
+        if (tryConditionalWalsh(X, grid, &lib, &nlib, Y[t], phiTgt, &w, out) catch false) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y[t], &w);
+            if (cov0 >= COVER) {
+                unified_cov[t] = cov0;
+                solved_by[t] = .walsh;
+                if (verbose) try out.print("    SOLVED by WALSH at {d:.3}\n", .{cov0});
+                continue;
+            }
+        }
+
         if (tryOperatorMenu(X, grid, &lib, &nlib, Y[t], phiTgt, &w, out) catch false) {
             cov0 = coverage(X, grid, lib[0..nlib], Y[t], &w);
             if (cov0 >= COVER) {
@@ -1071,6 +1220,32 @@ pub fn runGuidedBenchmark(
             continue;
         }
 
+        if (tryPairRouter(X, grid, &lib, &nlib, Y[t], phiTgt, &w, out) catch false) {
+            cost.certify_calls += 1;
+            cost.probe_calls += NCELL * (NCELL - 1) / 2;
+            cov0 = coverage(X, grid, lib[0..nlib], Y[t], &w);
+            if (cov0 >= COVER) {
+                unified_cov[t] = cov0;
+                solved_by[t] = .pair;
+                continue;
+            }
+        } else {
+            cost.probe_calls += NCELL * (NCELL - 1) / 2;
+        }
+
+        if (tryConditionalWalsh(X, grid, &lib, &nlib, Y[t], phiTgt, &w, out) catch false) {
+            cost.certify_calls += 1;
+            cost.probe_calls += DOM;
+            cov0 = coverage(X, grid, lib[0..nlib], Y[t], &w);
+            if (cov0 >= COVER) {
+                unified_cov[t] = cov0;
+                solved_by[t] = .walsh;
+                continue;
+            }
+        } else {
+            cost.probe_calls += 2;
+        }
+
         if (tryOperatorMenuGuided(X, grid, &lib, &nlib, Y[t], phiTgt, &w, hardness, g, &cost, out) catch false) {
             cov0 = coverage(X, grid, lib[0..nlib], Y[t], &w);
             if (cov0 >= COVER) {
@@ -1150,6 +1325,8 @@ pub fn bootstrapGuide(alloc: std.mem.Allocator, g: *guide.Guide, seed_base: u64)
         const hardness = targetHardness(grid, Y, phiTgt);
         cost.probe_calls += 2;
         _ = tryMonomialForgeGuided(X, grid, &lib, &nlib, Y, phiTgt, &w, hardness, g, guide.TOP_K_DEFAULT, &cost, null_out, true) catch false;
+        _ = tryPairRouter(X, grid, &lib, &nlib, Y, phiTgt, &w, null_out) catch false;
+        _ = tryConditionalWalsh(X, grid, &lib, &nlib, Y, phiTgt, &w, null_out) catch false;
         _ = tryOperatorMenuGuided(X, grid, &lib, &nlib, Y, phiTgt, &w, hardness, g, &cost, null_out) catch false;
         _ = tryWorldPoolGuided(X, grid, &lib, &nlib, Y, phiTgt, &w, hardness, g, guide.TOP_K_DEFAULT, &cost, null_out) catch false;
     }
@@ -1213,6 +1390,30 @@ pub fn countBaselineCertify(alloc: std.mem.Allocator, seed: u64) !BenchMetrics {
             unified_cov[t] = cov0;
             solved_by[t] = .forge;
             continue;
+        }
+        if (tryPairRouter(X, grid, &lib, &nlib, Y[t], phiTgt, &w, null_out) catch false) {
+            cost.certify_calls += 1;
+            cost.probe_calls += NCELL * (NCELL - 1) / 2;
+            cov0 = coverage(X, grid, lib[0..nlib], Y[t], &w);
+            if (cov0 >= COVER) {
+                unified_cov[t] = cov0;
+                solved_by[t] = .pair;
+                continue;
+            }
+        } else {
+            cost.probe_calls += NCELL * (NCELL - 1) / 2;
+        }
+        if (tryConditionalWalsh(X, grid, &lib, &nlib, Y[t], phiTgt, &w, null_out) catch false) {
+            cost.certify_calls += 1;
+            cost.probe_calls += DOM;
+            cov0 = coverage(X, grid, lib[0..nlib], Y[t], &w);
+            if (cov0 >= COVER) {
+                unified_cov[t] = cov0;
+                solved_by[t] = .walsh;
+                continue;
+            }
+        } else {
+            cost.probe_calls += 2;
         }
         if (tryOperatorMenu(X, grid, &lib, &nlib, Y[t], phiTgt, &w, null_out) catch false) {
             cost.certify_calls += 1;
@@ -1317,6 +1518,20 @@ pub fn runSingleTarget(
     }
 
     if (cov0 < COVER) {
+        if (tryPairRouter(X, grid, &lib, &nlib, Y, phiTgt, &w, out) catch false) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+            if (cov0 >= COVER) source = .pair;
+        }
+    }
+
+    if (cov0 < COVER) {
+        if (tryConditionalWalsh(X, grid, &lib, &nlib, Y, phiTgt, &w, out) catch false) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+            if (cov0 >= COVER) source = .walsh;
+        }
+    }
+
+    if (cov0 < COVER) {
         if (tryOperatorMenu(X, grid, &lib, &nlib, Y, phiTgt, &w, out) catch false) {
             cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
             if (cov0 >= COVER) source = .menu;
@@ -1414,6 +1629,40 @@ fn solveOneTarget(
             .nlib_before = nlib_before,
             .nlib_after = nlib.*,
         };
+    }
+
+    iters += 1;
+    if (tryPairRouter(X, grid, lib, nlib, Y, phiTgt, w, out) catch false) {
+        cov0 = coverage(X, grid, lib[0..nlib.*], Y, w);
+        if (cov0 >= COVER) {
+            source = .pair;
+            return .{
+                .solved = true,
+                .cov = cov0,
+                .source = source,
+                .iters_to_certify = iters,
+                .library_hit = false,
+                .nlib_before = nlib_before,
+                .nlib_after = nlib.*,
+            };
+        }
+    }
+
+    iters += 1;
+    if (tryConditionalWalsh(X, grid, lib, nlib, Y, phiTgt, w, out) catch false) {
+        cov0 = coverage(X, grid, lib[0..nlib.*], Y, w);
+        if (cov0 >= COVER) {
+            source = .walsh;
+            return .{
+                .solved = true,
+                .cov = cov0,
+                .source = source,
+                .iters_to_certify = iters,
+                .library_hit = false,
+                .nlib_before = nlib_before,
+                .nlib_after = nlib.*,
+            };
+        }
     }
 
     iters += 1;
@@ -1702,6 +1951,25 @@ pub fn runSequentialTargets(
     }
 
     return .{ .results = results, .final_nlib = nlib };
+}
+
+/// Public coverage for baseline harnesses.
+pub fn measureCoverage(X: [][]f64, grid: []const [NCELL]u8, lib: []const Feature, Y: []const f64, w: []f64) f64 {
+    return coverage(X, grid, lib, Y, w);
+}
+
+/// One operator-menu escalation attempt (baseline fixed-menu mode).
+pub fn tryMenuOnce(
+    X: [][]f64,
+    grid: []const [NCELL]u8,
+    lib: []Feature,
+    nlib: *usize,
+    Y: []const f64,
+    feat_scratch: []f64,
+    w: []f64,
+    out: anytype,
+) !bool {
+    return tryOperatorMenu(X, grid, lib, nlib, Y, feat_scratch, w, out);
 }
 
 pub fn main() !void {

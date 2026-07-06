@@ -1293,6 +1293,18 @@ pub fn build(b: *std.Build) void {
     const run_rq1_step = b.step("open-invention-rq1", "RQ1++: blind battery staged escalation (mono→mod→pair→Walsh q38)");
     run_rq1_step.dependOn(&run_rq1_cmd.step);
 
+    const baseline_cmp_exe = b.addExecutable(.{
+        .name = "invention_baseline_compare",
+        .root_source_file = b.path("invention_baseline_compare.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(baseline_cmp_exe);
+    const run_baseline_cmp_cmd = b.addRunArtifact(baseline_cmp_exe);
+    if (b.args) |args| run_baseline_cmp_cmd.addArgs(args);
+    const run_baseline_cmp_step = b.step("invention-baseline-compare", "Blind battery: invention vs 4 baselines (TSV)");
+    run_baseline_cmp_step.dependOn(&run_baseline_cmp_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

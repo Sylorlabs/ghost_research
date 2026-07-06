@@ -21,19 +21,19 @@ const NCELL: usize = 8;
 const VMAX: u8 = 5;
 const THRESH: u8 = 3;
 const MID: f64 = 2.5;
-const NSAMP: usize = 7000;
-const NTR: usize = 3500;
-const NVA: usize = 5250;
+pub const NSAMP: usize = 7000;
+pub const NTR: usize = 3500;
+pub const NVA: usize = 5250;
 const MAXFEAT: usize = 32;
 const MAXDEG: usize = 4;
-const COVER: f64 = 0.90;
+pub const COVER: f64 = 0.90;
 const R2_MAX: f64 = 0.40;
 const STAGE1_MAX: f64 = 0.70;
 const MONO_SATURATE: f64 = 0.55;
 const SINGLE_SUFFICIENT: f64 = 0.70;
 
-const GRID_SEED: u64 = 0xF0235A11CE0FF1CE;
-const BATTERY_SEED: u64 = 0xE1B10D20A11CE01;
+pub const GRID_SEED: u64 = 0xF0235A11CE0FF1CE;
+pub const BATTERY_SEED: u64 = 0xE1B10D20A11CE01;
 const RQ1_TAG: u64 = 0xA11CE0A110D20A11;
 
 const NZOO_A: usize = 4;
@@ -98,7 +98,7 @@ fn inversionCount(g: [NCELL]u8) usize {
 
 // ── Frozen monomial feature library ──────────────────────────────────────────
 
-const Feature = struct { monomial: u8 };
+pub const Feature = struct { monomial: u8 };
 
 fn evalFeature(f: Feature, g: [NCELL]u8) f64 {
     return phi(g, f.monomial);
@@ -167,7 +167,7 @@ fn accLogit(X: []const []f64, Y: []const f64, w: []const f64, dim: usize, lo: us
     return @as(f64, @floatFromInt(c)) / @as(f64, @floatFromInt(hi - lo));
 }
 
-fn coverage(X: [][]f64, grid: []const [NCELL]u8, lib: []const Feature, Y: []const f64, w: []f64) f64 {
+pub fn coverage(X: [][]f64, grid: []const [NCELL]u8, lib: []const Feature, Y: []const f64, w: []f64) f64 {
     buildFeat(X, grid, lib);
     fitLogit(X, Y, lib.len, 150, 0.05, w);
     return accLogit(X, Y, w, lib.len, NVA, NSAMP);
@@ -232,7 +232,7 @@ const ProgBank = struct {
     }
 };
 
-fn buildProgBank(alloc: std.mem.Allocator) !ProgBank {
+pub fn buildProgBank(alloc: std.mem.Allocator) !ProgBank {
     var nodes = std.ArrayList(ProgNode).init(alloc);
     defer nodes.deinit();
     var depths = std.ArrayList(u8).init(alloc);
@@ -360,11 +360,11 @@ fn accRange(X: []const []f64, Y: []const f64, w: []const f64, dim: usize, lo: us
     return @as(f64, @floatFromInt(c)) / @as(f64, @floatFromInt(hi - lo));
 }
 
-const Inner1 = enum { count, sum_all, sum01, inversion, max_cell, min01, mean01 };
-const N_INNER1 = 7;
+pub const Inner1 = enum { count, sum_all, sum01, inversion, max_cell, min01, mean01 };
+pub const N_INNER1 = 7;
 const inner1_name = [_][]const u8{ "count≥thr", "sum_all", "sum(c0,c1)", "inversion", "max_cell", "min(c0,c1)", "mean(c0,c1)" };
 
-fn inner1Scalar(kind: Inner1, g: [NCELL]u8) f64 {
+pub fn inner1Scalar(kind: Inner1, g: [NCELL]u8) f64 {
     return switch (kind) {
         .count => countGE(g),
         .sum_all => blk: {
@@ -529,7 +529,7 @@ fn stage1Best(grid: []const [NCELL]u8, Y: []const f64, S_all: *const [N_INNER1][
 
 // ── Battery B (E1 patterns) ──────────────────────────────────────────────────
 
-const BatteryKind = enum {
+pub const BatteryKind = enum {
     random_monomial,
     sum_mod,
     sign_mod,
@@ -540,7 +540,7 @@ const BatteryKind = enum {
     inversion_parity,
 };
 
-const BatteryTarget = struct {
+pub const BatteryTarget = struct {
     name: []const u8,
     kind: BatteryKind,
     mask: u8 = 0,
@@ -549,7 +549,7 @@ const BatteryTarget = struct {
     sum_mod: usize = 0,
 };
 
-fn labelBattery(g: [NCELL]u8, t: BatteryTarget) f64 {
+pub fn labelBattery(g: [NCELL]u8, t: BatteryTarget) f64 {
     return switch (t.kind) {
         .random_monomial => if (phi(g, t.mask) > 0) 1.0 else 0.0,
         .sum_mod => if (gridSum(g) % t.modulus == 0) 1.0 else 0.0,
@@ -609,7 +609,7 @@ fn randomMask(rand: std.Random, deg: usize, avoid: []const u8) u8 {
     return 0x0F;
 }
 
-fn generateBatteryB(rand: std.Random, alloc: std.mem.Allocator) ![]BatteryTarget {
+pub fn generateBatteryB(rand: std.Random, alloc: std.mem.Allocator) ![]BatteryTarget {
     var list = std.ArrayList(BatteryTarget).init(alloc);
     errdefer list.deinit();
     const m2 = randomMask(rand, 2, &ZOO_A_MASKS);
@@ -634,7 +634,7 @@ fn generateBatteryB(rand: std.Random, alloc: std.mem.Allocator) ![]BatteryTarget
 
 // ── Phase 1: train monomial forge on zoo A ───────────────────────────────────
 
-fn trainZooA(X: [][]f64, grid: []const [NCELL]u8, Y: []const []f64, phiTgt: []f64, w: []f64, out: anytype) !struct { lib: [MAXFEAT]Feature, nlib: usize, solved: usize } {
+pub fn trainZooA(X: [][]f64, grid: []const [NCELL]u8, Y: []const []f64, phiTgt: []f64, w: []f64, out: anytype) !struct { lib: [MAXFEAT]Feature, nlib: usize, solved: usize } {
     var lib: [MAXFEAT]Feature = undefined;
     var nlib: usize = 0;
     for (0..NCELL) |i| {
@@ -872,7 +872,7 @@ fn discoverWalsh(
 
 const Method = enum { frozen_only, synth_prog, pipeline, pair_router, walsh_corr, saturated };
 
-const EvalResult = struct {
+pub const EvalResult = struct {
     method: Method,
     test_acc: f64,
     certified: bool,
@@ -894,7 +894,26 @@ fn familyMatch(t: BatteryTarget, method: Method, label: []const u8, pipe: PipeRe
     };
 }
 
-fn evaluateBlind(
+pub fn buildInner1Store(alloc: std.mem.Allocator, grid: []const [NCELL]u8) ![N_INNER1][]f64 {
+    var S_store: [N_INNER1][]f64 = undefined;
+    for (0..N_INNER1) |i1i| {
+        const in1: Inner1 = @enumFromInt(i1i);
+        S_store[i1i] = try alloc.alloc(f64, NSAMP);
+        for (0..NSAMP) |s| S_store[i1i][s] = inner1Scalar(in1, grid[s]);
+    }
+    return S_store;
+}
+
+pub const EvalCounter = struct {
+    certify: usize = 0,
+    probe: usize = 0,
+    fit: usize = 0,
+    pub fn total(self: EvalCounter) usize {
+        return self.certify + self.probe + self.fit;
+    }
+};
+
+pub fn evaluateBlind(
     X: [][]f64,
     grid: []const [NCELL]u8,
     frozen: []const Feature,
@@ -906,8 +925,10 @@ fn evaluateBlind(
     w: []f64,
     tgt: BatteryTarget,
     out: anytype,
+    budget: ?*EvalCounter,
 ) !EvalResult {
     const cov0 = coverage(X, grid, frozen, Y, w);
+    if (budget) |b| b.fit += 1;
     try out.print("    frozen-only test={d:.3}\n", .{cov0});
     if (cov0 >= COVER) {
         try out.print("    → SOLVED (frozen monomial library)\n", .{});
@@ -923,7 +944,12 @@ fn evaluateBlind(
     }
 
     const synth = discoverSynth(grid, Y, bank, X, w);
+    if (budget) |b| {
+        b.probe += bank.nodes.len;
+        b.fit += 1;
+    }
     const cov_synth = coverageWithExtra(X, grid, frozen, synth.feat, Y, w);
+    if (budget) |b| b.certify += 1;
     buildFeat(X, grid, frozen);
     const r2_synth = reconR2(X, synth.feat, frozen.len, w);
     const synth_escape = cov_synth >= COVER and cov0 < COVER;
@@ -934,7 +960,9 @@ fn evaluateBlind(
     });
 
     const pipe = discoverPipeline(grid, Y, S_all, X, w);
+    if (budget) |b| b.probe += N_INNER1 * N_INNER2;
     const s1 = stage1Best(grid, Y, S_all, X, w);
+    if (budget) |b| b.probe += N_INNER1;
     const pipe_escape = pipe.tst >= COVER and s1.tst < STAGE1_MAX;
     try out.print("    pipeline: {s}→{s} val={d:.3} test={d:.3} stage1={d:.3} escape={}\n", .{
         inner1_name[@intFromEnum(pipe.inner1)],
@@ -1001,6 +1029,10 @@ fn evaluateBlind(
     if (!best.certified) {
         try out.print("    step 3 pair-router: escalating\n", .{});
         const pair = discoverPair(grid, Y, pf, w);
+        if (budget) |b| {
+            b.probe += 28;
+            b.fit += 1;
+        }
         var pair_label_buf: [48]u8 = undefined;
         const pair_label = std.fmt.bufPrint(&pair_label_buf, "φ({d},{d}) product inner", .{ pair.i, pair.j }) catch "pair";
         try out.print("    pair-router: ({d},{d}) val={d:.3} test={d:.3}\n", .{ pair.i, pair.j, pair.val, pair.tst });
@@ -1026,6 +1058,10 @@ fn evaluateBlind(
         if (hp.task_class == .q38_compound) {
             try out.print("    step 4 Walsh: q38_compound → correlation argmax\n", .{});
             const wal = discoverWalsh(grid, Y, feat);
+            if (budget) |b| {
+                b.probe += 256;
+                b.fit += 1;
+            }
             var wal_label_buf: [32]u8 = undefined;
             const wal_label = std.fmt.bufPrint(&wal_label_buf, "χ(0x{X:0>2})", .{wal.bestS}) catch "walsh";
             try out.print("    Walsh: {s} val={d:.3} test={d:.3}\n", .{ wal_label, wal.val, wal.tst });
@@ -1125,7 +1161,7 @@ pub fn main() !void {
         const Yb = try alloc.alloc(f64, NSAMP);
         for (0..NSAMP) |s| Yb[s] = labelBattery(grid[s], tgt);
         try out.print("  TARGET: {s} [{s}] known={s}\n", .{ tgt.name, @tagName(tgt.kind), knownFamily(tgt) });
-        const ev = try evaluateBlind(X, grid, frozen, Yb, bank, &S_store, pf, feat_scratch, &w, tgt, out);
+        const ev = try evaluateBlind(X, grid, frozen, Yb, bank, &S_store, pf, feat_scratch, &w, tgt, out, null);
         if (ev.certified) {
             n_cert += 1;
             if (ev.family_match) n_family_match += 1;

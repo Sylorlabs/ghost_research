@@ -1,6 +1,6 @@
 # Swarm research session — master report (2026-07-05)
 
-**Status:** 27 primary experiments + 5 forks dispatched via parallel subagents.  
+**Status:** 27 primary experiments + 8 forks; goal-session additions below (2026-07-06).
 **Repo:** `/home/micah/Desktop/Sylorlabs/ghost_research`
 
 One subagent per open research question from the 2026-07-05 experiment queue. Fork agents ran on PASS/FAIL hits that opened new questions.
@@ -76,6 +76,25 @@ One subagent per open research question from the 2026-07-05 experiment queue. Fo
 | **E4-G00** | EXP-5 novel survivor | **KEEP** | ~0.46 held-out, 0 lift | `swarm_fork_e4_g00_mint.md` |
 | **Triple-arity** | EXP-1 pair ceiling | **PASS** | triple 1.000, quad next | `swarm_fork_triple_arity.md` |
 | **Quad-arity** | Triple fork | **PASS** | quad 1.000, quint next | `swarm_fork_quad_arity.md` |
+| **Quint-arity** | Quad fork | **PASS** | quint 1.000, CEILING BROKEN | `swarm_fork_quint_arity.md` |
+| **RQ1++ production** | Unified loop wire-in | **PASS** | 7/7 unified + pair/Walsh stages | `unified_invention.zig` |
+| **Baseline compare** | Invention vs 4 baselines | **PASS** | 11/11 vs 8/3/2/3, 3182 evals | `invention_baseline_compare.zig` |
+| **E26 tax v2** | Equivalence remix | **PARTIAL** | 17/20 repro, 3 novel | `open_invention_e26.md` |
+
+---
+
+## Goal session verification (2026-07-06)
+
+| Gate | Command | Result |
+|------|---------|--------|
+| RQ1++ blind battery ×2 | `zig build open-invention-rq1 --release=fast` | **11/11** both runs |
+| Baseline harness | `zig build invention-baseline-compare --release=fast` | invention **11/11**, beats all baselines, PASS |
+| Quint menu growth ×2 | `zig build menu-growth --release=fast` | Target 7 **1.000**, CEILING BROKEN ✓ |
+| Unified production ×2 | `zig build unified-invention --release=fast` | **7/7** solved |
+| Learned guide | `zig build learned-guide-test --release=fast` | 7/7, **1.45×** certify |
+| E26 equivalence tax | `zig build open-invention-e26 --release=fast` | 17/20 repro, 3 genuinely novel |
+
+Scratch logs: `/tmp/grok-goal-f34e4448a3af/implementer/`
 
 ---
 
