@@ -11,6 +11,7 @@
 const std = @import("std");
 const rq1 = @import("open_invention_rq1.zig");
 const ui = @import("unified_invention.zig");
+const eqtax = @import("equivalence_tax.zig");
 
 pub const GRID_SEED = rq1.GRID_SEED;
 pub const BATTERY_SEED = rq1.BATTERY_SEED;
@@ -218,6 +219,14 @@ pub fn runBlindBatteryOnCtx(
         try out.print("  certified: {d}/{d}\n", .{ solved, ctx.battery.len });
         try out.print("  battery evals: {d}\n", .{b.total()});
         try out.print("  final library: {d} features (growable promotions)\n", .{nlib});
+        if (eqtax.strict_enabled) {
+            try out.print("  tax gate: checked={d} novel={d} remix_blocked={d} novel_rate={d:.1}%\n", .{
+                eqtax.stats.checked,
+                eqtax.stats.novel_allowed,
+                eqtax.stats.remix_blocked,
+                eqtax.stats.novelRate() * 100.0,
+            });
+        }
         try out.print("  VERDICT: {s}\n", .{if (solved >= 10) "PASS" else "FAIL"});
     }
 
@@ -239,5 +248,14 @@ pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
     const out = std.io.getStdOut().writer();
+    var args = try std.process.argsWithAllocator(arena.allocator());
+    defer args.deinit();
+    _ = args.skip();
+    while (args.next()) |arg| {
+        if (std.mem.eql(u8, arg, "--strict-tax")) {
+            eqtax.strict_enabled = true;
+            eqtax.resetStats();
+        }
+    }
     _ = try runBlindBattery(arena.allocator(), out, true, null);
 }

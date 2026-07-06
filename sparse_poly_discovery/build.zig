@@ -1317,6 +1317,33 @@ pub fn build(b: *std.Build) void {
     const run_invent_engine_step = b.step("invention-engine", "Production invention engine: blind battery B with growable menu");
     run_invent_engine_step.dependOn(&run_invent_engine_cmd.step);
 
+    const run_invent_strict_cmd = b.addRunArtifact(invent_engine_exe);
+    run_invent_strict_cmd.addArg("--strict-tax");
+    const run_invent_strict_step = b.step("invention-engine-strict-tax", "Invention engine with E26 tax promotion gate");
+    run_invent_strict_step.dependOn(&run_invent_strict_cmd.step);
+
+    const tier8_loop_exe = b.addExecutable(.{
+        .name = "tier8_loop",
+        .root_source_file = b.path("tier8_loop.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_loop_exe);
+    const run_tier8_loop_cmd = b.addRunArtifact(tier8_loop_exe);
+    const run_tier8_loop_step = b.step("tier8-loop", "Tier 8 Wave 0+1: baseline + strict tax gate");
+    run_tier8_loop_step.dependOn(&run_tier8_loop_cmd.step);
+
+    const dispatch_exe = b.addExecutable(.{
+        .name = "swarm_fork_dispatch",
+        .root_source_file = b.path("swarm_fork_dispatch.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(dispatch_exe);
+    const run_dispatch_cmd = b.addRunArtifact(dispatch_exe);
+    const run_dispatch_step = b.step("tier8-dispatch", "Tier 8 fork dispatch registry");
+    run_dispatch_step.dependOn(&run_dispatch_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

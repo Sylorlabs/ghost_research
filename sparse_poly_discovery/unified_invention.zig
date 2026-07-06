@@ -13,6 +13,7 @@
 //! Run: zig build unified-invention --release=fast
 
 const std = @import("std");
+const eqtax = @import("equivalence_tax.zig");
 pub const guide = @import("learned_candidate_guide.zig");
 const hr = @import("hardness_router.zig");
 const oml = @import("operator_menu_lib.zig");
@@ -26,9 +27,9 @@ const VMAX: u8 = 5;
 const THRESH: u8 = 3;
 const MID: f64 = 2.5;
 const THETA: f64 = 0.40;
-const NSAMP: usize = 7000;
-const NTR: usize = 3500;
-const NVA: usize = 5250;
+pub const NSAMP: usize = 7000;
+pub const NTR: usize = 3500;
+pub const NVA: usize = 5250;
 const DOM: usize = 1 << NCELL;
 const MAXFEAT: usize = 32;
 const MAXDEG: usize = 4;
@@ -178,6 +179,10 @@ fn pairProduct(g: [NCELL]u8, i: usize, j: usize) f64 {
     return (@as(f64, @floatFromInt(g[i])) - MID) * (@as(f64, @floatFromInt(g[j])) - MID);
 }
 
+pub fn evalFeaturePublic(f: Feature, g: [NCELL]u8) f64 {
+    return evalFeature(f, g);
+}
+
 fn evalFeature(f: Feature, g: [NCELL]u8) f64 {
     return switch (f) {
         .monomial => |m| phi(g, m),
@@ -202,7 +207,7 @@ fn featureKey(buf: []u8, f: Feature) []const u8 {
     }
 }
 
-fn featuresEqual(a: Feature, b: Feature) bool {
+pub fn featuresEqual(a: Feature, b: Feature) bool {
     const at = std.meta.activeTag(a);
     const bt = std.meta.activeTag(b);
     if (at != bt) return false;
@@ -323,8 +328,10 @@ fn certify(
     const r2 = reconR2(X, feat_scratch, lib.len, w);
     // escape: lifts held-out to ≥COVER from below COVER (same thresholds as invention_engine)
     const escape = cov_after >= COVER and cov_before < COVER;
+    const certified = escape and r2 < R2_MAX;
+    const ok = certified and eqtax.gatePromote(grid, lib, cand, Y, certified);
     return .{
-        .ok = escape and r2 < R2_MAX,
+        .ok = ok,
         .cov_before = cov_before,
         .cov_after = cov_after,
         .r2 = r2,
