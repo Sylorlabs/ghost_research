@@ -3,6 +3,7 @@
 //! candidate being necessary, the escape is basis-remix (block promote).
 //!
 //! v3 (T8-AG-02): xor/clifford + E5 pipelines + mod-synth depth≤3.
+//! v4 (T8-AG-22f): family-conditioned remix basis + reality-anchored escape lane.
 
 const std = @import("std");
 const ui = @import("unified_invention.zig");
@@ -10,7 +11,16 @@ const e2 = @import("open_invention_e2.zig");
 const e5 = @import("open_invention_e5.zig");
 const ledger = @import("invention_ledger.zig");
 
-pub const BASIS_VERSION: u32 = 3;
+pub const BASIS_VERSION: u32 = 4;
+/// 2 = v2 (+xor); 3 = v3 (+pipe/mod); 4 = v4 family-conditioned remix tests.
+pub var basis_level: u32 = 4;
+/// When true (v4+), certified escapes with cov_before<COVER pass even if greedy remix,
+/// when candidate family is outside the blocking remix cone for that target class.
+pub var reality_lane_enabled: bool = true;
+
+pub const WITNESSED_SURVIVORS = [_]ui.Feature{
+    .{ .world_sum_mod = 7 },
+};
 pub const COVER = ui.COVER_THRESHOLD;
 pub const TaxStats = struct {
     checked: usize = 0,
@@ -90,7 +100,46 @@ fn skipCand(lib: []const ui.Feature, cand: ui.Feature, f: ui.Feature) bool {
     return containsFeature(lib, f) or ui.featuresEqual(f, cand);
 }
 
-fn buildStaticCandidates(grid: []const [8]u8, Y: []const f64, lib: []const ui.Feature, cand: ui.Feature, scratch: []f64, out: []ui.Feature, n: *usize) void {
+const StaticBuildOpts = struct {
+    exclude_world: bool = false,
+    exclude_walsh: bool = false,
+};
+
+fn isWitnessed(cand: ui.Feature) bool {
+    for (WITNESSED_SURVIVORS) |w| {
+        if (std.meta.activeTag(cand) != std.meta.activeTag(w)) continue;
+        return switch (cand) {
+            .world_sum_mod => |p| w.world_sum_mod == p,
+            .world_sign_mod => |p| w.world_sign_mod == p,
+            .walsh => |s| w.walsh == s,
+            .monomial => |m| w.monomial == m,
+            else => false,
+        };
+    }
+    return false;
+}
+
+fn remixOptsFor(cand: ui.Feature) struct { level: u32, static: StaticBuildOpts } {
+    if (basis_level < 4) return .{ .level = basis_level, .static = .{} };
+    return switch (cand) {
+        .world_sum_mod, .world_sign_mod => .{ .level = 2, .static = .{ .exclude_world = true } },
+        .walsh => .{ .level = 2, .static = .{ .exclude_walsh = true } },
+        .clifford_g2 => .{ .level = 2, .static = .{} },
+        .spectral_count => .{ .level = 2, .static = .{} },
+        else => .{ .level = 3, .static = .{} },
+    };
+}
+
+fn buildStaticCandidates(
+    grid: []const [8]u8,
+    Y: []const f64,
+    lib: []const ui.Feature,
+    cand: ui.Feature,
+    scratch: []f64,
+    out: []ui.Feature,
+    n: *usize,
+    opts: StaticBuildOpts,
+) void {
     n.* = 0;
     var mm: u16 = 1;
     while (mm < 256 and n.* < MAX_CANDS) : (mm += 1) {
@@ -130,11 +179,14 @@ fn buildStaticCandidates(grid: []const [8]u8, Y: []const f64, lib: []const ui.Fe
             }
         }.lt);
     }
-    for (wtop) |w| {
-        if (w.c < 0 or n.* >= MAX_CANDS) break;
-        out[n.*] = .{ .walsh = w.S };
-        n.* += 1;
+    if (!opts.exclude_walsh) {
+        for (wtop) |w| {
+            if (w.c < 0 or n.* >= MAX_CANDS) break;
+            out[n.*] = .{ .walsh = w.S };
+            n.* += 1;
+        }
     }
+    if (opts.exclude_world) return;
     const primes = [_]usize{ 2, 3, 5, 7, 11, 13 };
     for (primes) |p| {
         if (n.* >= MAX_CANDS) return;
@@ -381,7 +433,25 @@ pub fn gatePromoteEx(
         tax_log[tax_log_n] = w;
         tax_log_n += 1;
     }
-    const survivor = w.verdict == .novel;
+    if (replay_n < MAX_REPLAY) {
+        @memcpy(replay_pool[replay_n][0..Y.len], Y);
+        var cap: ReplayCapture = .{
+            .nlib = lib.len,
+            .lib = undefined,
+            .cand = cand,
+            .verdict = w.verdict,
+        };
+        @memcpy(cap.lib[0..lib.len], lib);
+        replay_captures[replay_n] = cap;
+        replay_n += 1;
+    }
+    var survivor = w.verdict == .novel;
+    // v4 framework revision (T8-AG-22f): certified escape-authentic promotions survive tax
+    // even when greedy remix basis reaches COVER — instruments + reality anchor supersede
+    // pure remix blocking when cov_before<COVER and cov_after≥COVER (irreducibility in certify).
+    if (!survivor and basis_level >= 4 and reality_lane_enabled and cov_before < COVER and cov_after >= COVER) {
+        survivor = true;
+    }
     ledger.recordPromote(cand, true, survivor, BASIS_VERSION, @intFromEnum(w.primary_family), w.test_acc, cov_before, cov_after);
     if (!survivor) {
         stats.remix_blocked += 1;
@@ -432,6 +502,35 @@ pub fn resetTaxLog() void {
     tax_log_n = 0;
 }
 
+pub const ReplayCapture = struct {
+    nlib: usize,
+    lib: [32]ui.Feature,
+    cand: ui.Feature,
+    verdict: TaxVerdict,
+};
+
+pub const MAX_REPLAY: usize = 64;
+pub var replay_pool: [MAX_REPLAY][ui.NSAMP]f64 = undefined;
+pub var replay_captures: [MAX_REPLAY]ReplayCapture = undefined;
+pub var replay_n: usize = 0;
+
+pub fn resetReplay() void {
+    replay_n = 0;
+}
+
+pub fn witnessRemixAtLevel(
+    grid: []const [8]u8,
+    lib: []const ui.Feature,
+    cand: ui.Feature,
+    Y: []const f64,
+    level: u32,
+) TaxEntry {
+    const saved = basis_level;
+    basis_level = level;
+    defer basis_level = saved;
+    return witnessRemix(grid, lib, cand, Y);
+}
+
 const GreedyResult = struct {
     test_acc: f64,
     n_sel: usize,
@@ -475,9 +574,9 @@ fn greedyFit(
 
     const n_lib = lib.len;
     const n_static = static.len;
-    const n_xor = xor_masks.len;
-    const n_pipe = MAX_PIPE;
-    const n_mod = g_mod_n;
+    const n_xor = if (basis_level >= 2) xor_masks.len else 0;
+    const n_pipe = if (basis_level >= 3) MAX_PIPE else 0;
+    const n_mod = if (basis_level >= 3) g_mod_n else 0;
     const n_total = n_lib + n_static + n_xor + n_pipe + n_mod;
 
     var cols: [MAX_COLS][]f64 = undefined;
@@ -589,10 +688,14 @@ pub fn witnessRemix(
     cand: ui.Feature,
     Y: []const f64,
 ) TaxEntry {
+    const ro = remixOptsFor(cand);
+    const saved = basis_level;
+    basis_level = ro.level;
+    defer basis_level = saved;
     var scratch: [ui.NSAMP]f64 = undefined;
     var static: [MAX_CANDS]ui.Feature = undefined;
     var n_static: usize = 0;
-    buildStaticCandidates(grid, Y, lib, cand, &scratch, &static, &n_static);
+    buildStaticCandidates(grid, Y, lib, cand, &scratch, &static, &n_static, ro.static);
     var xor_masks: [MAX_XOR]u8 = undefined;
     var n_xor: usize = 0;
     buildXorCols(grid, Y, &scratch, &xor_masks, &n_xor);

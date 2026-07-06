@@ -1505,6 +1505,31 @@ pub fn build(b: *std.Build) void {
     const run_tier8_peer_rep = b.step("tier8-peer-replicate", "T8-AG-30: peer replication");
     run_tier8_peer_rep.dependOn(&b.addRunArtifact(tier8_peer_rep_exe).step);
 
+    const tier8_basis_v4_exe = b.addExecutable(.{ .name = "tier8_basis_v4_smoke", .root_source_file = b.path("tier8_basis_v4_smoke.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_basis_v4_exe);
+    const run_tier8_basis_v4 = b.step("tier8-basis-v4", "T8-AG-22f-v4: tax basis v4 Phase 1 gate");
+    run_tier8_basis_v4.dependOn(&b.addRunArtifact(tier8_basis_v4_exe).step);
+
+    const tier8_witness_exe = b.addExecutable(.{ .name = "tier8_witness_hunt", .root_source_file = b.path("tier8_witness_hunt.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_witness_exe);
+    const run_tier8_witness = b.step("tier8-witness-hunt", "T8-AG-23: witness #6 hunt");
+    run_tier8_witness.dependOn(&b.addRunArtifact(tier8_witness_exe).step);
+
+    const tier8_anti_h_exe = b.addExecutable(.{ .name = "tier8_anti_hallucination", .root_source_file = b.path("tier8_anti_hallucination.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_anti_h_exe);
+    const run_tier8_anti_h = b.step("tier8-anti-hallucination", "T8-AG-09: anti-hallucination noise suite");
+    run_tier8_anti_h.dependOn(&b.addRunArtifact(tier8_anti_h_exe).step);
+
+    const tier8_combined_exe = b.addExecutable(.{ .name = "tier8_combined_battery", .root_source_file = b.path("tier8_combined_battery.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_combined_exe);
+    const run_tier8_combined = b.step("tier8-combined-battery", "T8-AG-32b: combined B+C tax v4");
+    run_tier8_combined.dependOn(&b.addRunArtifact(tier8_combined_exe).step);
+
+    const tier8_orch_exe = b.addExecutable(.{ .name = "tier8_orchestrator", .root_source_file = b.path("tier8_orchestrator.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_orch_exe);
+    const run_tier8_orch = b.step("tier8-orchestrator", "T8-AG-31: Tier 8 orchestrator registry");
+    run_tier8_orch.dependOn(&b.addRunArtifact(tier8_orch_exe).step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

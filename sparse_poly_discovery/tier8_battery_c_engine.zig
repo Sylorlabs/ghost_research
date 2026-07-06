@@ -131,8 +131,12 @@ pub const EngineResult = struct {
 };
 
 pub fn runBatteryCEngine(alloc: std.mem.Allocator, out: anytype, strict_tax: bool) !EngineResult {
+    return runBatteryCEngineEx(alloc, out, strict_tax, true);
+}
+
+pub fn runBatteryCEngineEx(alloc: std.mem.Allocator, out: anytype, strict_tax: bool, reset_tax_stats: bool) !EngineResult {
     eqtax.strict_enabled = strict_tax;
-    eqtax.resetStats();
+    if (reset_tax_stats) eqtax.resetStats();
 
     const prep = try ie.prepareBlindBattery(alloc, SilentOut{});
     const ctx = prep.ctx;
