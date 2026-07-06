@@ -350,16 +350,110 @@ fn ensureModBank() void {
     }
 }
 
-fn greedyTestAcc(
+/// Returns true if greedy expanded basis already reaches COVER (candidate is remix).
+pub fn isBasisRemix(
+    grid: []const [8]u8,
+    lib: []const ui.Feature,
+    cand: ui.Feature,
+    Y: []const f64,
+) bool {
+    return witnessRemix(grid, lib, cand, Y).verdict == .remix;
+}
+
+pub fn gatePromote(
+    grid: []const [8]u8,
+    lib: []const ui.Feature,
+    cand: ui.Feature,
+    Y: []const f64,
+    cert_ok: bool,
+) bool {
+    if (!cert_ok) return false;
+    if (!strict_enabled) return true;
+    stats.checked += 1;
+    const w = witnessRemix(grid, lib, cand, Y);
+    if (tax_log_n < MAX_TAX_LOG) {
+        tax_log[tax_log_n] = w;
+        tax_log_n += 1;
+    }
+    if (w.verdict == .remix) {
+        stats.remix_blocked += 1;
+        return false;
+    }
+    stats.novel_allowed += 1;
+    return true;
+}
+
+pub const ColFamily = enum {
+    library,
+    monomial,
+    pair,
+    walsh,
+    world_sum,
+    world_sign,
+    clifford,
+    xor_popcount,
+    pipeline,
+    mod_synth,
+};
+
+pub const TaxVerdict = enum { novel, remix };
+
+pub const TaxEntry = struct {
+    feature_kind: []const u8,
+    verdict: TaxVerdict,
+    test_acc: f64,
+    primary_family: ColFamily,
+    n_basis_cols: u8,
+};
+
+pub const MAX_TAX_LOG: usize = 64;
+pub var tax_log: [MAX_TAX_LOG]TaxEntry = undefined;
+pub var tax_log_n: usize = 0;
+
+pub fn resetTaxLog() void {
+    tax_log_n = 0;
+}
+
+const GreedyResult = struct {
+    test_acc: f64,
+    n_sel: usize,
+    selected: [MAX_BUDGET]usize,
+};
+
+fn colFamily(
+    idx: usize,
+    n_lib: usize,
+    static: []const ui.Feature,
+) ColFamily {
+    if (idx < n_lib) return .library;
+    const si = idx - n_lib;
+    if (si < static.len) {
+        return switch (static[si]) {
+            .monomial => .monomial,
+            .pair_relation => .pair,
+            .walsh => .walsh,
+            .world_sum_mod => .world_sum,
+            .world_sign_mod => .world_sign,
+            .clifford_g2 => .clifford,
+            else => .monomial,
+        };
+    }
+    const rest = si - static.len;
+    if (rest < MAX_XOR) return .xor_popcount;
+    if (rest < MAX_XOR + MAX_PIPE) return .pipeline;
+    return .mod_synth;
+}
+
+fn greedyFit(
     grid: []const [8]u8,
     Y: []const f64,
     lib: []const ui.Feature,
     static: []const ui.Feature,
     xor_masks: []const u8,
     _: []f64,
-) f64 {
+) GreedyResult {
     ensureModBank();
-    const bank = g_mod_bank orelse return 0;
+    const bank = g_mod_bank orelse return .{ .test_acc = 0, .n_sel = 0, .selected = undefined };
 
     const n_lib = lib.len;
     const n_static = static.len;
@@ -367,7 +461,6 @@ fn greedyTestAcc(
     const n_pipe = MAX_PIPE;
     const n_mod = g_mod_n;
     const n_total = n_lib + n_static + n_xor + n_pipe + n_mod;
-    if (n_total == 0) return 0;
 
     var cols: [MAX_COLS][]f64 = undefined;
     var col_store: [MAX_COLS][ui.NSAMP]f64 = undefined;
@@ -406,13 +499,11 @@ fn greedyTestAcc(
     var Xte: [ui.NSAMP][MAX_BUDGET]f64 = undefined;
     var Xtr_rows: [ui.NSAMP][]f64 = undefined;
     var Xte_rows: [ui.NSAMP][]f64 = undefined;
-
     var best_test: f64 = 0;
 
     for (0..MAX_BUDGET) |_| {
         var round_best_val: f64 = -1;
         var round_best_idx: ?usize = null;
-
         const CandScore = struct { idx: usize, corr: f64 };
         var top: [PREFILTER_TOP]CandScore = undefined;
         for (&top) |*t| t.* = .{ .idx = 0, .corr = -2 };
@@ -431,7 +522,6 @@ fn greedyTestAcc(
                 }
             }.lt);
         }
-
         for (top) |cs| {
             if (cs.corr < 0) break;
             const dim = n_sel + 1;
@@ -447,11 +537,9 @@ fn greedyTestAcc(
                 round_best_idx = cs.idx;
             }
         }
-
         const pick = round_best_idx orelse break;
         selected[n_sel] = pick;
         n_sel += 1;
-
         const dim = n_sel;
         for (0..ui.NSAMP) |s| {
             for (0..dim) |j| Xtr[s][j] = cols[selected[j]][s];
@@ -460,7 +548,6 @@ fn greedyTestAcc(
         for (0..ui.NSAMP) |s| {
             for (0..dim) |j| Xte[s][j] = cols[selected[j]][s];
         }
-
         fitLogit(&Xtr_rows, Y, dim, 120, 0.05, &w);
         for (0..dim) |j| {
             var mu: f64 = 0;
@@ -475,16 +562,15 @@ fn greedyTestAcc(
         best_test = accLogit(&Xte_rows, Y, &w, dim, 0, ui.NSAMP);
         if (best_test >= COVER) break;
     }
-    return best_test;
+    return .{ .test_acc = best_test, .n_sel = n_sel, .selected = selected };
 }
 
-/// Returns true if greedy expanded basis already reaches COVER (candidate is remix).
-pub fn isBasisRemix(
+pub fn witnessRemix(
     grid: []const [8]u8,
     lib: []const ui.Feature,
     cand: ui.Feature,
     Y: []const f64,
-) bool {
+) TaxEntry {
     var scratch: [ui.NSAMP]f64 = undefined;
     var static: [MAX_CANDS]ui.Feature = undefined;
     var n_static: usize = 0;
@@ -492,26 +578,19 @@ pub fn isBasisRemix(
     var xor_masks: [MAX_XOR]u8 = undefined;
     var n_xor: usize = 0;
     buildXorCols(grid, Y, &scratch, &xor_masks, &n_xor);
-    const test_acc = greedyTestAcc(grid, Y, lib, static[0..n_static], xor_masks[0..n_xor], &scratch);
-    return test_acc >= COVER;
-}
-
-pub fn gatePromote(
-    grid: []const [8]u8,
-    lib: []const ui.Feature,
-    cand: ui.Feature,
-    Y: []const f64,
-    cert_ok: bool,
-) bool {
-    if (!cert_ok) return false;
-    if (!strict_enabled) return true;
-    stats.checked += 1;
-    if (isBasisRemix(grid, lib, cand, Y)) {
-        stats.remix_blocked += 1;
-        return false;
-    }
-    stats.novel_allowed += 1;
-    return true;
+    const g = greedyFit(grid, Y, lib, static[0..n_static], xor_masks[0..n_xor], &scratch);
+    const remix = g.test_acc >= COVER;
+    const primary: ColFamily = if (g.n_sel > 0)
+        colFamily(g.selected[g.n_sel - 1], lib.len, static[0..n_static])
+    else
+        .library;
+    return .{
+        .feature_kind = @tagName(std.meta.activeTag(cand)),
+        .verdict = if (remix) .remix else .novel,
+        .test_acc = g.test_acc,
+        .primary_family = primary,
+        .n_basis_cols = @intCast(g.n_sel),
+    };
 }
 
 pub fn resetStats() void {

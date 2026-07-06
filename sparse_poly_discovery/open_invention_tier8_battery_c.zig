@@ -129,12 +129,14 @@ pub fn measureMonomialCoverage(
     return cov;
 }
 
-pub fn runBatteryC(alloc: std.mem.Allocator, out: anytype) !BatteryCResult {
-    const prep = try ie.prepareBlindBattery(alloc, SilentOut{});
+pub const HELDOUT_GRID_SEEDS = [_]u64{ 0xC1B10D20260706, 0xC2B10D20260707 };
+
+pub fn runBatteryCWithSeed(alloc: std.mem.Allocator, grid_seed: u64, out: anytype) !BatteryCResult {
+    const prep = try ie.prepareBlindBatterySeed(alloc, grid_seed, SilentOut{});
     const ctx = prep.ctx;
 
     try out.print("=== T8-AG-11: Battery C (outside deg2 monomial closure) ===\n\n", .{});
-    try out.print("Grid seed 0x{X:0>16} | targets={d}\n", .{ GRID_SEED, BATTERY_C.len });
+    try out.print("Grid seed 0x{X:0>16} | targets={d}\n", .{ grid_seed, BATTERY_C.len });
     try out.print("PASS bar: ≥{d} targets, mean mono coverage <{d:.2}\n\n", .{ MIN_TARGETS, MONO_THRESH });
 
     var sum_cov: f64 = 0;
@@ -167,9 +169,54 @@ pub fn runBatteryC(alloc: std.mem.Allocator, out: anytype) !BatteryCResult {
     };
 }
 
+pub fn runBatteryC(alloc: std.mem.Allocator, out: anytype) !BatteryCResult {
+    return runBatteryCWithSeed(alloc, GRID_SEED, out);
+}
+
+pub const ReplicationResult = struct {
+    runs: [HELDOUT_GRID_SEEDS.len]BatteryCResult,
+    seeds: [HELDOUT_GRID_SEEDS.len]u64,
+    pass: bool,
+};
+
+pub fn runBatteryCReplication(alloc: std.mem.Allocator, out: anytype) !ReplicationResult {
+    try out.print("=== T8-AG-11f: Battery C held-out replication ×{d} ===\n\n", .{HELDOUT_GRID_SEEDS.len});
+    var runs: [HELDOUT_GRID_SEEDS.len]BatteryCResult = undefined;
+    var all_pass = true;
+    for (HELDOUT_GRID_SEEDS, 0..) |seed, i| {
+        try out.print("── Run {d}: grid seed 0x{X:0>16} ──\n", .{ i + 1, seed });
+        runs[i] = try runBatteryCWithSeed(alloc, seed, out);
+        try out.print("\n", .{});
+        if (!runs[i].pass) all_pass = false;
+    }
+    try out.print("════════════════════ REPLICATION SUMMARY ════════════════════\n", .{});
+    for (HELDOUT_GRID_SEEDS, 0..) |seed, i| {
+        try out.print("  seed 0x{X:0>16}: mean_mono={d:.3} hard={d}/{d} {s}\n", .{
+            seed,
+            runs[i].mean_mono_cov,
+            runs[i].hard_targets,
+            runs[i].n_targets,
+            if (runs[i].pass) "PASS" else "FAIL",
+        });
+    }
+    try out.print("  VERDICT: {s}\n", .{if (all_pass) "PASS" else "FAIL"});
+    return .{ .runs = runs, .seeds = HELDOUT_GRID_SEEDS, .pass = all_pass };
+}
+
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
     const out = std.io.getStdOut().writer();
-    _ = try runBatteryC(arena.allocator(), out);
+    var args = try std.process.argsWithAllocator(arena.allocator());
+    defer args.deinit();
+    _ = args.skip();
+    var replicate = false;
+    while (args.next()) |arg| {
+        if (std.mem.eql(u8, arg, "--replicate")) replicate = true;
+    }
+    if (replicate) {
+        _ = try runBatteryCReplication(arena.allocator(), out);
+    } else {
+        _ = try runBatteryC(arena.allocator(), out);
+    }
 }

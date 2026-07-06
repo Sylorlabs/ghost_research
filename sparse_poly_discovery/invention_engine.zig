@@ -113,12 +113,14 @@ pub const BlindBatteryCtx = struct {
     battery: []rq1.BatteryTarget,
 };
 
-pub fn prepareBlindBattery(alloc: std.mem.Allocator, out: anytype) !struct {
+pub const BlindBatteryPrep = struct {
     ctx: BlindBatteryCtx,
     trained_lib: []const rq1.Feature,
     trained_nlib: usize,
-} {
-    var prng = std.Random.DefaultPrng.init(GRID_SEED);
+};
+
+pub fn prepareBlindBatterySeed(alloc: std.mem.Allocator, grid_seed: u64, out: anytype) !BlindBatteryPrep {
+    var prng = std.Random.DefaultPrng.init(grid_seed);
     const rand = prng.random();
 
     const grid = try alloc.alloc([8]u8, rq1.NSAMP);
@@ -169,6 +171,10 @@ pub fn prepareBlindBattery(alloc: std.mem.Allocator, out: anytype) !struct {
         .trained_lib = trained.lib[0..trained.nlib],
         .trained_nlib = trained.nlib,
     };
+}
+
+pub fn prepareBlindBattery(alloc: std.mem.Allocator, out: anytype) !BlindBatteryPrep {
+    return prepareBlindBatterySeed(alloc, GRID_SEED, out);
 }
 
 /// Run blind battery B from prepared context; counts only battery-phase evals in `budget`.
@@ -255,6 +261,7 @@ pub fn main() !void {
         if (std.mem.eql(u8, arg, "--strict-tax")) {
             eqtax.strict_enabled = true;
             eqtax.resetStats();
+            eqtax.resetTaxLog();
         }
     }
     _ = try runBlindBattery(arena.allocator(), out, true, null);

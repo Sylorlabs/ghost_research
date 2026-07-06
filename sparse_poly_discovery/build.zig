@@ -1371,6 +1371,22 @@ pub fn build(b: *std.Build) void {
     const run_tier8_bc_engine_strict_step = b.step("tier8-battery-c-engine-strict", "T8-AG-15: Battery C + strict tax");
     run_tier8_bc_engine_strict_step.dependOn(&run_tier8_bc_engine_strict_cmd.step);
 
+    const tier8_tax_tax_exe = b.addExecutable(.{
+        .name = "tier8_tax_taxonomy",
+        .root_source_file = b.path("tier8_tax_taxonomy.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_tax_tax_exe);
+    const run_tier8_tax_tax_cmd = b.addRunArtifact(tier8_tax_tax_exe);
+    const run_tier8_tax_tax_step = b.step("tier8-tax-taxonomy", "T8-AG-02f: remix taxonomy JSON");
+    run_tier8_tax_tax_step.dependOn(&run_tier8_tax_tax_cmd.step);
+
+    const run_tier8_bc_repl_cmd = b.addRunArtifact(tier8_battery_c_exe);
+    run_tier8_bc_repl_cmd.addArg("--replicate");
+    const run_tier8_bc_repl_step = b.step("tier8-battery-c-replicate", "T8-AG-11f: Battery C held-out ×2");
+    run_tier8_bc_repl_step.dependOn(&run_tier8_bc_repl_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
