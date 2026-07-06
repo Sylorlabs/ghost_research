@@ -966,7 +966,29 @@ fn executeIntent(
             return .certified;
         },
         .discover_feature => {
-            // Hardness router chooses escalation; unified loop validates on full 7-target menu.
+            // Tier 6: learned guide ranks candidates before certify (EXP-6 policy).
+            var g = unified.guide.Guide.init(a);
+            defer g.deinit();
+            try unified.bootstrapGuide(a, &g, 0xDEAD_BEEF_CAFE);
+            const parity_spec = unified.TargetSpec{ .name = "parity-of-count", .kind = .parity_of_count };
+            const gr = try unified.runSingleTargetGuided(a, out, parity_spec, 0xDEAD_BEEF_CAFE, &g, true);
+            if (gr.solved) {
+                const src = switch (gr.source) {
+                    .forge => "guided monomial forge",
+                    .pair => "pair hardness router",
+                    .walsh => "conditional Walsh (q38)",
+                    .menu => "guided operator menu",
+                    .world => "guided world pool",
+                    .base => "base library",
+                };
+                try out.print("[CERTIFIED DISCOVERY] learned-guide route acc={d:.3} via {s} ({d} certify steps).\n", .{
+                    gr.cov,
+                    src,
+                    gr.certify_calls,
+                });
+                return .certified;
+            }
+            // Fallback: hardness router + unified single-target.
             const r = try exploreMysteryParity(0xDEAD_BEEF_CAFE, a, out);
             try out.print("  hardness route chosen: {s} (task_class={s})\n", .{
                 route_name[@intFromEnum(r.route)],
@@ -981,7 +1003,6 @@ fn executeIntent(
                 });
                 return .certified;
             }
-            const parity_spec = unified.TargetSpec{ .name = "parity-of-count", .kind = .parity_of_count };
             const ur = try unified.runSingleTarget(a, out, parity_spec, 0xDEAD_BEEF_CAFE, true);
             if (ur.solved) {
                 const src = switch (ur.source) {

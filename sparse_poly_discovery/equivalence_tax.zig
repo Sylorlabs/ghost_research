@@ -4,7 +4,9 @@
 
 const std = @import("std");
 const ui = @import("unified_invention.zig");
+const e2 = @import("open_invention_e2.zig");
 
+pub const BASIS_VERSION: u32 = 2;
 pub const COVER = ui.COVER_THRESHOLD;
 pub const TaxStats = struct {
     checked: usize = 0,
@@ -20,9 +22,11 @@ pub const TaxStats = struct {
 pub var strict_enabled: bool = false;
 pub var stats: TaxStats = .{};
 
-const MAX_BUDGET: usize = 6;
+const MAX_BUDGET: usize = 8;
 const PREFILTER_TOP: usize = 64;
-const MAX_CANDS: usize = 512;
+const MAX_CANDS: usize = 400;
+const MAX_XOR: usize = 16;
+const MAX_COLS: usize = MAX_CANDS + 32 + MAX_XOR;
 
 fn sigmoid(z: f64) f64 {
     return 1.0 / (1.0 + @exp(-@max(@as(f64, -30), @min(@as(f64, 30), z))));
@@ -76,7 +80,11 @@ fn containsFeature(list: []const ui.Feature, f: ui.Feature) bool {
     return false;
 }
 
-fn buildStaticCandidates(grid: []const [8]u8, Y: []const f64, lib: []const ui.Feature, scratch: []f64, out: []ui.Feature, n: *usize) void {
+fn skipCand(lib: []const ui.Feature, cand: ui.Feature, f: ui.Feature) bool {
+    return containsFeature(lib, f) or ui.featuresEqual(f, cand);
+}
+
+fn buildStaticCandidates(grid: []const [8]u8, Y: []const f64, lib: []const ui.Feature, cand: ui.Feature, scratch: []f64, out: []ui.Feature, n: *usize) void {
     n.* = 0;
     var mm: u16 = 1;
     while (mm < 256 and n.* < MAX_CANDS) : (mm += 1) {
@@ -84,14 +92,14 @@ fn buildStaticCandidates(grid: []const [8]u8, Y: []const f64, lib: []const ui.Fe
         const pc = @popCount(mask);
         if (pc < 1 or pc > 4) continue;
         const f: ui.Feature = .{ .monomial = mask };
-        if (containsFeature(lib, f)) continue;
+        if (skipCand(lib, cand, f)) continue;
         out[n.*] = f;
         n.* += 1;
     }
     for (0..8) |i| for (i + 1..8) |j| {
         if (n.* >= MAX_CANDS) return;
         const f: ui.Feature = .{ .pair_relation = .{ .i = i, .j = j } };
-        if (containsFeature(lib, f)) continue;
+        if (skipCand(lib, cand, f)) continue;
         out[n.*] = f;
         n.* += 1;
     };
@@ -105,7 +113,7 @@ fn buildStaticCandidates(grid: []const [8]u8, Y: []const f64, lib: []const ui.Fe
     while (S < 256) : (S += 1) {
         const mask: u8 = @intCast(S);
         const f: ui.Feature = .{ .walsh = mask };
-        if (containsFeature(lib, f)) continue;
+        if (skipCand(lib, cand, f)) continue;
         for (0..grid.len) |s| scratch[s] = ui.evalFeaturePublic(f, grid[s]);
         const c = @abs(corrTrain(scratch, Y));
         if (c <= wtop[31].c) continue;
@@ -125,16 +133,46 @@ fn buildStaticCandidates(grid: []const [8]u8, Y: []const f64, lib: []const ui.Fe
     for (primes) |p| {
         if (n.* >= MAX_CANDS) return;
         const fs: ui.Feature = .{ .world_sum_mod = p };
-        if (!containsFeature(lib, fs)) {
+        if (!skipCand(lib, cand, fs)) {
             out[n.*] = fs;
             n.* += 1;
         }
         if (n.* >= MAX_CANDS) return;
         const fg: ui.Feature = .{ .world_sign_mod = p };
-        if (!containsFeature(lib, fg)) {
+        if (!skipCand(lib, cand, fg)) {
             out[n.*] = fg;
             n.* += 1;
         }
+    }
+    const cliff: ui.Feature = .{ .clifford_g2 = {} };
+    if (n.* < MAX_CANDS and !skipCand(lib, cand, cliff)) {
+        out[n.*] = cliff;
+        n.* += 1;
+    }
+}
+
+fn buildXorCols(grid: []const [8]u8, Y: []const f64, scratch: []f64, masks: []u8, n: *usize) void {
+    n.* = 0;
+    const XorScore = struct { mask: u8, c: f64 };
+    var top: [MAX_XOR]XorScore = undefined;
+    for (&top) |*t| t.* = .{ .mask = 0, .c = -2 };
+    var xm: u16 = 1;
+    while (xm < 256) : (xm += 1) {
+        const mask: u8 = @intCast(xm);
+        for (0..grid.len) |s| scratch[s] = e2.xorPopcountReadout(grid[s], mask);
+        const c = @abs(corrTrain(scratch, Y));
+        if (c <= top[top.len - 1].c) continue;
+        top[top.len - 1] = .{ .mask = mask, .c = c };
+        std.sort.pdq(XorScore, &top, {}, struct {
+            fn lt(_: void, a: XorScore, b: XorScore) bool {
+                return a.c > b.c;
+            }
+        }.lt);
+    }
+    for (top) |t| {
+        if (t.c < 0 or n.* >= MAX_XOR) break;
+        masks[n.*] = t.mask;
+        n.* += 1;
     }
 }
 
@@ -143,15 +181,17 @@ fn greedyTestAcc(
     Y: []const f64,
     lib: []const ui.Feature,
     static: []const ui.Feature,
+    xor_masks: []const u8,
     _: []f64,
 ) f64 {
     const n_lib = lib.len;
     const n_static = static.len;
-    const n_total = n_lib + n_static;
+    const n_xor = xor_masks.len;
+    const n_total = n_lib + n_static + n_xor;
     if (n_total == 0) return 0;
 
-    var cols: [MAX_CANDS + 32][]f64 = undefined;
-    var col_store: [MAX_CANDS + 32][ui.NSAMP]f64 = undefined;
+    var cols: [MAX_COLS][]f64 = undefined;
+    var col_store: [MAX_COLS][ui.NSAMP]f64 = undefined;
     for (0..n_lib) |i| {
         for (0..grid.len) |s| col_store[i][s] = ui.evalFeaturePublic(lib[i], grid[s]);
         cols[i] = col_store[i][0..];
@@ -159,6 +199,11 @@ fn greedyTestAcc(
     for (0..n_static) |i| {
         const j = n_lib + i;
         for (0..grid.len) |s| col_store[j][s] = ui.evalFeaturePublic(static[i], grid[s]);
+        cols[j] = col_store[j][0..];
+    }
+    for (0..n_xor) |i| {
+        const j = n_lib + n_static + i;
+        for (0..grid.len) |s| col_store[j][s] = e2.xorPopcountReadout(grid[s], xor_masks[i]);
         cols[j] = col_store[j][0..];
     }
 
@@ -248,12 +293,14 @@ pub fn isBasisRemix(
     cand: ui.Feature,
     Y: []const f64,
 ) bool {
-    _ = cand;
     var scratch: [ui.NSAMP]f64 = undefined;
     var static: [MAX_CANDS]ui.Feature = undefined;
     var n_static: usize = 0;
-    buildStaticCandidates(grid, Y, lib, &scratch, &static, &n_static);
-    const test_acc = greedyTestAcc(grid, Y, lib, static[0..n_static], &scratch);
+    buildStaticCandidates(grid, Y, lib, cand, &scratch, &static, &n_static);
+    var xor_masks: [MAX_XOR]u8 = undefined;
+    var n_xor: usize = 0;
+    buildXorCols(grid, Y, &scratch, &xor_masks, &n_xor);
+    const test_acc = greedyTestAcc(grid, Y, lib, static[0..n_static], xor_masks[0..n_xor], &scratch);
     return test_acc >= COVER;
 }
 

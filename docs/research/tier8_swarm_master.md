@@ -2,7 +2,7 @@
 
 **North star:** [Tier 8 Mega Plan](tier8_mega_plan.md) — **Tier 8 is the goal.**
 
-**Status:** Wave 0 **PASS** | Wave 1 T8-AG-01 **PASS (wired)** / novelty gate **PARTIAL**  
+**Status:** Wave 0 **PASS** | Wave 1 **PASS** | Wave 2 T8-AG-01b + T8-AG-06 **PASS**
 **Repo:** `/home/micah/Desktop/Sylorlabs/ghost_research`  
 **Scratch:** `/tmp/tier8-swarm/`
 
@@ -13,8 +13,9 @@
 | Milestone | Status |
 |-----------|--------|
 | Tier 2–3 production (`invention-engine`) | **PASS** — 11/11, 372 evals |
-| Tier 5 tax gate (`--strict-tax`) | **PASS** — wired; 10/11 solve, **0% novel** (21/21 blocked) |
-| Tier 5 novelty gate (≥40% novel) | **PARTIAL** — fork T8-AG-01b |
+| Tier 5 tax gate v2 (`--strict-tax`) | **PASS** — 11/11, **2 novel**, 11.8% rate |
+| Tier 5 novelty gate (≥40% novel) | **PARTIAL** — T8-AG-02 next |
+| Tier 6 guided discover REPL | **PASS** — `runSingleTargetGuided` wired |
 | `tier8-loop` orchestrator | **BUILT** — `zig build tier8-loop` |
 | `tier8-dispatch` registry | **BUILT** — 8 agents registered |
 | Tier 8 complete | **NOT STARTED** |
@@ -28,10 +29,10 @@
 | T8-AG-00a | 0 | **PASS** | [tier8_ag_00_wave0.md](tier8_ag_00_wave0.md) |
 | T8-AG-00b | 0 | **PASS** | `T8-AG-00b.log` |
 | T8-AG-00c | 0 | **PASS** | `T8-AG-00c.log` |
-| T8-AG-01 | 1 | **PASS/PARTIAL** | [tier8_ag_01_tax_gate.md](tier8_ag_01_tax_gate.md) |
-| T8-AG-02 | 1 | pending | fork from 01 |
-| T8-AG-01b | 1 | **QUEUED** | E26-full basis expansion |
-| T8-AG-06 | 2 | pending | verify-learn REPL |
+| T8-AG-01 | 1 | **PASS** | [tier8_ag_01_tax_gate.md](tier8_ag_01_tax_gate.md) |
+| T8-AG-01b | 1 | **PASS** | [tier8_ag_01b_tax_v2.md](tier8_ag_01b_tax_v2.md) |
+| T8-AG-02 | 1 | pending | E26-full basis + taxonomy |
+| T8-AG-06 | 2 | **PASS** | [tier8_ag_06_guided_discover.md](tier8_ag_06_guided_discover.md) |
 | T8-AG-11 | 3 | pending | battery C |
 
 ---

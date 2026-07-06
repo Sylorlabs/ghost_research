@@ -18,7 +18,7 @@ pub fn main() !void {
     const a = try ie.runBlindBattery(arena.allocator(), out, true, null);
     try out.print("  result: {d}/{d} evals={d}\n\n", .{ a.solved, a.total, a.evals });
 
-    try out.print("── Pass B: strict tax gate (Tier 5) ──\n", .{});
+    try out.print("── Pass B: strict tax gate v{d} (Tier 5) ──\n", .{eqtax.BASIS_VERSION});
     eqtax.strict_enabled = true;
     eqtax.resetStats();
     const b = try ie.runBlindBattery(arena.allocator(), out, true, null);

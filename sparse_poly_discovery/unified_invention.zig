@@ -1559,6 +1559,101 @@ pub fn runSingleTarget(
     };
 }
 
+/// Guided single-target discover (EXP-6 policy ranks candidates before certify).
+pub fn runSingleTargetGuided(
+    alloc: std.mem.Allocator,
+    out: anytype,
+    spec: TargetSpec,
+    seed: u64,
+    g: *guide.Guide,
+    verbose: bool,
+) !struct { solved: bool, cov: f64, source: Source, certify_calls: usize } {
+    var prng = std.Random.DefaultPrng.init(seed);
+    const rand = prng.random();
+
+    const grid = try alloc.alloc([NCELL]u8, NSAMP);
+    for (0..NSAMP) |s| {
+        for (0..NCELL) |i| grid[s][i] = rand.intRangeAtMost(u8, 0, VMAX);
+    }
+
+    const Y = try alloc.alloc(f64, NSAMP);
+    for (0..NSAMP) |s| Y[s] = label(grid[s], spec);
+
+    const X = try alloc.alloc([]f64, NSAMP);
+    const phiTgt = try alloc.alloc(f64, NSAMP);
+    for (0..NSAMP) |s| X[s] = try alloc.alloc(f64, MAXFEAT);
+    var w: [MAXFEAT + 1]f64 = undefined;
+    var feat: [NSAMP]f64 = undefined;
+
+    var lib: [MAXFEAT]Feature = undefined;
+    var nlib: usize = 0;
+    for (0..NCELL) |i| {
+        lib[nlib] = .{ .monomial = @as(u8, 1) << @intCast(i) };
+        nlib += 1;
+    }
+
+    var certify_calls: usize = 0;
+    var cost = CostCounter{};
+
+    var source: Source = .base;
+    if (verbose) try out.print("  guided discover [{s}]: forge+ → pair → Walsh → menu+ → world+\n", .{@tagName(spec.kind)});
+
+    var cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+    const hardness = targetHardness(grid, Y, &feat);
+    cost.probe_calls += 2;
+
+    if (cov0 < COVER) {
+        var forge_round: usize = 0;
+        while (forge_round < 6) : (forge_round += 1) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+            if (cov0 >= COVER) break;
+            certify_calls += 1;
+            if (!(tryMonomialForgeGuided(X, grid, &lib, &nlib, Y, phiTgt, &w, hardness, g, guide.TOP_K_DEFAULT, &cost, out, !verbose) catch false)) break;
+        }
+        cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+        if (cov0 >= COVER) source = .forge;
+    }
+
+    if (cov0 < COVER) {
+        certify_calls += 1;
+        if (tryPairRouter(X, grid, &lib, &nlib, Y, phiTgt, &w, out) catch false) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+            if (cov0 >= COVER) source = .pair;
+        }
+    }
+
+    if (cov0 < COVER) {
+        certify_calls += 1;
+        if (tryConditionalWalsh(X, grid, &lib, &nlib, Y, phiTgt, &w, out) catch false) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+            if (cov0 >= COVER) source = .walsh;
+        }
+    }
+
+    if (cov0 < COVER) {
+        certify_calls += 1;
+        if (tryOperatorMenuGuided(X, grid, &lib, &nlib, Y, phiTgt, &w, hardness, g, &cost, out) catch false) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+            if (cov0 >= COVER) source = .menu;
+        }
+    }
+
+    if (cov0 < COVER) {
+        certify_calls += 1;
+        if (tryWorldPoolGuided(X, grid, &lib, &nlib, Y, phiTgt, &w, hardness, g, guide.TOP_K_WORLD, &cost, out) catch false) {
+            cov0 = coverage(X, grid, lib[0..nlib], Y, &w);
+            if (cov0 >= COVER) source = .world;
+        }
+    }
+
+    return .{
+        .solved = cov0 >= COVER,
+        .cov = cov0,
+        .source = if (cov0 >= COVER) source else .base,
+        .certify_calls = certify_calls,
+    };
+}
+
 /// Stable fingerprint for a structured target (E12 / EXP-7 held-out splits).
 pub fn specFingerprint(spec: TargetSpec) u64 {
     var h: u64 = @intFromEnum(spec.kind);
