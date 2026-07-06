@@ -1,12 +1,15 @@
 //! E26-style equivalence tax — promotion gate for Tier 5.
 //! Greedy forward selection over expanded basis; if test ≥ COVER without the
 //! candidate being necessary, the escape is basis-remix (block promote).
+//!
+//! v3 (T8-AG-02): xor/clifford + E5 pipelines + mod-synth depth≤3.
 
 const std = @import("std");
 const ui = @import("unified_invention.zig");
 const e2 = @import("open_invention_e2.zig");
+const e5 = @import("open_invention_e5.zig");
 
-pub const BASIS_VERSION: u32 = 2;
+pub const BASIS_VERSION: u32 = 3;
 pub const COVER = ui.COVER_THRESHOLD;
 pub const TaxStats = struct {
     checked: usize = 0,
@@ -26,7 +29,9 @@ const MAX_BUDGET: usize = 8;
 const PREFILTER_TOP: usize = 64;
 const MAX_CANDS: usize = 400;
 const MAX_XOR: usize = 16;
-const MAX_COLS: usize = MAX_CANDS + 32 + MAX_XOR;
+const MAX_PIPE: usize = e5.N_INNER1 * e5.N_INNER2;
+const MAX_MOD: usize = 64;
+const MAX_COLS: usize = MAX_CANDS + 32 + MAX_XOR + MAX_PIPE + MAX_MOD;
 
 fn sigmoid(z: f64) f64 {
     return 1.0 / (1.0 + @exp(-@max(@as(f64, -30), @min(@as(f64, 30), z))));
@@ -176,6 +181,175 @@ fn buildXorCols(grid: []const [8]u8, Y: []const f64, scratch: []f64, masks: []u8
     }
 }
 
+fn pipelineScalar(in1: e5.Inner1, in2: e5.Inner2, g: [8]u8) f64 {
+    const S = e5.inner1Scalar(in1, g);
+    return switch (in2) {
+        .linear => S,
+        .lift_q => S * S,
+        .half_p => @floatFromInt(@as(usize, @intFromFloat(@round(S))) & 1),
+        .scan_p => @cos(std.math.pi * S / @as(f64, @floatFromInt(e5.NCELL))),
+        .bind_xy => @as(f64, @floatFromInt(g[0])) * @as(f64, @floatFromInt(g[1])),
+        .bind_abs => @abs(@as(f64, @floatFromInt(g[0])) - @as(f64, @floatFromInt(g[1]))),
+        .bind_max => @floatFromInt(@max(g[0], g[1])),
+    };
+}
+
+// ── Mod synthesis bank (E26 / E14) ───────────────────────────────────────────
+
+const SynthLeaf = enum { count3, count2, count4, inv, sum };
+
+const ScalarCtx = struct {
+    count3: f64,
+    count2: f64,
+    count4: f64,
+    inv: f64,
+    sum: f64,
+
+    fn leafVal(self: ScalarCtx, leaf: SynthLeaf) f64 {
+        return switch (leaf) {
+            .count3 => self.count3,
+            .count2 => self.count2,
+            .count4 => self.count4,
+            .inv => self.inv,
+            .sum => self.sum,
+        };
+    }
+
+    fn fromGrid(g: [8]u8) ScalarCtx {
+        return .{
+            .count3 = countGE(g, 3),
+            .count2 = countGE(g, 2),
+            .count4 = countGE(g, 4),
+            .inv = @floatFromInt(inversionCount(g)),
+            .sum = @floatFromInt(gridSum(g)),
+        };
+    }
+};
+
+fn countGE(g: [8]u8, thr: u8) f64 {
+    var c: usize = 0;
+    for (g) |v| {
+        if (v >= thr) c += 1;
+    }
+    return @floatFromInt(c);
+}
+
+fn gridSum(g: [8]u8) usize {
+    var s: usize = 0;
+    for (g) |v| s += v;
+    return s;
+}
+
+fn inversionCount(g: [8]u8) usize {
+    var inv: usize = 0;
+    for (0..8) |i| for (i + 1..8) |j| {
+        if (g[i] > g[j]) inv += 1;
+    };
+    return inv;
+}
+
+const ProgNode = union(enum) {
+    leaf: SynthLeaf,
+    add: struct { a: u16, b: u16 },
+    mul: struct { a: u16, b: u16 },
+    sin: u16,
+    @"mod": struct { child: u16, k: u8 },
+};
+
+const ProgBank = struct {
+    nodes: []ProgNode,
+    depths: []u8,
+
+    fn depth(self: ProgBank, id: u16) u8 {
+        return self.depths[id];
+    }
+
+    fn eval(self: ProgBank, id: u16, ctx: ScalarCtx) f64 {
+        return switch (self.nodes[id]) {
+            .leaf => |lf| ctx.leafVal(lf),
+            .add => |ab| self.eval(ab.a, ctx) + self.eval(ab.b, ctx),
+            .mul => |ab| self.eval(ab.a, ctx) * self.eval(ab.b, ctx),
+            .sin => |ch| @sin(self.eval(ch, ctx)),
+            .@"mod" => |mk| @rem(self.eval(mk.child, ctx), @as(f64, @floatFromInt(mk.k))),
+        };
+    }
+};
+
+var g_mod_bank: ?ProgBank = null;
+var g_mod_pids: [MAX_MOD]u16 = undefined;
+var g_mod_n: usize = 0;
+
+fn buildProgBank(alloc: std.mem.Allocator) !ProgBank {
+    var nodes = std.ArrayList(ProgNode).init(alloc);
+    defer nodes.deinit();
+    var depths = std.ArrayList(u8).init(alloc);
+    defer depths.deinit();
+
+    const leaves = [_]SynthLeaf{ .count3, .count2, .count4, .inv, .sum };
+    for (leaves) |lf| {
+        try nodes.append(.{ .leaf = lf });
+        try depths.append(0);
+    }
+
+    var depth_cur: u8 = 1;
+    var frontier = std.ArrayList(u16).init(alloc);
+    defer frontier.deinit();
+    for (0..leaves.len) |i| try frontier.append(@intCast(i));
+
+    while (depth_cur <= 3) : (depth_cur += 1) {
+        var next = std.ArrayList(u16).init(alloc);
+        defer next.deinit();
+        for (frontier.items) |pid| {
+            if (nodes.items.len >= 120) break;
+            try nodes.append(.{ .sin = pid });
+            try depths.append(depth_cur);
+            try next.append(@intCast(nodes.items.len - 1));
+            for (2..9) |k| {
+                if (nodes.items.len >= 120) break;
+                try nodes.append(.{ .@"mod" = .{ .child = pid, .k = @intCast(k) } });
+                try depths.append(depth_cur);
+                try next.append(@intCast(nodes.items.len - 1));
+            }
+        }
+        const n = nodes.items.len;
+        var i: usize = 0;
+        while (i < n) : (i += 1) {
+            var j: usize = 0;
+            while (j < n) : (j += 1) {
+                const d = @max(depths.items[i], depths.items[j]) + 1;
+                if (d > 3 or nodes.items.len >= 120) continue;
+                const ai: u16 = @intCast(i);
+                const aj: u16 = @intCast(j);
+                for ([_]ProgNode{ .{ .add = .{ .a = ai, .b = aj } }, .{ .mul = .{ .a = ai, .b = aj } } }) |node| {
+                    if (nodes.items.len >= 120) break;
+                    try nodes.append(node);
+                    try depths.append(d);
+                }
+            }
+        }
+        frontier.clearRetainingCapacity();
+        for (next.items) |id| try frontier.append(id);
+    }
+
+    return .{
+        .nodes = try nodes.toOwnedSlice(),
+        .depths = try depths.toOwnedSlice(),
+    };
+}
+
+fn ensureModBank() void {
+    if (g_mod_bank != null) return;
+    const bank = buildProgBank(std.heap.page_allocator) catch return;
+    g_mod_bank = bank;
+    g_mod_n = 0;
+    for (1..bank.nodes.len) |pid| {
+        if (bank.depth(@intCast(pid)) > 3) continue;
+        if (g_mod_n >= MAX_MOD) break;
+        g_mod_pids[g_mod_n] = @intCast(pid);
+        g_mod_n += 1;
+    }
+}
+
 fn greedyTestAcc(
     grid: []const [8]u8,
     Y: []const f64,
@@ -184,10 +358,15 @@ fn greedyTestAcc(
     xor_masks: []const u8,
     _: []f64,
 ) f64 {
+    ensureModBank();
+    const bank = g_mod_bank orelse return 0;
+
     const n_lib = lib.len;
     const n_static = static.len;
     const n_xor = xor_masks.len;
-    const n_total = n_lib + n_static + n_xor;
+    const n_pipe = MAX_PIPE;
+    const n_mod = g_mod_n;
+    const n_total = n_lib + n_static + n_xor + n_pipe + n_mod;
     if (n_total == 0) return 0;
 
     var cols: [MAX_COLS][]f64 = undefined;
@@ -204,6 +383,19 @@ fn greedyTestAcc(
     for (0..n_xor) |i| {
         const j = n_lib + n_static + i;
         for (0..grid.len) |s| col_store[j][s] = e2.xorPopcountReadout(grid[s], xor_masks[i]);
+        cols[j] = col_store[j][0..];
+    }
+    for (0..n_pipe) |pi| {
+        const j = n_lib + n_static + n_xor + pi;
+        const in1: e5.Inner1 = @enumFromInt(pi / e5.N_INNER2);
+        const in2: e5.Inner2 = @enumFromInt(pi % e5.N_INNER2);
+        for (0..grid.len) |s| col_store[j][s] = pipelineScalar(in1, in2, grid[s]);
+        cols[j] = col_store[j][0..];
+    }
+    for (0..n_mod) |mi| {
+        const j = n_lib + n_static + n_xor + n_pipe + mi;
+        const pid = g_mod_pids[mi];
+        for (0..grid.len) |s| col_store[j][s] = bank.eval(pid, ScalarCtx.fromGrid(grid[s]));
         cols[j] = col_store[j][0..];
     }
 

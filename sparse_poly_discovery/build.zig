@@ -1344,6 +1344,17 @@ pub fn build(b: *std.Build) void {
     const run_dispatch_step = b.step("tier8-dispatch", "Tier 8 fork dispatch registry");
     run_dispatch_step.dependOn(&run_dispatch_cmd.step);
 
+    const tier8_battery_c_exe = b.addExecutable(.{
+        .name = "open_invention_tier8_battery_c",
+        .root_source_file = b.path("open_invention_tier8_battery_c.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_battery_c_exe);
+    const run_tier8_battery_c_cmd = b.addRunArtifact(tier8_battery_c_exe);
+    const run_tier8_battery_c_step = b.step("tier8-battery-c", "T8-AG-11: Battery C hardness harness");
+    run_tier8_battery_c_step.dependOn(&run_tier8_battery_c_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
