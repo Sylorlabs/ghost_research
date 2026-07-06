@@ -1,5 +1,7 @@
 # Swarm research session — master report (2026-07-05)
 
+**North star:** [**Tier 8 is the goal**](tier8_mega_plan.md) — invention of conditions for invention (instruments, framework revision, reality anchoring). This report covers the Tier 2–3 swarm wave that precedes it.
+
 **Status:** 27 primary experiments + 8 forks; goal-session additions below (2026-07-06).
 **Repo:** `/home/micah/Desktop/Sylorlabs/ghost_research`
 

@@ -26,6 +26,20 @@ runnable before/after experiments and reproduction commands.
 
 ---
 
+## North star — Tier 8 is the goal
+
+Invention research in this repo targets **Tier 8**: invention of the **conditions for
+invention** (instruments, certifiers, reality checks, framework revision when the loop
+only produces remix). Tier 2–3 production (`invention-engine`, 11/11 blind battery) is
+scaffolding, not the finish line.
+
+| Doc | What it is |
+|-----|------------|
+| [`docs/research/tier8_mega_plan.md`](docs/research/tier8_mega_plan.md) | **Giant mega plan** — 7 phases, 35 agents + 12 forks, sub-agent swarm |
+| [`docs/research/tier8_swarm_master.md`](docs/research/tier8_swarm_master.md) | Living agent verdict table (updated per wave) |
+
+---
+
 ## Directory Map
 
 ```
