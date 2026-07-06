@@ -26,7 +26,7 @@ const ComposedKind = enum {
     max_parity,
 };
 
-const BatteryCTarget = struct {
+pub const BatteryCTarget = struct {
     name: []const u8,
     e2_spec: ?e2.PredSpec = null,
     composed: ?ComposedKind = null,
@@ -76,7 +76,7 @@ fn labelComposed(g: [8]u8, kind: ComposedKind) f64 {
     };
 }
 
-fn labelTarget(g: [8]u8, t: BatteryCTarget) f64 {
+pub fn labelTarget(g: [8]u8, t: BatteryCTarget) f64 {
     if (t.e2_spec) |spec| return e2.label(g, spec);
     return labelComposed(g, t.composed.?);
 }
@@ -102,7 +102,7 @@ pub const BatteryCResult = struct {
     pass: bool,
 };
 
-fn measureMonomialCoverage(
+pub fn measureMonomialCoverage(
     X: [][]f64,
     grid: []const [8]u8,
     trained_lib: []const rq1.Feature,

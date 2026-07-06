@@ -1355,6 +1355,22 @@ pub fn build(b: *std.Build) void {
     const run_tier8_battery_c_step = b.step("tier8-battery-c", "T8-AG-11: Battery C hardness harness");
     run_tier8_battery_c_step.dependOn(&run_tier8_battery_c_cmd.step);
 
+    const tier8_bc_engine_exe = b.addExecutable(.{
+        .name = "tier8_battery_c_engine",
+        .root_source_file = b.path("tier8_battery_c_engine.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_bc_engine_exe);
+    const run_tier8_bc_engine_cmd = b.addRunArtifact(tier8_bc_engine_exe);
+    const run_tier8_bc_engine_step = b.step("tier8-battery-c-engine", "T8-AG-15: invention engine on Battery C");
+    run_tier8_bc_engine_step.dependOn(&run_tier8_bc_engine_cmd.step);
+
+    const run_tier8_bc_engine_strict_cmd = b.addRunArtifact(tier8_bc_engine_exe);
+    run_tier8_bc_engine_strict_cmd.addArg("--strict-tax");
+    const run_tier8_bc_engine_strict_step = b.step("tier8-battery-c-engine-strict", "T8-AG-15: Battery C + strict tax");
+    run_tier8_bc_engine_strict_step.dependOn(&run_tier8_bc_engine_strict_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

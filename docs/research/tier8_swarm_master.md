@@ -2,7 +2,7 @@
 
 **North star:** [Tier 8 Mega Plan](tier8_mega_plan.md) — **Tier 8 is the goal.**
 
-**Status:** Wave 0–2 **PASS** | Wave 3 T8-AG-02 **PARTIAL** | T8-AG-11 **PASS**
+**Status:** Wave 0–2 **PASS** | Wave 3 **PASS** (T8-AG-11, T8-AG-15) | T8-AG-02 **PARTIAL**
 **Repo:** `/home/micah/Desktop/Sylorlabs/ghost_research`  
 **Scratch:** `/tmp/tier8-swarm/`
 
@@ -18,6 +18,7 @@
 | Tier 5 novelty gate (≥40% novel) | **FAIL** — T8-AG-02f taxonomy next |
 | Tier 6 guided discover REPL | **PASS** — `runSingleTargetGuided` wired |
 | Tier 7 battery C harness | **PASS** — 11 targets, mean mono 0.498 |
+| Tier 7 invention on battery C | **PASS** — 11/11 vs mono 0/11 |
 | `tier8-loop` orchestrator | **BUILT** — Pass A + Pass B |
 | `tier8-dispatch` registry | **BUILT** — 8 agents registered |
 | Tier 8 complete | **NOT STARTED** |
@@ -36,6 +37,7 @@
 | T8-AG-02 | 1 | **PARTIAL** | [tier8_ag_02_tax_v3.md](tier8_ag_02_tax_v3.md) |
 | T8-AG-06 | 2 | **PASS** | [tier8_ag_06_guided_discover.md](tier8_ag_06_guided_discover.md) |
 | T8-AG-11 | 3 | **PASS** | [tier8_ag_11_battery_c.md](tier8_ag_11_battery_c.md) |
+| T8-AG-15 | 3 | **PASS** | [tier8_ag_15_battery_c_engine.md](tier8_ag_15_battery_c_engine.md) |
 
 ---
 
