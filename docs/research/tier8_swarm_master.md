@@ -26,6 +26,7 @@
 | Ledger drift replay (T8-AG-19) | **PASS** — 0 v3 flips, 1 retroactive v2 novel |
 | Tax basis registry (T8-AG-17) | **PASS** — novel rate 11.1%→11.1%→5.6% monotonic |
 | RQ7 proposer + tax (T8-AG-07) | **FAIL** — 1/13 tax survivors (need ≥5) |
+| E11 proposer + tax (T8-AG-08) | **PASS** — 1/8 tax survivors (`sum_mod7_indicator`) |
 | Tier 8 complete | **NOT STARTED** |
 
 ---
@@ -46,6 +47,7 @@
 | T8-AG-11f | 3 | **PASS** | [tier8_ag_11f_replication.md](tier8_ag_11f_replication.md) |
 | T8-AG-15 | 3 | **PASS** | [tier8_ag_15_battery_c_engine.md](tier8_ag_15_battery_c_engine.md) |
 | T8-AG-07 | 2 | **FAIL** | [tier8_ag_07_proposer.md](tier8_ag_07_proposer.md) |
+| T8-AG-08 | 2 | **PASS** | [tier8_ag_08_e11_tax.md](tier8_ag_08_e11_tax.md) |
 | T8-AG-16 | 4 | **PASS** | [tier8_ag_16_cross_audit.md](tier8_ag_16_cross_audit.md) |
 | T8-AG-17 | 4 | **PASS** | [tier8_ag_17_basis_version.md](tier8_ag_17_basis_version.md) |
 | T8-AG-18 | 4 | **PASS** | [tier8_ag_18_ledger.md](tier8_ag_18_ledger.md) |
@@ -71,6 +73,7 @@ zig build tier8-ledger-smoke --release=fast      # T8-AG-18
 zig build tier8-ledger-drift --release=fast      # T8-AG-19
 zig build tier8-basis-version --release=fast   # T8-AG-17
 zig build tier8-rq7-tax --release=fast         # T8-AG-07
+zig build tier8-e11-tax --release=fast         # T8-AG-08
 zig build open-invention-e26 --release=fast
 ```
 

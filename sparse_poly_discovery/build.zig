@@ -1432,6 +1432,18 @@ pub fn build(b: *std.Build) void {
     const run_tier8_rq7_tax_step = b.step("tier8-rq7-tax", "T8-AG-07: RQ7 proposals + strict tax gate");
     run_tier8_rq7_tax_step.dependOn(&run_tier8_rq7_tax_cmd.step);
 
+    const tier8_e11_tax_exe = b.addExecutable(.{
+        .name = "open_invention_tier8_e11",
+        .root_source_file = b.path("open_invention_tier8_e11.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_e11_tax_exe);
+    const run_tier8_e11_tax_cmd = b.addRunArtifact(tier8_e11_tax_exe);
+    run_tier8_e11_tax_cmd.setCwd(b.path("."));
+    const run_tier8_e11_tax_step = b.step("tier8-e11-tax", "T8-AG-08: E11 proposals + strict tax gate");
+    run_tier8_e11_tax_step.dependOn(&run_tier8_e11_tax_cmd.step);
+
     const tier8_basis_version_exe = b.addExecutable(.{
         .name = "tier8_tax_basis_version",
         .root_source_file = b.path("tier8_tax_basis_version.zig"),
