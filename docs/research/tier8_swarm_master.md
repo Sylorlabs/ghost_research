@@ -21,6 +21,7 @@
 | Tier 7 invention on battery C | **PASS** — 11/11 vs mono 0/11 |
 | `tier8-loop` orchestrator | **BUILT** — Pass A + Pass B |
 | `tier8-dispatch` registry | **BUILT** — 8 agents registered |
+| Cert cross-audit (T8-AG-16) | **PASS** — 0 flips / 4096 trials |
 | Promotion ledger (T8-AG-18) | **PASS** — 18 records, 1 survivor |
 | Tier 8 complete | **NOT STARTED** |
 
@@ -41,6 +42,7 @@
 | T8-AG-11 | 3 | **PASS** | [tier8_ag_11_battery_c.md](tier8_ag_11_battery_c.md) |
 | T8-AG-11f | 3 | **PASS** | [tier8_ag_11f_replication.md](tier8_ag_11f_replication.md) |
 | T8-AG-15 | 3 | **PASS** | [tier8_ag_15_battery_c_engine.md](tier8_ag_15_battery_c_engine.md) |
+| T8-AG-16 | 4 | **PASS** | [tier8_ag_16_cross_audit.md](tier8_ag_16_cross_audit.md) |
 | T8-AG-18 | 4 | **PASS** | [tier8_ag_18_ledger.md](tier8_ag_18_ledger.md) |
 
 ---
@@ -58,6 +60,7 @@ zig build tier8-battery-c --release=fast   # T8-AG-11
 zig build tier8-battery-c-engine --release=fast   # T8-AG-15
 zig build tier8-tax-taxonomy --release=fast       # T8-AG-02f
 zig build tier8-battery-c-replicate --release=fast # T8-AG-11f
+zig build tier8-cert-cross-audit --release=fast  # T8-AG-16
 zig build tier8-ledger-smoke --release=fast      # T8-AG-18
 zig build open-invention-e26 --release=fast
 ```
@@ -72,4 +75,4 @@ zig build open-invention-e26 --release=fast
 
 **Fork wave complete:** T8-AG-02f taxonomy (mono 10 / walsh 6 / pipeline 1 remix blocks). T8-AG-11f replication PASS on 2 held-out seeds.
 
-Next army wave: **Phase 4** instruments (T8-AG-16 promotion ledger) or **T8-AG-07** proposer loop.
+Next army wave: **T8-AG-19** (ledger drift replay) + **T8-AG-07** (proposer loop).

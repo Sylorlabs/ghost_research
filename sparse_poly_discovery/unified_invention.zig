@@ -309,6 +309,19 @@ pub const BenchMetrics = struct {
     forge_fits: usize,
 };
 
+/// Production certifier (escape + irreducibility); exposed for T8-AG-16 cross-audit.
+pub fn certifyPublic(
+    X: [][]f64,
+    grid: []const [NCELL]u8,
+    lib: []const Feature,
+    cand: Feature,
+    Y: []const f64,
+    feat_scratch: []f64,
+    w: []f64,
+) CertResult {
+    return certify(X, grid, lib, cand, Y, feat_scratch, w);
+}
+
 fn certify(
     X: [][]f64,
     grid: []const [NCELL]u8,

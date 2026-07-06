@@ -1398,6 +1398,17 @@ pub fn build(b: *std.Build) void {
     const run_tier8_ledger_step = b.step("tier8-ledger-smoke", "T8-AG-18: promotion ledger smoke");
     run_tier8_ledger_step.dependOn(&run_tier8_ledger_cmd.step);
 
+    const tier8_cross_audit_exe = b.addExecutable(.{
+        .name = "tier8_cert_cross_audit",
+        .root_source_file = b.path("tier8_cert_cross_audit.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_cross_audit_exe);
+    const run_tier8_cross_cmd = b.addRunArtifact(tier8_cross_audit_exe);
+    const run_tier8_cross_step = b.step("tier8-cert-cross-audit", "T8-AG-16: coverage/certify cross-audit");
+    run_tier8_cross_step.dependOn(&run_tier8_cross_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),
