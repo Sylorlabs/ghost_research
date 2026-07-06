@@ -1455,6 +1455,56 @@ pub fn build(b: *std.Build) void {
     const run_tier8_basis_version_step = b.step("tier8-basis-version", "T8-AG-17: tax basis version registry + monotonic audit");
     run_tier8_basis_version_step.dependOn(&run_tier8_basis_version_cmd.step);
 
+    const tier8_remix_mon_exe = b.addExecutable(.{ .name = "tier8_remix_monitor", .root_source_file = b.path("tier8_remix_monitor.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_remix_mon_exe);
+    const run_tier8_remix_mon = b.step("tier8-remix-monitor", "T8-AG-21: remix rate monitor");
+    run_tier8_remix_mon.dependOn(&b.addRunArtifact(tier8_remix_mon_exe).step);
+
+    const tier8_remix_mon_f_exe = b.addExecutable(.{ .name = "tier8_remix_monitor_f", .root_source_file = b.path("tier8_remix_monitor_f.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_remix_mon_f_exe);
+    const run_tier8_remix_mon_f = b.step("tier8-remix-monitor-f", "T8-AG-21f: proposer remix alert");
+    run_tier8_remix_mon_f.dependOn(&b.addRunArtifact(tier8_remix_mon_f_exe).step);
+
+    const tier8_closure_prop_exe = b.addExecutable(.{ .name = "tier8_closure_proposal", .root_source_file = b.path("tier8_closure_proposal.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_closure_prop_exe);
+    const run_tier8_closure_prop = b.step("tier8-closure-proposal", "T8-AG-22: closure revision proposal");
+    run_tier8_closure_prop.dependOn(&b.addRunArtifact(tier8_closure_prop_exe).step);
+
+    const tier8_closure_apply_exe = b.addExecutable(.{ .name = "tier8_closure_apply", .root_source_file = b.path("tier8_closure_apply.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_closure_apply_exe);
+    const run_tier8_closure_apply = b.step("tier8-closure-apply", "T8-AG-22f: witnessed closure apply");
+    run_tier8_closure_apply.dependOn(&b.addRunArtifact(tier8_closure_apply_exe).step);
+
+    const tier8_fw_vote_exe = b.addExecutable(.{ .name = "tier8_framework_vote", .root_source_file = b.path("tier8_framework_vote.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_fw_vote_exe);
+    const run_tier8_fw_vote = b.step("tier8-framework-vote", "T8-AG-25: framework vote harness");
+    run_tier8_fw_vote.dependOn(&b.addRunArtifact(tier8_fw_vote_exe).step);
+
+    const tier8_real_anchor_exe = b.addExecutable(.{ .name = "tier8_reality_anchor", .root_source_file = b.path("tier8_reality_anchor.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_real_anchor_exe);
+    const run_tier8_real_anchor = b.step("tier8-reality-anchor", "T8-AG-26: reality anchor trait");
+    run_tier8_real_anchor.dependOn(&b.addRunArtifact(tier8_real_anchor_exe).step);
+
+    const tier8_deploy_fb_exe = b.addExecutable(.{ .name = "tier8_deploy_feedback", .root_source_file = b.path("tier8_deploy_feedback.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_deploy_fb_exe);
+    const run_tier8_deploy_fb = b.step("tier8-deploy-feedback", "T8-AG-27: deploy feedback stub");
+    run_tier8_deploy_fb.dependOn(&b.addRunArtifact(tier8_deploy_fb_exe).step);
+
+    const tier8_wcore_lift_exe = b.addExecutable(.{ .name = "tier8_wcore_lift", .root_source_file = b.path("tier8_wcore_lift.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_wcore_lift_exe);
+    const run_tier8_wcore_lift = b.step("tier8-wcore-lift", "T8-AG-28: wcore promote lift");
+    run_tier8_wcore_lift.dependOn(&b.addRunArtifact(tier8_wcore_lift_exe).step);
+
+    const tier8_wcore_lift_f_exe = b.addExecutable(.{ .name = "tier8_wcore_lift_f", .root_source_file = b.path("tier8_wcore_lift_f.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_wcore_lift_f_exe);
+    const run_tier8_wcore_lift_f = b.step("tier8-wcore-lift-f", "T8-AG-28f: minimal promote lift");
+    run_tier8_wcore_lift_f.dependOn(&b.addRunArtifact(tier8_wcore_lift_f_exe).step);
+
+    const tier8_peer_rep_exe = b.addExecutable(.{ .name = "tier8_peer_replicate", .root_source_file = b.path("tier8_peer_replicate.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_peer_rep_exe);
+    const run_tier8_peer_rep = b.step("tier8-peer-replicate", "T8-AG-30: peer replication");
+    run_tier8_peer_rep.dependOn(&b.addRunArtifact(tier8_peer_rep_exe).step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

@@ -19,8 +19,20 @@ pub const REGISTRY = [_]AgentSpec{
     .{ .id = "T8-AG-01", .phase = 1, .fork_on_pass = "T8-AG-02", .fork_on_fail = "T8-AG-01b" },
     .{ .id = "T8-AG-02", .phase = 1, .fork_on_pass = "T8-AG-02f", .fork_on_fail = null },
     .{ .id = "T8-AG-06", .phase = 2, .fork_on_pass = "T8-AG-07", .fork_on_fail = "T8-AG-06b" },
+    .{ .id = "T8-AG-07", .phase = 2, .fork_on_pass = "T8-AG-07f", .fork_on_fail = "T8-AG-06b" },
+    .{ .id = "T8-AG-08", .phase = 2, .fork_on_pass = "T8-AG-09", .fork_on_fail = null },
     .{ .id = "T8-AG-11", .phase = 3, .fork_on_pass = "T8-AG-11f", .fork_on_fail = null },
-    .{ .id = "T8-AG-31", .phase = 7, .fork_on_pass = null, .fork_on_fail = null },
+    .{ .id = "T8-AG-16", .phase = 4, .fork_on_pass = "T8-AG-16f", .fork_on_fail = null },
+    .{ .id = "T8-AG-19", .phase = 4, .fork_on_pass = "T8-AG-17", .fork_on_fail = null },
+    .{ .id = "T8-AG-21", .phase = 5, .fork_on_pass = "T8-AG-21f", .fork_on_fail = null },
+    .{ .id = "T8-AG-22", .phase = 5, .fork_on_pass = "T8-AG-22f", .fork_on_fail = null },
+    .{ .id = "T8-AG-22f", .phase = 5, .fork_on_pass = "T8-AG-25", .fork_on_fail = null },
+    .{ .id = "T8-AG-25", .phase = 5, .fork_on_pass = null, .fork_on_fail = null },
+    .{ .id = "T8-AG-26", .phase = 6, .fork_on_pass = "T8-AG-27", .fork_on_fail = null },
+    .{ .id = "T8-AG-28", .phase = 6, .fork_on_pass = "T8-AG-28f", .fork_on_fail = null },
+    .{ .id = "T8-AG-28f", .phase = 6, .fork_on_pass = "T8-AG-30", .fork_on_fail = null },
+    .{ .id = "T8-AG-30", .phase = 6, .fork_on_pass = null, .fork_on_fail = null },
+    .{ .id = "T8-AG-31", .phase = 7, .fork_on_pass = "T8-AG-32", .fork_on_fail = null },
 };
 
 pub fn nextFork(agent_id: []const u8, v: Verdict) ?[]const u8 {
@@ -28,8 +40,7 @@ pub fn nextFork(agent_id: []const u8, v: Verdict) ?[]const u8 {
         if (!std.mem.eql(u8, spec.id, agent_id)) continue;
         return switch (v) {
             .pass => spec.fork_on_pass,
-            .fail => spec.fork_on_fail,
-            .partial => spec.fork_on_fail,
+            .fail, .partial => spec.fork_on_fail,
         };
     }
     return null;
@@ -46,6 +57,6 @@ pub fn main() !void {
             spec.fork_on_fail,
         });
     }
-    try out.print("\nExample: T8-AG-01 PASS → {?s}\n", .{nextFork("T8-AG-01", .pass)});
-    try out.print("Example: T8-AG-01 FAIL → {?s}\n", .{nextFork("T8-AG-01", .fail)});
+    try out.print("\nExample: T8-AG-21 PASS → {?s}\n", .{nextFork("T8-AG-21", .pass)});
+    try out.print("Example: T8-AG-28 PASS → {?s}\n", .{nextFork("T8-AG-28", .pass)});
 }
