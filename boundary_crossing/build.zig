@@ -30,6 +30,13 @@ pub fn build(b: *std.Build) void {
     const run_eng_step = b.step("invention-engine", "The closed inject→certify→promote loop: recombination vs certified invention, with compounding");
     run_eng_step.dependOn(&run_eng.step);
 
+    const unified_invention_mod = b.addModule("unified_invention", .{
+        .root_source_file = b.path("../sparse_poly_discovery/unified_invention.zig"),
+    });
+    const compression_invent_mod = b.addModule("compression_invent", .{
+        .root_source_file = b.path("compression_invent.zig"),
+    });
+
     // decoupled run steps (each compiles only its own file, so `zig build superopt` doesn't need the others)
     inline for (.{
         .{ "superopt", "superopt.zig", "Source B: verified superoptimization (external unknown + exhaustive verifier)" },
@@ -110,8 +117,23 @@ pub fn build(b: *std.Build) void {
         .{ "stream-lm", "stream_lm.zig", "Bounded-memory streaming count LM on big EN+ZH: flat RAM + data-scaling curve, CPU, no GPU/LLM" },
         .{ "stream-fast", "stream_fast.zig", "Fixed-memory streaming count LM (flat RAM, scales): data-scaling curve toward gpt2 1.0499, CPU, no GPU/LLM" },
         .{ "oracle", "oracle.zig", "The KNOWING engine: unified verified-knowledge oracle (KNOWN/OPINION/REFUSED + provenance), interactive REPL, no LLM" },
+        .{ "verify-learn-invent", "verify_learn_invent.zig", "VERIFY-LEARN-INVENT: learn from certification not next-token; explore unknown; plain English invention" },
+        .{ "learned-guide-test", "../sparse_poly_discovery/learned_guide_test.zig", "EXP-6: learned candidate policy vs baseline unified invention (7-target)" },
+        .{ "open-invention-e8", "open_invention_e8.zig", "E8: terminal-invented predicates — safe whitelist commands, forge+logistic readout, verify novel runs" },
+        .{ "open-invention-e9", "open_invention_e9.zig", "E9: real-data compression invention — train self-extend on corpus, test cross-corpus generalization on Chinese held-out" },
+        .{ "open-invention-rq6", "open_invention_rq6.zig", "RQ6: E8 scale — 200-command terminal grind, 50 held-out phrasings, surprise vs uniform, ≥80% certified predict" },
+        .{ "open-invention-e18", "open_invention_e18.zig", "E18: terminal NL→command synthesis (E8++) — phrase→command→outcome, 100 held-out, ≥60% certified command match" },
+        .{ "open-invention-e15", "open_invention_e15.zig", "E15: verify_learn_invent production loop — REPL invent→certify→promote→reuse on novel English" },
+        .{ "open-invention-e23", "open_invention_e23.zig", "E23: cross-corpus compression v2 — train train_dw_8mb, test same-family EN held-out, macro transfer >0.1%" },
+        .{ "swarm-exp07", "swarm_exp07_verify_learn_gen.zig", "EXP-7: verify-learn generalization — curriculum discovery → held-out iters-to-certify" },
     }) |spec| {
         const e = b.addExecutable(.{ .name = spec[0], .root_source_file = b.path(spec[1]), .target = target, .optimize = optimize });
+        if (std.mem.eql(u8, spec[0], "verify-learn-invent") or std.mem.eql(u8, spec[0], "open-invention-e15") or std.mem.eql(u8, spec[0], "learned-guide-test") or std.mem.eql(u8, spec[0], "swarm-exp07")) {
+            e.root_module.addImport("unified_invention", unified_invention_mod);
+        }
+        if (std.mem.eql(u8, spec[0], "open-invention-e9") or std.mem.eql(u8, spec[0], "open-invention-e23")) {
+            e.root_module.addImport("compression_invent", compression_invent_mod);
+        }
         const rc = b.addRunArtifact(e);
         if (b.args) |args| rc.addArgs(args);
         const rs = b.step(spec[0], spec[2]);
