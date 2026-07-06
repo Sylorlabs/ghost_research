@@ -23,6 +23,9 @@
 | `tier8-dispatch` registry | **BUILT** — 8 agents registered |
 | Cert cross-audit (T8-AG-16) | **PASS** — 0 flips / 4096 trials |
 | Promotion ledger (T8-AG-18) | **PASS** — 18 records, 1 survivor |
+| Ledger drift replay (T8-AG-19) | **PASS** — 0 v3 flips, 1 retroactive v2 novel |
+| Tax basis registry (T8-AG-17) | **PASS** — novel rate 11.1%→11.1%→5.6% monotonic |
+| RQ7 proposer + tax (T8-AG-07) | **FAIL** — 1/13 tax survivors (need ≥5) |
 | Tier 8 complete | **NOT STARTED** |
 
 ---
@@ -42,8 +45,11 @@
 | T8-AG-11 | 3 | **PASS** | [tier8_ag_11_battery_c.md](tier8_ag_11_battery_c.md) |
 | T8-AG-11f | 3 | **PASS** | [tier8_ag_11f_replication.md](tier8_ag_11f_replication.md) |
 | T8-AG-15 | 3 | **PASS** | [tier8_ag_15_battery_c_engine.md](tier8_ag_15_battery_c_engine.md) |
+| T8-AG-07 | 2 | **FAIL** | [tier8_ag_07_proposer.md](tier8_ag_07_proposer.md) |
 | T8-AG-16 | 4 | **PASS** | [tier8_ag_16_cross_audit.md](tier8_ag_16_cross_audit.md) |
+| T8-AG-17 | 4 | **PASS** | [tier8_ag_17_basis_version.md](tier8_ag_17_basis_version.md) |
 | T8-AG-18 | 4 | **PASS** | [tier8_ag_18_ledger.md](tier8_ag_18_ledger.md) |
+| T8-AG-19 | 4 | **PASS** | [tier8_ag_19_drift.md](tier8_ag_19_drift.md) |
 
 ---
 
@@ -62,6 +68,9 @@ zig build tier8-tax-taxonomy --release=fast       # T8-AG-02f
 zig build tier8-battery-c-replicate --release=fast # T8-AG-11f
 zig build tier8-cert-cross-audit --release=fast  # T8-AG-16
 zig build tier8-ledger-smoke --release=fast      # T8-AG-18
+zig build tier8-ledger-drift --release=fast      # T8-AG-19
+zig build tier8-basis-version --release=fast   # T8-AG-17
+zig build tier8-rq7-tax --release=fast         # T8-AG-07
 zig build open-invention-e26 --release=fast
 ```
 
@@ -75,4 +84,6 @@ zig build open-invention-e26 --release=fast
 
 **Fork wave complete:** T8-AG-02f taxonomy (mono 10 / walsh 6 / pipeline 1 remix blocks). T8-AG-11f replication PASS on 2 held-out seeds.
 
-Next army wave: **T8-AG-19** (ledger drift replay) + **T8-AG-07** (proposer loop).
+**Wave 4 instruments complete:** T8-AG-16/17/18/19 all PASS. T8-AG-07 proposer FAIL (1/13 tax survivors) — novelty gate remains Phase 1 blocker.
+
+Next army wave: **T8-AG-06b** (deterministic proposer fork) or **T8-AG-08** (E11 replay + tax).
