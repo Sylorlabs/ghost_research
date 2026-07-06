@@ -78,7 +78,8 @@ One subagent per open research question from the 2026-07-05 experiment queue. Fo
 | **Quad-arity** | Triple fork | **PASS** | quad 1.000, quint next | `swarm_fork_quad_arity.md` |
 | **Quint-arity** | Quad fork | **PASS** | quint 1.000, CEILING BROKEN | `swarm_fork_quint_arity.md` |
 | **RQ1++ production** | Unified loop wire-in | **PASS** | 7/7 unified + pair/Walsh stages | `unified_invention.zig` |
-| **Baseline compare** | Invention vs 4 baselines | **PASS** | 11/11 vs 8/3/2/3, 3182 evals | `invention_baseline_compare.zig` |
+| **Invention engine** | Production entrypoint | **PASS** | **11/11** blind B, growable menu, 372 battery evals | `invention_engine.zig` |
+| **Baseline compare** | Invention vs 4 baselines | **PASS** | 11/7/3/2/2 solved; 372 vs 2320/6160 evals (battery-only) | `invention_baseline_compare.zig` |
 | **E26 tax v2** | Equivalence remix | **PARTIAL** | 17/20 repro, 3 novel | `open_invention_e26.md` |
 
 ---
@@ -87,8 +88,9 @@ One subagent per open research question from the 2026-07-05 experiment queue. Fo
 
 | Gate | Command | Result |
 |------|---------|--------|
+| **Invention engine ×2** | `zig build invention-engine --release=fast` | **11/11** both runs, 372 battery evals, growable menu path |
 | RQ1++ blind battery ×2 | `zig build open-invention-rq1 --release=fast` | **11/11** both runs |
-| Baseline harness | `zig build invention-baseline-compare --release=fast` | invention **11/11**, beats all baselines, PASS |
+| Baseline harness | `zig build invention-baseline-compare --release=fast` | invention **11/11**, beats all 4 baselines on solve rate **and** eval count, PASS |
 | Quint menu growth ×2 | `zig build menu-growth --release=fast` | Target 7 **1.000**, CEILING BROKEN ✓ |
 | Unified production ×2 | `zig build unified-invention --release=fast` | **7/7** solved |
 | Learned guide | `zig build learned-guide-test --release=fast` | 7/7, **1.45×** certify |
@@ -105,7 +107,9 @@ Scratch logs: `/tmp/grok-goal-f34e4448a3af/implementer/`
 cd 04_verified_synthesis && zig build z3_cross_audit  # or standalone per swarm_g49 doc
 cd 05_meta_synthesis && zig build toaig_audit         # if build step added
 
-# sparse_poly — routing & invention
+# sparse_poly — routing & invention (production entrypoint first)
+cd sparse_poly_discovery && zig build invention-engine --release=fast      # 11/11 blind B, growable menu
+cd sparse_poly_discovery && zig build invention-baseline-compare --release=fast
 cd sparse_poly_discovery && zig build pair-hardness-router-test --release=fast
 cd sparse_poly_discovery && zig build open-invention-rq1 --release=fast   # RQ1++ 11/11
 cd sparse_poly_discovery && zig build learned-guide-test --release=fast
@@ -128,9 +132,9 @@ cd 05_meta_synthesis && zig build swarm-exp19 swarm-exp20 swarm-exp21 --release=
 
 ## Open forks (next session)
 
-1. **Quint-arity growth** — hidden quint (0,1,2,3,6) named in quad fork
-2. **Wire RQ1++ into unified_invention** — production path vs benchmark-only
-3. **Learned guide → verify_learn_invent REPL** — close the AlphaZero loop in interactive mode
+1. **Swarm runtime dispatcher** — `swarm_fork_dispatch.zig` for fork-on-PASS agent loops (docs-only today)
+2. **E26 equivalence tax** — 85% reproducible; genuine novelty rate still low
+3. **Learned guide → verify_learn_invent REPL** — interactive English→certified loop (7/7 certify path exists)
 
 ---
 

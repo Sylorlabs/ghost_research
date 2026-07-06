@@ -9,7 +9,7 @@
 //!
 //! EXCLUDED: spectral peak, Clifford, world pool, pre-labeled operator menu.
 //!
-//! PASS: ≥1/11 battery B certified at held-out test ≥0.90.
+//! PASS: ≥10/11 battery B certified at held-out test ≥0.90.
 //!
 //! Run: zig build open-invention-rq1 --release=fast
 
@@ -212,7 +212,7 @@ const ProgNode = union(enum) {
     @"mod": struct { child: u16, k: u8 },
 };
 
-const ProgBank = struct {
+pub const ProgBank = struct {
     nodes: []ProgNode,
     depths: []u8,
     names: []const []const u8,
@@ -913,6 +913,154 @@ pub const EvalCounter = struct {
     }
 };
 
+pub fn needsMod(kind: BatteryKind) bool {
+    return switch (kind) {
+        .parity_of_count, .inversion_parity, .composed_parity_and_sum => true,
+        else => false,
+    };
+}
+
+/// Mod/synth/pipeline escalation only (steps 2 of RQ1 ladder).
+pub fn tryModEscalation(
+    X: [][]f64,
+    grid: []const [NCELL]u8,
+    frozen: []const Feature,
+    Y: []const f64,
+    bank: ProgBank,
+    S_all: *const [N_INNER1][]f64,
+    w: []f64,
+    cov0: f64,
+    tgt: BatteryTarget,
+    out: anytype,
+    budget: ?*EvalCounter,
+) !?EvalResult {
+    const synth = discoverSynth(grid, Y, bank, X, w);
+    if (budget) |b| {
+        b.probe += bank.nodes.len;
+        b.fit += 1;
+    }
+    const cov_synth = coverageWithExtra(X, grid, frozen, synth.feat, Y, w);
+    if (budget) |b| b.certify += 1;
+    buildFeat(X, grid, frozen);
+    const r2_synth = reconR2(X, synth.feat, frozen.len, w);
+    const synth_cert = cov_synth >= COVER and cov0 < COVER and r2_synth < R2_MAX;
+
+    const pipe = discoverPipeline(grid, Y, S_all, X, w);
+    if (budget) |b| b.probe += N_INNER1 * N_INNER2;
+    const s1 = stage1Best(grid, Y, S_all, X, w);
+    if (budget) |b| b.probe += N_INNER1;
+    const pipe_escape = pipe.tst >= COVER and s1.tst < STAGE1_MAX;
+
+    var best_acc = cov0;
+    var best: ?EvalResult = null;
+
+    if (synth_cert and cov_synth > best_acc) {
+        best_acc = cov_synth;
+        best = .{
+            .method = .synth_prog,
+            .test_acc = cov_synth,
+            .certified = true,
+            .escape = true,
+            .irreducible = r2_synth < R2_MAX,
+            .label = bank.names[synth.prog_id],
+            .family_match = familyMatch(tgt, .synth_prog, bank.names[synth.prog_id], pipe),
+        };
+    } else if (cov_synth >= COVER and cov_synth > best_acc) {
+        best_acc = cov_synth;
+        best = .{
+            .method = .synth_prog,
+            .test_acc = cov_synth,
+            .certified = true,
+            .escape = cov0 < COVER,
+            .irreducible = r2_synth < R2_MAX,
+            .label = bank.names[synth.prog_id],
+            .family_match = familyMatch(tgt, .synth_prog, bank.names[synth.prog_id], pipe),
+        };
+    }
+
+    if (pipe.tst >= COVER and pipe.tst > best_acc) {
+        var plabel_buf: [96]u8 = undefined;
+        const plabel = if (pipe.inner2 == .scan_p)
+            std.fmt.bufPrint(&plabel_buf, "{s}→{s}(ω={d:.3})", .{ inner1_name[@intFromEnum(pipe.inner1)], inner2_name[@intFromEnum(pipe.inner2)], pipe.omega }) catch "pipe"
+        else
+            std.fmt.bufPrint(&plabel_buf, "{s}→{s}", .{ inner1_name[@intFromEnum(pipe.inner1)], inner2_name[@intFromEnum(pipe.inner2)] }) catch "pipe";
+        best = .{
+            .method = .pipeline,
+            .test_acc = pipe.tst,
+            .certified = true,
+            .escape = pipe_escape,
+            .irreducible = pipe_escape,
+            .label = plabel,
+            .family_match = familyMatch(tgt, .pipeline, plabel, pipe),
+        };
+    }
+
+    std.heap.page_allocator.free(synth.feat);
+    if (best) |b| {
+        try out.print("    mod-escalation: {s} test={d:.3}\n", .{ @tagName(b.method), b.test_acc });
+    }
+    return best;
+}
+
+/// Pair-router + conditional Walsh only (steps 3–4).
+pub fn tryPairWalshEscalation(
+    grid: []const [NCELL]u8,
+    frozen: []const Feature,
+    Y: []const f64,
+    pf: []const []f64,
+    feat: []f64,
+    w: []f64,
+    cov0: f64,
+    tgt: BatteryTarget,
+    out: anytype,
+    budget: ?*EvalCounter,
+) !?EvalResult {
+    _ = frozen;
+    const pair = discoverPair(grid, Y, pf, w);
+    if (budget) |b| {
+        b.probe += 28;
+        b.fit += 1;
+    }
+    if (pair.tst >= COVER) {
+        var pair_label_buf: [48]u8 = undefined;
+        const pair_label = std.fmt.bufPrint(&pair_label_buf, "φ({d},{d}) product inner", .{ pair.i, pair.j }) catch "pair";
+        try out.print("    pair-router: ({d},{d}) test={d:.3}\n", .{ pair.i, pair.j, pair.tst });
+        return .{
+            .method = .pair_router,
+            .test_acc = pair.tst,
+            .certified = true,
+            .escape = cov0 < COVER,
+            .irreducible = true,
+            .label = pair_label,
+            .family_match = familyMatch(tgt, .pair_router, pair_label, .{ .inner1 = .count, .inner2 = .linear, .val = 0, .tst = 0, .omega = 0 }),
+        };
+    }
+
+    const hp = probeEscalationHardness(cov0, grid, Y, feat);
+    if (hp.task_class == .q38_compound) {
+        const wal = discoverWalsh(grid, Y, feat);
+        if (budget) |b| {
+            b.probe += 256;
+            b.fit += 1;
+        }
+        if (wal.tst >= COVER) {
+            var wal_label_buf: [32]u8 = undefined;
+            const wal_label = std.fmt.bufPrint(&wal_label_buf, "χ(0x{X:0>2})", .{wal.bestS}) catch "walsh";
+            try out.print("    Walsh: {s} test={d:.3}\n", .{ wal_label, wal.tst });
+            return .{
+                .method = .walsh_corr,
+                .test_acc = wal.tst,
+                .certified = true,
+                .escape = cov0 < COVER,
+                .irreducible = true,
+                .label = wal_label,
+                .family_match = familyMatch(tgt, .walsh_corr, wal_label, .{ .inner1 = .count, .inner2 = .linear, .val = 0, .tst = 0, .omega = 0 }),
+            };
+        }
+    }
+    return null;
+}
+
 pub fn evaluateBlind(
     X: [][]f64,
     grid: []const [NCELL]u8,
@@ -1139,7 +1287,7 @@ pub fn main() !void {
     try out.print("Grid seed 0x{X:0>16} | battery seed 0x{X:0>16}\n", .{ GRID_SEED, BATTERY_SEED });
     try out.print("Ladder: monomial → mod/pipeline → pair-router → Walsh (q38_compound only)\n", .{});
     try out.print("Excluded: spectral peak, Clifford, world pool, pre-labeled operator menu\n", .{});
-    try out.print("Program bank: {d} expressions | PASS: ≥1/11 battery B at test ≥{d:.2}\n\n", .{ bank.nodes.len, COVER });
+    try out.print("Program bank: {d} expressions | PASS: ≥10/11 battery B at test ≥{d:.2}\n\n", .{ bank.nodes.len, COVER });
 
     const trained = try trainZooA(X, grid, Yzoo, phiTgt, &w, out);
     const frozen = trained.lib[0..trained.nlib];
@@ -1185,10 +1333,10 @@ pub fn main() !void {
     try out.print("  closed by step 3 (pair):  {d}\n", .{n_step3});
     try out.print("  closed by step 4 (Walsh): {d}\n\n", .{n_step4});
 
-    const pass = n_cert >= 1;
+    const pass = n_cert >= 10;
     try out.print("VERDICT: {s}\n", .{if (pass) "PASS" else "FAIL"});
     if (pass) {
-        try out.print("  {d}/11 blind targets certified via staged auto-escalation (no handed menu).\n", .{n_cert});
+        try out.print("  {d}/{d} blind targets certified via staged auto-escalation (no handed menu).\n", .{ n_cert, battery.len });
     } else {
         try out.print("  No battery-B target reached {d:.2} after full escalation ladder.\n", .{COVER});
     }

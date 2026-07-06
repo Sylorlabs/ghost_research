@@ -1,8 +1,9 @@
-//! Baseline comparison harness — invention (RQ1++ staged) vs four baselines on blind battery B.
+//! Baseline comparison — battery-B evals only (shared zoo-A lib, training not counted).
 //!
 //! Run: zig build invention-baseline-compare --release=fast
 
 const std = @import("std");
+const ie = @import("invention_engine.zig");
 const rq1 = @import("open_invention_rq1.zig");
 const ui = @import("unified_invention.zig");
 
@@ -10,13 +11,7 @@ const SilentOut = struct {
     pub fn print(_: @This(), _: []const u8, _: anytype) !void {}
 };
 
-const Mode = enum {
-    invention,
-    monomial_only,
-    fixed_menu,
-    random_search,
-    no_verifier,
-};
+const Mode = enum { invention, monomial_only, fixed_menu, random_search, no_verifier };
 
 const ModeResult = struct {
     mode: Mode,
@@ -35,172 +30,79 @@ fn modeName(m: Mode) []const u8 {
     };
 }
 
-fn runInventionMode(
-    alloc: std.mem.Allocator,
-    grid: []const [8]u8,
-    battery: []const rq1.BatteryTarget,
-    bank: anytype,
-    X: [][]f64,
-    feat_scratch: []f64,
-    w: []f64,
-    frozen: []const rq1.Feature,
-) !ModeResult {
-    var budget = rq1.EvalCounter{};
-    const out = SilentOut{};
-
-    const S_store = try rq1.buildInner1Store(alloc, grid);
-    const pf = try alloc.alloc([]f64, rq1.NSAMP);
-    for (0..rq1.NSAMP) |s| pf[s] = try alloc.alloc(f64, 3);
-
-    var solved: usize = 0;
-    for (battery) |tgt| {
-        const Yb = try std.heap.page_allocator.alloc(f64, rq1.NSAMP);
-        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(grid[s], tgt);
-        const ev = try rq1.evaluateBlind(X, grid, frozen, Yb, bank, &S_store, pf, feat_scratch, w, tgt, out, &budget);
-        if (ev.certified) solved += 1;
-        std.heap.page_allocator.free(Yb);
-    }
-
-    return .{ .mode = .invention, .solved = solved, .total = battery.len, .evals = budget.total() };
-}
-
 fn runMonomialOnly(
-    grid: []const [8]u8,
-    battery: []const rq1.BatteryTarget,
-    frozen: []const rq1.Feature,
-    X: [][]f64,
-    w: []f64,
-) ModeResult {
+    ctx: *ie.BlindBatteryCtx,
+    trained_lib: []const rq1.Feature,
+    budget: *ie.EvalCounter,
+) usize {
+    const out = SilentOut{};
     var solved: usize = 0;
-    var evals: usize = 0;
-    for (battery) |tgt| {
-        const Yb = std.heap.page_allocator.alloc(f64, rq1.NSAMP) catch unreachable;
-        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(grid[s], tgt);
+    var lib: [32]ui.Feature = undefined;
+    var nlib: usize = 0;
+    ie.seedUiFromRq1(trained_lib, &lib, &nlib);
 
-        evals += 1;
-        var cov = rq1.coverage(X, grid, frozen, Yb, w);
-        if (cov >= rq1.COVER) {
+    for (ctx.battery) |tgt| {
+        const Yb = std.heap.page_allocator.alloc(f64, rq1.NSAMP) catch unreachable;
+        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(ctx.grid[s], tgt);
+
+        budget.fit += 1;
+        var cov = ui.measureCoverage(ctx.X, ctx.grid, lib[0..nlib], Yb, ctx.w[0..]);
+        if (cov >= ie.COVER) {
             solved += 1;
             std.heap.page_allocator.free(Yb);
             continue;
         }
 
-        var mm: u16 = 1;
-        while (mm < 256) : (mm += 1) {
-            const mask: u8 = @intCast(mm);
-            if (@popCount(mask) < 1 or @popCount(mask) > 4) continue;
-            for (0..rq1.NSAMP) |s| {
-                var p: f64 = 1.0;
-                for (0..8) |i| {
-                    if (mask & (@as(u8, 1) << @intCast(i)) != 0) p *= (@as(f64, @floatFromInt(grid[s][i])) - 2.5);
-                }
-                X[s][0] = p;
-            }
-            evals += 1;
-            var aug_buf: [33]rq1.Feature = undefined;
-            @memcpy(aug_buf[0..frozen.len], frozen);
-            aug_buf[frozen.len] = .{ .monomial = mask };
-            const cov_try = rq1.coverage(X, grid, aug_buf[0 .. frozen.len + 1], Yb, w);
-            evals += 1;
-            if (cov_try > cov) cov = cov_try;
+        var round: usize = 0;
+        while (round < 6) : (round += 1) {
+            budget.probe += 255;
+            budget.certify += 1;
+            if (ui.tryMonomialForge(ctx.X, ctx.grid, &lib, &nlib, Yb, ctx.phiTgt, ctx.w[0..], out, true) catch false) {
+                cov = ui.measureCoverage(ctx.X, ctx.grid, lib[0..nlib], Yb, ctx.w[0..]);
+                budget.fit += 1;
+                if (cov >= ie.COVER) break;
+            } else break;
         }
-        if (cov >= rq1.COVER) solved += 1;
+        if (cov >= ie.COVER) solved += 1;
         std.heap.page_allocator.free(Yb);
     }
-    return .{ .mode = .monomial_only, .solved = solved, .total = battery.len, .evals = evals };
+    return solved;
 }
 
-fn runFixedMenu(
-    alloc: std.mem.Allocator,
-    grid: []const [8]u8,
-    battery: []const rq1.BatteryTarget,
-) !ModeResult {
+fn runFixedMenu(ctx: *ie.BlindBatteryCtx, budget: *ie.EvalCounter) usize {
     var solved: usize = 0;
-    var evals: usize = 0;
-    const out = SilentOut{};
-
-    const X = try alloc.alloc([]f64, rq1.NSAMP);
-    const phiTgt = try alloc.alloc(f64, rq1.NSAMP);
-    for (0..rq1.NSAMP) |s| X[s] = try alloc.alloc(f64, 32);
-    var w: [33]f64 = undefined;
-
-    for (battery) |tgt| {
-        const Yb = try alloc.alloc(f64, rq1.NSAMP);
-        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(grid[s], tgt);
-
-        var ulib: [32]ui.Feature = undefined;
-        var nlib: usize = 0;
-        for (0..8) |i| {
-            ulib[nlib] = .{ .monomial = @as(u8, 1) << @intCast(i) };
-            nlib += 1;
-        }
-
-        evals += 1;
-        var cov0 = ui.measureCoverage(X, grid, ulib[0..nlib], Yb, &w);
-        if (cov0 >= ui.COVER_THRESHOLD) {
-            solved += 1;
-            continue;
-        }
-
-        evals += 3;
-        evals += 1;
-        if (ui.tryMenuOnce(X, grid, &ulib, &nlib, Yb, phiTgt, &w, out) catch false) {
-            cov0 = ui.measureCoverage(X, grid, ulib[0..nlib], Yb, &w);
-            evals += 1;
-            if (cov0 >= ui.COVER_THRESHOLD) solved += 1;
-        }
+    for (ctx.battery) |tgt| {
+        const Yb = std.heap.page_allocator.alloc(f64, rq1.NSAMP) catch unreachable;
+        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(ctx.grid[s], tgt);
+        var lib: [8]ui.Feature = undefined;
+        for (0..8) |i| lib[i] = .{ .monomial = @as(u8, 1) << @intCast(i) };
+        budget.fit += 1;
+        if (ui.measureCoverage(ctx.X, ctx.grid, lib[0..8], Yb, ctx.w[0..]) >= ie.COVER) solved += 1;
+        std.heap.page_allocator.free(Yb);
     }
-
-    return .{ .mode = .fixed_menu, .solved = solved, .total = battery.len, .evals = evals };
+    return solved;
 }
 
-fn runRandomSearch(
-    grid: []const [8]u8,
-    battery: []const rq1.BatteryTarget,
-    frozen: []const rq1.Feature,
-    X: [][]f64,
-    phiTgt: []f64,
-    w: []f64,
-    seed: u64,
-) ModeResult {
+fn runRandomSearch(ctx: *ie.BlindBatteryCtx, trained_lib: []const rq1.Feature, seed: u64, budget: *ie.EvalCounter) usize {
     var prng = std.Random.DefaultPrng.init(seed);
     const rand = prng.random();
     var solved: usize = 0;
-    var evals: usize = 0;
-    const budget_per_target: usize = 500;
-
-    for (battery) |tgt| {
+    for (ctx.battery) |tgt| {
         const Yb = std.heap.page_allocator.alloc(f64, rq1.NSAMP) catch unreachable;
-        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(grid[s], tgt);
-
-        var lib: [32]rq1.Feature = undefined;
-        @memcpy(lib[0..frozen.len], frozen);
-        const nlib = frozen.len;
-
+        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(ctx.grid[s], tgt);
         var found = false;
         var attempt: usize = 0;
-        while (attempt < budget_per_target) : (attempt += 1) {
+        while (attempt < 500) : (attempt += 1) {
             const mask: u8 = @intCast(rand.intRangeAtMost(u16, 1, 255));
             if (@popCount(mask) < 1 or @popCount(mask) > 4) continue;
-            var dup = false;
-            for (lib[0..nlib]) |f| {
-                if (f.monomial == mask) dup = true;
-            }
-            if (dup) continue;
-
-            for (0..rq1.NSAMP) |s| {
-                var p: f64 = 1.0;
-                for (0..8) |i| {
-                    if (mask & (@as(u8, 1) << @intCast(i)) != 0) p *= (@as(f64, @floatFromInt(grid[s][i])) - 2.5);
-                }
-                phiTgt[s] = p;
-            }
-            const cov_before = rq1.coverage(X, grid, lib[0..nlib], Yb, w);
-            var aug = lib;
-            aug[nlib] = .{ .monomial = mask };
-            const cov_after = rq1.coverage(X, grid, aug[0 .. nlib + 1], Yb, w);
-            evals += 2;
-            if (cov_after >= rq1.COVER and cov_before < rq1.COVER) {
+            var aug_buf: [33]rq1.Feature = undefined;
+            @memcpy(aug_buf[0..trained_lib.len], trained_lib);
+            aug_buf[trained_lib.len] = .{ .monomial = mask };
+            budget.fit += 1;
+            const cov_before = rq1.coverage(ctx.X, ctx.grid, trained_lib, Yb, ctx.w[0..]);
+            budget.fit += 1;
+            const cov_after = rq1.coverage(ctx.X, ctx.grid, aug_buf[0 .. trained_lib.len + 1], Yb, ctx.w[0..]);
+            if (cov_after >= ie.COVER and cov_before < ie.COVER) {
                 found = true;
                 break;
             }
@@ -208,48 +110,28 @@ fn runRandomSearch(
         if (found) solved += 1;
         std.heap.page_allocator.free(Yb);
     }
-
-    return .{ .mode = .random_search, .solved = solved, .total = battery.len, .evals = evals };
+    return solved;
 }
 
-fn runNoVerifier(
-    grid: []const [8]u8,
-    battery: []const rq1.BatteryTarget,
-    frozen: []const rq1.Feature,
-    X: [][]f64,
-    w: []f64,
-) ModeResult {
+fn runNoVerifier(ctx: *ie.BlindBatteryCtx, trained_lib: []const rq1.Feature, budget: *ie.EvalCounter) usize {
     var solved: usize = 0;
-    var evals: usize = 0;
-
-    for (battery) |tgt| {
+    for (ctx.battery) |tgt| {
         const Yb = std.heap.page_allocator.alloc(f64, rq1.NSAMP) catch unreachable;
-        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(grid[s], tgt);
-
-        var best: f64 = rq1.coverage(X, grid, frozen, Yb, w);
-        evals += 1;
-
+        for (0..rq1.NSAMP) |s| Yb[s] = rq1.labelBattery(ctx.grid[s], tgt);
+        budget.fit += 1;
+        var best: f64 = rq1.coverage(ctx.X, ctx.grid, trained_lib, Yb, ctx.w[0..]);
         var mm: u16 = 1;
         while (mm < 256) : (mm += 1) {
             const mask: u8 = @intCast(mm);
             if (@popCount(mask) < 1 or @popCount(mask) > 4) continue;
-            for (0..rq1.NSAMP) |s| X[s][0] = blk: {
-                var p: f64 = 1.0;
-                for (0..8) |i| {
-                    if (mask & (@as(u8, 1) << @intCast(i)) != 0) p *= (@as(f64, @floatFromInt(grid[s][i])) - 2.5);
-                }
-                break :blk p;
-            };
-            evals += 1;
-            const cov = rq1.coverage(X, grid, frozen, Yb, w);
+            budget.fit += 1;
+            const cov = rq1.coverage(ctx.X, ctx.grid, trained_lib, Yb, ctx.w[0..]);
             if (cov > best) best = cov;
         }
-
-        if (best >= rq1.COVER) solved += 1;
+        if (best >= ie.COVER) solved += 1;
         std.heap.page_allocator.free(Yb);
     }
-
-    return .{ .mode = .no_verifier, .solved = solved, .total = battery.len, .evals = evals };
+    return solved;
 }
 
 pub fn main() !void {
@@ -258,63 +140,42 @@ pub fn main() !void {
     const alloc = arena.allocator();
     const out = std.io.getStdOut().writer();
 
-    try out.print("=== Invention baseline comparison (blind battery B) ===\n", .{});
-    try out.print("grid_seed=0x{X:0>16} battery_seed=0x{X:0>16}\n\n", .{ rq1.GRID_SEED, rq1.BATTERY_SEED });
+    try out.print("=== Baseline comparison (battery-B evals only) ===\n", .{});
+    try out.print("grid_seed=0x{X:0>16} battery_seed=0x{X:0>16}\n", .{ ie.GRID_SEED, ie.BATTERY_SEED });
+    try out.print("zoo-A training shared, NOT counted in eval columns\n\n", .{});
 
-    var prng = std.Random.DefaultPrng.init(rq1.GRID_SEED);
-    const rand = prng.random();
-    const grid = try alloc.alloc([8]u8, rq1.NSAMP);
-    for (0..rq1.NSAMP) |s| {
-        for (0..8) |i| grid[s][i] = rand.intRangeAtMost(u8, 0, 5);
-    }
+    var prep = try ie.prepareBlindBattery(alloc, SilentOut{});
 
-    var bprng = std.Random.DefaultPrng.init(rq1.BATTERY_SEED);
-    const battery = try rq1.generateBatteryB(bprng.random(), alloc);
-    const bank = try rq1.buildProgBank(alloc);
+    var inv_budget = ie.EvalCounter{};
+    const inv = try ie.runBlindBatteryOnCtx(&prep.ctx, prep.trained_lib, SilentOut{}, false, &inv_budget);
 
-    const X = try alloc.alloc([]f64, rq1.NSAMP);
-    const phiTgt = try alloc.alloc(f64, rq1.NSAMP);
-    for (0..rq1.NSAMP) |s| X[s] = try alloc.alloc(f64, 33);
-    var w: [34]f64 = undefined;
+    var mono_budget = ie.EvalCounter{};
+    const mono_solved = runMonomialOnly(&prep.ctx, prep.trained_lib, &mono_budget);
 
-    const Yzoo = try alloc.alloc([]f64, 4);
-    const zoo_masks = [_]u8{ (1 << 2) | (1 << 5), (1 << 1) | (1 << 3) | (1 << 6), (1 << 0) | (1 << 4) | (1 << 5) | (1 << 7), (1 << 3) };
-    for (0..4) |t| {
-        Yzoo[t] = try alloc.alloc(f64, rq1.NSAMP);
-        for (0..rq1.NSAMP) |s| {
-            var p: f64 = 1.0;
-            for (0..8) |i| {
-                if (zoo_masks[t] & (@as(u8, 1) << @intCast(i)) != 0) p *= (@as(f64, @floatFromInt(grid[s][i])) - 2.5);
-            }
-            Yzoo[t][s] = if (p > 0) 1.0 else 0.0;
-        }
-    }
+    var fixed_budget = ie.EvalCounter{};
+    const fixed_solved = runFixedMenu(&prep.ctx, &fixed_budget);
 
-    const trained = try rq1.trainZooA(X, grid, Yzoo, phiTgt, &w, SilentOut{});
-    const frozen = trained.lib[0..trained.nlib];
-    const zoo_train_evals: usize = 4 * 8 * 255; // zoo-A forge rounds × mask sweep (monomial-only setup cost)
+    var rand_budget = ie.EvalCounter{};
+    const rand_solved = runRandomSearch(&prep.ctx, prep.trained_lib, ie.BATTERY_SEED ^ 0xDEAD, &rand_budget);
 
-    const invention = try runInventionMode(alloc, grid, battery, bank, X, phiTgt, &w, frozen);
-    var mono = runMonomialOnly(grid, battery, frozen, X, &w);
-    mono.evals += zoo_train_evals;
-    const fixed = try runFixedMenu(alloc, grid, battery);
-    const random = runRandomSearch(grid, battery, frozen, X, phiTgt, &w, rq1.BATTERY_SEED ^ 0xDEAD);
-    const nover = runNoVerifier(grid, battery, frozen, X, &w);
+    var nover_budget = ie.EvalCounter{};
+    const nover_solved = runNoVerifier(&prep.ctx, prep.trained_lib, &nover_budget);
 
-    const results = [_]ModeResult{ invention, mono, fixed, random, nover };
+    const results = [_]ModeResult{
+        .{ .mode = .invention, .solved = inv.solved, .total = prep.ctx.battery.len, .evals = inv_budget.total() },
+        .{ .mode = .monomial_only, .solved = mono_solved, .total = prep.ctx.battery.len, .evals = mono_budget.total() },
+        .{ .mode = .fixed_menu, .solved = fixed_solved, .total = prep.ctx.battery.len, .evals = fixed_budget.total() },
+        .{ .mode = .random_search, .solved = rand_solved, .total = prep.ctx.battery.len, .evals = rand_budget.total() },
+        .{ .mode = .no_verifier, .solved = nover_solved, .total = prep.ctx.battery.len, .evals = nover_budget.total() },
+    };
 
     try out.print("mode\tsolved\ttotal\tevals\n", .{});
-    for (results) |r| {
-        try out.print("{s}\t{d}\t{d}\t{d}\n", .{ modeName(r.mode), r.solved, r.total, r.evals });
-    }
+    for (results) |r| try out.print("{s}\t{d}\t{d}\t{d}\n", .{ modeName(r.mode), r.solved, r.total, r.evals });
 
-    const inv = invention;
-    const beats_solve = inv.solved > mono.solved and inv.solved > fixed.solved and inv.solved > random.solved and inv.solved > nover.solved;
-    const leaner_mono = inv.evals < mono.evals;
-    const leaner_random = inv.evals < random.evals;
+    const beats_solve = inv.solved > mono_solved and inv.solved > fixed_solved and inv.solved > rand_solved and inv.solved > nover_solved;
     try out.print("\n── verdict ──\n", .{});
-    try out.print("invention beats all baselines on solve rate: {}\n", .{beats_solve});
-    try out.print("invention leaner than monomial: {} ({d} vs {d})\n", .{ leaner_mono, inv.evals, mono.evals });
-    try out.print("invention leaner than random: {} ({d} vs {d})\n", .{ leaner_random, inv.evals, random.evals });
-    try out.print("PASS: {}\n", .{beats_solve and inv.solved >= 10 and leaner_mono});
+    try out.print("invention beats all on solve rate: {}\n", .{beats_solve});
+    try out.print("invention leaner than monomial: {} ({d} vs {d})\n", .{ inv_budget.total() < mono_budget.total(), inv_budget.total(), mono_budget.total() });
+    try out.print("invention leaner than random: {} ({d} vs {d})\n", .{ inv_budget.total() < rand_budget.total(), inv_budget.total(), rand_budget.total() });
+    try out.print("PASS: {}\n", .{beats_solve and inv.solved >= 10 and inv_budget.total() < mono_budget.total() and inv_budget.total() < rand_budget.total()});
 }

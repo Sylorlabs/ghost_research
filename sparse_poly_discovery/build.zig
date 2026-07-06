@@ -1305,6 +1305,18 @@ pub fn build(b: *std.Build) void {
     const run_baseline_cmp_step = b.step("invention-baseline-compare", "Blind battery: invention vs 4 baselines (TSV)");
     run_baseline_cmp_step.dependOn(&run_baseline_cmp_cmd.step);
 
+    const invent_engine_exe = b.addExecutable(.{
+        .name = "invention_engine",
+        .root_source_file = b.path("invention_engine.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(invent_engine_exe);
+    const run_invent_engine_cmd = b.addRunArtifact(invent_engine_exe);
+    if (b.args) |args| run_invent_engine_cmd.addArgs(args);
+    const run_invent_engine_step = b.step("invention-engine", "Production invention engine: blind battery B with growable menu");
+    run_invent_engine_step.dependOn(&run_invent_engine_cmd.step);
+
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{
         .root_source_file = b.path("tests.zig"),

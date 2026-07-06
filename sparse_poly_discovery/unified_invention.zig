@@ -742,7 +742,7 @@ fn isMonomialOnly(lib: []const Feature) bool {
     return true;
 }
 
-fn tryMonomialForge(
+pub fn tryMonomialForge(
     X: [][]f64,
     grid: []const [NCELL]u8,
     lib: []Feature,
@@ -1571,7 +1571,7 @@ pub const SolveMetrics = struct {
 };
 
 /// Solve one target on a shared grid with a mutable feature library; count escalation steps.
-fn solveOneTarget(
+pub fn solveOneTarget(
     X: [][]f64,
     grid: []const [NCELL]u8,
     lib: []Feature,
@@ -1699,7 +1699,7 @@ fn solveOneTarget(
     };
 }
 
-fn initMonomialLibrary(lib: []Feature, nlib: *usize) void {
+pub fn initMonomialLibrary(lib: []Feature, nlib: *usize) void {
     nlib.* = 0;
     for (0..NCELL) |i| {
         lib[nlib.*] = .{ .monomial = @as(u8, 1) << @intCast(i) };
