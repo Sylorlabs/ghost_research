@@ -1,6 +1,6 @@
 # Research Round 2026-07-10c — crossing the conjunction wall
 
-**Status:** LIVE — updated as each experiment lands. 3/6 complete.
+**Status:** LIVE — updated as each experiment lands. 4/6 complete.
 **Predecessors:** `research_round_2026_07_10.md` (8/8) and
 `research_round_2026_07_10b.md` (6/6). Round b's settled architecture: *inner
 loops explore un-aimed and un-gated; aim, taxes, and novelty verdicts act at
@@ -22,7 +22,7 @@ claim, negatives documented as findings, main session commits centrally.
 | 1 | Conjunction wall (wcore) | Do stepping-stone curricula or mechanism-level descriptors lift the distinct-count climb past the 0.862 plateau to the 0.95 bar? | pending | — | `wcore/docs/research/conjunction_wall.md` |
 | 2 | Evidence lenses (battery-C) | Do second-order / conditional / order-statistic lenses beat the (1/3)^k signal decay — reaching degree-5 C11 and family-miss C09? Baseline 8/33. | **DONE** | **Battery-C SATURATED: 33/33, cheaper than v1** (12,630 vs 13,152 evals). The (1/3)^k wall was an estimator artifact — the GF(2) joint solve is exact and k-independent; C09 fell to pairwise-order evidence primitives + algebraic identification. 30/30 derivation chains byte-exact; asterisk: exactness needs noiseless labels (LPN). | `docs/research/tier8_evidence_lenses.md` |
 | 3 | greedyFit z-scoring fix | Fix the raw-vs-z-scored mismatch; do the 5 leaked battery-D candidates reclassify, and do prior verdicts (11/11 battery, gate v5) survive? | **DONE** | Fit and eval now share train-stat scaling. **All 5 leaks flip → DECISIVE (band 3→8); ablation effect 1/9-vs-9/9 → 0/24-vs-22/24; B3 was silently leaking in every prior strict-v3 run** (honest ARM-OFF battery-B = 29/33). Stock production line-identical; gate v5 survives and strengthens (60/60 + 9/9). | `docs/research/tier8_taxfix.md` |
-| 4 | Matcher falsification (wcore) | Can the 0.95 / 8×28 statistical matcher be made to lie (false-equal, false-different, seed-flips)? What protocol fixes it? | pending | — | `wcore/docs/research/matcher_falsification.md` |
+| 4 | Matcher falsification (wcore) | Can the 0.95 / 8×28 statistical matcher be made to lie (false-equal, false-different, seed-flips)? What protocol fixes it? | **DONE** | **CRACKED: 4.2% of production "reducible" verdicts are false-equals** (8/189, all witnessed); the horizon bomb scores 1.000 while truly matching 10.9%. Corrected protocol (exact match, 64×256, 2 seeds) → 0 false-equals AND cheaper (13ms vs 70ms). **All 20/20 promotion identities survive.** | `wcore/docs/research/matcher_falsification.md` |
 | 5 | Assembled engine | Do revision + aimed proposal + v5-ladder verdict + export-filter tax cohere in ONE pass across batteries B/C/D, or interfere? | pending | — | `docs/research/tier8_assembled.md` |
 | 6 | D08/C09 reachability gap | Is the gap family-level (proven)? Does the minimal comparison-aggregate family close it, at what cost signature? | **DONE** | **Two gaps, not one:** C09 proven family-level (Bayes ceilings of every family at chance; inversion basis = 1.000); D08 is a *selection bug* (exact spectral member exists at gridpoint 100 — discoverSpectral picks by DFT power, not accuracy). +CMP/+MENUACC double dissociation: **+11 flips, 0 regressions in 99 cells**, B11's metadata-gated solve now blind. | `docs/research/tier8_reach_gap.md` |
 
@@ -123,6 +123,32 @@ claim, negatives documented as findings, main session commits centrally.
   without the generator; 397–1,689 evals with it. Recommendation: MENUACC
   is a bug-fix (certify the accuracy-argmax), CMP earns a production seat.
 
+### 4. Matcher falsification (the crack, and the fix that costs less)
+- **The matcher lies structurally in the false-equal direction.** All 9
+  constructed adversaries certify "reducible" (7 at 100% of 500 stream
+  seeds), each with an exact disagreement witness. The **horizon bomb** is
+  the cleanest: production agreement 1.000, true agreement 10.9% — a
+  28-symbol stream cannot see past position 28 at any threshold or seed.
+  Beyond constructions: 2 false-equals in 5,803 random production-passing
+  pairs, and **8/189 (4.2%) of the real a1a6 census's "reducible" verdicts
+  are false-equals** (worst true agreement 0.32).
+- **What is NOT fragile:** false-different is structurally impossible
+  (0/90,000); production verdict seed-flips 0/2,000 — the 0.008 kill-test
+  margin was an aggregate-search property, not per-verdict fragility; the
+  inv8 depth-flip is real (exact on 2×16,384 symbols); kill-tests
+  non-vacuous at exact depth ≤8.
+- **Corrected protocol, ROC-backed:** exact match (threshold 1.0), 64
+  streams × 256 symbols, confirmed on 2 independent seeds, 32-symbol
+  early-exit. False-equal 0/2,489 labeled pairs, true-equal 1.0000 — and
+  **cheaper than production** (13ms vs 70ms per depth-4 census; first-
+  mismatch early exit beats the bigger sample). Honest residual: sub-2e-4
+  deviators survive any finite-sample protocol.
+- **Verdict migrations: none that matter.** 14 intermediate census verdicts
+  migrate reducible→irreducible, but promotion identity is unchanged 20/20
+  (first-irreducible-in-length-order is insensitive to corrections after
+  its index). Not attacked: the coevo-side 12×32 matcher (same mechanics
+  likely apply — flagged).
+
 ## Synthesis (updated as results land)
 
 1. **The Tier 8 effect size was UNDERSTATED by the instrument bug, not
@@ -150,5 +176,14 @@ claim, negatives documented as findings, main session commits centrally.
    successor battery designed against the *new* frontier: label noise (the
    LPN asterisk), deeper compositions, and targets outside both the XOR
    and order-statistic families.
+5. **The instrument-trust round paid for itself twice over:** both audited
+   instruments were broken (greedyFit scale mismatch; matcher horizon +
+   threshold lies), both fixes make the system STRONGER not weaker (Tier 8
+   effect 0/24-vs-22/24; exact matching cheaper at 13ms), and in both cases
+   every headline verdict survived — the false-equal class was hiding in
+   intermediate census rows, not in promotions. The repo's claim-hygiene
+   (promotion rules insensitive to census corrections; byte-identical
+   pre-fix controls) is what made the corrections cheap. Next instrument in
+   line: the coevo-side 12×32 matcher.
 
 *(Remaining verdicts added as agents land.)*
