@@ -664,12 +664,23 @@ fn greedyFit(
         const dim = n_sel;
         for (0..ui.NSAMP) |s| {
             for (0..dim) |j| Xtr[s][j] = cols[selected[j]][s];
-            Xtr_rows[s] = Xtr[s][0..dim];
         }
         for (0..ui.NSAMP) |s| {
             for (0..dim) |j| Xte[s][j] = cols[selected[j]][s];
         }
-        fitLogit(&Xtr_rows, Y, dim, 120, 0.05, &w);
+        // BUGFIX (2026-07-10 taxfix, see docs/research/tier8_battery_d.md):
+        // this block used to call fitLogit on the RAW Xtr, then z-score ONLY
+        // Xte using Xtr's train-set mean/std, and evaluate the raw-fit
+        // weights against those z-scored test columns -- a scale mismatch
+        // between what `w` was optimized for and what accLogit measured it
+        // against. For binary {0,1} remainder columns the decision boundary
+        // happens to survive the substitution almost by construction; for
+        // 3+-valued columns it doesn't reliably. Fix: compute train-only
+        // mean/std once and apply the SAME standardization to both Xtr and
+        // Xte before fitting, so fitLogit's weights and accLogit's
+        // evaluation operate on the identical scale (textbook train/test
+        // feature scaling -- normalize with train statistics, apply
+        // identically to both splits).
         for (0..dim) |j| {
             var mu: f64 = 0;
             for (0..ui.NTR) |s| mu += Xtr[s][j];
@@ -677,9 +688,14 @@ fn greedyFit(
             var sd: f64 = 0;
             for (0..ui.NTR) |s| sd += (Xtr[s][j] - mu) * (Xtr[s][j] - mu);
             sd = @max(1e-6, @sqrt(sd / @as(f64, @floatFromInt(ui.NTR))));
+            for (0..ui.NSAMP) |s| Xtr[s][j] = (Xtr[s][j] - mu) / sd;
             for (0..ui.NSAMP) |s| Xte[s][j] = (Xte[s][j] - mu) / sd;
         }
-        for (0..ui.NSAMP) |s| Xte_rows[s] = Xte[s][0..dim];
+        for (0..ui.NSAMP) |s| {
+            Xtr_rows[s] = Xtr[s][0..dim];
+            Xte_rows[s] = Xte[s][0..dim];
+        }
+        fitLogit(&Xtr_rows, Y, dim, 120, 0.05, &w);
         best_test = accLogit(&Xte_rows, Y, &w, dim, 0, ui.NSAMP);
         if (best_test >= COVER) break;
     }
