@@ -371,12 +371,26 @@ Full list with honesty flags at [`RESEARCH_QUESTIONS.md`](RESEARCH_QUESTIONS.md)
 | I53–I56 | Falsification hunts — try to break our own claims | Ongoing |
 | J57–J60 | External-ingredient experiments (real code, real datasets) | Needs external data |
 
-**Highest-priority open experiments:**
-1. **A10** — Clifford geometric-product binding ablation (predicted by both the Closure
-   Principle and the external frontier research to be the next out-of-closure generator)
-2. **A1–A6** — Open-atom-set: iterated promotion, fixed-point test, generalisation check
-3. **G48** — `toAig` faithfulness audit (instrument trust before trusting more results)
-4. **I53** — Falsify the closure principle (highest-value possible outcome)
+**2026-07-10 round: the previous four priorities are all now done** (see
+`docs/research/research_round_2026_07_10.md` for the full eight-experiment round):
+A10 replicated with controls (0.508→0.976); A1–A6 measured (no fixed point,
+escapes mostly unaimed, corrected held-out 3/18→4/18); G49 cross-audit 5016/5016;
+I53 falsification refuted the emergent-pair block and strengthened the core
+principle (u2 infinite-depth fixpoint). Plus: Tier 8 revision proven load-bearing
+by ablation; tax gate settled (measurement-only); H50 closure-exhaustion law;
+two externally-verified dial-3 campaigns (LABS, addchains).
+
+**Highest-priority open experiments (updated):**
+1. **Aimed escapes** — couple the forge/proposer to the target frontier (the A1–A6
+   lesson); a gate that admits aimed escapes while still blocking remix (the exp-5+6
+   joint lesson)
+2. **wcore Claim-C depth-artifact attack** — the reducer's "irreducible" verdicts
+   carry the same resource-bound risk I53 exposed; re-attack at deeper budgets
+3. **Decisive Tier-8 battery band** — targets that are ladder-reachable but
+   tax-blockable (currently ~1 exists), so the revision ablation can be sharpened
+4. **Records, not baselines** — even-N LABS moves + Mertens bounding;
+   Flammenkamp/Clift addchain comparisons (J57–J60 externalization)
+5. **H51/H52** — coverage vs atom-set size; control quality vs band width
 
 ---
 

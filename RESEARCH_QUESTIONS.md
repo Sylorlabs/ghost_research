@@ -5,6 +5,21 @@ Legend: **🟢** answer genuinely unknown in advance (real research, can surpris
 (run only for completeness). `[solo]` = runnable in this repo now · `[needs X]` =
 needs an external ingredient. The 🟢 `[solo]` rows are where to spend runs.
 
+> **2026-07-10 round — eight parallel experiments** (see `docs/research/research_round_2026_07_10.md`):
+> **A10 replicated** at 6 seeds with controls (0.508→0.976; Hadamard = Clifford). **A2 REVISED** —
+> no fixed point at a depth-3 certifier bar; prior "saturation" was a budget artifact. **A4/A7
+> answered** — 3/20 promoted atoms redundant, 1/20 degenerate (~5% certifier leak); generalisation
+> mostly illusory (corrected held-out 3/18→4/18). **E38 REFUTED as a closure claim** — emergent
+> pairs are (depth, register) budget-relative (`i53_falsification_2026_07_10.md`); core principle
+> strengthened (u2 infinite-depth fixpoint). **G49 DONE** — 5016/5016 prover agreement. **H50
+> partially** — closure exhaustion measured: 10/11 solves by ~50 evals, the out-of-closure target
+> costs 322/372 (87%), budget past 372 unspendable (`scaling_laws_h50.md`). **Tier 8 revision
+> proven load-bearing** (ablation, 3/3 seeds); **tax gate: measurement-only wins** (B>A>C).
+> **Dial-3 externally verified twice** — LABS (proven optima N≤24, matched best-known odd N≤59)
+> and addchains (52/60 beat classical stack, minimality proven n≤16384); nothing new-to-humanity,
+> distance to records itemized. Both campaigns' verifiers caught planted lies; a textbook addchain
+> lower bound was refuted en route.
+
 > **2026-06-03 round — four directions answered** (see `RESEARCH_ROUND_2026_06_03.md`):
 > **A10 (new, Clifford binding)** ✅ — changing the bind off GF(2) moves the closure, but a
 > plain real bind matches Clifford; "leave GF(2)," not the geometric product, is the lever
@@ -22,12 +37,12 @@ The budget-scan proved a *fixed* atom set can't invent (every behaviour is a
 composition). The live edge is letting the atom set grow.
 
 1. 🟢 [solo] ✅ If a certified depth-N survivor is **promoted** into the atom set, can the *next* round find a behaviour irreducible to the **enlarged** set? — **Yes (8 rounds), but the bar is weak; see #2/#3.** (`wcore atomforge`)
-2. 🟢 [solo] ✅ Does iterated atom-promotion **terminate** (atom set stops growing) or grow unboundedly? Is there a fixed point? — **Effectively saturates: it COVERS the fixed opcode VM, bottoms out there. Composition all the way down.**
+2. 🟢 [solo] ✅ Does iterated atom-promotion **terminate** (atom set stops growing) or grow unboundedly? Is there a fixed point? — **REVISED 2026-07-10: NO fixed point at a depth-3 certifier bar (10 rounds × 2 seeds, promotion never starves); the earlier "saturates" answer was a search-budget artifact.** (`a1a6_iterated_promotion.md`)
 3. 🟢 [solo] ✅ Does each promotion let solvable-task **composition depth** keep rising, or plateau? — **Plateau: minimal program-length stays flat/noisy (coverage, not growth).**
-4. 🟢 [solo] Is a promoted atom ever later **reducible to other promoted atoms** (redundant)? Can the atom set be minimised?
+4. 🟢 [solo] ✅ Is a promoted atom ever later **reducible to other promoted atoms** (redundant)? Can the atom set be minimised? — **Yes: 3/20 redundant vs final library, plus 1/20 retroactively reducible at depth 4 (~5% certifier leak). The set is minimisable.** (`a1a6_iterated_promotion.md`)
 5. 🟢 [solo] Two different seed atom sets → do they converge to the **same closure** (path-invariant invention) or diverge?
 6. 🟢 [solo] Is there a task solvable **only after ≥2 promotions** (invented-on-invented)?
-7. 🟢 [solo] Do invented atoms **generalise** (help on held-out tasks they weren't forged for) or are they task-overfit?
+7. 🟢 [solo] ✅ Do invented atoms **generalise** (help on held-out tasks they weren't forged for) or are they task-overfit? — **Mostly overfit: raw held-out 3/18→7/18 but 6/8 flips are SELF matches (atom ≡ a decoy target); corrected 3/18→4/18 — one genuine composed flip per seed; the structured family never flips. Escapes must be AIMED.** (`a1a6_iterated_promotion.md`)
 8. 🟡 [solo] Does promotion lower **search cost** (iters-to-solve) for downstream tasks — do atoms act as useful abstractions?
 9. 🟡 [solo] Does promotion **order** change what's eventually invented (path dependence)?
 10. 🟢 [solo] ✅ **(A10, Clifford binding)** Does swapping the bind off XOR/GF(2) move the readout closure on the band/sum the XOR substrate can't read? — **Yes (0.50→0.97); but a plain real Hadamard bind matches Clifford — the lever is "leave GF(2)," not the geometric product. Clifford's grade-2 advantage untested (needs a two-sided/relational predicate).** (`clifford_binding.md`)
@@ -67,7 +82,7 @@ composition). The live edge is letting the atom set grow.
 ## E. The closure principle — theory & generalisation
 36. 🟢 [needs theory] Is there a **decidable, budget-independent** irreducibility certificate for any closure class richer than affine?
 37. 🟡 [solo] For the XOR/bundle VSA: is "predicate P ∈ readout closure" decidable; what's the expressible-predicate class / VC-dim?
-38. 🟢 [solo] Can a **pair** of in-closure-looking ops jointly escape a closure (emergent escape), with neither escaping alone?
+38. 🟢 [solo] ✅ Can a **pair** of in-closure-looking ops jointly escape a closure (emergent escape), with neither escaping alone? — **Only budget-relatively: the pair-necessity claims were REFUTED at depth 6–8 / more registers (x&(x-1) via SUB alone). Emergent pairs are a (depth, register) reachability phenomenon, not closure.** (`i53_falsification_2026_07_10.md`)
 39. 🟢 [solo] Is there a closure where adding the obvious generator does **NOT** escape (counterexample to the escape corollary)?
 40. 🟡 Across the 5 witnesses, is the escape gap predicted by a common measure (e.g., **algebraic degree** the generator adds)?
 
@@ -83,10 +98,10 @@ composition). The live edge is letting the atom set grow.
 46. 🟢 [solo] Does `behaviorMatches` (12 regs, 32 tests) ever declare two **non-equal** programs equal? Stress with adversarial pairs.
 47. 🟡 [solo] Do reducible/irreducible verdicts change as `behaviorMatches` test count rises (32→256)?
 48. 🟢 [solo] Is `domain_superoptimizer.toAig` **faithful**? (I found AND/SHL bugs.) Exhaustively check each op's AIG vs `execute` at small width.
-49. 🟡 [solo] Does the native SAT prover agree with **libz3** on a battery of equivalence checks (cross-verifier audit)?
+49. 🟡 [solo] ✅ Does the native SAT prover agree with an independent checker on a battery of equivalence checks (cross-verifier audit)? — **PASS: 5016/5016 agreement vs a zero-shared-code truth-table evaluator, incl. 1551 adversarial minterm flips. Unaudited: `Aig.sweep`, `createBvMiter`, 64-bit chains.** (`i53_falsification_2026_07_10.md`)
 
 ## H. Scaling laws & cost signatures
-50. 🟢 [solo] iters-to-solve vs task composition depth — is it **exponential** (the Claim-C cost signature)?
+50. 🟢 [solo] ◐ iters-to-solve vs task composition depth — is it **exponential** (the Claim-C cost signature)? — **Partially: per-target eval steps 1→5→8→322 across ladder stages (consistent with exponential), and the curve is closure exhaustion, not diminishing returns — budget past 372 evals is unspendable. Not yet parameterized by composition depth.** (`scaling_laws_h50.md`)
 51. 🟡 [solo] Closure coverage vs atom-set size — does coverage of k-bit functions grow linearly, or saturate?
 52. 🟡 [solo] mb_mass control quality vs band width / dynamics granularity — where does it break?
 
