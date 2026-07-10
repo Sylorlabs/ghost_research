@@ -23,8 +23,11 @@ to **theorem**, and in doing so corrects the mechanism:
 > Every committed constrained champion (3 roots × {mul_free, no_carry}) is
 > composed *exclusively* of GF(2)-linear operations, so each is an exact
 > affine map `P(x) = M·x + c`. An affine recurrence `x_{n+1} = M·x_n + c`
-> satisfies a GF(2) linear recurrence of order ≤ 64 (Cayley–Hamilton), so
-> its output stream has binary rank bounded by ~64. That is precisely what
+> satisfies a GF(2) linear recurrence of order ≤ 65 (Cayley–Hamilton gives
+> ≤ 64 for c = 0; the affine offset adds one — corrected 2026-07-10 by
+> exhaustive check at n ≤ 3, see `docs/research/i53_falsification_2026_07_10.md`
+> attack (c) T3; applies to the F00D mul_free champion, the only c ≠ 0 case), so
+> its output stream has binary rank bounded by ~65. That is precisely what
 > PractRand's BRank test detected (`BRank(12):score:256(10)`). The proximate,
 > *provable* cause of failure is **"the search never left the GF(2)-affine
 > subspace,"** not "the absence of multiplication."
