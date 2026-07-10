@@ -1,6 +1,6 @@
 # Research Round 2026-07-10b — aiming the escapes
 
-**Status:** LIVE — updated as each experiment lands. 2/6 complete.
+**Status:** LIVE — updated as each experiment lands. 3/6 complete.
 **Predecessor:** `research_round_2026_07_10.md` (8/8 complete). Its converged
 finding: *the loop's binding resource is aimed out-of-closure generators — not
 compute, not more promotion rounds, not stricter gates.* Escapes are cheap when
@@ -26,7 +26,7 @@ negatives documented as findings, main session commits centrally.
 | 2 | Aimed proposer (battery-C wall) | Do near-miss witnesses + residual-guided feature proposal move the 10/11 battery-C wall? Baselines: 0/33 frozen, 3/33 revision. | **DONE** | **Wall moves: 3/33 → 8/33.** Every flip's evidence-mined mask is byte-identical to ground truth; all 5 export as novel. Honest limit: the correlation signal is (1/3)^k — aiming is probabilistic (~17%/attempt deg-4, 0 at deg-5); C09's family is a structural miss. | `docs/research/tier8_aimed_proposer.md` |
 | 3 | Gate v5 discrimination | Is there a gate that admits certified escapes (C08 must still pass) AND blocks planted remix (v4 passes 100%)? | pending | — | `docs/research/tier8_gate_v5.md` |
 | 4 | Claim-C depth attack (wcore) | Do wcore's "irreducible" verdicts survive +1/+2/+3 certifier depth, or are they resource artifacts (the I53 attack, applied to wcore)? | pending | — | `wcore/docs/research/claimc_depth_attack.md` |
-| 5 | LABS even-N | Can memetic / pair-flip / structural moves close the 12 even-N + {61,63,64} gaps skew-symmetry can't touch? | pending | — | `boundary_crossing/docs/research/labs_even_n.md` |
+| 5 | LABS even-N | Can memetic / pair-flip / structural moves close the 12 even-N + {61,63,64} gaps skew-symmetry can't touch? | **DONE** | **2/12 fully closed (N=44, 50 hit best-known), 3 partial, 4 regressed** (budget split across 8 arms < one concentrated run — real lesson). Key negative: **no even-N analogue of skew-symmetry exists** among mirror-pair hypotheses (isolation test: plain 6.86 vs mirror 4.24). Verifier 12/12 + 63/63. | `boundary_crossing/docs/research/labs_even_n.md` |
 | 6 | Decisive battery-D | Build ~10 targets in the ladder-reachable-but-v3-blockable band; turn the 1-target Tier 8 existence proof into an effect size. | **DONE** | **3/11 candidates DECISIVE** (D01 sum%2, D07 count3%3, D11 subset-parity). Ablation on the decisive subset: **ARM-OFF 1/9 vs ARM-ON 9/9**, zero reversals, battery B preserved at fewer evals. Bonus: found a greedyFit scale-mismatch bug (raw-vs-z-scored columns) and a ladder reachability gap (D08). | `docs/research/tier8_battery_d.md` |
 
 ---
@@ -96,6 +96,27 @@ negatives documented as findings, main session commits centrally.
   evidence-guidance, not reachability. C09 (inversion-count parity, an
   order-statistic) resists both: wrong feature family entirely, an honest
   structural miss.
+
+### 5. LABS even-N (the record-gap chase)
+- Attacked all 12 miss lengths with 7–8 arms each (pair/triple-flip
+  neighborhoods with incremental updates, memetic crossover/restarts, three
+  mirror-pair structural hypotheses), 160–185M evals per length, three
+  sub-runs each within the 15-min cap.
+- **Closed: N=44 (E 126→122) and N=50 (161→153) now match best-known.**
+  Partial: N=56 (75% of gap), N=60 (22%), N=63 (19%). Unchanged: 48, 61, 64.
+  **Regressed: 52, 54, 58, 62** — honestly reported; the methodological
+  lesson is real: 2.3–3× total budget *split across 8 arms* underperforms
+  yesterday's single concentrated run — next round should winnow arms first,
+  then concentrate.
+- **Key structural negative:** no even-N analogue of skew-symmetry among
+  mirror-pair forms. Fair isolation at N=48 (equal 35M budget, fresh state):
+  plain F=6.86 vs mirror-alternating 4.24 vs palindrome/antipalindrome 1.90
+  (near-random). Unrestricted pair/triple search won 9/12 lengths. If an
+  even-N restriction exists, it isn't in this hypothesis family — finding
+  one is genuine open theory (the literature reaches even-N records with
+  branch-and-bound compute, not a symmetry trick).
+- Verifier: 12/12 new claims + 63/63 prior claims verified; planted two-lie
+  test refuted (exit 1). EXTRAORDINARY never fired.
 
 ## Synthesis (updated as results land)
 
