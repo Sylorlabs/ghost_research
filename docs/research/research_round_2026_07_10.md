@@ -1,6 +1,6 @@
 # Research Round 2026-07-10 — eight parallel experiments toward "way better than AlphaEvolve"
 
-**Status:** LIVE — updated as each experiment lands. 7/8 complete.
+**Status:** COMPLETE — all 8 experiments landed 2026-07-10.
 **Design:** Eight independent experiments launched in parallel (one subagent each),
 derived from the gap analysis against AlphaEvolve: the repo is ahead on the
 *certification* axis (irreducibility certificates + remix taxonomy = a defensible
@@ -26,7 +26,7 @@ claim (exp 7), and our own foundations (exp 8).
 | # | Experiment | Status | Headline | Doc |
 |---|-----------|--------|----------|-----|
 | 1 | LABS merit-factor campaign | **DONE** | Proven optima N=2–24 (23/23 match literature); matched best-known at all N=25–43 and every odd N≤59; honest misses at 12 lengths (even N≥44 + {61,63,64}). Verifier: 63/63 verified, 3/3 planted lies refuted. Nothing new-to-humanity. | `boundary_crossing/docs/research/labs_campaign.md` |
-| 2 | Addition-chain campaign v2 | pending | — | `boundary_crossing/docs/research/addchain_v2.md` |
+| 2 | Addition-chain campaign v2 | **DONE** | 52/60 targets: search beats the full classical stack at 24–40 bits (mean −1.2 adds); 118/118 chains independently verified; minimality proven for all n≤16384. Bonus: the textbook ⌈log₂n⌉+⌈log₂ν(n)⌉ formula empirically refuted as a lower bound. Nothing new-to-humanity. | `boundary_crossing/docs/research/addchain_v2.md` |
 | 3 | A10 Clifford binding ablation | **DONE** | Ceiling broken: 0.508 → 0.976 (6 seeds, zero overlap). Deflation control: plain Hadamard-real bind = 0.978 — the lever is leaving GF(2) for a magnitude-carrying algebra, not the geometric product. Escape corollary confirmed. | `sparse_poly_discovery/docs/research/a10_clifford_binding.md` |
 | 4 | A1–A6 iterated atom promotion | **DONE** | No fixed point (depth-3 certifier bar too weak); corrected held-out reach 3/18 → 4/18 — 6/8 raw flips were SELF matches. ~5% certifier leak caught at depth 4. Ten escape rungs bought ONE genuine behaviour. | `wcore/docs/research/a1a6_iterated_promotion.md` |
 | 5 | Tax gate as promotion gate (A/B/C) | **DONE** | Nuanced negative: compounding is REAL (survivor library instantly solves later targets; no-promotion arm fails fresh composition P8 3/3 seeds) but hard-gating loses — starves library 33→9, drops 2 solves, 5.4× eval cost. **B > A > C; keep measurement-only**, gate at library export if at all. | `docs/research/tier8_tax_gate_promotion.md` |
@@ -57,6 +57,31 @@ claim (exp 7), and our own foundations (exp 8).
 - **Verdict:** the FunSearch/AlphaEvolve *shape* (unknown target + sound
   verifier + beats naive baseline) now runs end-to-end at CPU-seconds scale.
   Nothing new-to-humanity; the gap to records is quantified, not vibes.
+
+### 2. Addition-chain campaign v2 (second external-verification domain)
+- 60 urandom MID targets (24–40 bit), per-method mean lengths: binary 49.17 →
+  factor 44.42 → window 42.88 → **stochastic search 41.67**. Best < binary
+  60/60; best < best-window 53/60.
+- **Honest invention yield: 52/60** targets where search beats the whole
+  classical stack (mean saving ~1.2 additions, max 3). The `--restarts 0`
+  ablation attributes 12/60 to deletion-repair pruning of classical chains;
+  ~40/60 is genuinely stochastic. On small targets the search adds ~nothing
+  (0/20, 0/20, 1/10) — the stochastic edge only exists where classical
+  methods leave slack.
+- **Minimality proven for all 50 targets n ≤ 16384** by the independent
+  checker. The wall is (16K, 64K]: engine-side complete IDDFS still
+  terminates (9m11s / 8 targets) but lengths 18–20 exceed the checker's
+  depth-16 proof cap → VALID/UNPROVEN. At 16 bits the heuristic stack sits
+  ~0.5 additions above optimal.
+- **Bonus refutation:** the prescribed ⌈log₂n⌉+⌈log₂ν(n)⌉ formula is NOT a
+  valid lower bound (n=15: proven l=5 < 6; gap −1 in every small batch) —
+  reported alongside the sound Schönhage bound (MID gap 5.97 mean).
+- Verifier: 118/118 chains VALID, 2/2 planted lies (non-minimal claim,
+  invalid step) REFUTED with exit 1.
+- **Verdict:** re-derivation of known methods, honestly measured — real
+  externally-verified better-than-baseline yield at 40-bit scale, nothing
+  new-to-humanity. A record requires beating curated published tables
+  (Flammenkamp/Clift), not our own baselines.
 
 ### 3. A10 Clifford binding (proposer richness without an LLM)
 - Arm (a) XOR/bundle baseline reproduces the known ceiling: 0.508 ± 0.013
@@ -252,5 +277,29 @@ claim (exp 7), and our own foundations (exp 8).
    `equivalence_tax.greedyFit`'s ~31MB stack allocation segfaults any
    default-stack binary running `--strict-tax`. Fix properly (heap-allocate
    col_store) in a follow-up commit rather than three workarounds.
+10. **The significance axis now has two measured domains (exps 1–2), same
+    verdict both times:** the full FunSearch/AlphaEvolve shape runs
+    end-to-end on CPU-seconds — unknown targets, shared-nothing verifiers
+    that catch planted lies, real better-than-classical yield (52/60 at
+    40-bit addchains; matched best-known LABS to N=59 odd) — and both docs
+    state plainly that nothing is new-to-humanity yet. The distance to
+    records is now itemized (even-N LABS moves + Mertens bounding; curated
+    Flammenkamp/Clift comparisons), which converts "beat AlphaEvolve" from a
+    slogan into a work list. Meanwhile exps 2 and 8 each *refuted a textbook/
+    repo formula as a side effect* (the ν(n) lower bound; the emergent-pair
+    block) — the verification-first culture is finding real errors, which is
+    the strongest evidence the certification axis is worth keeping.
 
-*(Section for experiment 2 to be added on completion.)*
+---
+
+## Round verdict (final)
+
+Eight experiments, eight completions, zero theater: 2 ceiling-breaks
+(A10 algebra escape; Tier 8 revision existence proof), 2 external campaigns
+with independent verification (LABS, addchains), 2 disciplined negatives that
+redirect the program (iterated promotion pays ~nothing unaimed; hard tax
+gating loses), 1 measured cost law (closure exhaustion, not diminishing
+returns), and 1 successful self-falsification (emergent-pair block refuted;
+core principle strengthened to an infinite-depth proof). Follow-ups queued:
+CLOSURE_PRINCIPLE.md correction pass, wcore Claim-C depth-artifact attack,
+greedyFit stack fix, decisive battery band for the Tier 8 ablation, H51/H52.
