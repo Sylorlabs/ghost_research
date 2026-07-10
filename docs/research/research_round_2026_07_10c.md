@@ -1,6 +1,6 @@
 # Research Round 2026-07-10c — crossing the conjunction wall
 
-**Status:** LIVE — updated as each experiment lands. 4/6 complete.
+**Status:** LIVE — updated as each experiment lands. 5/6 complete.
 **Predecessors:** `research_round_2026_07_10.md` (8/8) and
 `research_round_2026_07_10b.md` (6/6). Round b's settled architecture: *inner
 loops explore un-aimed and un-gated; aim, taxes, and novelty verdicts act at
@@ -23,7 +23,7 @@ claim, negatives documented as findings, main session commits centrally.
 | 2 | Evidence lenses (battery-C) | Do second-order / conditional / order-statistic lenses beat the (1/3)^k signal decay — reaching degree-5 C11 and family-miss C09? Baseline 8/33. | **DONE** | **Battery-C SATURATED: 33/33, cheaper than v1** (12,630 vs 13,152 evals). The (1/3)^k wall was an estimator artifact — the GF(2) joint solve is exact and k-independent; C09 fell to pairwise-order evidence primitives + algebraic identification. 30/30 derivation chains byte-exact; asterisk: exactness needs noiseless labels (LPN). | `docs/research/tier8_evidence_lenses.md` |
 | 3 | greedyFit z-scoring fix | Fix the raw-vs-z-scored mismatch; do the 5 leaked battery-D candidates reclassify, and do prior verdicts (11/11 battery, gate v5) survive? | **DONE** | Fit and eval now share train-stat scaling. **All 5 leaks flip → DECISIVE (band 3→8); ablation effect 1/9-vs-9/9 → 0/24-vs-22/24; B3 was silently leaking in every prior strict-v3 run** (honest ARM-OFF battery-B = 29/33). Stock production line-identical; gate v5 survives and strengthens (60/60 + 9/9). | `docs/research/tier8_taxfix.md` |
 | 4 | Matcher falsification (wcore) | Can the 0.95 / 8×28 statistical matcher be made to lie (false-equal, false-different, seed-flips)? What protocol fixes it? | **DONE** | **CRACKED: 4.2% of production "reducible" verdicts are false-equals** (8/189, all witnessed); the horizon bomb scores 1.000 while truly matching 10.9%. Corrected protocol (exact match, 64×256, 2 seeds) → 0 false-equals AND cheaper (13ms vs 70ms). **All 20/20 promotion identities survive.** | `wcore/docs/research/matcher_falsification.md` |
-| 5 | Assembled engine | Do revision + aimed proposal + v5-ladder verdict + export-filter tax cohere in ONE pass across batteries B/C/D, or interfere? | pending | — | `docs/research/tier8_assembled.md` |
+| 5 | Assembled engine | Do revision + aimed proposal + v5-ladder verdict + export-filter tax cohere in ONE pass across batteries B/C/D, or interfere? | **DONE** | **COHERES: every battery's best number simultaneously** (B 33/33, C 8/33, D 9/9) at revision-only's eval budget; zero decision-level interference across 300 rows; attribution exactly additive; D11 overlap dedupes correctly via the v5 verdict. Recommended as production default. | `docs/research/tier8_assembled.md` |
 | 6 | D08/C09 reachability gap | Is the gap family-level (proven)? Does the minimal comparison-aggregate family close it, at what cost signature? | **DONE** | **Two gaps, not one:** C09 proven family-level (Bayes ceilings of every family at chance; inversion basis = 1.000); D08 is a *selection bug* (exact spectral member exists at gridpoint 100 — discoverSpectral picks by DFT power, not accuracy). +CMP/+MENUACC double dissociation: **+11 flips, 0 regressions in 99 cells**, B11's metadata-gated solve now blind. | `docs/research/tier8_reach_gap.md` |
 
 ---
@@ -148,6 +148,32 @@ claim, negatives documented as findings, main session commits centrally.
   (first-irreducible-in-length-order is insensitive to corrections after
   its index). Not attacked: the coevo-side 12×32 matcher (same mechanics
   likely apply — flagged).
+
+### 5. Assembled engine (the coherence test)
+- Four arms × 3 seeds with all baselines re-measured in-harness against the
+  taxfix: frozen (B 29/33, C 0/33, D 0/9), revision-only (33/33, 3/33,
+  9/9), aimed-without-revision (29/33, 5/33 final, 3/9), **assembled
+  (33/33, 8/33, 9/9)** — every documented best simultaneously, at
+  revision-only's eval budget (2072), same 5 aimed flips with
+  byte-identical masks.
+- **Interference: zero at the decision level** — all solved/route/tax/
+  basis/trigger columns identical between corresponding arms across 300
+  rows. One bounded finding: unsolved targets' terminal coverage drifts
+  ±0.01–0.02 downstream of genuine divergence points via a *pre-existing*
+  shared-scratch channel (also present between yesterday's own ablation
+  arms); never crosses a decision boundary; cleanliness fix queued.
+- **Attribution exactly additive:** revision carries the battery-B rescues
+  + C08 + all of battery-D; aimed carries the XOR family. The overlap case
+  (D11) dedupes correctly — and when aimed solves it without revision, the
+  v5 verdict rightly labels that composite engine-expressible remix.
+  Revision also cuts the aimed stage's cost 35% by relieving its queue.
+- Independently confirms the taxfix migrations (frozen B 29/33, D 0/9,
+  decisive band 8/11) from a separately-written harness — two agents, same
+  numbers, no shared code path for the comparison.
+- **Recommendation adopted: assembled is the production default** —
+  revision ON, aimed as a post-ladder stage on stuck targets only,
+  v5-ladder at recording/export only. Next round runs on the widened
+  8-target decisive band.
 
 ## Synthesis (updated as results land)
 
