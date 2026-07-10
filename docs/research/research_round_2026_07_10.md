@@ -1,6 +1,6 @@
 # Research Round 2026-07-10 — eight parallel experiments toward "way better than AlphaEvolve"
 
-**Status:** LIVE — updated as each experiment lands. 6/8 complete.
+**Status:** LIVE — updated as each experiment lands. 7/8 complete.
 **Design:** Eight independent experiments launched in parallel (one subagent each),
 derived from the gap analysis against AlphaEvolve: the repo is ahead on the
 *certification* axis (irreducibility certificates + remix taxonomy = a defensible
@@ -31,7 +31,7 @@ claim (exp 7), and our own foundations (exp 8).
 | 4 | A1–A6 iterated atom promotion | **DONE** | No fixed point (depth-3 certifier bar too weak); corrected held-out reach 3/18 → 4/18 — 6/8 raw flips were SELF matches. ~5% certifier leak caught at depth 4. Ten escape rungs bought ONE genuine behaviour. | `wcore/docs/research/a1a6_iterated_promotion.md` |
 | 5 | Tax gate as promotion gate (A/B/C) | **DONE** | Nuanced negative: compounding is REAL (survivor library instantly solves later targets; no-promotion arm fails fresh composition P8 3/3 seeds) but hard-gating loses — starves library 33→9, drops 2 solves, 5.4× eval cost. **B > A > C; keep measurement-only**, gate at library export if at all. | `docs/research/tier8_tax_gate_promotion.md` |
 | 6 | Tier 8 framework-revision ablation | **DONE** | **Existence proof found — revision IS load-bearing.** C08 parity-count solved 3/3 seeds only with revision (OFF: certified escape tax-blocked, cov~0.50; ON: promoted, cov=1.000). ON solved 4 targets OFF never did, with fewer evals. Caveat: post-revision tax is vacuous for certified escapes. | `docs/research/tier8_ablation.md` |
-| 7 | H50–H52 scaling laws | pending | — | `docs/research/scaling_laws_h50.md` |
+| 7 | H50–H52 scaling laws | **DONE** | Not diminishing returns — **closure exhaustion**: knee at ~50 evals (10/11), hard ceiling at exactly 372 (11/11); the one out-of-closure target costs 322/372 units (87%); caps 96→1536 unspendable. ~0.42 certified solves/CPU-s (caveat: toy domain). H51/H52 open. | `docs/research/scaling_laws_h50.md` |
 | 8 | I53 falsification + G49 cross-audit | **DONE** | **Crack found:** the "emergent pair" block of `CLOSURE_PRINCIPLE.md` is false as printed (x&(x−1) via SUB alone at depth 6; the walls were depth/register bounds, not closure). Core theorem SURVIVED (exact infinite-depth fixpoint proof at u2). Affine-theorem off-by-one fixed (order bound n+1=65). G49: 5016/5016 agreement. | `docs/research/i53_falsification_2026_07_10.md` |
 
 ---
@@ -141,6 +141,30 @@ claim (exp 7), and our own foundations (exp 8).
 - Engineering note: the tax greedy fit needs ~32MB stack → harness runs it on
   a 512MB-stack worker thread (default 8MB main stack segfaults).
 
+### 7. H50 scaling laws (the efficiency axis, measured)
+- Budget ladder {6,12,24,48,96,384,1536} × 4 seeds on the 11-target blind
+  battery; solve counts identical across all seeds at every budget
+  (deterministic): 6→1/11, 18→3/11, 24→5/11, 50→10/11, **372→11/11**.
+- **The curve is not diminishing returns — it is closure exhaustion.** Caps
+  96/384/1536 all consume *exactly* 372 evals: past the ceiling the ladder
+  terminates and extra budget is unspendable. The Closure-Principle cost
+  signature, measured: in-closure solves cost 1–8 evals each; the single
+  out-of-closure target (inversion parity) costs 322 of 372 (87%) via the
+  256-program mod/pipeline bank. Novel promotions (2–3 strict-tax, 8 v4
+  survivors) all land by cap 48.
+- **Efficiency headline (with its mandatory caveat, stated in the doc):**
+  ≈0.42 certified solves/CPU-s and ≈0.09 strict-novel promotions/CPU-s on one
+  Ryzen 5600X core — a certified result every ~2.4 CPU-s vs AlphaEvolve-class
+  ~1e4–1e6 LLM samples on data-center hardware. ~6–9 orders of magnitude
+  cheaper per result, but on 11 synthetic grid predicates spanning a known
+  closure ladder — external-significance transfer untested (J57–J60 open).
+- Coverage: H50 partially (per-target eval steps 1→5→8→322, the exponential
+  Claim-C signature; not parameterized by composition depth); H51/H52 not
+  addressed (no atom-set-size or band-width sweeps).
+- Pre-existing bug documented, not fixed: `equivalence_tax.greedyFit` puts
+  ~31MB on the stack; stock `--strict-tax` segfaults at the 8MB rlimit
+  (third independent hit this round — see exps 5, 6).
+
 ### 8. I53 falsification + G49 cross-audit (red-team our own foundations)
 - **The crack (attack b — depth push): the "emergent pair" refinement block in
   `CLOSURE_PRINCIPLE.md` is REFUTED as printed.** On the repo's own substrate
@@ -217,5 +241,16 @@ claim (exp 7), and our own foundations (exp 8).
    emergent-pair block with the resource-bound qualifier, add explicit width
    to every witness, fix the order bound to n+1. (Corrected wording proposed
    in the I53 doc.)
+8. **"More compute" is now measured as the wrong axis for this stack:** exp 7
+   shows budget past 372 evals is literally unspendable — the binding
+   resource is out-of-closure generators (one target = 87% of all cost), not
+   evals. This is the quantitative version of the whole round's theme, and
+   the honest form of the anti-AlphaEvolve pitch: their loop buys progress
+   with samples; this loop exhausts its closure in seconds and then needs an
+   *idea* (a new generator / basis revision — exp 6), not a bigger machine.
+9. **Recurring infrastructure bug, hit independently by exps 5, 6, 7:**
+   `equivalence_tax.greedyFit`'s ~31MB stack allocation segfaults any
+   default-stack binary running `--strict-tax`. Fix properly (heap-allocate
+   col_store) in a follow-up commit rather than three workarounds.
 
-*(Sections for experiments 2 and 7 to be added on completion.)*
+*(Section for experiment 2 to be added on completion.)*
