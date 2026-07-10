@@ -1,6 +1,6 @@
 # Research Round 2026-07-10b — aiming the escapes
 
-**Status:** LIVE — updated as each experiment lands. 3/6 complete.
+**Status:** LIVE — updated as each experiment lands. 4/6 complete.
 **Predecessor:** `research_round_2026_07_10.md` (8/8 complete). Its converged
 finding: *the loop's binding resource is aimed out-of-closure generators — not
 compute, not more promotion rounds, not stricter gates.* Escapes are cheap when
@@ -22,7 +22,7 @@ negatives documented as findings, main session commits centrally.
 
 | # | Experiment | Question | Status | Headline | Doc |
 |---|-----------|----------|--------|----------|-----|
-| 1 | Aimed forge (wcore) | Does residual pressure toward a named frontier beat pure novelty at equal budget? Baseline: unaimed = 3/18→4/18, structured family never flips. | pending | — | `wcore/docs/research/aimed_forge.md` |
+| 1 | Aimed forge (wcore) | Does residual pressure toward a named frontier beat pure novelty at equal budget? Baseline: unaimed = 3/18→4/18, structured family never flips. | **DONE** | Aiming the *search* fails completely (F 0/9 in both aimed-fitness arms); aiming the *promotion gate* (pick highest-residual certified candidate) produced the arc's **first structured-family solve** (hashtbl + union, 1/2 seeds). distinct-count is a measured **conjunction wall** (climb plateau 0.862 < 0.95 bar). Aim info belongs at the gate, not the inner loop. | `wcore/docs/research/aimed_forge.md` |
 | 2 | Aimed proposer (battery-C wall) | Do near-miss witnesses + residual-guided feature proposal move the 10/11 battery-C wall? Baselines: 0/33 frozen, 3/33 revision. | **DONE** | **Wall moves: 3/33 → 8/33.** Every flip's evidence-mined mask is byte-identical to ground truth; all 5 export as novel. Honest limit: the correlation signal is (1/3)^k — aiming is probabilistic (~17%/attempt deg-4, 0 at deg-5); C09's family is a structural miss. | `docs/research/tier8_aimed_proposer.md` |
 | 3 | Gate v5 discrimination | Is there a gate that admits certified escapes (C08 must still pass) AND blocks planted remix (v4 passes 100%)? | pending | — | `docs/research/tier8_gate_v5.md` |
 | 4 | Claim-C depth attack (wcore) | Do wcore's "irreducible" verdicts survive +1/+2/+3 certifier depth, or are they resource artifacts (the I53 attack, applied to wcore)? | pending | — | `wcore/docs/research/claimc_depth_attack.md` |
@@ -74,6 +74,33 @@ negatives documented as findings, main session commits centrally.
   columns — the scale mismatch still separates binary {0,1} remainders but
   not always 3+-valued ones, which is what let D02/D03/D04/D09/D10 leak
   TOO_EASY. Second greedyFit defect found by this program in two days.
+
+### 1. Aimed forge (the spine, layer 1)
+- Four arms at identical budget (pop 90 × gens 45 × 10 rounds × 2 seeds);
+  the unaimed control re-run reproduced A1–A6's numbers *exactly*. F/E split:
+  F = the 9 distinct-count-centric targets the unaimed forge never reached;
+  E = 9 rmw-centric targets + 3 decoy sentinels, never aimed at.
+- **Aiming the search fails completely:** both aimed-fitness arms (flat 0.5
+  blend, annealed 0→0.85) scored F 0/9 on both seeds — behavioral-proximity
+  pressure in the forge's fitness cannot cross the wall at equal budget. It
+  did cut the SELF-match pathology (75% → 14–38%), so the pressure *is*
+  changing the distribution, just not usefully.
+- **Aiming the promotion gate works (existence proof):** the fourth arm
+  (aimed_promote — promote the highest-residual certified-irreducible
+  candidate instead of the shortest) produced the arc's **first
+  structured-family solves ever**: hashtbl + union at round 4 on seed
+  0x5EED2 (1/2 seeds). The winning atom holds at every retro-audit depth.
+- **Diagnosis probe separates the two failure modes:** hashtbl/union's
+  residual landscape is fully climbable (1.000 reachable); distinct-count is
+  a measured **conjunction wall** — greedy climb plateaus at 0.862 against
+  the 0.95 certification bar (random max 0.723). 7/9 of F is behind that
+  wall, which no amount of proximity pressure crosses. Named next lever:
+  mechanism-level descriptors / stepping-stone curricula, with the measured
+  target "lift climbable residual 0.862 → ≥0.95".
+- Retro-audit across all 80 promoted atoms: 4/80 leaks (5% — same rate as
+  A1–A6, whose leak reproduced exactly). Cost signature of residual-max
+  promotion: longer atoms (mean 10.5 vs 4.1 instructions), 2/10 leaks on one
+  seed — the gate trades brevity for aim.
 
 ### 2. Aimed proposer at the battery-C wall (the spine, layer 2)
 - Baselines reproduced exactly in-harness: 0/33 frozen, 3/33 revision.
@@ -137,3 +164,17 @@ negatives documented as findings, main session commits centrally.
    gap mark where proposal-from-evidence ends and genuine
    family/primitive invention has to begin — the same frontier
    sparse_poly's inner-forge work identified from the other side.
+4. **WHERE the aim information goes is now settled by three independent
+   experiments:** in the forge's fitness it does nothing (exp 1: F 0/9);
+   at the promotion/selection step it works (exp 1's aimed_promote — first
+   structured-family solve; exp 2's evidence-guided proposal; round 1's
+   revision mechanism). Combined with round 1's "tax must not gate the
+   inner loop," the architecture principle reads: **inner loops explore
+   un-aimed and un-gated; aim and taxes act at selection boundaries.**
+5. **Two wall *types* are now measured, needing different tools:**
+   climbable-but-unaimed residual landscapes (hashtbl 1.000 — solved by
+   gate-level aiming), vs conjunction walls (distinct-count plateau 0.862;
+   C09's family miss; D08's reachability gap) where the needed structure
+   has no gradient in the current descriptor space. The conjunction-wall
+   class is the round's named successor problem: stepping-stone curricula
+   or mechanism-level descriptors, with the measured 0.862→0.95 target.
