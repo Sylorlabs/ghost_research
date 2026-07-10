@@ -580,7 +580,11 @@ fn greedyFit(
     const n_total = n_lib + n_static + n_xor + n_pipe + n_mod;
 
     var cols: [MAX_COLS][]f64 = undefined;
-    var col_store: [MAX_COLS][ui.NSAMP]f64 = undefined;
+    // ~31MB (MAX_COLS x NSAMP x f64): must live on the heap — as a stack local
+    // it segfaults any binary running at the default 8MB stack rlimit.
+    const col_store = std.heap.page_allocator.create([MAX_COLS][ui.NSAMP]f64) catch
+        return .{ .test_acc = 0, .n_sel = 0, .selected = undefined };
+    defer std.heap.page_allocator.destroy(col_store);
     for (0..n_lib) |i| {
         for (0..grid.len) |s| col_store[i][s] = ui.evalFeaturePublic(lib[i], grid[s]);
         cols[i] = col_store[i][0..];
