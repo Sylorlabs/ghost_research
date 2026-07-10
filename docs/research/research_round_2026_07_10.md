@@ -1,6 +1,6 @@
 # Research Round 2026-07-10 — eight parallel experiments toward "way better than AlphaEvolve"
 
-**Status:** LIVE — updated as each experiment lands. 3/8 complete.
+**Status:** LIVE — updated as each experiment lands. 4/8 complete.
 **Design:** Eight independent experiments launched in parallel (one subagent each),
 derived from the gap analysis against AlphaEvolve: the repo is ahead on the
 *certification* axis (irreducibility certificates + remix taxonomy = a defensible
@@ -30,7 +30,7 @@ claim (exp 7), and our own foundations (exp 8).
 | 3 | A10 Clifford binding ablation | **DONE** | Ceiling broken: 0.508 → 0.976 (6 seeds, zero overlap). Deflation control: plain Hadamard-real bind = 0.978 — the lever is leaving GF(2) for a magnitude-carrying algebra, not the geometric product. Escape corollary confirmed. | `sparse_poly_discovery/docs/research/a10_clifford_binding.md` |
 | 4 | A1–A6 iterated atom promotion | **DONE** | No fixed point (depth-3 certifier bar too weak); corrected held-out reach 3/18 → 4/18 — 6/8 raw flips were SELF matches. ~5% certifier leak caught at depth 4. Ten escape rungs bought ONE genuine behaviour. | `wcore/docs/research/a1a6_iterated_promotion.md` |
 | 5 | Tax gate as promotion gate (A/B/C) | pending | — | `docs/research/tier8_tax_gate_promotion.md` |
-| 6 | Tier 8 framework-revision ablation | pending | — | `docs/research/tier8_ablation.md` |
+| 6 | Tier 8 framework-revision ablation | **DONE** | **Existence proof found — revision IS load-bearing.** C08 parity-count solved 3/3 seeds only with revision (OFF: certified escape tax-blocked, cov~0.50; ON: promoted, cov=1.000). ON solved 4 targets OFF never did, with fewer evals. Caveat: post-revision tax is vacuous for certified escapes. | `docs/research/tier8_ablation.md` |
 | 7 | H50–H52 scaling laws | pending | — | `docs/research/scaling_laws_h50.md` |
 | 8 | I53 falsification + G49 cross-audit | pending | — | `docs/research/i53_falsification_2026_07_10.md` |
 
@@ -89,6 +89,35 @@ claim (exp 7), and our own foundations (exp 8).
   deeper certifier), not more rounds. Direct motivation for exp 5's tax gate
   as the coupling mechanism.
 
+### 6. Tier 8 framework-revision ablation (is the just-PASSed loop load-bearing?)
+- Two arms × 3 seeds (production seed + both battery-C held-out seeds),
+  identical code path and ladder caps, both starting at strict tax basis v3.
+  ARM-OFF frozen forever; ARM-ON carries the T8-AG-21 remix alert (checked ≥5,
+  novel rate <0.20) firing a witnessed T8-AG-22/25 revision to v4.
+- **Existence proof (the thing the Tier 8 PASS lacked):** C08 "parity count",
+  3/3 seeds — ARM-OFF finds a *certified* walsh escape that the v3 tax blocks
+  as greedy-basis remix (2 blocked certified escapes per seed, saturates at
+  cov ≈ 0.50); ARM-ON's post-revision gate promotes the same escape,
+  cov = 1.000. Secondary: B10 on 1/3 seeds (indirect library-trajectory
+  effect; OFF missed by 0.002 — reported, not leaned on).
+- Aggregate: battery B 32/33 (OFF) vs 33/33 (ON); battery-C ladder-only slice
+  0/33 vs 3/33; novel promotions 3 vs 20; ARM-ON used **fewer** evals
+  (2072 vs 4412) — not a compute artifact. Revision fired at target 1 in every
+  ON run.
+- **Diagnosis for a decisive battery:** B is too easy (rescue lanes bypass the
+  tax); 10/11 battery-C targets too hard for both arms (ladder lacks an xor
+  primitive). The decisive band — ladder-reachable but v3-blockable —
+  currently contains ~one target. Fix: add parity-of-count / sum%k /
+  walsh-of-subset composites in that band, or admit xor_popcount as a ladder
+  feature.
+- **Honest caveat:** v4's escape-authentic lane condition is identical to the
+  certifier's escape condition, so post-revision the tax is vacuous for
+  certified escapes (0 post-revision blocks, 100% novel). Revision is proven
+  load-bearing *for solves*; NOT proven to retain novelty discrimination.
+  That is the next gate to design.
+- Engineering note: the tax greedy fit needs ~32MB stack → harness runs it on
+  a 512MB-stack worker thread (default 8MB main stack segfaults).
+
 ---
 
 ## Cross-experiment synthesis (updated as results land)
@@ -105,5 +134,13 @@ claim (exp 7), and our own foundations (exp 8).
    distance to published records (even-N move sets; Mertens bounding). The
    addchain v2 result (pending) will add the second external-verification
    domain.
+4. **Tier 8 is now evidenced, not just PASSed:** framework revision produced
+   solves unreachable by the frozen loop at equal (actually lower) budget,
+   3/3 seeds — the repo's first ablation-backed Tier 8 claim. The next
+   weakness is precisely characterized: the revised gate must be shown to
+   still *discriminate* (post-revision tax is currently vacuous for certified
+   escapes). Combined with A1–A6 (escapes must be aimed) and exp 5 (tax gate
+   as the aiming mechanism), the Tier 8 loop's missing piece is a gate that
+   both admits aimed escapes and keeps blocking remix.
 
-*(Sections for experiments 2, 5, 6, 7, 8 to be added on completion.)*
+*(Sections for experiments 2, 5, 7, 8 to be added on completion.)*
