@@ -1,6 +1,6 @@
 # Research Round 2026-07-10b — aiming the escapes
 
-**Status:** LIVE — updated as each experiment lands. 4/6 complete.
+**Status:** COMPLETE — all 6 experiments landed 2026-07-10.
 **Predecessor:** `research_round_2026_07_10.md` (8/8 complete). Its converged
 finding: *the loop's binding resource is aimed out-of-closure generators — not
 compute, not more promotion rounds, not stricter gates.* Escapes are cheap when
@@ -24,8 +24,8 @@ negatives documented as findings, main session commits centrally.
 |---|-----------|----------|--------|----------|-----|
 | 1 | Aimed forge (wcore) | Does residual pressure toward a named frontier beat pure novelty at equal budget? Baseline: unaimed = 3/18→4/18, structured family never flips. | **DONE** | Aiming the *search* fails completely (F 0/9 in both aimed-fitness arms); aiming the *promotion gate* (pick highest-residual certified candidate) produced the arc's **first structured-family solve** (hashtbl + union, 1/2 seeds). distinct-count is a measured **conjunction wall** (climb plateau 0.862 < 0.95 bar). Aim info belongs at the gate, not the inner loop. | `wcore/docs/research/aimed_forge.md` |
 | 2 | Aimed proposer (battery-C wall) | Do near-miss witnesses + residual-guided feature proposal move the 10/11 battery-C wall? Baselines: 0/33 frozen, 3/33 revision. | **DONE** | **Wall moves: 3/33 → 8/33.** Every flip's evidence-mined mask is byte-identical to ground truth; all 5 export as novel. Honest limit: the correlation signal is (1/3)^k — aiming is probabilistic (~17%/attempt deg-4, 0 at deg-5); C09's family is a structural miss. | `docs/research/tier8_aimed_proposer.md` |
-| 3 | Gate v5 discrimination | Is there a gate that admits certified escapes (C08 must still pass) AND blocks planted remix (v4 passes 100%)? | pending | — | `docs/research/tier8_gate_v5.md` |
-| 4 | Claim-C depth attack (wcore) | Do wcore's "irreducible" verdicts survive +1/+2/+3 certifier depth, or are they resource artifacts (the I53 attack, applied to wcore)? | pending | — | `wcore/docs/research/claimc_depth_attack.md` |
+| 3 | Gate v5 discrimination | Is there a gate that admits certified escapes (C08 must still pass) AND blocks planted remix (v4 passes 100%)? | **DONE** | **v5-ladder breaks the trade-off**: 3/3 C08 admission, 51/51 true remixes blocked, 6/6 wrongly-blocked escapes admitted. Full-basis variants fail *irreducibly* (C08's test_acc = 1.0000 exactly equals remix — no ε separates). Adopt at verdict layer; never bind in-loop. | `docs/research/tier8_gate_v5.md` |
+| 4 | Claim-C depth attack (wcore) | Do wcore's "irreducible" verdicts survive +1/+2/+3 certifier depth, or are they resource artifacts (the I53 attack, applied to wcore)? | **DONE** | Known 5% leak confirmed and sharpened (1/20 flips at +1 depth, flip distribution entirely front-loaded, 0 flips at +2..+5); kill-test survives a *completed* depth-8 enumeration — but by only **0.008 margin** vs the 0.95 statistical matcher, which is now the thinner axis. Corrected wording adopted; +1-depth promotion gate costs ~1s/candidate. | `wcore/docs/research/claimc_depth_attack.md` |
 | 5 | LABS even-N | Can memetic / pair-flip / structural moves close the 12 even-N + {61,63,64} gaps skew-symmetry can't touch? | **DONE** | **2/12 fully closed (N=44, 50 hit best-known), 3 partial, 4 regressed** (budget split across 8 arms < one concentrated run — real lesson). Key negative: **no even-N analogue of skew-symmetry exists** among mirror-pair hypotheses (isolation test: plain 6.86 vs mirror 4.24). Verifier 12/12 + 63/63. | `boundary_crossing/docs/research/labs_even_n.md` |
 | 6 | Decisive battery-D | Build ~10 targets in the ladder-reachable-but-v3-blockable band; turn the 1-target Tier 8 existence proof into an effect size. | **DONE** | **3/11 candidates DECISIVE** (D01 sum%2, D07 count3%3, D11 subset-parity). Ablation on the decisive subset: **ARM-OFF 1/9 vs ARM-ON 9/9**, zero reversals, battery B preserved at fewer evals. Bonus: found a greedyFit scale-mismatch bug (raw-vs-z-scored columns) and a ladder reachability gap (D08). | `docs/research/tier8_battery_d.md` |
 
@@ -124,6 +124,52 @@ negatives documented as findings, main session commits centrally.
   order-statistic) resists both: wrong feature family entirely, an honest
   structural miss.
 
+### 3. Gate v5 (the spine, layer 3)
+- Shadow-audited 4 gate variants against 103 real captured gate decisions
+  from live passes that replicated the round-1 ablation byte-identically.
+- **The pre-registered full-basis designs fail irreducibly, measured:**
+  C08's `test_acc(3)` = 1.0000 *exactly* — identical to true remix — so no
+  ε or margin in the leave-one-out / marginal-coverage family can separate
+  a genuine escape from a reconstruction. The honest negative stands for
+  that whole design space.
+- **v5-ladder breaks the trade-off by changing the quantifier:** remix =
+  reconstructible by families the *ladder can promote* (level-1
+  engine-expressible basis), not by audit-only mod-synth/pipeline columns
+  the engine can't express. Result: 3/3 C08 admission (1.000), 51/51 true
+  remixes blocked, 6/6 wrongly-blocked escapes admitted. (Designed
+  mid-experiment from seed-1 interim data — provenance disclosed — then
+  evaluated identically on all 3 seeds.)
+- **Adopted recommendation:** v5-ladder at the verdict layer (drop-in,
+  cheaper per check); retire the vacuous v4 lane (C08 now survives on the
+  merits); feed the honest 41% post-revision novel rate to the T8-AG-21
+  monitor (vs the lane-pinned 100%); use ladder-novel as the wcore export
+  filter; never bind in-loop (13/22 real promotions would flip — the class
+  round 1 measured at −2 solves / 5.4× evals).
+
+### 4. Claim-C depth attack (the defensive audit)
+- Baseline reproduction exact: both seeds re-derived the identical 20
+  promoted atoms; the witness-capturing certifier agreed 20/20 with
+  production at depth 3 before being pushed deeper.
+- **Flip distribution entirely front-loaded:** 1/20 flips at +1 depth (the
+  known a1a6 leak, independently re-verified with a disjoint-seed witness);
+  0 flips at +2 through +5 among rows that completed. 3/20
+  final-library-redundant (post-hoc, not certifier error). Depth ≥5 vs
+  14-atom libraries honestly marked budget-open per row.
+- **Kill-test integrity upgraded and re-scoped:** distinct-count correctly
+  IRREDUCIBLE with the depth-8 enumeration fully *completed* (16/16
+  replicates) — but the closest adversarial approach was **0.9420 vs the
+  0.95 match threshold**. The statistical matcher, not depth, is now the
+  thinner axis of the certifier.
+- **Corrected wording adopted (mirrors I53):** "irreducible at depth ≤ 3
+  against the promotion-time library under the production evaluator (0.95,
+  8×28 streams)" — never "irreducible"; retro-audit "holds" = "no
+  composition found at *completed* depth ≤ D". A +1-depth promotion gate
+  (~1 s/candidate) catches the entire observed artifact class.
+- Housekeeping correction: the certifier code is `inv_coevo.zig` +
+  `inv_atomforge.zig` (not checker.zig/evaluator.zig, which are the
+  unrelated STLC line); `reducibleLib` has no register/width axis to push —
+  depth is its only resource axis.
+
 ### 5. LABS even-N (the record-gap chase)
 - Attacked all 12 miss lengths with 7–8 arms each (pair/triple-flip
   neighborhoods with incremental updates, memetic crossover/restarts, three
@@ -178,3 +224,34 @@ negatives documented as findings, main session commits centrally.
    has no gradient in the current descriptor space. The conjunction-wall
    class is the round's named successor problem: stepping-stone curricula
    or mechanism-level descriptors, with the measured 0.862→0.95 target.
+6. **The Tier 8 gate problem is solved in principle:** v5-ladder shows the
+   admission/discrimination trade-off was an artifact of quantifying remix
+   over a basis richer than the engine can express. "Novel" must mean
+   "novel relative to what the system can itself produce" — a
+   closure-relative definition, pleasingly consistent with the Closure
+   Principle itself. With v5-ladder at the verdict layer + the selection-
+   boundary principle (synthesis #4), the Tier 8 loop now has a coherent,
+   fully-measured gate architecture.
+7. **Certifier trust after two audits:** the artifact class is small (5%),
+   entirely front-loaded at +1 depth, and cheaply closable (~1 s/candidate
+   promotion-time depth-4 check — adopt it). The new thin axis is the 0.95
+   statistical matcher (0.008 kill-test margin) — the next falsification
+   round should attack the matcher, not depth.
+
+---
+
+## Round verdict (final)
+
+Six experiments, six completions. The round's bet — *aim the escapes* — is
+confirmed with an architecture: *where* aim enters is decisive. Inner loops
+explore un-aimed and un-gated; aim, taxes, and novelty verdicts act at
+selection boundaries (promotion choice, proposal evidence, verdict layer,
+export filter). Concretely delivered: battery-C wall 3/33 → 8/33 with
+byte-identical derivations; first-ever structured-family solves via
+gate-level aiming; Tier 8 effect size 1/9 → 9/9 on a purpose-built decisive
+battery; a gate (v5-ladder) that admits every genuine escape and blocks
+every true remix; the certifier leak bounded and closable; two LABS
+best-knowns matched. Named successor problems: the conjunction-wall class
+(0.862→0.95), better evidence lenses (the (1/3)^k signal), the greedyFit
+z-scoring fix, the 0.95-matcher falsification, D08's reachability gap, and
+the even-N restriction (open theory).
