@@ -1,6 +1,6 @@
 # Research Round 2026-07-10b — aiming the escapes
 
-**Status:** LIVE — updated as each experiment lands. 1/6 complete.
+**Status:** LIVE — updated as each experiment lands. 2/6 complete.
 **Predecessor:** `research_round_2026_07_10.md` (8/8 complete). Its converged
 finding: *the loop's binding resource is aimed out-of-closure generators — not
 compute, not more promotion rounds, not stricter gates.* Escapes are cheap when
@@ -23,7 +23,7 @@ negatives documented as findings, main session commits centrally.
 | # | Experiment | Question | Status | Headline | Doc |
 |---|-----------|----------|--------|----------|-----|
 | 1 | Aimed forge (wcore) | Does residual pressure toward a named frontier beat pure novelty at equal budget? Baseline: unaimed = 3/18→4/18, structured family never flips. | pending | — | `wcore/docs/research/aimed_forge.md` |
-| 2 | Aimed proposer (battery-C wall) | Do near-miss witnesses + residual-guided feature proposal move the 10/11 battery-C wall? Baselines: 0/33 frozen, 3/33 revision. | pending | — | `docs/research/tier8_aimed_proposer.md` |
+| 2 | Aimed proposer (battery-C wall) | Do near-miss witnesses + residual-guided feature proposal move the 10/11 battery-C wall? Baselines: 0/33 frozen, 3/33 revision. | **DONE** | **Wall moves: 3/33 → 8/33.** Every flip's evidence-mined mask is byte-identical to ground truth; all 5 export as novel. Honest limit: the correlation signal is (1/3)^k — aiming is probabilistic (~17%/attempt deg-4, 0 at deg-5); C09's family is a structural miss. | `docs/research/tier8_aimed_proposer.md` |
 | 3 | Gate v5 discrimination | Is there a gate that admits certified escapes (C08 must still pass) AND blocks planted remix (v4 passes 100%)? | pending | — | `docs/research/tier8_gate_v5.md` |
 | 4 | Claim-C depth attack (wcore) | Do wcore's "irreducible" verdicts survive +1/+2/+3 certifier depth, or are they resource artifacts (the I53 attack, applied to wcore)? | pending | — | `wcore/docs/research/claimc_depth_attack.md` |
 | 5 | LABS even-N | Can memetic / pair-flip / structural moves close the 12 even-N + {61,63,64} gaps skew-symmetry can't touch? | pending | — | `boundary_crossing/docs/research/labs_even_n.md` |
@@ -75,6 +75,28 @@ negatives documented as findings, main session commits centrally.
   not always 3+-valued ones, which is what let D02/D03/D04/D09/D10 leak
   TOO_EASY. Second greedyFit defect found by this program in two days.
 
+### 2. Aimed proposer at the battery-C wall (the spine, layer 2)
+- Baselines reproduced exactly in-harness: 0/33 frozen, 3/33 revision.
+  **Aimed proposer: 8/33** — five flips beyond revision (C02, C04, C05,
+  C06×2 seeds), 6m56s single-threaded, ~438 evals/target for the aimed step.
+- Mechanism: mine near-miss evidence (the monomial sweep's own argmax + a
+  256-Walsh sweep), scan 6 generic per-cell lenses over the evidence mask,
+  greedily grow/shrink, certify through the real coverage/R² bar; tax as a
+  post-hoc export filter only (round 1's settled design).
+- **Derivation honesty (the required check):** in every flip the
+  evidence-mined mask is byte-identical to the target's ground-truth mask;
+  none of the 22 non-flips had a coincidental match; all 5 flips export as
+  genuinely novel (corr 0.018–0.045 vs any existing feature) with a
+  remix-flagged control (corr 1.0) validating the proxy.
+- **The honest limit, measured not asserted:** a k-cell XOR target's
+  correlation with the true mask under the ladder's only lens is (1/3)^k —
+  below the 162-way argmax noise floor for degree ≥5. So aiming works
+  *probabilistically*: ~17%/attempt at degree 4, 0/3 at degree 5. An unaimed
+  brute control (all masks × lenses) solves 9/10 — the wall is
+  evidence-guidance, not reachability. C09 (inversion-count parity, an
+  order-statistic) resists both: wrong feature family entirely, an honest
+  structural miss.
+
 ## Synthesis (updated as results land)
 
 1. **Tier 8's load-bearing claim is now quantitative:** 1/9 → 9/9 on a battery
@@ -85,3 +107,12 @@ negatives documented as findings, main session commits centrally.
    `equivalence_tax` finds a defect (stack overflow in round 1, scale
    mismatch now). The tax is load-bearing for the whole Tier 8 program;
    its z-scoring path needs a dedicated audit + fix.
+3. **The round's central bet is confirmed at layer 2:** frontier-coupling
+   works — the battery-C wall moved 3/33 → 8/33 with byte-identical
+   evidence-to-ground-truth derivations, not lucky draws. And its limit is
+   now a *formula*, not a mystery: the aiming signal decays as (1/3)^k under
+   the current lens, so the next lever is better evidence lenses (raise the
+   signal), not more attempts. C09's family-level miss + D08's reachability
+   gap mark where proposal-from-evidence ends and genuine
+   family/primitive invention has to begin — the same frontier
+   sparse_poly's inner-forge work identified from the other side.
