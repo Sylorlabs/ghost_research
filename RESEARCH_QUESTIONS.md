@@ -5,6 +5,16 @@ Legend: **🟢** answer genuinely unknown in advance (real research, can surpris
 (run only for completeness). `[solo]` = runnable in this repo now · `[needs X]` =
 needs an external ingredient. The 🟢 `[solo]` rows are where to spend runs.
 
+> **2026-07-10b round — aiming the escapes, six experiments** (see `docs/research/research_round_2026_07_10b.md`):
+> **A7 sharpened** — aim at selection boundaries works (first structured-family solves: hashtbl+union via
+> highest-residual promotion; battery-C wall 3/33→8/33 with byte-identical evidence derivations); aim in the
+> forge fitness fails (0/9). **A8 partially** — promotion lowers downstream cost only when aimed. **Gate design
+> settled** — v5-ladder (closure-relative novelty) admits 6/6 escapes AND blocks 51/51 remixes; full-basis
+> gates fail irreducibly. **Claim-C qualifier adopted** — "irreducible at depth ≤3 under the production
+> evaluator"; 5% leak front-loaded at +1 depth, closable ~1s/candidate; next attack surface = the 0.95
+> matcher (0.008 margin). **New named problems:** the conjunction-wall class (0.862→0.95), (1/3)^k evidence
+> lenses, greedyFit z-scoring bug, D08 reachability gap, even-N restriction (no mirror-pair analogue exists).
+
 > **2026-07-10 round — eight parallel experiments** (see `docs/research/research_round_2026_07_10.md`):
 > **A10 replicated** at 6 seeds with controls (0.508→0.976; Hadamard = Clifford). **A2 REVISED** —
 > no fixed point at a depth-3 certifier bar; prior "saturation" was a budget artifact. **A4/A7

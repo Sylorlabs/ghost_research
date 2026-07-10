@@ -380,17 +380,29 @@ principle (u2 infinite-depth fixpoint). Plus: Tier 8 revision proven load-bearin
 by ablation; tax gate settled (measurement-only); H50 closure-exhaustion law;
 two externally-verified dial-3 campaigns (LABS, addchains).
 
-**Highest-priority open experiments (updated):**
-1. **Aimed escapes** — couple the forge/proposer to the target frontier (the A1–A6
-   lesson); a gate that admits aimed escapes while still blocking remix (the exp-5+6
-   joint lesson)
-2. **wcore Claim-C depth-artifact attack** — the reducer's "irreducible" verdicts
-   carry the same resource-bound risk I53 exposed; re-attack at deeper budgets
-3. **Decisive Tier-8 battery band** — targets that are ladder-reachable but
-   tax-blockable (currently ~1 exists), so the revision ablation can be sharpened
-4. **Records, not baselines** — even-N LABS moves + Mertens bounding;
-   Flammenkamp/Clift addchain comparisons (J57–J60 externalization)
-5. **H51/H52** — coverage vs atom-set size; control quality vs band width
+**2026-07-10b round: priorities 1–3 answered same day** (see
+`docs/research/research_round_2026_07_10b.md`): aimed escapes WORK but only at
+selection boundaries (battery-C wall 3/33→8/33; first structured-family solves
+via gate-level aiming; fitness-level aiming fails 0/9); the v5-ladder gate
+breaks the admission/discrimination trade-off (51/51 remix blocked, 6/6
+escapes admitted — "novel" is closure-relative); Claim-C certifier leak
+bounded at 5%, front-loaded at +1 depth, closable at ~1s/candidate (new thin
+axis: the 0.95 matcher, margin 0.008); Tier 8 effect size now 1/9 vs 9/9 on
+battery-D; LABS N=44/50 matched best-known, no even-N skew analogue exists.
+
+**Highest-priority open experiments (updated after round b):**
+1. **The conjunction-wall class** — distinct-count (climb plateau 0.862 vs the
+   0.95 bar), C09's family miss, D08's reachability gap: stepping-stone
+   curricula / mechanism-level descriptors; measured target 0.862 → ≥0.95
+2. **Better evidence lenses** — the aiming signal decays as (1/3)^k under the
+   current lens; raise the signal to reach degree ≥5 targets
+3. **Instrument fixes + falsification** — greedyFit raw-vs-z-scored scale
+   mismatch (battery-D leak); attack the 0.95 statistical matcher (0.008
+   kill-test margin), not depth
+4. **Adopt the settled architecture** — v5-ladder at the verdict layer, +1-depth
+   promotion gate in wcore, aim/taxes at selection boundaries only
+5. **Records, not baselines** — LABS even-N needs new theory or B&B compute;
+   Flammenkamp/Clift addchain comparisons (J57–J60); H51/H52 still open
 
 ---
 
