@@ -1,6 +1,6 @@
 # Research Round 2026-07-10 — eight parallel experiments toward "way better than AlphaEvolve"
 
-**Status:** LIVE — updated as each experiment lands. 4/8 complete.
+**Status:** LIVE — updated as each experiment lands. 5/8 complete.
 **Design:** Eight independent experiments launched in parallel (one subagent each),
 derived from the gap analysis against AlphaEvolve: the repo is ahead on the
 *certification* axis (irreducibility certificates + remix taxonomy = a defensible
@@ -29,7 +29,7 @@ claim (exp 7), and our own foundations (exp 8).
 | 2 | Addition-chain campaign v2 | pending | — | `boundary_crossing/docs/research/addchain_v2.md` |
 | 3 | A10 Clifford binding ablation | **DONE** | Ceiling broken: 0.508 → 0.976 (6 seeds, zero overlap). Deflation control: plain Hadamard-real bind = 0.978 — the lever is leaving GF(2) for a magnitude-carrying algebra, not the geometric product. Escape corollary confirmed. | `sparse_poly_discovery/docs/research/a10_clifford_binding.md` |
 | 4 | A1–A6 iterated atom promotion | **DONE** | No fixed point (depth-3 certifier bar too weak); corrected held-out reach 3/18 → 4/18 — 6/8 raw flips were SELF matches. ~5% certifier leak caught at depth 4. Ten escape rungs bought ONE genuine behaviour. | `wcore/docs/research/a1a6_iterated_promotion.md` |
-| 5 | Tax gate as promotion gate (A/B/C) | pending | — | `docs/research/tier8_tax_gate_promotion.md` |
+| 5 | Tax gate as promotion gate (A/B/C) | **DONE** | Nuanced negative: compounding is REAL (survivor library instantly solves later targets; no-promotion arm fails fresh composition P8 3/3 seeds) but hard-gating loses — starves library 33→9, drops 2 solves, 5.4× eval cost. **B > A > C; keep measurement-only**, gate at library export if at all. | `docs/research/tier8_tax_gate_promotion.md` |
 | 6 | Tier 8 framework-revision ablation | **DONE** | **Existence proof found — revision IS load-bearing.** C08 parity-count solved 3/3 seeds only with revision (OFF: certified escape tax-blocked, cov~0.50; ON: promoted, cov=1.000). ON solved 4 targets OFF never did, with fewer evals. Caveat: post-revision tax is vacuous for certified escapes. | `docs/research/tier8_ablation.md` |
 | 7 | H50–H52 scaling laws | pending | — | `docs/research/scaling_laws_h50.md` |
 | 8 | I53 falsification + G49 cross-audit | pending | — | `docs/research/i53_falsification_2026_07_10.md` |
@@ -89,6 +89,29 @@ claim (exp 7), and our own foundations (exp 8).
   deeper certifier), not more rounds. Direct motivation for exp 5's tax gate
   as the coupling mechanism.
 
+### 5. Tax gate as promotion gate (A/B/C — does gated novelty compound?)
+- 3 seeds × 3 arms × 19 targets, equal protocol; arms realized purely via
+  existing `pub var` toggles (`eqtax.strict_enabled`,
+  `eqtax.reality_lane_enabled`), zero edits to existing files.
+- Aggregate: **A (gated)** 55/57 solves, 9 kept promotions, 83 blocked, 6398
+  evals. **B (current: promote on certifier, tax measured)** 57/57, 33 kept,
+  1191 evals. **C (no promotion)** 54/57, 2261 evals.
+- **Compounding is real:** arm A's 3-feature-per-seed survivor library
+  (`sum%7`, parity-Walsh `χ{0xFF}`, +1) instantly solves the survivor-designed
+  later targets P3/P4 on every seed; arm C fails fresh composition P8 on all
+  3 seeds (0.843–0.847) while both library-carrying arms solve it.
+- **But hard-gating loses:** the gate never exceeds B — B's remix-verdict
+  promotions are what make repeats free and carry the borderline B4/B10
+  solves A loses. Gating starves the library (33→9), drops 2/33 phase-1
+  solves, and inflates eval cost 5.4× (blocked rungs re-propose + re-certify;
+  each blocked check pays the greedy tax fit).
+- **Recommendation adopted: keep measurement-only** (the shipped v4
+  strict-tax + reality-lane config is already the right hybrid). If a gate is
+  wanted, put it at library *export* (wcore lift) or as search
+  deprioritization — never as a block inside the solve loop.
+- Engineering note (shared with exp 6): the tax greedy fit needs ~32MB stack;
+  run it on a 512MB-stack worker thread or a plain binary segfaults.
+
 ### 6. Tier 8 framework-revision ablation (is the just-PASSed loop load-bearing?)
 - Two arms × 3 seeds (production seed + both battery-C held-out seeds),
   identical code path and ladder caps, both starting at strict tax basis v3.
@@ -142,5 +165,11 @@ claim (exp 7), and our own foundations (exp 8).
    escapes). Combined with A1–A6 (escapes must be aimed) and exp 5 (tax gate
    as the aiming mechanism), the Tier 8 loop's missing piece is a gate that
    both admits aimed escapes and keeps blocking remix.
+5. **The tax's correct role is resolved by exps 5+6 jointly:** as a hard
+   promotion gate it blocks certified escapes (exp 6's ARM-OFF failure mode)
+   and starves/slows the loop (exp 5's arm A); as pure measurement it is free
+   and loses nothing (exp 5's arm B, 57/57). So: tax = instrument + revision
+   trigger + export filter, never an inner-loop block. This settles the
+   Phase-1 design question from `tier8_mega_plan.md` with data.
 
-*(Sections for experiments 2, 5, 7, 8 to be added on completion.)*
+*(Sections for experiments 2, 7, 8 to be added on completion.)*
