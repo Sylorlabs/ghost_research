@@ -1,6 +1,6 @@
 # Research Round 2026-07-10 — eight parallel experiments toward "way better than AlphaEvolve"
 
-**Status:** LIVE — updated as each experiment lands. 5/8 complete.
+**Status:** LIVE — updated as each experiment lands. 6/8 complete.
 **Design:** Eight independent experiments launched in parallel (one subagent each),
 derived from the gap analysis against AlphaEvolve: the repo is ahead on the
 *certification* axis (irreducibility certificates + remix taxonomy = a defensible
@@ -32,7 +32,7 @@ claim (exp 7), and our own foundations (exp 8).
 | 5 | Tax gate as promotion gate (A/B/C) | **DONE** | Nuanced negative: compounding is REAL (survivor library instantly solves later targets; no-promotion arm fails fresh composition P8 3/3 seeds) but hard-gating loses — starves library 33→9, drops 2 solves, 5.4× eval cost. **B > A > C; keep measurement-only**, gate at library export if at all. | `docs/research/tier8_tax_gate_promotion.md` |
 | 6 | Tier 8 framework-revision ablation | **DONE** | **Existence proof found — revision IS load-bearing.** C08 parity-count solved 3/3 seeds only with revision (OFF: certified escape tax-blocked, cov~0.50; ON: promoted, cov=1.000). ON solved 4 targets OFF never did, with fewer evals. Caveat: post-revision tax is vacuous for certified escapes. | `docs/research/tier8_ablation.md` |
 | 7 | H50–H52 scaling laws | pending | — | `docs/research/scaling_laws_h50.md` |
-| 8 | I53 falsification + G49 cross-audit | pending | — | `docs/research/i53_falsification_2026_07_10.md` |
+| 8 | I53 falsification + G49 cross-audit | **DONE** | **Crack found:** the "emergent pair" block of `CLOSURE_PRINCIPLE.md` is false as printed (x&(x−1) via SUB alone at depth 6; the walls were depth/register bounds, not closure). Core theorem SURVIVED (exact infinite-depth fixpoint proof at u2). Affine-theorem off-by-one fixed (order bound n+1=65). G49: 5016/5016 agreement. | `docs/research/i53_falsification_2026_07_10.md` |
 
 ---
 
@@ -141,6 +141,40 @@ claim (exp 7), and our own foundations (exp 8).
 - Engineering note: the tax greedy fit needs ~32MB stack → harness runs it on
   a 512MB-stack worker thread (default 8MB main stack segfaults).
 
+### 8. I53 falsification + G49 cross-audit (red-team our own foundations)
+- **The crack (attack b — depth push): the "emergent pair" refinement block in
+  `CLOSURE_PRINCIPLE.md` is REFUTED as printed.** On the repo's own substrate
+  (u8, K=2), BFS found `x&(x-1)` with **SUB alone at depth 6** (the repo had
+  searched only ≤3), `x|(x*x)` without OR or MUL (19 instrs of
+  {SHR,SHL,XOR,NOT,AND}), and `x&(x-1)` via {OR,SHL,XOR}. All three verified
+  exhaustively in Zig and independently re-verified in Python. New qualifier:
+  the synergy substrate's walls are **(depth, register-count) resource
+  bounds, not algebraic closure** — base+{AND} is functionally complete over
+  GF(2) given registers.
+- **The core theorem SURVIVED, and is now stronger:** at u2 the affine base
+  reaches an exact closure **fixpoint** (64/256 functions) with the
+  genuinely-nonlinear targets unreachable at *any* depth — an infinite-depth
+  proof, not a budget claim. Affine base = 0/5 targets at every width/depth
+  tested (u4 depth 9, u8 depth 8).
+- Boundary abuse (attack a): SURVIVED-WITH-QUALIFIER — witness targets are
+  width-relative (all 5 affine at u1; the flagship pair-emergence witness
+  degenerates to the identity map at u2). Statements need explicit width.
+- Affine-theorem edges (attack c): W2b alone certifies nothing —
+  **4095/4096 basis-passers are non-affine impostors**; the W1 precondition
+  is fully load-bearing. Real off-by-one found: the order bound for
+  affine-with-offset is **n+1 = 65**, not 64 (Cayley–Hamilton misapplied);
+  affects the F00D mul_free champion (only c≠0 case); BRank verdict
+  unaffected.
+- **G49 instrument cross-audit: PASS 5016/5016 (100%)** — production
+  native-prover path (AIG strash → miter → toSat → DPLL) vs a
+  zero-shared-code truth-table evaluator, including 1551 adversarial
+  single-minterm-flip cases. Unaudited surface listed: `Aig.sweep`,
+  `createBvMiter`, 64-bit chains.
+- **Follow-up flagged:** the wcore Claim-C reducer has the same
+  depth-artifact risk as attack (b) — its "irreducible" verdicts may also be
+  resource-bound artifacts. Deserves its own round (and connects to A1–A6's
+  5% certifier leak).
+
 ---
 
 ## Cross-experiment synthesis (updated as results land)
@@ -171,5 +205,17 @@ claim (exp 7), and our own foundations (exp 8).
    and loses nothing (exp 5's arm B, 57/57). So: tax = instrument + revision
    trigger + export filter, never an inner-loop block. This settles the
    Phase-1 design question from `tier8_mega_plan.md` with data.
+6. **"Outside the closure" claims must now carry (width, depth, registers)
+   qualifiers.** Exp 8 broke the emergent-pair block by pushing depth on the
+   repo's own substrate — the walls were resource bounds, not algebra. This
+   retroactively reframes A1–A6's certifier leak (same failure class: a
+   depth-budget verdict presented as an algebraic one) and puts the wcore
+   Claim-C reducer next in line for the same attack. The core principle
+   itself came out *stronger* (u2 infinite-depth fixpoint proof) — which is
+   exactly what a falsification round is for.
+7. **CLOSURE_PRINCIPLE.md needs a correction pass:** delete/rewrite the
+   emergent-pair block with the resource-bound qualifier, add explicit width
+   to every witness, fix the order bound to n+1. (Corrected wording proposed
+   in the I53 doc.)
 
-*(Sections for experiments 2, 7, 8 to be added on completion.)*
+*(Sections for experiments 2 and 7 to be added on completion.)*
