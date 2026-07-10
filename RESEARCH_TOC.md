@@ -1518,3 +1518,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** The I53 depth-push attack applied to wcore's irreducibility certifier: re-certified all 20 a1a6 promoted atoms at +1..+5 depth with checked reduction witnesses, plus a completed depth-8 kill-test enumeration.
 - **Result:** 1/20 flips at +1 depth (the known a1a6 leak, independently re-verified), 0 flips at +2..+5 — artifact class is 5% and entirely front-loaded; kill-test correctly irreducible at completed depth 8 but with a 0.008 margin vs the 0.95 statistical matcher; depth ≥5 vs 14-atom libraries honestly budget-open.
 - **Aftermath:** ADOPTED — corrected qualifier wording ("irreducible at depth ≤3 under the production evaluator", never "irreducible"); +1-depth promotion gate (~1s/candidate) closes the artifact class; ⚠️ next falsification target named: the 0.95 matcher, not depth; corrects [a1a6_iterated_promotion.md](wcore/docs/research/a1a6_iterated_promotion.md)'s framing and INDEX's certifier row.
+
+---
+
+## 14. Research round 2026-07-10c — crossing the conjunction wall
+
+### [docs/research/research_round_2026_07_10c.md](docs/research/research_round_2026_07_10c.md)
+- **Tried:** Six parallel experiments on round-b's successor problems: conjunction wall (stepping-stones + mechanism descriptors), evidence lenses vs (1/3)^k, greedyFit z-scoring fix, 0.95-matcher falsification, the assembled-engine coherence test, D08/C09 family-level reach gap.
+- **Result:** In progress — taxfix landed first (decisive band 3→8, ablation 0/24 vs 22/24).
+- **Aftermath:** OPEN — live round master doc, updated per landing.
+
+### [docs/research/tier8_taxfix.md](docs/research/tier8_taxfix.md)
+- **Tried:** Fixed greedyFit's scale mismatch (weights fit on raw columns, evaluated on z-scored columns) with train-stat scaling on both splits; pre-fix control reproduced all old results byte-identically before applying, then re-ran all three regression gates.
+- **Result:** Stock production line-identical (11/11); all five battery-D leaks flip TOO_EASY→DECISIVE (band 3→8); B3 (sum%7) exposed as silently leaking in every prior strict-v3 run (honest ARM-OFF battery-B 29/33); updated ablation 0/24 vs 22/24 (26 ON-only proofs, 0 reverse); gate v5 survives and strengthens (60/60 blocked, 9/9 admitted).
+- **Aftermath:** ADOPTED — the fix understated-not-inflated direction strengthens Tier 8's headline; ⚠️ corrects [tier8_battery_d.md](docs/research/tier8_battery_d.md)'s band classification and [tier8_ablation.md](docs/research/tier8_ablation.md)'s 32/33 ARM-OFF battery-B figure (honest: 29/33 under strict v3); migration CSVs kept separate so prior docs still match their data.
