@@ -1479,3 +1479,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Result:** Steep then hard-saturated — 10/11 solves by ~50 evals, 11/11 at exactly 372; one out-of-closure target consumes 87% of the budget; ≈0.42 certified solves/CPU-s (with an explicit anti-AlphaEvolve-comparison caveat).
 - **Aftermath:** ADOPTED as experiment 7 of the 2026-07-10 round; H51/H52 remain OPEN.
 
+
+---
+
+## 13. Research round 2026-07-10b — aiming the escapes
+
+### [docs/research/research_round_2026_07_10b.md](docs/research/research_round_2026_07_10b.md)
+- **Tried:** Six parallel experiments building/testing the aiming mechanism round 1 identified as the binding resource: aimed forge (wcore), aimed proposer (battery-C wall), discriminating gate v5, Claim-C depth attack, LABS even-N moves, decisive battery-D.
+- **Result:** In progress — battery-D landed first (3/11 decisive; ablation 1/9 vs 9/9).
+- **Aftermath:** OPEN — live round master doc, updated per landing.
+
+### [docs/research/tier8_battery_d.md](docs/research/tier8_battery_d.md)
+- **Tried:** Constructed 11 targets generalizing C08's decisive coincidence (ladder-certifiable escape that the v3 tax bank independently reconstructs) along sum%k, count3%k, and subset-Walsh; empirically classified band membership, then re-ran the two-arm ablation on the decisive subset.
+- **Result:** 3/11 DECISIVE (D01 sum%2, D07 count3%3, D11 subset-parity via an unpredicted monomial sign-parity route); ablation 3 targets × 3 seeds: ARM-OFF 1/9 vs ARM-ON 9/9, zero reversals, battery B preserved at fewer evals (2072 vs 4412).
+- **Aftermath:** ADOPTED — upgrades [tier8_ablation.md](docs/research/tier8_ablation.md)'s single-witness existence proof to a measured effect size; ⚠️ also exposed a second `equivalence_tax.greedyFit` defect (raw-vs-z-scored column scale mismatch let 5 candidates leak TOO_EASY — fix queued) and a ladder reachability gap (D08, OPEN).
