@@ -1,4 +1,5 @@
 # Tier 8 aimed proposer — does frontier-coupling move the 10/11 battery-C wall?
+> **Belongs to: Round 2026-07-10b · experiment 2 of 6 (aimed proposer)** — [round index](research_round_2026_07_10b.md).
 
 **Harness:** `sparse_poly_discovery/tier8_aimed_proposer.zig` (new file; no
 existing file modified)

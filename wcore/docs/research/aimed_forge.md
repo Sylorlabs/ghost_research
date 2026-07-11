@@ -1,4 +1,5 @@
 # Aimed forge — coupling novelty pressure to the frontier (headline experiment, round 2026-07-10b)
+> **Belongs to: Round 2026-07-10b · experiment 1 of 6 (aimed forge)** — [round index](../../../docs/research/research_round_2026_07_10b.md).
 
 **Date:** 2026-07-10
 **Runner:** `wcore/src/inv_aimed.zig` (new standalone file; imports existing wcore

@@ -1,4 +1,5 @@
 # Tier 8 ablation — is framework revision load-bearing?
+> **Belongs to: Round 2026-07-10 · experiment 6 of 8 (Tier 8 ablation)** — [round index](research_round_2026_07_10.md).
 
 **Harness:** `sparse_poly_discovery/tier8_ablation.zig` (new file; no existing file modified)
 **Date:** 2026-07-10

@@ -1,4 +1,5 @@
 # H50-adjacent — Scaling laws: invention yield vs eval budget (2026-07-10)
+> **Belongs to: Round 2026-07-10 · experiment 7 of 8 (H50 scaling laws)** — [round index](research_round_2026_07_10.md).
 
 **Question:** How do battery solves and genuinely-novel (tax-surviving) promotions
 scale with eval budget on the production invention engine — and where is the

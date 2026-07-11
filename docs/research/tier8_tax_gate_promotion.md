@@ -1,4 +1,5 @@
 # Tax gate as promotion gate — A/B/C compounding experiment
+> **Belongs to: Round 2026-07-10 · experiment 5 of 8 (tax gate A/B/C)** — [round index](research_round_2026_07_10.md).
 
 **Date:** 2026-07-10
 **Harness:** `sparse_poly_discovery/tier8_tax_gate_ab.zig` (new file; no existing file edited)

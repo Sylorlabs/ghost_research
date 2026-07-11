@@ -1,4 +1,5 @@
 # LABS round 2026-07-10b — richer moves for the 12 even-N / {61,63,64} misses
+> **Belongs to: Round 2026-07-10b · experiment 5 of 6 (LABS even-N)** — [round index](../../../docs/research/research_round_2026_07_10b.md).
 
 **Status:** built, measured, independently re-verified. 2026-07-10 (round b, same day as the
 base campaign).

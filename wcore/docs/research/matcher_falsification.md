@@ -1,4 +1,5 @@
 # Matcher falsification — can the 0.95/8×28 statistical matcher be made to lie?
+> **Belongs to: Round 2026-07-10c · experiment 4 of 6 (matcher falsification)** — [round index](../../../docs/research/research_round_2026_07_10c.md).
 
 **Date:** 2026-07-10 (round 2026-07-10c, red-team)
 **Runner:** `wcore/src/matcher_attack.zig` (new standalone file; imports wcore sources

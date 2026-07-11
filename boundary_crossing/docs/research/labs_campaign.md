@@ -1,4 +1,5 @@
 # LABS dial-3 campaign — proven small-N optima + heuristic frontier to N=64
+> **Belongs to: Round 2026-07-10 · experiment 1 of 8 (LABS dial-3 campaign)** — [round index](../../../docs/research/research_round_2026_07_10.md).
 
 **Status:** built, measured, independently verified. 2026-07-10.
 **Verdict up front:** nothing here is new-to-humanity. Proven optima for N ≤ 24 (which the

@@ -1,4 +1,5 @@
 # Addition-chain campaign v2 — stronger constructions, external verification (2026-07-10)
+> **Belongs to: Round 2026-07-10 · experiment 2 of 8 (addition-chain v2)** — [round index](../../../docs/research/research_round_2026_07_10.md).
 
 Extends the 2026-07-07 campaign (`results/addchain_campaign_2026_07_07.md`). New engine:
 `boundary_crossing/addchain_v2.zig`. New generator: `scripts/zig/addchain_gen_v2.zig`.

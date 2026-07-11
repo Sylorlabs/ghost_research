@@ -1,4 +1,5 @@
 # Oriented control — Clifford grade-2 (bivector) readouts on the real grid task
+> **Belongs to: Doc gap-fill 2026-07-11 · RESEARCH_TOC §15 (oriented control; follows round-a A10)** — [round index](../../../RESEARCH_TOC.md).
 
 **Status:** built, measured. Reproduce: `cd sparse_poly_discovery && zig build oriented-control`
 (80k train / 10k frozen-eval steps, mean of 8 seeds, single-threaded, ~seconds).

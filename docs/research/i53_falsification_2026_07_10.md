@@ -1,4 +1,5 @@
 # I53 falsification round + G49 instrument cross-audit — 2026-07-10
+> **Belongs to: Round 2026-07-10 · experiment 8 of 8 (I53 falsification + G49)** — [round index](research_round_2026_07_10.md).
 
 **Task:** adversarially attack the Closure Principle (`CLOSURE_PRINCIPLE.md`) on
 three fronts, and cross-audit the native prover instrument against a fully

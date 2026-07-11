@@ -85,6 +85,56 @@ predicted final compressed size / "is this branch promising"), trained on the ve
 evaluations than blind search? That single experiment *demonstrates* "learns better" the project's way — by
 measurement, not assertion. It is the AlphaZero loop with gzip as the game and reversibility as the rules.
 
+## Concrete implementation: VERIFY-LEARN-INVENT (measured, June 2026)
+
+`verify_learn_invent.zig` is the first end-to-end wiring of this axis — not a brief, a running binary.
+
+**Reproduce:** `cd boundary_crossing && zig build verify-learn-invent --release=fast`  
+**Full doc:** `verify_learn_invent.md`
+
+### What it demonstrates
+
+| Verification-learning property | Measured in verify-learn-invent |
+|-------------------------------|--------------------------------|
+| Labels from certifiers, not next-token | Weights update only on CERTIFIED/SURPRISE/FAILED/ABSTAIN (surprise **3.0×**, certified **2.0×**) |
+| Perfect self-generated labels | gzip round-trip, chain minimality proof, held-out acc **≥0.90** |
+| No hallucination past verifier | `meaning of life` → **ABSTAIN**; failed mono forge → no promotion |
+| Sample-efficient routing | **28-phrase** corpus bootstrap; **3/3** novel task-specific routing after verify-learn |
+| Invent beyond training dist | mono **0.541** → spectral **1.000** on hidden parity; l(1023)=**13** from English |
+
+### Routing numbers (2026-06-30 run)
+
+```
+Bootstrap held-out (supervised seed, 22/6 split):  3/6 = 50.0%
+English → certified invention:                    4/4
+Verify-learn novel routing (squeeze/511/parity):  3/3
+Explore unknown:                                  mono 0.541 → spectral 1.000
+```
+
+### Parallel fork: hardness-guided routing (Fork 2)
+
+The same verification axis applied to **control feature discovery** (not English):
+
+```
+cd sparse_poly_discovery && zig build hardness-router-test --release=fast
+```
+
+| Metric | Measured |
+|--------|----------|
+| Q38 compound on DUAL_BAND | **CONFIRMED** (deg1 ∧ extremal both fail alone) |
+| Guided vs brute pair quality | **35.13** vs **35.13** fail/1k (gap **0.00**) |
+| Search cost | **5** probe+verify ops vs **12** brute pair runs → **2.4×** cheaper |
+
+Hardness probes classify substrate before search — analogous to verify-learn classifying intent before invent.
+See `sparse_poly_discovery/docs/research/parallel_forks_2026.md` (Fork 2).
+
+### Honest ceiling (unchanged)
+
+VERIFY-LEARN-INVENT **does not** beat transformers on open-ended language (`attention_replacement.md`: gpt2-124M
+**1.91** BPB vs our **2.06** at ~7% gap on held-out prose). It wins on the **verification axis** only: bounded
+intent menu, certifier-gated outputs, RLVR-weighted updates. The learned **guide** for blind invent search
+(AlphaZero policy) remains the next measured rung in this doc's "concrete next build" section.
+
 ## Sources
 
 - Turing Post, *What is JEPA?* — https://www.turingpost.com/p/jepa

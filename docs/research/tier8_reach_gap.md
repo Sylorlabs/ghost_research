@@ -1,4 +1,5 @@
 # Tier 8 reach gap — where the ladder's families end (D08 / C09), and the cheapest extension that closes it
+> **Belongs to: Round 2026-07-10c · experiment 6 of 6 (reach gap)** — [round index](research_round_2026_07_10c.md).
 
 **Harness:** `sparse_poly_discovery/tier8_reach_gap.zig` (new file; no existing
 file modified; `equivalence_tax.zig` deliberately **not imported** — it is

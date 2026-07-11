@@ -1,4 +1,5 @@
 # Battery D — turning the C08 existence proof into an effect size
+> **Belongs to: Round 2026-07-10b · experiment 6 of 6 (battery-D)** — [round index](research_round_2026_07_10b.md).
 
 **Harnesses:** `sparse_poly_discovery/tier8_battery_d.zig` (target defs, new
 file), `sparse_poly_discovery/tier8_ablation_d.zig` (two-phase harness, new

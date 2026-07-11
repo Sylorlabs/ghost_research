@@ -1,4 +1,5 @@
 # LM baseline — an LLM as addition-chain generator, gated by the same verifier
+> **Belongs to: Doc gap-fill 2026-07-11 · RESEARCH_TOC §15 (LM baseline; addition-chain head-to-head)** — [round index](../../../RESEARCH_TOC.md).
 
 **Status:** harness built, **not yet run** (running makes live `claude` CLI calls).
 `scripts/zig/lm_baseline.zig`; build `zig build-exe lm_baseline.zig -O ReleaseFast`;

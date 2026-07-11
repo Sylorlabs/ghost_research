@@ -1,4 +1,5 @@
 # Tier 8 gate v5 — can a revised gate admit certified escapes AND discriminate remix?
+> **Belongs to: Round 2026-07-10b · experiment 3 of 6 (gate v5)** — [round index](research_round_2026_07_10b.md).
 
 **Harness:** `sparse_poly_discovery/tier8_gate_v5.zig` (new file; no existing file modified)
 **Date:** 2026-07-10 (round 2026-07-10b, experiment 3)

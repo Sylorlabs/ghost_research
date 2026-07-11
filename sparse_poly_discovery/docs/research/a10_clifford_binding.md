@@ -1,4 +1,5 @@
 # RQ A10 (multi-seed replication, 2026-07-10) — Clifford geometric-product binding vs the XOR band-readout ceiling
+> **Belongs to: Round 2026-07-10 · experiment 3 of 8 (A10 Clifford binding)** — [round index](../../../docs/research/research_round_2026_07_10.md).
 
 **Status:** built, measured, 6 seeds.
 **Code:** `sparse_poly_discovery/clifford_binding.zig` (standalone — no existing file touched; all needed environment/encoder code ported inline).

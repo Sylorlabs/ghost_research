@@ -1,4 +1,5 @@
 # Conjunction wall — crossing it (round 2026-07-10c headline)
+> **Belongs to: Round 2026-07-10c · experiment 1 of 6 (conjunction wall)** — [round index](../../../docs/research/research_round_2026_07_10c.md).
 
 **Status:** built, measured. Reproduce:
 ```

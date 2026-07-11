@@ -1,4 +1,5 @@
 # Tier 8 assembled engine — does the settled architecture cohere as one pass?
+> **Belongs to: Round 2026-07-10c · experiment 5 of 6 (assembled engine)** — [round index](research_round_2026_07_10c.md).
 
 **Harness:** `sparse_poly_discovery/tier8_assembled.zig` (new file; no existing file modified)
 **Date:** 2026-07-10 (round 2026-07-10c, integration experiment)

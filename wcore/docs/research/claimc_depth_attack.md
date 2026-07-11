@@ -1,4 +1,5 @@
 # Claim-C depth attack — I53-style depth push on the wcore irreducibility certifier
+> **Belongs to: Round 2026-07-10b · experiment 4 of 6 (Claim-C depth attack)** — [round index](../../../docs/research/research_round_2026_07_10b.md).
 
 **Date:** 2026-07-10 (round 2026-07-10b, red-team)
 **Runner:** `wcore/src/claimc_attack.zig` (new standalone file; imports existing wcore

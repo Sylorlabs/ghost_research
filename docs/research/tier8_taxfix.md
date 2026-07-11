@@ -1,4 +1,5 @@
 # Tier 8 tax-instrument repair — greedyFit train/test scale mismatch
+> **Belongs to: Round 2026-07-10c · experiment 3 of 6 (greedyFit tax fix)** — [round index](research_round_2026_07_10c.md).
 
 **Round:** 2026-07-10c (instrument repair)
 **File modified:** `sparse_poly_discovery/equivalence_tax.zig` (`greedyFit` only — the one

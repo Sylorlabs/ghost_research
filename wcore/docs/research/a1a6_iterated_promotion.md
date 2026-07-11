@@ -1,4 +1,5 @@
 # A1–A6: Iterated atom promotion — fixed point, generalisation, retro-reduction audit
+> **Belongs to: Round 2026-07-10 · experiment 4 of 8 (A1–A6 iterated promotion)** — [round index](../../../docs/research/research_round_2026_07_10.md).
 
 **Date:** 2026-07-10
 **Runner:** `wcore/src/inv_iterate.zig` (new standalone file; imports existing wcore

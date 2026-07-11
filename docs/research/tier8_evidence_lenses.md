@@ -1,4 +1,5 @@
 # Tier 8 evidence lenses — raising the (1/3)^k aiming signal
+> **Belongs to: Round 2026-07-10c · experiment 2 of 6 (evidence lenses)** — [round index](research_round_2026_07_10c.md).
 
 **Harness:** `sparse_poly_discovery/tier8_lenses.zig` (new file; no existing
 file modified; the v1 block inside it is a verbatim read-only copy of
