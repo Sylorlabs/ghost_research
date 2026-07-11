@@ -1,6 +1,6 @@
 # Research Round 2026-07-11b (Round F) — the generator-of-generators
 
-**Status:** LIVE — updated as each experiment lands. 1/6 complete.
+**Status:** LIVE — updated as each experiment lands. 2/6 complete.
 **Premise (the five-round arc, closed in Round E):** machine invention is gated
 by **representability** and steered by **aim** (`research_round_2026_07_11.md`,
 law: reach ≈ representable ? aim-decides : 0). Round E proved both levers are
@@ -23,7 +23,7 @@ commit + TOC + "Belongs to" banner per landing.
 |---|-----------|----------|--------|----------|-----|
 | F1 | Learned structural priors (headline) | Can the machine INFER which structural prior a target needs from its failure signature (E2-router, one level up), instead of being handed it? | pending | — | `wcore/docs/research/prior_selector.md` |
 | F2 | Auto-family discovery for ORDER2 | Can E3's smart-gen + a comparison prior auto-discover the FAMILY that unlocks E1's standing unreachable target ORDER2? | pending | — | `docs/research/autofamily_order2.md` |
-| F3 | RUN1 certifier-boundary audit | Is the novelty gate's rejection of the exact `run(maxRunGE3)` member correct (real redundancy) or a false rejection the program is missing? | pending | — | `docs/research/run1_gate_audit.md` |
+| F3 | RUN1 certifier-boundary audit | Is the novelty gate's rejection of the exact `run(maxRunGE3)` member correct (real redundancy) or a false rejection the program is missing? | **DONE** | **The gate is OVER-REJECTING — a real bug.** run(maxRunGE3) is genuinely NOT reconstructible (0.887 acc / R²=0.80 ceiling vs the run family's instant 1.000); the gate's single-column linear-R² statistic is non-monotonic in true reconstructibility (AUC 0.889), false-rejection **33%** among novel targets — an *axis* problem no threshold fixes. Corrected measure proposed (multi-feature COVER reconstruction, mirrors gate-v5). | `docs/research/run1_gate_audit.md` |
 | F4 | Prior transfer / compounding | Once a mechanism+prior is discovered, do OTHER family targets become auto-discoverable without re-supplying the prior? Does it amortize? | pending | — | `wcore/docs/research/prior_transfer.md` |
 | F5 | Assembled generator-of-generators | Do prior-guided smart-gen + representability growth + learned aim cohere in one autonomous pass, vs the hand-guided stack at equal budget? | pending | — | `docs/research/genofgen_assembled.md` |
 | F6 | Residual human-insight bit | Put a NUMBER on how much insight is machine-supplied vs human-supplied per method (D5→E3→F1), and whether it's shrinking. | **DONE** | **Machine-supplied insight 0% → 66.7% across the arc** (hand-curriculum 0%, E3 smart-gen 66.7%, cross-check 70.7%; F1 projected ~85–90%, unmeasured). Trend: 100%→33% human-supplied (~3× drop), shrinking not vanishing (D5 anchor: skip the insight bit = 0/9). Irreducible floor: alphabet, certifier, target, protocol. COVER-fair vs -uniform (same bits eliminated, only one solves) → the prior's value is *aim*, not quantity. | `docs/research/insight_ledger.md` |
