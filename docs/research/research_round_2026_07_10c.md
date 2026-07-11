@@ -1,6 +1,6 @@
 # Research Round 2026-07-10c — crossing the conjunction wall
 
-**Status:** LIVE — updated as each experiment lands. 5/6 complete.
+**Status:** COMPLETE — all 6 experiments landed 2026-07-10.
 **Predecessors:** `research_round_2026_07_10.md` (8/8) and
 `research_round_2026_07_10b.md` (6/6). Round b's settled architecture: *inner
 loops explore un-aimed and un-gated; aim, taxes, and novelty verdicts act at
@@ -19,7 +19,7 @@ claim, negatives documented as findings, main session commits centrally.
 
 | # | Experiment | Question | Status | Headline | Doc |
 |---|-----------|----------|--------|----------|-----|
-| 1 | Conjunction wall (wcore) | Do stepping-stone curricula or mechanism-level descriptors lift the distinct-count climb past the 0.862 plateau to the 0.95 bar? | pending | — | `wcore/docs/research/conjunction_wall.md` |
+| 1 | Conjunction wall (wcore) | Do stepping-stone curricula or mechanism-level descriptors lift the distinct-count climb past the 0.862 plateau to the 0.95 bar? | **DONE** | **CROSSED by the curriculum:** frontier reach 0 → 6/9 on both seeds (stones promoted → target composable via `distinct = noveltyflag→g_add`), 0 depth-4 leaks. Mechanism descriptors fail (0/9). The wall is a gradient absence bypassed at the promotion boundary — not climbable under any of 4 lenses. | `wcore/docs/research/conjunction_wall.md` |
 | 2 | Evidence lenses (battery-C) | Do second-order / conditional / order-statistic lenses beat the (1/3)^k signal decay — reaching degree-5 C11 and family-miss C09? Baseline 8/33. | **DONE** | **Battery-C SATURATED: 33/33, cheaper than v1** (12,630 vs 13,152 evals). The (1/3)^k wall was an estimator artifact — the GF(2) joint solve is exact and k-independent; C09 fell to pairwise-order evidence primitives + algebraic identification. 30/30 derivation chains byte-exact; asterisk: exactness needs noiseless labels (LPN). | `docs/research/tier8_evidence_lenses.md` |
 | 3 | greedyFit z-scoring fix | Fix the raw-vs-z-scored mismatch; do the 5 leaked battery-D candidates reclassify, and do prior verdicts (11/11 battery, gate v5) survive? | **DONE** | Fit and eval now share train-stat scaling. **All 5 leaks flip → DECISIVE (band 3→8); ablation effect 1/9-vs-9/9 → 0/24-vs-22/24; B3 was silently leaking in every prior strict-v3 run** (honest ARM-OFF battery-B = 29/33). Stock production line-identical; gate v5 survives and strengthens (60/60 + 9/9). | `docs/research/tier8_taxfix.md` |
 | 4 | Matcher falsification (wcore) | Can the 0.95 / 8×28 statistical matcher be made to lie (false-equal, false-different, seed-flips)? What protocol fixes it? | **DONE** | **CRACKED: 4.2% of production "reducible" verdicts are false-equals** (8/189, all witnessed); the horizon bomb scores 1.000 while truly matching 10.9%. Corrected protocol (exact match, 64×256, 2 seeds) → 0 false-equals AND cheaper (13ms vs 70ms). **All 20/20 promotion identities survive.** | `wcore/docs/research/matcher_falsification.md` |
@@ -46,6 +46,35 @@ claim, negatives documented as findings, main session commits centrally.
 ---
 
 ## Completed-experiment detail
+
+### 1. Conjunction wall (the headline — CROSSED)
+- **Probe (the wall is real under every lens):** greedy climb to distinct-count
+  plateaus at 0.875 / 0.839 vs the 0.95 bar — reproducing round b's 0.862 —
+  and none of three new lenses beats it (curriculum's final stone climbed
+  directly 0.875/0.835; mechanism-pure 0.446/0.732; mechanism-blend
+  0.772/0.750). A genuine gradient absence, not a weak-lens artifact.
+- **Forge control (aimed_promote on the wall family, hashtbl/union excluded):**
+  `f_reach` = 0/9 on both seeds. The wall holds — a *harder* control than
+  round b's (aimed only at the ungradient family).
+- **Forge curriculum (lever A) CROSSES it: f_reach 0 → 6/9 on both seeds.** The
+  jump lands at the exact round the `noveltyflag` stone is solved and promoted
+  (`stone_solved` → `compose_advance`): `distinct = noveltyflag→g_add` becomes
+  a depth-2 composition and 4 of its 6 hidden compositions follow at depth ≤3.
+  Since F holds only 2 already-climbable members, ≥4 of the 6 are genuine
+  wall-family targets. Promotions clean: 0 depth-4 retro-audit rejects (control
+  had 2, 1).
+- **Forge mechanism descriptors (lever B):** f_reach = 0/9 both seeds —
+  structural credit M at the gate does not identify a promotable stone.
+- **Selftest all-PASS:** stone oracles equal brute references, the payoff
+  identity holds, S1/S2 are behavioural complements (agreement 0.000 at
+  edit-distance 1 — the designed trap), distinct uniquely M = 1.000.
+- **Verdict:** the wall is a *gradient* absence, not a *reachability* absence —
+  bypassed at the promotion boundary by climbing to a sub-conjunction that has
+  gradient, promoting it, and composing. A Closure-Principle escape at the
+  curriculum level where the generator is a *discovered intermediate
+  abstraction*, not a new primitive. Honest bound: the stones were
+  hand-designed from the known mechanism; auto-discovering the decomposition is
+  the next frontier.
 
 ### 3. greedyFit z-scoring fix (instrument repair with full migration accounting)
 - **The bug:** `greedyFit` fit logit weights on raw remainder columns but
@@ -211,5 +240,38 @@ claim, negatives documented as findings, main session commits centrally.
    (promotion rules insensitive to census corrections; byte-identical
    pre-fix controls) is what made the corrections cheap. Next instrument in
    line: the coevo-side 12×32 matcher.
+6. **All three round-b walls are now resolved, and each fell to a different
+   tool:** the (1/3)^k evidence wall was an estimator artifact (exact GF(2)
+   identification, exp 2); C09's family wall was real and fell to a new
+   primitive family (comparison aggregates, exp 6); the distinct-count
+   conjunction wall was a gradient absence and fell to a *curriculum* —
+   climb a gradient-bearing sub-conjunction, promote it, compose (exp 1).
+   Not one of the three yielded to "more search" or "more compute"; each
+   needed a structurally different move, and the diagnostic that told them
+   apart (Bayes ceilings, signal-formula derivation, the gradient probe) was
+   the actual load-bearing work. This is the round-1 lesson made operational:
+   diagnose the wall before attacking it.
+
+---
+
+## Round verdict (final)
+
+Six experiments, six completions. The conjunction wall — round b's named
+successor problem — is crossed: a stepping-stone curriculum lifts frontier
+reach 0 → 6/9 by discovering and promoting an intermediate abstraction, the
+Closure-Principle escape at the curriculum level. Around it: the settled
+architecture is proven to cohere in one engine (assembled: every battery's
+best simultaneously, zero interference, now the production default); two more
+walls fell (evidence lenses saturate battery-C 33/33 by exact GF(2)
+identification; comparison aggregates close the C09/D08 reach gap, +11 flips /
+0 regressions); and both load-bearing instruments were red-teamed and repaired
+with every headline surviving (greedyFit scale fix *strengthened* the Tier 8
+effect to 0/24-vs-22/24 and exposed B3's silent leak; the 0.95 matcher was
+falsified — 4.2% false-equals — and replaced by an exact protocol that is both
+correct and cheaper). Named successor problems: auto-discovering curriculum
+decompositions (the conjunction-wall bound), a successor battery beyond XOR +
+order-statistic families and into label noise (the LPN asterisk; C and D are
+saturated), the coevo-side 12×32 matcher audit, and the shared-scratch
+coverage-drift cleanliness fix.
 
 *(Remaining verdicts added as agents land.)*
