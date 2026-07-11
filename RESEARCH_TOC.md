@@ -1610,3 +1610,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Replaced round c's hand-designed stepping stones with a mechanism-blind generate-and-filter loop (bulk random programs + archive prefixes; filter = depth-3&4 certifiable AND makes a wall target composable at depth ≤3); swept bulk 0→1000 candidates/round × 2 seeds.
 - **Result:** ZERO stones discovered — reach 0/9 both seeds at every bulk size vs the hand-curriculum's 6/9; 54,432 candidate-behaviours, n_payoff_pos = n_certified = 0 every round; 20× more bulk changed cost not outcome; positive control confirms detection works (S1 payoff 0/7, S2 6/7) so the failure is entirely in generation.
 - **Aftermath:** ADOPTED as the round's capstone negative — quantity does NOT substitute for insight when the insight isn't cheap to stumble into; sharply bounds "pump more out at once"; localizes the missing capability to GENERATION (motivates Round E's E2 learned-aim / E3 auto-family). Successor to [conjunction_wall.md](wcore/docs/research/conjunction_wall.md).
+
+---
+
+## 17. Research round 2026-07-11 (Round E) — aim × representability
+
+### [docs/research/research_round_2026_07_11.md](docs/research/research_round_2026_07_11.md)
+- **Tried:** Six experiments attacking the arc's two proven levers: E1 representability expansion, E2 learned aim/target router, E3 smart generation for auto-discovery (the D5 pivot), E4 aimed engine on an open target, E5 aim×representability predictor, E6 coevo matcher audit.
+- **Result:** In progress.
+- **Aftermath:** OPEN — live round master doc, updated per landing.
+
+### [docs/research/aim_repr_predictor.md](docs/research/aim_repr_predictor.md)
+- **Tried:** The theory capstone — regress reach against representability, aim-quality, diversity, and budget over 6,480 cells; test for a phase boundary (does aim only matter once representability is satisfied?).
+- **Result:** Representability dominates (R²=0.652, 5–100× every other factor); aim is a sharp phase boundary — corr(aim,reach) 0.00/0.00/0.18 across LOW/MID/HIGH representability, solve rate 0%/0%/45.9%; diversity (D6) is a proxy for representability (corr 0.60) and flips negative once representability is controlled; falsification clean; fixed the D6 same-family-combo fairness bug (33%→0%).
+- **Aftermath:** ADOPTED as the four-round arc's quantitative law — reach ≈ representable ? aim-decides : 0; retroactively explains [diversity_predictor.md](docs/research/diversity_predictor.md); provably narrows the levers to E1 (representability) + E2 (aim), with E1 gating E2.
