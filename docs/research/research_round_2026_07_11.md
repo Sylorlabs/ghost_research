@@ -1,6 +1,6 @@
 # Research Round 2026-07-11 (Round E) — attacking the two real levers: aim × representability
 
-**Status:** LIVE — updated as each experiment lands. 2/6 complete.
+**Status:** LIVE — updated as each experiment lands. 3/6 complete.
 **Plan:** `research_round_2026_07_11_PLAN.md`. **Premise (the four-round arc):**
 the ceiling is **AIM × REPRESENTABILITY** — not compute (H50), not quantity
 (D1/D2), not diversity-alone (D6: conditional), not human-vs-non-human grammar
@@ -23,7 +23,7 @@ commit + TOC + "Belongs to" banner per landing.
 | # | Experiment | Lever | Status | Headline | Doc |
 |---|-----------|-------|--------|----------|-----|
 | E1 | Representability expansion | representability | pending | — | `docs/research/repr_expansion.md` |
-| E2 | Learned aim / target router | aim | pending | — | `docs/research/target_router.md` |
+| E2 | Learned aim / target router | aim | **DONE** | **Aim generalizes to a learned selector.** A router over a 10-feature failure descriptor picks the winning family: **12/13 (92.3%)** held-out vs fixed-best 46.2% vs random 7.7% — and cheaper. Needs ~20–24 labeled examples. Leakage guard caught a real duplicate-target leak; 12/12 solves re-derived exactly. | `docs/research/target_router.md` |
 | E3 | Smart generation for auto-discovery | meta (generation) | pending | — | `wcore/docs/research/smart_gen.md` |
 | E4 | Assembled aimed engine on an OPEN target | the goal | **DONE** | **Aim buys efficiency, not ceiling-crossing — no record.** N=61 (closest gap: 4 above best-known): aim improves reliability (6/6 vs 5/6 reach E=230 at equal budget) but both arms plateau at E=230 even at 500M evals — a hard representability ceiling. Aim's *biggest* win was on the less-representable N=48 (148 vs 160) — the E5 signature exactly. 8/8 verified, planted-lie refuted. | `boundary_crossing/docs/research/aimed_open.md` |
 | E5 | Aim × representability unified predictor | theory capstone | **DONE** | **The arc's law, quantified.** Representability dominates reach (R²=0.65, 5–100× every other factor); aim is a **phase boundary** above it — corr(aim,reach) 0.00/0.00/0.18 across LOW/MID/HIGH representability, solve rate 0%/0%/45.9%. **Diversity (D6) was a proxy for representability**; controlling for it, D flips negative. Falsification clean. | `docs/research/aim_repr_predictor.md` |
@@ -55,6 +55,29 @@ it would bound machine auto-discovery precisely.
 ---
 
 ## Completed-experiment detail
+
+### E2. Learned aim / target router — aim generalizes from handed-in to learned
+- A 10-feature descriptor of a target's *failure signal* (weak near-miss
+  correlations, power-vs-accuracy gap, base-rate skew — all computable without
+  the answer) feeds a standardized k-NN router that picks among 3 aim
+  mechanisms: `base`, `gf2_joint` (round-c's unified 45-column GF(2)
+  dictionary — one lens subsuming both the XOR and order-statistic walls), and
+  `spectral_acc` (generalized MENUACC).
+- **Held-out TEST (n=13): router 12/13 (92.3%) vs fixed-best 6/13 (46.2%) vs
+  random 1/13 (7.7%)** — and the router uses *fewer* evals (4,701 vs 6,084 vs
+  6,165 single-shot). Sample complexity: ties fixed-best at n≤16 labeled
+  targets, crosses it by n=24.
+- Rigor: the leakage guard caught a real leak pre-fix (two exact-duplicate
+  targets across battery namings — C01≡C10, B11≡C09, dist²=0 across a
+  prospective split); post-dedup min distance 0.037. 12/12 router solves
+  independently re-derived by exact mask/statistic recovery (not just
+  accuracy ≥ 0.90). Honest caveats: 1 excluded structural-miss target, 2
+  skewed-base-rate borderline cases.
+- **Verdict:** the aim lever generalizes from a handed-in lens to a genuinely
+  learned selector — and the router's 3 mechanisms are literally round c's own
+  three lenses, so this is aim-selection automated, not a new capability
+  invented. Consistent with E5: aim operates *above* the representability
+  threshold, and the router is how you pick the right aim once you're there.
 
 ### E4. Aimed engine on an open target — aim buys efficiency, not the ceiling
 - Chose **LABS N=61** (best 230 vs best-known 226 = gap of 4, the smallest
