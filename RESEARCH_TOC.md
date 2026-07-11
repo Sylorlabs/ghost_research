@@ -1617,8 +1617,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 ### [docs/research/research_round_2026_07_11.md](docs/research/research_round_2026_07_11.md)
 - **Tried:** Six experiments attacking the arc's two proven levers: E1 representability expansion, E2 learned aim/target router, E3 smart generation for auto-discovery (the D5 pivot), E4 aimed engine on an open target, E5 aim×representability predictor, E6 coevo matcher audit.
-- **Result:** In progress.
-- **Aftermath:** OPEN — live round master doc, updated per landing.
+- **Result:** COMPLETE (6/6) — representability grows by hand (E1) and the machine can auto-discover a missing mechanism with a tiny prior (E3); aim automates (E2) and buys efficiency not ceiling (E4); the law is quantified (E5); instruments hold (E6).
+- **Aftermath:** ADOPTED — closes the 5-round arc (32 experiments): reach = representable ? aim-decides : 0; the next lever is machine-driven representability expansion via learned structural priors.
 
 ### [docs/research/aim_repr_predictor.md](docs/research/aim_repr_predictor.md)
 - **Tried:** The theory capstone — regress reach against representability, aim-quality, diversity, and budget over 6,480 cells; test for a phase boundary (does aim only matter once representability is satisfied?).
@@ -1644,3 +1644,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Grow the ladder's expressible family menu under the certifier (thresh, mixr, ratio, run), each unlock proven unrepresentable before via Bayes ceilings then certified after; measure the closure-expansion lattice + battery-B/D regression.
 - **Result:** mixr unlocks MIXMOD1 (.682→1.000), ratio unlocks RATIO1 (.582→1.000), thresh 0, 0 regressions; three outcome categories — family-unlocked (2 fresh targets), a standing unrepresentable core (GF(2)-XOR wall + ORDER2, ceiling .646), and RUN1 (representable exact-1.000 member but R²-novelty-gate-blocked = a certifier boundary, not a family boundary).
 - **Aftermath:** ADOPTED — representability grows by hand (the E5 ceiling lever is movable), but ORDER2 is the standing family-boundary frontier (motivates E3 auto-family discovery) and RUN1 exposes a new distinct boundary type (the novelty certifier can reject a genuine expression); links [tier8_reach_gap.md](docs/research/tier8_reach_gap.md), [aim_repr_predictor.md](docs/research/aim_repr_predictor.md).
+
+### [wcore/docs/research/smart_gen.md](wcore/docs/research/smart_gen.md)
+- **Tried:** The round crux — keep D5's proven detector, swap in smart generators (gradient hill-climb, memory-bias sampling, forced-signature sampling, exhaustive behaviour-deduped coverage + signature-as-inclusion) to auto-discover the conjunction-wall decomposition D5's blind bulk couldn't.
+- **Result:** Gradient/sampling/forced-sampling all fail (0/9, like D5); exhaustive coverage + the load;store-signature as a coverage INCLUSION crosses 0/9→6/9 both seeds, matching the hand curriculum, rediscovering noveltyflag from scratch (genuine, structurally distinct, clean at depth 4); ablation pins the minimal prior (coverage-alone 0/9, signature-as-sampling 0/9); generation is hard (no partial payoff, needle completion, length-3 uncoverable without steering).
+- **Aftermath:** ADOPTED as the crux bound — human insight is partially (not fully) dispensable: the machine auto-discovers with a structural prior strictly smaller than a hand curriculum, so the frontier moves without vanishing; the generation-side analogue of E5's representability gate; successor to [auto_curriculum.md](wcore/docs/research/auto_curriculum.md) and [conjunction_wall.md](wcore/docs/research/conjunction_wall.md).
