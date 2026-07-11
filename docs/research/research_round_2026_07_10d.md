@@ -1,6 +1,6 @@
 # Research Round 2026-07-10d — does MORE go further? (breadth, diversity, non-human grammars)
 
-**Status:** LIVE — updated as each experiment lands. 5/6 complete.
+**Status:** COMPLETE — all 6 experiments landed 2026-07-10 → 2026-07-11.
 **Origin:** A user hypothesis, made falsifiable: *"maybe it thinks the same way as
 humans — maybe if we pump more out at once it will go further."* This round tests
 it rigorously rather than arguing from the H50 prior.
@@ -31,7 +31,7 @@ commits centrally, doc + commit + TOC per landing.
 
 | # | Experiment | Question | Status | Headline | Doc |
 |---|-----------|----------|--------|----------|-----|
-| 1 | Breadth vs depth | At equal total budget, does breadth of N diverse proposers reach targets one deep proposer (H50 plateau) can't? | pending | — | `docs/research/breadth_vs_depth.md` |
+| 1 | Breadth vs depth | At equal total budget, does breadth of N diverse proposers reach targets one deep proposer (H50 plateau) can't? | **DONE** | **NO — re-confirms the ceiling.** At equal total budget (breadth held to depth's exact consumed evals, ≤0.23% dev), breadth's total never exceeds depth (12/12/12 vs 13/12/13, 3 seeds); the proven out-of-closure target C09 falls to no arm (0/0/0); breadth *loses* the concentration-dependent target B11 at every N≥8. Its only edge is a variance/portfolio hit on the ~17%-probabilistic XOR layer (a target depth's single pass missed), dominated by the B11 loss. Dominant-proposer share 83–100%: one proposer does ~all the work. | `docs/research/breadth_vs_depth.md` |
 | 2 | Breadth scaling law | The H50 counterpart: does out-of-closure reach grow with N diverse proposers, or plateau? Diverse-vs-identical control. | **DONE** | **Breadth plateaus like depth — diversity is NOT the lever.** Diverse reach flat at 1 across N=1→32; identical copies reached 2 at N=32. The wall is *representability* (brute-verified: only 4/15 cells representable; C09 provably at chance), not budget. Breadth beats single-shot depth in the needle regime, but neither crosses the closure boundary. | `docs/research/breadth_scaling.md` |
 | 3 | Non-human grammar | Do bulk machine-invented (non-human) atoms escape a proven family-level wall that human families can't? | **DONE** | **Refuted both ways:** the engine ALREADY thinks non-human (92.4% of forged atoms genuinely non-human) — so "thinks like humans" is false — but that buys NO reach: bulk machine grammar scores ~chance (0.519), *worse* than raw search (0.713) and human-op search (0.691) at equal budget. **The ceiling is AIM, not grammar.** | `wcore/docs/research/nonhuman_grammar.md` |
 | 4 | Parallel swarm on LABS | Does a massively-parallel diverse strategy pool crack an open LABS even-N gap a single method can't? (round-b rematch) | **DONE** | **Diversity beats concentration 9/12 at equal budget** (reverses round-b's blanket claim) — but the edge is *restart-diversification of one arm* (the best arm led all 48/48 pool runs), not diverse strategies each winning; vs best prior number only 2/12 improved, 7/12 regressed. **No record.** Verifier clean (12/12, 2/2 lies caught). | `boundary_crossing/docs/research/labs_swarm.md` |
@@ -61,6 +61,32 @@ commits centrally, doc + commit + TOC per landing.
 ---
 
 ## Completed-experiment detail
+
+### 1. Breadth vs depth (headline) — breadth does NOT beat depth at equal budget
+- Direct equal-total-budget head-to-head (breadth held to depth's *actual
+  consumed* evals, enforced to ≤0.23%), 3 seeds. Total solves /16:
+
+  | seed | DEPTH | BR(4) | BR(8) | BR(16) | BR(32) |
+  |------|-------|-------|-------|--------|--------|
+  | 0 | **13** | 11 | 12 | 11 | 11 |
+  | 1 | **12** | 11 | 9 | 10 | 12 |
+  | 2 | **13** | 12 | 10 | 12 | 11 |
+
+- **Breadth's total never exceeds depth at any N, any seed.** The proven
+  out-of-closure target **C09 falls to no arm on any seed (0/0/0)** — diversity
+  manufactured no missing primitive. The only targets breadth reached that
+  depth missed (C02 on seeds 1–2) are *in-closure* XOR members on the
+  ~17%-per-attempt probabilistic layer — a variance/portfolio effect within the
+  already-reachable set, paid for by losing **B11** (the ~330-eval
+  concentration-dependent target, forfeited to budget fragmentation at every
+  N≥8).
+- **Dominant-proposer share 83–100%** (5/12 runs at 100%): one proposer does
+  ~all the work — the "diversity" is mostly illusory; the pool spanned many
+  configurations of the *same two closures*, not more closures.
+- **Verdict:** "pump more diverse at once" re-confirms the H50 ceiling, does not
+  escape it. Honest asterisk: on a genuinely probabilistic reach layer, more
+  independent draws is a real variance play — but it samples the same reachable
+  set, never enlarges it, and is dominated by the cost of splitting.
 
 ### 2. Breadth scaling law — breadth plateaus like depth
 - Breadth curve (union reach over 15 out-of-closure cells, diverse pool):
@@ -193,4 +219,41 @@ and learned-aim work of Round E. D5's positive control (detection works,
 generation fails) localizes the problem precisely — Round E's E2/E3 attack
 generation directly.
 
-*(Experiment 1 pending; final round verdict on its completion.)*
+---
+
+## Round verdict (final) — the hypothesis, answered
+
+Six experiments, six completions. **Your hypothesis — "it thinks like humans;
+pump more out at once and it'll go further" — is now answered with
+measurements, and it splits cleanly:**
+
+- **"Pump more of the same" — REFUTED** on every axis: compute (H50 depth
+  plateau), breadth/quantity (D1 breadth never beats depth; D2 breadth curve
+  flat), bulk proposal (D5: 54k candidates, zero auto-discoveries).
+- **"Thinks like humans" — REFUTED**: the engine is *already* 92.4% non-human
+  (D3); the human primitive families were never the ceiling. But that
+  non-humanness, unaimed, is *worse* than aimed search.
+- **"Pump more DIFFERENT" — VALIDATED, but only conditionally** (D6: R²≈0.4):
+  diversity is the escape resource **exactly when it spans the target's
+  closure**, and even then needs adequate per-family selection margin.
+  Wrong-direction diversity buys nothing (D1/D2 measured it losing to
+  concentration when targets share one closure).
+
+**The unifying law of the whole four-round arc:**
+
+> **The ceiling is AIM × REPRESENTABILITY. "More" — of anything — moves you
+> within what your generator can already represent and aim at. It cannot
+> manufacture the missing generator (a new family) or the missing aim (a
+> spanning direction). Those require an insight, and insight is exactly what
+> quantity cannot buy when it is not cheap to stumble into (D5).**
+
+This is a *direction*, not a dead end. D5's positive control (detection works,
+generation fails) localizes the missing capability precisely: the next step is
+not a bigger machine but a **smarter generator-of-generators** — auto-family
+discovery and learned aim. That is Round E (`research_round_2026_07_11_PLAN.md`).
+
+**One honest bright spot for the open-target push:** D4's LABS swarm showed
+diversity *does* help modestly at equal budget on a real open problem (9/12
+lengths) — as restart-diversification, not structural diversity, and with no
+record — which says the assembled aimed engine on an open target (Round E's E4)
+is worth running, but with aim as the lever, not raw breadth.

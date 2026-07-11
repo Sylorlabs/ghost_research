@@ -1489,6 +1489,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Result:** In progress — battery-D landed first (3/11 decisive; ablation 1/9 vs 9/9).
 - **Aftermath:** OPEN — live round master doc, updated per landing.
 
+### [docs/research/breadth_vs_depth.md](docs/research/breadth_vs_depth.md)
+- **Tried:** The direct equal-total-budget head-to-head (D1 headline) — depth (one deep proposer) vs breadth (N∈{4,8,16,32} diverse proposers sharing depth's exact consumed evals) across 3 seeds, with C09 as a proven out-of-closure negative control.
+- **Result:** Breadth NEVER beats depth (12/12/12 vs 13/12/13); C09 falls to no arm on any seed (0/0/0); breadth loses the concentration-dependent target B11 to fragmentation at every N≥8; dominant-proposer share 83–100% (diversity mostly illusory); its only edge is a variance/portfolio hit on the ~17% probabilistic XOR layer, dominated by the B11 loss.
+- **Aftermath:** ADOPTED — re-confirms the H50 ceiling for the breadth axis; the ceiling is representability/aim not quantity; pairs with [breadth_scaling.md](docs/research/breadth_scaling.md) and [diversity_predictor.md](docs/research/diversity_predictor.md).
+
 ### [docs/research/tier8_battery_d.md](docs/research/tier8_battery_d.md)
 - **Tried:** Constructed 11 targets generalizing C08's decisive coincidence (ladder-certifiable escape that the v3 tax bank independently reconstructs) along sum%k, count3%k, and subset-Walsh; empirically classified band membership, then re-ran the two-arm ablation on the decisive subset.
 - **Result:** 3/11 DECISIVE (D01 sum%2, D07 count3%3, D11 subset-parity via an unpredicted monomial sign-parity route); ablation 3 targets × 3 seeds: ARM-OFF 1/9 vs ARM-ON 9/9, zero reversals, battery B preserved at fewer evals (2072 vs 4412).
