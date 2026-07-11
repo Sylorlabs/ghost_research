@@ -390,17 +390,29 @@ bounded at 5%, front-loaded at +1 depth, closable at ~1s/candidate (new thin
 axis: the 0.95 matcher, margin 0.008); Tier 8 effect size now 1/9 vs 9/9 on
 battery-D; LABS N=44/50 matched best-known, no even-N skew analogue exists.
 
-**Highest-priority open experiments (updated after round b):**
-1. **The conjunction-wall class** — distinct-count (climb plateau 0.862 vs the
-   0.95 bar), C09's family miss, D08's reachability gap: stepping-stone
-   curricula / mechanism-level descriptors; measured target 0.862 → ≥0.95
-2. **Better evidence lenses** — the aiming signal decays as (1/3)^k under the
-   current lens; raise the signal to reach degree ≥5 targets
-3. **Instrument fixes + falsification** — greedyFit raw-vs-z-scored scale
-   mismatch (battery-D leak); attack the 0.95 statistical matcher (0.008
-   kill-test margin), not depth
-4. **Adopt the settled architecture** — v5-ladder at the verdict layer, +1-depth
-   promotion gate in wcore, aim/taxes at selection boundaries only
+**2026-07-10c round: all round-b successor problems resolved** (see
+`docs/research/research_round_2026_07_10c.md`, 6/6): conjunction wall CROSSED by
+a stepping-stone curriculum (frontier reach 0→6/9, mechanism descriptors fail);
+evidence lenses SATURATE battery-C 33/33 by exact GF(2) identification (the
+(1/3)^k wall was an estimator artifact); C09/D08 reach gap closed by a
+comparison-aggregate family (+11 flips, 0 regressions; D08 was a selection bug,
+C09 proven family-level by Bayes ceilings); greedyFit scale fix *strengthened*
+the Tier 8 effect to 0/24-vs-22/24 and exposed B3's silent leak; the 0.95
+matcher was falsified (4.2% false-equals) and replaced by an exact protocol
+that is correct AND cheaper; the assembled engine coheres (every battery's best
+simultaneously) and is the new production default.
+
+**Highest-priority open experiments (updated after round c):**
+1. **Auto-discover the curriculum decomposition** — the conjunction wall fell to
+   *hand-designed* stones; discovering which sub-conjunction has gradient AND
+   composes to an unknown-structure target is the standing frontier
+2. **Successor battery** — C and D are saturated; design targets beyond the XOR
+   and order-statistic families and into label noise (the LG/LPN asterisk)
+3. **coevo-side 12×32 matcher audit** — same horizon/threshold mechanics the
+   0.95 matcher failed; not yet re-run
+4. **Adopt in production** — assembled engine as default (revision ON, aimed as
+   post-ladder stage, v5-ladder at export); MENUACC selection-statistic bug-fix
+   and CMP ladder seat; exact-match certifier protocol; shared-scratch drift fix
 5. **Records, not baselines** — LABS even-N needs new theory or B&B compute;
    Flammenkamp/Clift addchain comparisons (J57–J60); H51/H52 still open
 

@@ -5,6 +5,18 @@ Legend: **🟢** answer genuinely unknown in advance (real research, can surpris
 (run only for completeness). `[solo]` = runnable in this repo now · `[needs X]` =
 needs an external ingredient. The 🟢 `[solo]` rows are where to spend runs.
 
+> **2026-07-10c round — crossing the conjunction wall, six experiments** (see `docs/research/research_round_2026_07_10c.md`):
+> **Conjunction wall CROSSED** — a stepping-stone curriculum lifts frontier reach 0→6/9 both seeds (promote a
+> gradient-bearing sub-conjunction, then compose; mechanism descriptors fail 0/9). **Evidence lenses** saturate
+> battery-C 33/33 by exact GF(2) identification — the (1/3)^k wall was an estimator artifact. **C09/D08 reach gap**
+> closed by a comparison-aggregate family (+11 flips, 0 regressions; C09 proven family-level via Bayes ceilings,
+> D08 a discoverSpectral selection bug). **greedyFit fixed** (raw-vs-z-scored) — Tier 8 effect *strengthens* to
+> 0/24-vs-22/24, B3 exposed as a silent prior leak (honest ARM-OFF battery-B 29/33). **0.95 matcher FALSIFIED**
+> (4.2% false-equals, horizon bomb) → exact-match 64×256 protocol, correct and cheaper; 20/20 promotions survive.
+> **Assembled engine coheres** (every battery's best simultaneously, zero interference) — new production default.
+> **New open problems:** auto-discover curriculum decompositions; successor battery beyond XOR+order-statistic +
+> label noise; coevo-side 12×32 matcher audit; MENUACC/CMP ladder adoption.
+
 > **2026-07-10b round — aiming the escapes, six experiments** (see `docs/research/research_round_2026_07_10b.md`):
 > **A7 sharpened** — aim at selection boundaries works (first structured-family solves: hashtbl+union via
 > highest-residual promotion; battery-C wall 3/33→8/33 with byte-identical evidence derivations); aim in the
