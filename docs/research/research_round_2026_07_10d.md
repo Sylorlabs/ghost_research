@@ -1,6 +1,6 @@
 # Research Round 2026-07-10d — does MORE go further? (breadth, diversity, non-human grammars)
 
-**Status:** LIVE — updated as each experiment lands. 2/6 complete.
+**Status:** LIVE — updated as each experiment lands. 3/6 complete.
 **Origin:** A user hypothesis, made falsifiable: *"maybe it thinks the same way as
 humans — maybe if we pump more out at once it will go further."* This round tests
 it rigorously rather than arguing from the H50 prior.
@@ -32,7 +32,7 @@ commits centrally, doc + commit + TOC per landing.
 | # | Experiment | Question | Status | Headline | Doc |
 |---|-----------|----------|--------|----------|-----|
 | 1 | Breadth vs depth | At equal total budget, does breadth of N diverse proposers reach targets one deep proposer (H50 plateau) can't? | pending | — | `docs/research/breadth_vs_depth.md` |
-| 2 | Breadth scaling law | The H50 counterpart: does out-of-closure reach grow with N diverse proposers, or plateau? Diverse-vs-identical control. | pending | — | `docs/research/breadth_scaling.md` |
+| 2 | Breadth scaling law | The H50 counterpart: does out-of-closure reach grow with N diverse proposers, or plateau? Diverse-vs-identical control. | **DONE** | **Breadth plateaus like depth — diversity is NOT the lever.** Diverse reach flat at 1 across N=1→32; identical copies reached 2 at N=32. The wall is *representability* (brute-verified: only 4/15 cells representable; C09 provably at chance), not budget. Breadth beats single-shot depth in the needle regime, but neither crosses the closure boundary. | `docs/research/breadth_scaling.md` |
 | 3 | Non-human grammar | Do bulk machine-invented (non-human) atoms escape a proven family-level wall that human families can't? | **DONE** | **Refuted both ways:** the engine ALREADY thinks non-human (92.4% of forged atoms genuinely non-human) — so "thinks like humans" is false — but that buys NO reach: bulk machine grammar scores ~chance (0.519), *worse* than raw search (0.713) and human-op search (0.691) at equal budget. **The ceiling is AIM, not grammar.** | `wcore/docs/research/nonhuman_grammar.md` |
 | 4 | Parallel swarm on LABS | Does a massively-parallel diverse strategy pool crack an open LABS even-N gap a single method can't? (round-b rematch) | **DONE** | **Diversity beats concentration 9/12 at equal budget** (reverses round-b's blanket claim) — but the edge is *restart-diversification of one arm* (the best arm led all 48/48 pool runs), not diverse strategies each winning; vs best prior number only 2/12 improved, 7/12 regressed. **No record.** Verifier clean (12/12, 2/2 lies caught). | `boundary_crossing/docs/research/labs_swarm.md` |
 | 5 | Auto-discover curriculum | Can bulk parallel proposal DISCOVER the conjunction-wall decomposition autonomously (no hand-designed stones)? | pending | — | `wcore/docs/research/auto_curriculum.md` |
