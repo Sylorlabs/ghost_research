@@ -1557,3 +1557,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Attacked the distinct-count conjunction wall (round-b's 0.862 plateau vs the 0.95 bar) with two levers — a stepping-stone curriculum (climb membership→noveltyflag sub-conjunctions, promote, compose) and mechanism-level descriptors M=m_rel·m_perm·m_dup at the promotion gate.
 - **Result:** Curriculum CROSSES it — frontier reach 0→6/9 both seeds at the round noveltyflag promotes (distinct = noveltyflag→g_add composes), 0 depth-4 leaks; mechanism descriptors fail (0/9); the wall is not climbable under any of 4 lenses (probe 0.875/0.839), confirming a gradient absence not a weak-lens artifact; selftest all-PASS.
 - **Aftermath:** ADOPTED — the escape is a discovered intermediate abstraction promoted at the selection boundary (Closure Principle at the curriculum level), extending round-b's [aimed_forge.md](wcore/docs/research/aimed_forge.md); honest bound: stones hand-designed, auto-discovering the decomposition is the next frontier (OPEN).
+
+---
+
+## 15. Documentation gap-fill (2026-07-11) — built-but-undocumented experiments
+
+### [sparse_poly_discovery/docs/research/oriented_control.md](sparse_poly_discovery/docs/research/oriented_control.md)
+- **Tried:** Clifford Cl(2,0) grade-2 (bivector) readouts vs the mb_mass sum baseline on the REAL grid control task (dynamics are oriented: charge→anode, discharge→cathode), 8 seeds, pre-registered H1/H2/H3.
+- **Result:** sum wins everywhere — single-band 19.80 vs bivector 50.70 (H2 confirmed), dual-band sum 35.10 vs bivector 77.73 (H3 refuted); grade-2 wins on the TOY oriented predicate (1.000 on sign(v1−v0)) but not the real task.
+- **Aftermath:** ADOPTED — closes A10's open caveat: the escape lever was "leave GF(2)," not the geometric product; grade-2 pays only when the target CONSTRAINT is oriented, and the real control constraint is symmetric mass-band (an oriented environment ≠ an oriented objective). Links [a10_clifford_binding.md](sparse_poly_discovery/docs/research/a10_clifford_binding.md).
+
+### [boundary_crossing/docs/research/lm_baseline.md](boundary_crossing/docs/research/lm_baseline.md)
+- **Tried:** Documented the built-but-unrun LLM-as-addition-chain-generator baseline: `claude -p` proposes a chain per target, every reply forced through the SAME independent verifier (`addchain_check`) the engine uses; cost measured in API calls.
+- **Result:** N/A — harness built, not run (running makes live API calls, the user's call). No results claimed.
+- **Aftermath:** OPEN — the fair AlphaEvolve head-to-head (LLM proposer + our sound verifier vs the engine + same verifier); when run, results go to `results/lm_baseline_<date>.csv`. Distinct from [llm_proposer.md](boundary_crossing/docs/research/llm_proposer.md).
