@@ -1673,3 +1673,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Generalize CMP's five fixed pair sets into an exhaustive subset-conditioned comparison-family search, then ask whether it independently discovers the missing family for E1's standing-unreachable ORDER2 target.
 - **Result:** Yes — all four seeds, including a held-out seed, select `between({cell 0}) mod 2` at val=tst=1.000 from 50,490 candidates; a production-style ladder moves ORDER2 0.582→1.000 with zero regressions across Battery B plus controls.
 - **Aftermath:** ADOPTED — the machine found the distinguished-cell family rather than being handed its member; the remaining supplied insight is the bounded comparison-shape prior, making this a clean low-dimensional representability-expansion result.
+
+### [docs/research/genofgen_assembled.md](docs/research/genofgen_assembled.md)
+- **Tried:** Assemble learned routing, signature probing, exhaustive family search, certification, and within-pass promotion into one autonomous 73-target loop, with hand-oracle, no-smart-generation, and no-router controls over three seeds.
+- **Result:** Positive coherence, negative full equivalence — autonomous 58/73 vs hand 59/73; smart generation is load-bearing (36–37/73 without it; frontier 3/10→8/10), while routing preserves the ceiling and reduces mean evaluations 45,029→30,546 (32.2%).
+- **Aftermath:** MODIFIED — adopt the integration and ablation result, not a full generator-of-generators victory; rerun with F3's corrected novelty gate and F1's inferred selector, and retain the honest blind-control caveat on WALL_HARD.
