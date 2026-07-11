@@ -1649,3 +1649,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** The round crux — keep D5's proven detector, swap in smart generators (gradient hill-climb, memory-bias sampling, forced-signature sampling, exhaustive behaviour-deduped coverage + signature-as-inclusion) to auto-discover the conjunction-wall decomposition D5's blind bulk couldn't.
 - **Result:** Gradient/sampling/forced-sampling all fail (0/9, like D5); exhaustive coverage + the load;store-signature as a coverage INCLUSION crosses 0/9→6/9 both seeds, matching the hand curriculum, rediscovering noveltyflag from scratch (genuine, structurally distinct, clean at depth 4); ablation pins the minimal prior (coverage-alone 0/9, signature-as-sampling 0/9); generation is hard (no partial payoff, needle completion, length-3 uncoverable without steering).
 - **Aftermath:** ADOPTED as the crux bound — human insight is partially (not fully) dispensable: the machine auto-discovers with a structural prior strictly smaller than a hand curriculum, so the frontier moves without vanishing; the generation-side analogue of E5's representability gate; successor to [auto_curriculum.md](wcore/docs/research/auto_curriculum.md) and [conjunction_wall.md](wcore/docs/research/conjunction_wall.md).
+
+---
+
+## 18. Research round 2026-07-11b (Round F) — the generator-of-generators
+
+### [docs/research/research_round_2026_07_11b.md](docs/research/research_round_2026_07_11b.md)
+- **Tried:** Six experiments building the arc's named next lever (machine-driven representability via learned structural priors): F1 infer-the-prior, F2 auto-family for ORDER2, F3 RUN1 novelty-gate audit, F4 prior transfer, F5 assembled generator-of-generators, F6 residual human-insight bit.
+- **Result:** In progress.
+- **Aftermath:** OPEN — live round master doc, updated per landing.
+
+### [docs/research/insight_ledger.md](docs/research/insight_ledger.md)
+- **Tried:** Quantify how much of the insight to solve a target is machine-supplied vs human-supplied per arc method (hand-curriculum / D5 blind bulk / E3 smart-gen / F1 projected), via a 9-unit ingredient decomposition tagged human-vs-machine, plus an independent bit-narrowing cross-check.
+- **Result:** Machine-supplied fraction 0% (hand-curriculum) → 66.7% (E3, cross-check 70.7%); D5 = 0/9 (insight never assembled); F1 projected ~85–90% (unmeasured, honest); trend 100%→33% human-supplied (~3× drop, shrinking not vanishing); irreducible floor = alphabet + certifier + target + protocol; COVER-fair vs COVER-uniform (identical bits eliminated, only one solves) proves the prior's value is aim not quantity.
+- **Aftermath:** ADOPTED as the arc's honest accounting — the residual human bit shrinks measurably but has a floor (the verifier definition); echoes [aim_repr_predictor.md](docs/research/aim_repr_predictor.md) at the insight scale; the "greatest invention machine" distance is now a tracked number.
