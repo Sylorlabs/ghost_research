@@ -402,19 +402,35 @@ matcher was falsified (4.2% false-equals) and replaced by an exact protocol
 that is correct AND cheaper; the assembled engine coheres (every battery's best
 simultaneously) and is the new production default.
 
-**Highest-priority open experiments (updated after round c):**
-1. **Auto-discover the curriculum decomposition** — the conjunction wall fell to
-   *hand-designed* stones; discovering which sub-conjunction has gradient AND
-   composes to an unknown-structure target is the standing frontier
-2. **Successor battery** — C and D are saturated; design targets beyond the XOR
-   and order-statistic families and into label noise (the LG/LPN asterisk)
-3. **coevo-side 12×32 matcher audit** — same horizon/threshold mechanics the
-   0.95 matcher failed; not yet re-run
-4. **Adopt in production** — assembled engine as default (revision ON, aimed as
-   post-ladder stage, v5-ladder at export); MENUACC selection-statistic bug-fix
-   and CMP ladder seat; exact-match certifier protocol; shared-scratch drift fix
-5. **Records, not baselines** — LABS even-N needs new theory or B&B compute;
-   Flammenkamp/Clift addchain comparisons (J57–J60); H51/H52 still open
+**2026-07-11 round (Round E): the arc's law quantified + both levers mapped**
+(see `docs/research/research_round_2026_07_11.md`, 6/6): E5 — reach ≈
+representable ? aim-decides : 0 (representability a threshold gate R²=0.65, aim a
+phase boundary above it, diversity a proxy for representability); E1 —
+representability grows by hand (+2 targets) with a three-part boundary
+(family-unlocked / unreachable core ORDER2 / the RUN1 certifier-boundary); E3 —
+the machine CAN auto-discover a missing mechanism with a structural prior smaller
+than a hand curriculum (0/9→6/9 where blind bulk fails); E2 — aim automates
+(router 92%); E4 — aim buys efficiency not ceiling (LABS N=61 plateau); E6 — the
+85/86 headline survives the coevo matcher audit. **Five-round arc closed
+(32 experiments): machine invention is gated by representability, steered by aim;
+the missing generator is machine-findable but only with a small structural prior.**
+
+**Highest-priority open experiments (updated after round E → the Round F frontier):**
+1. **Learned structural priors (generator-of-generators)** — E3 hand-supplied the
+   RMW-shape prior; can the machine *infer* which prior a target needs from its
+   failure signature (the E2-router idea, one level up)?
+2. **Auto-family discovery for ORDER2** — E1's standing unreachable target; apply
+   E3's smart-generation method with a comparison/order prior to discover the
+   family that unlocks it
+3. **The RUN1 certifier-boundary** — audit whether the novelty gate's rejection of
+   the exact `run(maxRunGE3)` member is correct (genuinely reconstructible) or a
+   false rejection the program is missing
+4. **Prior transfer / compounding** — does a machine-discovered mechanism + its
+   prior generalize to the rest of its family without re-supplying the prior?
+5. **Quantify the residual human-insight bit** — how much of "insight" is now
+   machine-supplied vs handed-in (prior/alphabet/menu), and is it shrinking?
+6. **Records, not baselines** — LABS even-N / addchain records still need a
+   representability escape, not more aim or budget (E4 confirmed)
 
 ---
 

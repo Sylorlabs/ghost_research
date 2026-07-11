@@ -5,6 +5,16 @@ Legend: **🟢** answer genuinely unknown in advance (real research, can surpris
 (run only for completeness). `[solo]` = runnable in this repo now · `[needs X]` =
 needs an external ingredient. The 🟢 `[solo]` rows are where to spend runs.
 
+> **2026-07-11 round (Round E) — aim × representability, six experiments** (see `docs/research/research_round_2026_07_11.md`):
+> **The arc's law quantified (E5):** reach ≈ representable ? aim-decides : 0 — representability a threshold gate (R²=0.65),
+> aim a phase boundary above it (0/0/0.18 across low/mid/high repr), diversity a proxy for representability. **Representability
+> grows by hand (E1):** +2 fresh targets certified; three-part boundary (family-unlocked / standing unreachable core ORDER2 /
+> the RUN1 certifier-boundary — representable but novelty-gate-blocked). **The machine CAN auto-discover (E3, the crux):**
+> smart generation (exhaustive coverage + a tiny structural prior) rediscovers the missing mechanism from scratch 0/9→6/9 where
+> blind bulk (D5) and gradient/sampling all fail — human insight partially, not fully, dispensable. **Aim automates (E2):**
+> learned router 92% vs fixed-best 46%; **buys efficiency not ceiling (E4):** LABS N=61 plateaus at E=230 (no record).
+> **Instruments hold (E6):** coevo matcher has the same false-equal bug class but the 85/86 headline stands.
+
 > **2026-07-10c round — crossing the conjunction wall, six experiments** (see `docs/research/research_round_2026_07_10c.md`):
 > **Conjunction wall CROSSED** — a stepping-stone curriculum lifts frontier reach 0→6/9 both seeds (promote a
 > gradient-bearing sub-conjunction, then compose; mechanism descriptors fail 0/9). **Evidence lenses** saturate
