@@ -1,0 +1,596 @@
+phase,seed,target,family_or_arm,members_or_idx,detail,val_or_cov,tst,cert_or_solved,cov_after_or_probes,r2_or_certs
+base_rate,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",-,0,"-",0.4950,,,,
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",EXIST monomial(deg<=8),255,"phi(0x0F)",0.5577,0.5349,0,0.5006,-0.1125
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",EXIST pair_relation,28,"pair(2,4)",0.5337,0.4806,0,0.4903,-0.0647
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",EXIST walsh(sign bits),255,"chi(0x33)",0.5343,0.4869,0,0.4937,-0.1086
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",EXIST spectral cos(w*c3),800,"cos(w*c3),w=2.0970",0.5349,0.4909,0,0.4920,-0.0421
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",EXIST clifford,64,"sin(0.049(v1-v0))",0.5206,0.4646,0,0.4880,0.9458
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",EXIST world_sum_mod,19,"sum%19==0",0.5229,0.4606,0,0.4909,-0.0485
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",EXIST world_sign_mod,19,"sign%17==0",0.5200,0.4731,0,0.4869,-0.0238
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",EARNED cmp(round c),1030,"cmp(low6,cos w=1.052)",0.5411,0.4846,0,0.4869,0.0855
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",NEW thresh,264,"thresh(k=2,mod5)",0.5280,0.4920,0,0.4943,0.0100
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",NEW mixr,396,"mixr(sum,count3,3x3,cos w=2.147)",0.5389,0.5063,0,0.4857,-0.0676
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",NEW ratio,381,"ratio(prod,hi3lo2,cos w=1.361)",0.5337,0.4966,0,0.4914,-0.0471
+family_diag,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",NEW run,330,"run(firstDescentPos,cos w=0.576)",0.5314,0.4737,0,0.4840,0.2537
+basis_ceiling,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",basis:count3,9,"spectral+modsynth(count)",0.5034,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",basis:gridSum,41,"world_sum_mod",0.4846,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",basis:signPattern,256,"walsh+world_sign_mod",0.5149,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",basis:v1-v0,11,"clifford",0.4989,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",basis:inversion,29,"cmp(all28)",0.5160,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",basis:max_cell,6,"pipeline(max)",0.4863,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",basis:sum01,11,"pipeline(sum01)",0.5303,,,,
+base_rate,0xF0235A11CE0FF1CE,"C03 XOR 0x55",-,0,"-",0.4967,,,,
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",EXIST monomial(deg<=8),255,"phi(0x55)",0.5560,0.5400,0,0.4960,-0.1154
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",EXIST pair_relation,28,"pair(0,3)",0.5309,0.5006,0,0.5040,-0.1014
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",EXIST walsh(sign bits),255,"chi(0x92)",0.5331,0.5074,0,0.4983,-0.0738
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.0039",0.5211,0.4966,0,0.5091,0.7300
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",EXIST clifford,64,"sin(2.111(v1-v0))",0.5320,0.4737,0,0.5006,0.9458
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",EXIST world_sum_mod,19,"sum%11==0",0.5211,0.4931,0,0.5034,-0.0855
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",EXIST world_sign_mod,19,"sign%4==0",0.5211,0.4891,0,0.4954,0.4450
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",EARNED cmp(round c),1030,"cmp(all28,cos w=2.670)",0.5389,0.4954,0,0.5017,-0.0844
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",NEW thresh,264,"thresh(k=2,cos w=0.838)",0.5280,0.4926,0,0.4983,0.5049
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",NEW mixr,396,"mixr(sum,inv,3x3,cos w=2.147)",0.5371,0.4989,0,0.5046,-0.0817
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",NEW ratio,381,"ratio(prod,hi4lo1,cos w=1.833)",0.5366,0.5063,0,0.5074,-0.0445
+family_diag,0xF0235A11CE0FF1CE,"C03 XOR 0x55",NEW run,330,"run(maxRunGE2,cos w=2.147)",0.5417,0.5040,0,0.4977,-0.0233
+basis_ceiling,0xF0235A11CE0FF1CE,"C03 XOR 0x55",basis:count3,9,"spectral+modsynth(count)",0.5251,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C03 XOR 0x55",basis:gridSum,41,"world_sum_mod",0.5126,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C03 XOR 0x55",basis:signPattern,256,"walsh+world_sign_mod",0.5143,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C03 XOR 0x55",basis:v1-v0,11,"clifford",0.5040,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C03 XOR 0x55",basis:inversion,29,"cmp(all28)",0.4869,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C03 XOR 0x55",basis:max_cell,6,"pipeline(max)",0.5034,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C03 XOR 0x55",basis:sum01,11,"pipeline(sum01)",0.5057,,,,
+base_rate,0xF0235A11CE0FF1CE,"C09 inv parity",-,0,"-",0.5026,,,,
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",EXIST monomial(deg<=8),255,"phi(0x9A)",0.5343,0.5040,0,0.4834,-0.0880
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",EXIST pair_relation,28,"pair(1,4)",0.5291,0.5086,0,0.4920,-0.0717
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",EXIST walsh(sign bits),255,"chi(0x9A)",0.5314,0.4943,0,0.4709,-0.0775
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.2606",0.5166,0.4846,0,0.4823,0.1557
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",EXIST clifford,64,"sin(0.049(v1-v0))",0.5234,0.5057,0,0.4731,0.9458
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",EXIST world_sum_mod,19,"sum%15==0",0.5103,0.4794,0,0.4800,0.0137
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",EXIST world_sign_mod,19,"sign%19==0",0.5149,0.5120,0,0.4771,-0.0075
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",EARNED cmp(round c),1030,"cmp(all28,mod2)",1.0000,1.0000,1,1.0000,-0.0713
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",NEW thresh,264,"thresh(k=4,mod5)",0.5269,0.5131,0,0.4691,0.0695
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",NEW mixr,396,"mixr(sum,inv,2x2,mod2)",1.0000,1.0000,1,1.0000,-0.0713
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",NEW ratio,381,"ratio(prod,hi4lo1,cos w=2.880)",0.5326,0.5086,0,0.4680,-0.0446
+family_diag,0xF0235A11CE0FF1CE,"C09 inv parity",NEW run,330,"run(firstDescentPos,cos w=1.414)",0.5257,0.5063,0,0.4829,0.4694
+basis_ceiling,0xF0235A11CE0FF1CE,"C09 inv parity",basis:count3,9,"spectral+modsynth(count)",0.5103,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C09 inv parity",basis:gridSum,41,"world_sum_mod",0.4943,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C09 inv parity",basis:signPattern,256,"walsh+world_sign_mod",0.5160,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C09 inv parity",basis:v1-v0,11,"clifford",0.5051,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C09 inv parity",basis:inversion,29,"cmp(all28)",1.0000,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C09 inv parity",basis:max_cell,6,"pipeline(max)",0.5171,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C09 inv parity",basis:sum01,11,"pipeline(sum01)",0.5034,,,,
+base_rate,0xF0235A11CE0FF1CE,"C11 XOR 0x37",-,0,"-",0.5064,,,,
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",EXIST monomial(deg<=8),255,"phi(0x37)",0.5503,0.5446,0,0.5149,-0.0634
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",EXIST pair_relation,28,"pair(5,6)",0.5269,0.5326,0,0.5126,-0.0445
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",EXIST walsh(sign bits),255,"chi(0xDA)",0.5360,0.5046,0,0.5160,-0.1175
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.1428",0.5206,0.5069,0,0.5131,0.3025
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",EXIST clifford,64,"sin(0.442(v1-v0))",0.5217,0.5057,0,0.5097,0.9458
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",EXIST world_sum_mod,19,"sum%11==0",0.5137,0.5034,0,0.5074,-0.0855
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",EXIST world_sign_mod,19,"sign%2==0",0.5109,0.5103,0,0.5177,0.7601
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",EARNED cmp(round c),1030,"cmp(all28,cos w=1.131)",0.5297,0.5143,0,0.5114,-0.0542
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",NEW thresh,264,"thresh(k=1,mod4)",0.5326,0.4943,0,0.5057,-0.0473
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",NEW mixr,396,"mixr(count3,inv,3x3,cos w=2.880)",0.5217,0.4891,0,0.5177,-0.0589
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",NEW ratio,381,"ratio(prod,hi4lo1,cos w=0.890)",0.5320,0.4977,0,0.5086,-0.0683
+family_diag,0xF0235A11CE0FF1CE,"C11 XOR 0x37",NEW run,330,"run(maxRunGE2,cos w=2.409)",0.5257,0.5211,0,0.5029,-0.0206
+basis_ceiling,0xF0235A11CE0FF1CE,"C11 XOR 0x37",basis:count3,9,"spectral+modsynth(count)",0.4994,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C11 XOR 0x37",basis:gridSum,41,"world_sum_mod",0.4914,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C11 XOR 0x37",basis:signPattern,256,"walsh+world_sign_mod",0.5154,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C11 XOR 0x37",basis:v1-v0,11,"clifford",0.4800,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C11 XOR 0x37",basis:inversion,29,"cmp(all28)",0.5046,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C11 XOR 0x37",basis:max_cell,6,"pipeline(max)",0.5091,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"C11 XOR 0x37",basis:sum01,11,"pipeline(sum01)",0.4840,,,,
+base_rate,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",-,0,"-",0.4236,,,,
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",EXIST monomial(deg<=8),255,"phi(0x01)",0.5977,0.5909,0,0.5823,1.0000
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",EXIST pair_relation,28,"pair(5,7)",0.5800,0.5657,0,0.5857,-0.1074
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",EXIST walsh(sign bits),255,"chi(0x01)",0.5869,0.5891,0,0.5834,0.7601
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.5733",0.5903,0.6051,0,0.5783,0.5820
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",EXIST clifford,64,"sin(0.049(v1-v0))",0.5983,0.5886,0,0.5909,0.9458
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",EXIST world_sum_mod,19,"sum%2==0",0.5771,0.5743,0,0.5794,-0.0408
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",EXIST world_sign_mod,19,"sign%2==0",0.5869,0.5891,0,0.5834,0.7601
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",EARNED cmp(round c),1030,"cmp(all28,cos w=0.204)",0.6034,0.5863,0,0.5726,0.6403
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",NEW thresh,264,"thresh(k=5,mod4)",0.6160,0.5851,0,0.5789,0.1985
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",NEW mixr,396,"mixr(sum,count3,3x3,cos w=1.414)",0.5800,0.5840,0,0.5846,-0.0695
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",NEW ratio,381,"ratio(prod,hi4lo1,mod2)",0.6297,0.6154,0,0.6034,-0.0831
+family_diag,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",NEW run,330,"run(firstDescentPos,mod6)",0.5920,0.5886,0,0.5817,0.3832
+basis_ceiling,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",basis:count3,9,"spectral+modsynth(count)",0.6103,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",basis:gridSum,41,"world_sum_mod",0.5640,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",basis:signPattern,256,"walsh+world_sign_mod",0.6377,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",basis:v1-v0,11,"clifford",0.5691,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",basis:inversion,29,"cmp(all28)",0.5949,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",basis:max_cell,6,"pipeline(max)",0.5743,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",basis:sum01,11,"pipeline(sum01)",0.5971,,,,
+base_rate,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",-,0,"-",0.4233,,,,
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",EXIST monomial(deg<=8),255,"phi(0x20)",0.6783,0.6589,0,0.7926,1.0000
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",EXIST pair_relation,28,"pair(5,6)",0.6183,0.6131,0,0.8120,-0.0445
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",EXIST walsh(sign bits),255,"chi(0x20)",0.6783,0.6589,0,0.7949,0.7522
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.0039",0.8166,0.8097,0,0.8337,0.7300
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",EXIST clifford,64,"sin(0.049(v1-v0))",0.5914,0.5817,0,0.7960,0.9458
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",EXIST world_sum_mod,19,"sum%13==0",0.5966,0.5817,0,0.7960,-0.0383
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",EXIST world_sign_mod,19,"sign%2==0",0.5914,0.5817,0,0.7949,0.7601
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",EARNED cmp(round c),1030,"cmp(cross16,cos w=0.456)",0.6200,0.6006,0,0.8057,-0.0310
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",NEW thresh,264,"thresh(k=4,ident)",0.7160,0.7149,0,0.8006,0.6646
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",NEW mixr,396,"mixr(count3,inv,3x3,ident)",0.5920,0.5834,0,0.8069,-0.0121
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",NEW ratio,381,"ratio(prod,hi3lo2,ident)",0.8011,0.8091,0,0.8269,0.8239
+family_diag,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",NEW run,330,"run(maxRunGE3,ident)",1.0000,1.0000,0,1.0000,0.5063
+basis_ceiling,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",basis:count3,9,"spectral+modsynth(count)",0.8097,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",basis:gridSum,41,"world_sum_mod",0.7789,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",basis:signPattern,256,"walsh+world_sign_mod",1.0000,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",basis:v1-v0,11,"clifford",0.5817,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",basis:inversion,29,"cmp(all28)",0.5960,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",basis:max_cell,6,"pipeline(max)",0.5817,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",basis:sum01,11,"pipeline(sum01)",0.6314,,,,
+base_rate,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",-,0,"-",0.5076,,,,
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",EXIST monomial(deg<=8),255,"phi(0x63)",0.5589,0.5211,0,0.4720,-0.1492
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",EXIST pair_relation,28,"pair(1,7)",0.5389,0.5246,0,0.4851,-0.0930
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",EXIST walsh(sign bits),255,"chi(0x53)",0.5383,0.5131,0,0.4783,-0.1038
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.3980",0.5623,0.5509,0,0.4789,-0.0027
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",EXIST clifford,64,"sin(1.374(v1-v0))",0.5246,0.4971,0,0.4806,0.9458
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",EXIST world_sum_mod,19,"sum%13==0",0.5349,0.5360,0,0.4914,-0.0383
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",EXIST world_sign_mod,19,"sign%4==0",0.5234,0.5171,0,0.4829,0.4450
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",EARNED cmp(round c),1030,"cmp(all28,cos w=0.785)",0.5326,0.5091,0,0.4880,-0.0306
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",NEW thresh,264,"thresh(k=4,mod3)",0.8200,0.8086,0,0.7343,-0.0738
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",NEW mixr,396,"mixr(count3,inv,3x3,cos w=0.681)",0.5349,0.5080,0,0.4823,-0.0636
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",NEW ratio,381,"ratio(prod,hi4lo1,mod3)",1.0000,1.0000,1,1.0000,-0.0917
+family_diag,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",NEW run,330,"run(maxRunGE4,cos w=2.566)",0.5789,0.5983,0,0.5526,0.0063
+basis_ceiling,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",basis:count3,9,"spectral+modsynth(count)",0.5640,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",basis:gridSum,41,"world_sum_mod",0.5686,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",basis:signPattern,256,"walsh+world_sign_mod",0.5240,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",basis:v1-v0,11,"clifford",0.5143,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",basis:inversion,29,"cmp(all28)",0.5109,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",basis:max_cell,6,"pipeline(max)",0.5337,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",basis:sum01,11,"pipeline(sum01)",0.5143,,,,
+base_rate,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",-,0,"-",0.3386,,,,
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",EXIST monomial(deg<=8),255,"phi(0x65)",0.6623,0.6549,0,0.5851,-0.0942
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",EXIST pair_relation,28,"pair(0,1)",0.6594,0.6566,0,0.5777,-0.0862
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",EXIST walsh(sign bits),255,"chi(0x01)",0.6594,0.6566,0,0.5777,0.7601
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.0039",0.6594,0.6566,0,0.5674,0.7300
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",EXIST clifford,64,"sin(0.049(v1-v0))",0.6594,0.6566,0,0.5737,0.9458
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",EXIST world_sum_mod,19,"sum%19==0",0.6663,0.6537,0,0.5989,-0.0485
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",EXIST world_sign_mod,19,"sign%2==0",0.6594,0.6566,0,0.5777,0.7601
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",EARNED cmp(round c),1030,"cmp(all28,cos w=0.236)",0.6611,0.6560,0,0.5760,0.2518
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",NEW thresh,264,"thresh(k=5,ident)",0.6611,0.6554,0,0.5543,0.4170
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",NEW mixr,396,"mixr(sum,count3,3x3,mod4)",1.0000,1.0000,1,1.0000,-0.1099
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",NEW ratio,381,"ratio(diff,hi4lo1,cos w=3.665)",0.6611,0.6537,0,0.5611,0.3666
+family_diag,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",NEW run,330,"run(maxRunGE4,ident)",0.6600,0.6571,0,0.5646,0.4213
+basis_ceiling,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",basis:count3,9,"spectral+modsynth(count)",0.6554,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",basis:gridSum,41,"world_sum_mod",0.6714,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",basis:signPattern,256,"walsh+world_sign_mod",0.6206,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",basis:v1-v0,11,"clifford",0.6566,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",basis:inversion,29,"cmp(all28)",0.6566,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",basis:max_cell,6,"pipeline(max)",0.6554,,,,
+basis_ceiling,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",basis:sum01,11,"pipeline(sum01)",0.6566,,,,
+base_rate,0x00C1B10D20260706,"C01 XOR 0x0F",-,0,"-",0.5034,,,,
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",EXIST monomial(deg<=8),255,"phi(0x0F)",0.5543,0.5611,0,0.5057,-0.0703
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",EXIST pair_relation,28,"pair(2,3)",0.5297,0.4834,0,0.5069,-0.0493
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",EXIST walsh(sign bits),255,"chi(0xC5)",0.5280,0.4891,0,0.5086,-0.0534
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.5733",0.5183,0.5063,0,0.5131,0.6162
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",EXIST clifford,64,"sin(1.914(v1-v0))",0.5211,0.4851,0,0.5063,0.9404
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",EXIST world_sum_mod,19,"sum%9==0",0.5137,0.4954,0,0.5023,-0.0436
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",EXIST world_sign_mod,19,"sign%8==0",0.5137,0.4863,0,0.5091,0.3559
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",EARNED cmp(round c),1030,"cmp(all28,cos w=1.649)",0.5331,0.5029,0,0.5023,-0.0908
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",NEW thresh,264,"thresh(k=4,mod5)",0.5223,0.4851,0,0.5023,0.0493
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",NEW mixr,396,"mixr(sum,inv,3x3,cos w=1.728)",0.5354,0.5069,0,0.5057,-0.0972
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",NEW ratio,381,"ratio(prod,hi4lo1,cos w=1.623)",0.5371,0.5177,0,0.5109,-0.0369
+family_diag,0x00C1B10D20260706,"C01 XOR 0x0F",NEW run,330,"run(firstDescentPos,cos w=2.827)",0.5257,0.5126,0,0.5029,0.5708
+basis_ceiling,0x00C1B10D20260706,"C01 XOR 0x0F",basis:count3,9,"spectral+modsynth(count)",0.4863,,,,
+basis_ceiling,0x00C1B10D20260706,"C01 XOR 0x0F",basis:gridSum,41,"world_sum_mod",0.4943,,,,
+basis_ceiling,0x00C1B10D20260706,"C01 XOR 0x0F",basis:signPattern,256,"walsh+world_sign_mod",0.5011,,,,
+basis_ceiling,0x00C1B10D20260706,"C01 XOR 0x0F",basis:v1-v0,11,"clifford",0.4903,,,,
+basis_ceiling,0x00C1B10D20260706,"C01 XOR 0x0F",basis:inversion,29,"cmp(all28)",0.5240,,,,
+basis_ceiling,0x00C1B10D20260706,"C01 XOR 0x0F",basis:max_cell,6,"pipeline(max)",0.5006,,,,
+basis_ceiling,0x00C1B10D20260706,"C01 XOR 0x0F",basis:sum01,11,"pipeline(sum01)",0.5200,,,,
+base_rate,0x00C1B10D20260706,"C03 XOR 0x55",-,0,"-",0.5110,,,,
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",EXIST monomial(deg<=8),255,"phi(0x55)",0.5623,0.5726,0,0.5034,-0.0487
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",EXIST pair_relation,28,"pair(6,7)",0.5423,0.5046,0,0.5029,-0.0162
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",EXIST walsh(sign bits),255,"chi(0xCC)",0.5366,0.5023,0,0.5114,-0.1153
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.5262",0.5349,0.4943,0,0.5109,0.6997
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",EXIST clifford,64,"sin(1.374(v1-v0))",0.5286,0.5114,0,0.5160,0.9404
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",EXIST world_sum_mod,19,"sum%5==0",0.5263,0.4931,0,0.5097,-0.0515
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",EXIST world_sign_mod,19,"sign%3==0",0.5183,0.5086,0,0.5097,-0.1232
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",EARNED cmp(round c),1030,"cmp(all28,cos w=1.304)",0.5377,0.5063,0,0.5137,-0.0280
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",NEW thresh,264,"thresh(k=2,cos w=1.414)",0.5303,0.4800,0,0.5103,0.0390
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",NEW mixr,396,"mixr(sum,count3,3x3,cos w=1.623)",0.5400,0.5149,0,0.5103,-0.0453
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",NEW ratio,381,"ratio(prod,hi3lo2,cos w=2.618)",0.5423,0.4914,0,0.5120,-0.0287
+family_diag,0x00C1B10D20260706,"C03 XOR 0x55",NEW run,330,"run(maxRunGE3,mod6)",0.5360,0.5057,0,0.5097,0.3238
+basis_ceiling,0x00C1B10D20260706,"C03 XOR 0x55",basis:count3,9,"spectral+modsynth(count)",0.5086,,,,
+basis_ceiling,0x00C1B10D20260706,"C03 XOR 0x55",basis:gridSum,41,"world_sum_mod",0.5154,,,,
+basis_ceiling,0x00C1B10D20260706,"C03 XOR 0x55",basis:signPattern,256,"walsh+world_sign_mod",0.5366,,,,
+basis_ceiling,0x00C1B10D20260706,"C03 XOR 0x55",basis:v1-v0,11,"clifford",0.5069,,,,
+basis_ceiling,0x00C1B10D20260706,"C03 XOR 0x55",basis:inversion,29,"cmp(all28)",0.5086,,,,
+basis_ceiling,0x00C1B10D20260706,"C03 XOR 0x55",basis:max_cell,6,"pipeline(max)",0.5051,,,,
+basis_ceiling,0x00C1B10D20260706,"C03 XOR 0x55",basis:sum01,11,"pipeline(sum01)",0.5017,,,,
+base_rate,0x00C1B10D20260706,"C09 inv parity",-,0,"-",0.5057,,,,
+family_diag,0x00C1B10D20260706,"C09 inv parity",EXIST monomial(deg<=8),255,"phi(0xEF)",0.5463,0.4823,0,0.5006,-0.0376
+family_diag,0x00C1B10D20260706,"C09 inv parity",EXIST pair_relation,28,"pair(0,3)",0.5240,0.5171,0,0.4949,-0.1113
+family_diag,0x00C1B10D20260706,"C09 inv parity",EXIST walsh(sign bits),255,"chi(0xEF)",0.5371,0.4834,0,0.5086,-0.0339
+family_diag,0x00C1B10D20260706,"C09 inv parity",EXIST spectral cos(w*c3),800,"cos(w*c3),w=2.3601",0.5206,0.5177,0,0.4926,-0.0873
+family_diag,0x00C1B10D20260706,"C09 inv parity",EXIST clifford,64,"sin(2.553(v1-v0))",0.5229,0.5103,0,0.4989,0.9404
+family_diag,0x00C1B10D20260706,"C09 inv parity",EXIST world_sum_mod,19,"sum%2==0",0.5200,0.4966,0,0.4943,-0.0579
+family_diag,0x00C1B10D20260706,"C09 inv parity",EXIST world_sign_mod,19,"sign%5==0",0.5171,0.4920,0,0.4989,-0.0821
+family_diag,0x00C1B10D20260706,"C09 inv parity",EARNED cmp(round c),1030,"cmp(all28,mod2)",1.0000,1.0000,1,1.0000,-0.0556
+family_diag,0x00C1B10D20260706,"C09 inv parity",NEW thresh,264,"thresh(k=2,mod4)",0.5509,0.5154,0,0.4834,-0.0214
+family_diag,0x00C1B10D20260706,"C09 inv parity",NEW mixr,396,"mixr(sum,inv,2x2,mod2)",1.0000,1.0000,1,1.0000,-0.0556
+family_diag,0x00C1B10D20260706,"C09 inv parity",NEW ratio,381,"ratio(prod,hi3lo2,cos w=2.932)",0.5434,0.5177,0,0.4829,-0.0372
+family_diag,0x00C1B10D20260706,"C09 inv parity",NEW run,330,"run(maxRunGE2,cos w=0.576)",0.5303,0.5034,0,0.4960,0.3405
+basis_ceiling,0x00C1B10D20260706,"C09 inv parity",basis:count3,9,"spectral+modsynth(count)",0.4920,,,,
+basis_ceiling,0x00C1B10D20260706,"C09 inv parity",basis:gridSum,41,"world_sum_mod",0.4971,,,,
+basis_ceiling,0x00C1B10D20260706,"C09 inv parity",basis:signPattern,256,"walsh+world_sign_mod",0.4943,,,,
+basis_ceiling,0x00C1B10D20260706,"C09 inv parity",basis:v1-v0,11,"clifford",0.4989,,,,
+basis_ceiling,0x00C1B10D20260706,"C09 inv parity",basis:inversion,29,"cmp(all28)",1.0000,,,,
+basis_ceiling,0x00C1B10D20260706,"C09 inv parity",basis:max_cell,6,"pipeline(max)",0.4937,,,,
+basis_ceiling,0x00C1B10D20260706,"C09 inv parity",basis:sum01,11,"pipeline(sum01)",0.5034,,,,
+base_rate,0x00C1B10D20260706,"C11 XOR 0x37",-,0,"-",0.4960,,,,
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",EXIST monomial(deg<=8),255,"phi(0x37)",0.5469,0.5383,0,0.4840,-0.0628
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",EXIST pair_relation,28,"pair(0,1)",0.5297,0.4977,0,0.4971,-0.0908
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",EXIST walsh(sign bits),255,"chi(0x93)",0.5320,0.5160,0,0.4886,-0.0490
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.3980",0.5251,0.4851,0,0.5034,-0.0054
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",EXIST clifford,64,"sin(2.651(v1-v0))",0.5286,0.5023,0,0.4857,0.9404
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",EXIST world_sum_mod,19,"sum%3==0",0.5194,0.5057,0,0.4846,-0.0737
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",EXIST world_sign_mod,19,"sign%3==0",0.5160,0.5006,0,0.4966,-0.1232
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",EARNED cmp(round c),1030,"cmp(cross16,cos w=1.319)",0.5286,0.4960,0,0.4931,-0.0551
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",NEW thresh,264,"thresh(k=2,cos w=2.932)",0.5331,0.5171,0,0.4886,-0.0536
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",NEW mixr,396,"mixr(sum,count3,3x3,ident)",0.5263,0.5097,0,0.4909,-0.0904
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",NEW ratio,381,"ratio(prod,hi3lo2,cos w=2.409)",0.5354,0.5171,0,0.4926,-0.0823
+family_diag,0x00C1B10D20260706,"C11 XOR 0x37",NEW run,330,"run(maxRunGE2,ident)",0.5337,0.4971,0,0.4920,0.4805
+basis_ceiling,0x00C1B10D20260706,"C11 XOR 0x37",basis:count3,9,"spectral+modsynth(count)",0.5069,,,,
+basis_ceiling,0x00C1B10D20260706,"C11 XOR 0x37",basis:gridSum,41,"world_sum_mod",0.5194,,,,
+basis_ceiling,0x00C1B10D20260706,"C11 XOR 0x37",basis:signPattern,256,"walsh+world_sign_mod",0.5000,,,,
+basis_ceiling,0x00C1B10D20260706,"C11 XOR 0x37",basis:v1-v0,11,"clifford",0.5149,,,,
+basis_ceiling,0x00C1B10D20260706,"C11 XOR 0x37",basis:inversion,29,"cmp(all28)",0.5051,,,,
+basis_ceiling,0x00C1B10D20260706,"C11 XOR 0x37",basis:max_cell,6,"pipeline(max)",0.4971,,,,
+basis_ceiling,0x00C1B10D20260706,"C11 XOR 0x37",basis:sum01,11,"pipeline(sum01)",0.4931,,,,
+base_rate,0x00C1B10D20260706,"ORDER2 rank0 parity",-,0,"-",0.4231,,,,
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",EXIST monomial(deg<=8),255,"phi(0x01)",0.6240,0.5983,0,0.5886,1.0000
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",EXIST pair_relation,28,"pair(3,4)",0.5891,0.5640,0,0.6006,-0.0855
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",EXIST walsh(sign bits),255,"chi(0x01)",0.6240,0.5983,0,0.5891,0.7598
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",EXIST spectral cos(w*c3),800,"cos(w*c3),w=2.5172",0.6063,0.6034,0,0.6457,-0.0570
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",EXIST clifford,64,"sin(0.049(v1-v0))",0.6257,0.6251,0,0.5897,0.9404
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",EXIST world_sum_mod,19,"sum%2==0",0.5874,0.5794,0,0.5931,-0.0579
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",EXIST world_sign_mod,19,"sign%2==0",0.6240,0.5983,0,0.5891,0.7598
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",EARNED cmp(round c),1030,"cmp(all28,cos w=0.990)",0.6120,0.5686,0,0.5954,-0.0618
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",NEW thresh,264,"thresh(k=4,cos w=2.304)",0.6126,0.5777,0,0.6040,-0.0848
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",NEW mixr,396,"mixr(count3,inv,2x2,mod3)",0.6051,0.5880,0,0.5937,-0.0694
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",NEW ratio,381,"ratio(prod,hi4lo1,mod2)",0.6320,0.6211,0,0.6343,-0.0273
+family_diag,0x00C1B10D20260706,"ORDER2 rank0 parity",NEW run,330,"run(firstDescentPos,ident)",0.6257,0.6251,0,0.5954,0.3515
+basis_ceiling,0x00C1B10D20260706,"ORDER2 rank0 parity",basis:count3,9,"spectral+modsynth(count)",0.6011,,,,
+basis_ceiling,0x00C1B10D20260706,"ORDER2 rank0 parity",basis:gridSum,41,"world_sum_mod",0.5789,,,,
+basis_ceiling,0x00C1B10D20260706,"ORDER2 rank0 parity",basis:signPattern,256,"walsh+world_sign_mod",0.6543,,,,
+basis_ceiling,0x00C1B10D20260706,"ORDER2 rank0 parity",basis:v1-v0,11,"clifford",0.6251,,,,
+basis_ceiling,0x00C1B10D20260706,"ORDER2 rank0 parity",basis:inversion,29,"cmp(all28)",0.5914,,,,
+basis_ceiling,0x00C1B10D20260706,"ORDER2 rank0 parity",basis:max_cell,6,"pipeline(max)",0.5754,,,,
+basis_ceiling,0x00C1B10D20260706,"ORDER2 rank0 parity",basis:sum01,11,"pipeline(sum01)",0.5737,,,,
+base_rate,0x00C1B10D20260706,"RUN1 run>=3 of >=3",-,0,"-",0.4087,,,,
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",EXIST monomial(deg<=8),255,"phi(0x20)",0.6731,0.6657,0,0.7886,1.0000
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",EXIST pair_relation,28,"pair(1,2)",0.6211,0.6011,0,0.8114,-0.0404
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",EXIST walsh(sign bits),255,"chi(0x20)",0.6731,0.6657,0,0.7994,0.7566
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.0039",0.7897,0.8206,0,0.8463,0.7297
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",EXIST clifford,64,"sin(0.049(v1-v0))",0.5806,0.5851,0,0.7920,0.9404
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",EXIST world_sum_mod,19,"sum%11==0",0.5863,0.5771,0,0.7897,-0.0426
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",EXIST world_sign_mod,19,"sign%15==0",0.5800,0.5594,0,0.7891,-0.1095
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",EARNED cmp(round c),1030,"cmp(all28,cos w=0.251)",0.6337,0.5851,0,0.8131,-0.0148
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",NEW thresh,264,"thresh(k=4,ident)",0.6989,0.7166,0,0.7943,0.6711
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",NEW mixr,396,"mixr(sum,count3,2x2,ident)",0.5789,0.5829,0,0.7903,-0.0751
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",NEW ratio,381,"ratio(prod,hi3lo2,ident)",0.7800,0.8137,0,0.8263,0.8320
+family_diag,0x00C1B10D20260706,"RUN1 run>=3 of >=3",NEW run,330,"run(maxRunGE3,ident)",1.0000,1.0000,0,1.0000,0.5092
+basis_ceiling,0x00C1B10D20260706,"RUN1 run>=3 of >=3",basis:count3,9,"spectral+modsynth(count)",0.8206,,,,
+basis_ceiling,0x00C1B10D20260706,"RUN1 run>=3 of >=3",basis:gridSum,41,"world_sum_mod",0.7754,,,,
+basis_ceiling,0x00C1B10D20260706,"RUN1 run>=3 of >=3",basis:signPattern,256,"walsh+world_sign_mod",1.0000,,,,
+basis_ceiling,0x00C1B10D20260706,"RUN1 run>=3 of >=3",basis:v1-v0,11,"clifford",0.5829,,,,
+basis_ceiling,0x00C1B10D20260706,"RUN1 run>=3 of >=3",basis:inversion,29,"cmp(all28)",0.5989,,,,
+basis_ceiling,0x00C1B10D20260706,"RUN1 run>=3 of >=3",basis:max_cell,6,"pipeline(max)",0.5829,,,,
+basis_ceiling,0x00C1B10D20260706,"RUN1 run>=3 of >=3",basis:sum01,11,"pipeline(sum01)",0.6154,,,,
+base_rate,0x00C1B10D20260706,"RATIO1 prod%3==0",-,0,"-",0.5019,,,,
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",EXIST monomial(deg<=8),255,"phi(0xF4)",0.5537,0.5046,0,0.5149,-0.0779
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",EXIST pair_relation,28,"pair(4,5)",0.5349,0.5074,0,0.5149,-0.1047
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",EXIST walsh(sign bits),255,"chi(0xF4)",0.5354,0.4863,0,0.5120,-0.1058
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.3980",0.5549,0.5583,0,0.5406,-0.0054
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",EXIST clifford,64,"sin(2.651(v1-v0))",0.5297,0.5091,0,0.5257,0.9404
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",EXIST world_sum_mod,19,"sum%9==0",0.5211,0.5069,0,0.5114,-0.0436
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",EXIST world_sign_mod,19,"sign%2==0",0.5154,0.5171,0,0.5229,0.7598
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",EARNED cmp(round c),1030,"cmp(cross16,cos w=1.587)",0.5429,0.4811,0,0.5011,-0.0655
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",NEW thresh,264,"thresh(k=4,mod3)",0.8171,0.8126,0,0.7914,-0.0904
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",NEW mixr,396,"mixr(count3,inv,3x3,cos w=0.576)",0.5446,0.5091,0,0.5211,-0.1147
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",NEW ratio,381,"ratio(prod,hi4lo1,mod3)",1.0000,1.0000,1,1.0000,-0.0117
+family_diag,0x00C1B10D20260706,"RATIO1 prod%3==0",NEW run,330,"run(maxRunGE4,cos w=2.566)",0.5920,0.5480,0,0.5463,0.0354
+basis_ceiling,0x00C1B10D20260706,"RATIO1 prod%3==0",basis:count3,9,"spectral+modsynth(count)",0.5766,,,,
+basis_ceiling,0x00C1B10D20260706,"RATIO1 prod%3==0",basis:gridSum,41,"world_sum_mod",0.5851,,,,
+basis_ceiling,0x00C1B10D20260706,"RATIO1 prod%3==0",basis:signPattern,256,"walsh+world_sign_mod",0.5269,,,,
+basis_ceiling,0x00C1B10D20260706,"RATIO1 prod%3==0",basis:v1-v0,11,"clifford",0.5189,,,,
+basis_ceiling,0x00C1B10D20260706,"RATIO1 prod%3==0",basis:inversion,29,"cmp(all28)",0.5143,,,,
+basis_ceiling,0x00C1B10D20260706,"RATIO1 prod%3==0",basis:max_cell,6,"pipeline(max)",0.5383,,,,
+basis_ceiling,0x00C1B10D20260706,"RATIO1 prod%3==0",basis:sum01,11,"pipeline(sum01)",0.5011,,,,
+base_rate,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",-,0,"-",0.3437,,,,
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",EXIST monomial(deg<=8),255,"phi(0x4F)",0.6600,0.6469,0,0.6566,-0.0659
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",EXIST pair_relation,28,"pair(0,1)",0.6520,0.6686,0,0.6474,-0.0908
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",EXIST walsh(sign bits),255,"chi(0x01)",0.6520,0.6686,0,0.6366,0.7598
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.0039",0.6537,0.6674,0,0.6474,0.7297
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",EXIST clifford,64,"sin(0.049(v1-v0))",0.6520,0.6686,0,0.6520,0.9404
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",EXIST world_sum_mod,19,"sum%19==0",0.6663,0.6703,0,0.6611,-0.0518
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",EXIST world_sign_mod,19,"sign%2==0",0.6520,0.6686,0,0.6366,0.7598
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",EARNED cmp(round c),1030,"cmp(all28,ident)",0.6520,0.6686,0,0.6440,0.8285
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",NEW thresh,264,"thresh(k=1,ident)",0.6526,0.6680,0,0.6417,0.4078
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",NEW mixr,396,"mixr(sum,count3,3x3,mod4)",1.0000,1.0000,1,1.0000,-0.0396
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",NEW ratio,381,"ratio(prod,hi3lo2,ident)",0.6537,0.6674,0,0.6497,0.8320
+family_diag,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",NEW run,330,"run(firstDescentPos,mod6)",0.6543,0.6646,0,0.6474,0.3521
+basis_ceiling,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",basis:count3,9,"spectral+modsynth(count)",0.6686,,,,
+basis_ceiling,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",basis:gridSum,41,"world_sum_mod",0.6857,,,,
+basis_ceiling,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",basis:signPattern,256,"walsh+world_sign_mod",0.6200,,,,
+basis_ceiling,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",basis:v1-v0,11,"clifford",0.6686,,,,
+basis_ceiling,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",basis:inversion,29,"cmp(all28)",0.6651,,,,
+basis_ceiling,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",basis:max_cell,6,"pipeline(max)",0.6686,,,,
+basis_ceiling,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",basis:sum01,11,"pipeline(sum01)",0.6686,,,,
+base_rate,0x00C2B10D20260707,"C01 XOR 0x0F",-,0,"-",0.4937,,,,
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",EXIST monomial(deg<=8),255,"phi(0x0F)",0.5600,0.5503,0,0.5017,-0.1643
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",EXIST pair_relation,28,"pair(0,2)",0.5269,0.5103,0,0.5120,-0.0546
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",EXIST walsh(sign bits),255,"chi(0xB2)",0.5377,0.4943,0,0.5057,-0.0376
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.3980",0.5263,0.4766,0,0.5057,-0.0398
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",EXIST clifford,64,"sin(0.638(v1-v0))",0.5234,0.4937,0,0.5034,0.9363
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",EXIST world_sum_mod,19,"sum%2==0",0.5274,0.5017,0,0.4983,-0.0676
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",EXIST world_sign_mod,19,"sign%3==0",0.5194,0.4800,0,0.5034,-0.0754
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",EARNED cmp(round c),1030,"cmp(all28,cos w=2.623)",0.5286,0.5080,0,0.4874,-0.0883
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",NEW thresh,264,"thresh(k=5,cos w=2.566)",0.5297,0.5177,0,0.4989,-0.0244
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",NEW mixr,396,"mixr(sum,count3,2x2,mod3)",0.5354,0.4914,0,0.5063,-0.0538
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",NEW ratio,381,"ratio(prod,hi3lo2,cos w=1.100)",0.5337,0.4863,0,0.5029,-0.0877
+family_diag,0x00C2B10D20260707,"C01 XOR 0x0F",NEW run,330,"run(maxRunGE3,cos w=2.356)",0.5286,0.4823,0,0.5080,-0.0203
+basis_ceiling,0x00C2B10D20260707,"C01 XOR 0x0F",basis:count3,9,"spectral+modsynth(count)",0.5137,,,,
+basis_ceiling,0x00C2B10D20260707,"C01 XOR 0x0F",basis:gridSum,41,"world_sum_mod",0.4834,,,,
+basis_ceiling,0x00C2B10D20260707,"C01 XOR 0x0F",basis:signPattern,256,"walsh+world_sign_mod",0.5189,,,,
+basis_ceiling,0x00C2B10D20260707,"C01 XOR 0x0F",basis:v1-v0,11,"clifford",0.5006,,,,
+basis_ceiling,0x00C2B10D20260707,"C01 XOR 0x0F",basis:inversion,29,"cmp(all28)",0.5011,,,,
+basis_ceiling,0x00C2B10D20260707,"C01 XOR 0x0F",basis:max_cell,6,"pipeline(max)",0.5091,,,,
+basis_ceiling,0x00C2B10D20260707,"C01 XOR 0x0F",basis:sum01,11,"pipeline(sum01)",0.4983,,,,
+base_rate,0x00C2B10D20260707,"C03 XOR 0x55",-,0,"-",0.5053,,,,
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",EXIST monomial(deg<=8),255,"phi(0x55)",0.5589,0.5366,0,0.4989,-0.0387
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",EXIST pair_relation,28,"pair(2,7)",0.5309,0.4829,0,0.4983,-0.0587
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",EXIST walsh(sign bits),255,"chi(0x1B)",0.5366,0.4954,0,0.5011,-0.0761
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.3980",0.5314,0.4874,0,0.5023,-0.0398
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",EXIST clifford,64,"sin(2.111(v1-v0))",0.5337,0.4954,0,0.4989,0.9363
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",EXIST world_sum_mod,19,"sum%6==0",0.5280,0.5097,0,0.5029,-0.0939
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",EXIST world_sign_mod,19,"sign%2==0",0.5217,0.5080,0,0.5017,0.7638
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",EARNED cmp(round c),1030,"cmp(all28,cos w=0.644)",0.5440,0.4937,0,0.4960,-0.0480
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",NEW thresh,264,"thresh(k=5,cos w=1.100)",0.5303,0.4863,0,0.4971,0.3584
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",NEW mixr,396,"mixr(sum,count3,3x3,cos w=2.566)",0.5343,0.5086,0,0.5040,-0.0684
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",NEW ratio,381,"ratio(diff,hi3lo2,ident)",0.5331,0.5149,0,0.4920,0.1519
+family_diag,0x00C2B10D20260707,"C03 XOR 0x55",NEW run,330,"run(maxRunGE4,mod4)",0.5274,0.4880,0,0.5034,0.1380
+basis_ceiling,0x00C2B10D20260707,"C03 XOR 0x55",basis:count3,9,"spectral+modsynth(count)",0.5097,,,,
+basis_ceiling,0x00C2B10D20260707,"C03 XOR 0x55",basis:gridSum,41,"world_sum_mod",0.5074,,,,
+basis_ceiling,0x00C2B10D20260707,"C03 XOR 0x55",basis:signPattern,256,"walsh+world_sign_mod",0.4926,,,,
+basis_ceiling,0x00C2B10D20260707,"C03 XOR 0x55",basis:v1-v0,11,"clifford",0.5177,,,,
+basis_ceiling,0x00C2B10D20260707,"C03 XOR 0x55",basis:inversion,29,"cmp(all28)",0.5109,,,,
+basis_ceiling,0x00C2B10D20260707,"C03 XOR 0x55",basis:max_cell,6,"pipeline(max)",0.5137,,,,
+basis_ceiling,0x00C2B10D20260707,"C03 XOR 0x55",basis:sum01,11,"pipeline(sum01)",0.5229,,,,
+base_rate,0x00C2B10D20260707,"C09 inv parity",-,0,"-",0.5041,,,,
+family_diag,0x00C2B10D20260707,"C09 inv parity",EXIST monomial(deg<=8),255,"phi(0x5E)",0.5354,0.5183,0,0.5177,-0.0611
+family_diag,0x00C2B10D20260707,"C09 inv parity",EXIST pair_relation,28,"pair(0,6)",0.5257,0.5069,0,0.4891,-0.0333
+family_diag,0x00C2B10D20260707,"C09 inv parity",EXIST walsh(sign bits),255,"chi(0x5E)",0.5314,0.5131,0,0.5240,-0.0260
+family_diag,0x00C2B10D20260707,"C09 inv parity",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.2606",0.5183,0.5063,0,0.5211,0.0607
+family_diag,0x00C2B10D20260707,"C09 inv parity",EXIST clifford,64,"sin(1.914(v1-v0))",0.5166,0.5309,0,0.5223,0.9363
+family_diag,0x00C2B10D20260707,"C09 inv parity",EXIST world_sum_mod,19,"sum%6==0",0.5154,0.4874,0,0.5177,-0.0939
+family_diag,0x00C2B10D20260707,"C09 inv parity",EXIST world_sign_mod,19,"sign%5==0",0.5189,0.4954,0,0.5206,-0.0293
+family_diag,0x00C2B10D20260707,"C09 inv parity",EARNED cmp(round c),1030,"cmp(all28,mod2)",1.0000,1.0000,1,1.0000,-0.0422
+family_diag,0x00C2B10D20260707,"C09 inv parity",NEW thresh,264,"thresh(k=2,cos w=2.932)",0.5246,0.5189,0,0.5023,-0.0443
+family_diag,0x00C2B10D20260707,"C09 inv parity",NEW mixr,396,"mixr(sum,inv,2x2,mod2)",1.0000,1.0000,1,1.0000,-0.0422
+family_diag,0x00C2B10D20260707,"C09 inv parity",NEW ratio,381,"ratio(prod,hi4lo1,cos w=2.513)",0.5280,0.4960,0,0.5189,-0.0995
+family_diag,0x00C2B10D20260707,"C09 inv parity",NEW run,330,"run(maxRunGE4,mod2)",0.5394,0.4851,0,0.4994,-0.0286
+basis_ceiling,0x00C2B10D20260707,"C09 inv parity",basis:count3,9,"spectral+modsynth(count)",0.5149,,,,
+basis_ceiling,0x00C2B10D20260707,"C09 inv parity",basis:gridSum,41,"world_sum_mod",0.5114,,,,
+basis_ceiling,0x00C2B10D20260707,"C09 inv parity",basis:signPattern,256,"walsh+world_sign_mod",0.4977,,,,
+basis_ceiling,0x00C2B10D20260707,"C09 inv parity",basis:v1-v0,11,"clifford",0.4800,,,,
+basis_ceiling,0x00C2B10D20260707,"C09 inv parity",basis:inversion,29,"cmp(all28)",1.0000,,,,
+basis_ceiling,0x00C2B10D20260707,"C09 inv parity",basis:max_cell,6,"pipeline(max)",0.5131,,,,
+basis_ceiling,0x00C2B10D20260707,"C09 inv parity",basis:sum01,11,"pipeline(sum01)",0.4977,,,,
+base_rate,0x00C2B10D20260707,"C11 XOR 0x37",-,0,"-",0.5039,,,,
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",EXIST monomial(deg<=8),255,"phi(0x37)",0.5651,0.5326,0,0.4949,-0.0517
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",EXIST pair_relation,28,"pair(2,3)",0.5320,0.4954,0,0.4954,-0.1327
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",EXIST walsh(sign bits),255,"chi(0x9F)",0.5349,0.5200,0,0.4834,-0.0634
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",EXIST spectral cos(w*c3),800,"cos(w*c3),w=2.8588",0.5337,0.5074,0,0.4886,-0.0935
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",EXIST clifford,64,"sin(0.049(v1-v0))",0.5200,0.4880,0,0.4903,0.9363
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",EXIST world_sum_mod,19,"sum%3==0",0.5166,0.4971,0,0.4897,-0.0404
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",EXIST world_sign_mod,19,"sign%2==0",0.5229,0.4977,0,0.4783,0.7638
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",EARNED cmp(round c),1030,"cmp(cross16,cos w=2.183)",0.5320,0.4983,0,0.4914,-0.0601
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",NEW thresh,264,"thresh(k=1,cos w=0.576)",0.5200,0.4834,0,0.4811,0.2117
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",NEW mixr,396,"mixr(sum,count3,3x3,cos w=2.147)",0.5309,0.4994,0,0.4880,-0.1122
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",NEW ratio,381,"ratio(prod,hi3lo2,cos w=1.885)",0.5320,0.5000,0,0.4886,-0.1097
+family_diag,0x00C2B10D20260707,"C11 XOR 0x37",NEW run,330,"run(maxRunGE3,ident)",0.5263,0.5080,0,0.4829,0.5340
+basis_ceiling,0x00C2B10D20260707,"C11 XOR 0x37",basis:count3,9,"spectral+modsynth(count)",0.5017,,,,
+basis_ceiling,0x00C2B10D20260707,"C11 XOR 0x37",basis:gridSum,41,"world_sum_mod",0.4977,,,,
+basis_ceiling,0x00C2B10D20260707,"C11 XOR 0x37",basis:signPattern,256,"walsh+world_sign_mod",0.4891,,,,
+basis_ceiling,0x00C2B10D20260707,"C11 XOR 0x37",basis:v1-v0,11,"clifford",0.4926,,,,
+basis_ceiling,0x00C2B10D20260707,"C11 XOR 0x37",basis:inversion,29,"cmp(all28)",0.4880,,,,
+basis_ceiling,0x00C2B10D20260707,"C11 XOR 0x37",basis:max_cell,6,"pipeline(max)",0.4903,,,,
+basis_ceiling,0x00C2B10D20260707,"C11 XOR 0x37",basis:sum01,11,"pipeline(sum01)",0.5200,,,,
+base_rate,0x00C2B10D20260707,"ORDER2 rank0 parity",-,0,"-",0.4133,,,,
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",EXIST monomial(deg<=8),255,"phi(0xFE)",0.6069,0.5954,0,0.6137,-0.1394
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",EXIST pair_relation,28,"pair(1,6)",0.5960,0.5754,0,0.5749,-0.0406
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",EXIST walsh(sign bits),255,"chi(0xFE)",0.6046,0.5920,0,0.6491,-0.0585
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",EXIST spectral cos(w*c3),800,"cos(w*c3),w=2.5172",0.6069,0.5891,0,0.6194,-0.0898
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",EXIST clifford,64,"sin(0.049(v1-v0))",0.6011,0.5971,0,0.5834,0.9363
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",EXIST world_sum_mod,19,"sum%2==0",0.5926,0.5869,0,0.5880,-0.0676
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",EXIST world_sign_mod,19,"sign%2==0",0.5926,0.5869,0,0.5829,0.7638
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",EARNED cmp(round c),1030,"cmp(cross16,cos w=2.702)",0.6011,0.6029,0,0.5783,-0.0423
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",NEW thresh,264,"thresh(k=1,mod4)",0.6177,0.6029,0,0.5846,-0.0641
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",NEW mixr,396,"mixr(count3,inv,2x2,ident)",0.5966,0.5863,0,0.5886,-0.0565
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",NEW ratio,381,"ratio(prod,hi4lo1,cos w=2.251)",0.6394,0.6269,0,0.5651,-0.0070
+family_diag,0x00C2B10D20260707,"ORDER2 rank0 parity",NEW run,330,"run(firstDescentPos,ident)",0.6011,0.5971,0,0.5823,0.3086
+basis_ceiling,0x00C2B10D20260707,"ORDER2 rank0 parity",basis:count3,9,"spectral+modsynth(count)",0.5886,,,,
+basis_ceiling,0x00C2B10D20260707,"ORDER2 rank0 parity",basis:gridSum,41,"world_sum_mod",0.5869,,,,
+basis_ceiling,0x00C2B10D20260707,"ORDER2 rank0 parity",basis:signPattern,256,"walsh+world_sign_mod",0.6457,,,,
+basis_ceiling,0x00C2B10D20260707,"ORDER2 rank0 parity",basis:v1-v0,11,"clifford",0.5971,,,,
+basis_ceiling,0x00C2B10D20260707,"ORDER2 rank0 parity",basis:inversion,29,"cmp(all28)",0.5754,,,,
+basis_ceiling,0x00C2B10D20260707,"ORDER2 rank0 parity",basis:max_cell,6,"pipeline(max)",0.5869,,,,
+basis_ceiling,0x00C2B10D20260707,"ORDER2 rank0 parity",basis:sum01,11,"pipeline(sum01)",0.5680,,,,
+base_rate,0x00C2B10D20260707,"RUN1 run>=3 of >=3",-,0,"-",0.4247,,,,
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",EXIST monomial(deg<=8),255,"phi(0x20)",0.6726,0.6811,0,0.7954,1.0000
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",EXIST pair_relation,28,"pair(5,6)",0.6057,0.6120,0,0.8029,-0.0182
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",EXIST walsh(sign bits),255,"chi(0x20)",0.6726,0.6811,0,0.8143,0.7562
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.0039",0.8109,0.8126,0,0.8389,0.7249
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",EXIST clifford,64,"sin(0.049(v1-v0))",0.5737,0.5634,0,0.7943,0.9363
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",EXIST world_sum_mod,19,"sum%12==0",0.5863,0.5731,0,0.7931,-0.0519
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",EXIST world_sign_mod,19,"sign%2==0",0.5703,0.5686,0,0.7931,0.7638
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",EARNED cmp(round c),1030,"cmp(cross16,cos w=0.408)",0.6120,0.6131,0,0.8109,0.0568
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",NEW thresh,264,"thresh(k=2,ident)",0.7069,0.6926,0,0.7931,0.6609
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",NEW mixr,396,"mixr(sum,count3,3x3,ident)",0.5743,0.5651,0,0.7954,-0.0734
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",NEW ratio,381,"ratio(prod,hi3lo2,ident)",0.8017,0.8057,0,0.8223,0.8248
+family_diag,0x00C2B10D20260707,"RUN1 run>=3 of >=3",NEW run,330,"run(maxRunGE3,ident)",1.0000,1.0000,0,1.0000,0.5340
+basis_ceiling,0x00C2B10D20260707,"RUN1 run>=3 of >=3",basis:count3,9,"spectral+modsynth(count)",0.8126,,,,
+basis_ceiling,0x00C2B10D20260707,"RUN1 run>=3 of >=3",basis:gridSum,41,"world_sum_mod",0.7634,,,,
+basis_ceiling,0x00C2B10D20260707,"RUN1 run>=3 of >=3",basis:signPattern,256,"walsh+world_sign_mod",1.0000,,,,
+basis_ceiling,0x00C2B10D20260707,"RUN1 run>=3 of >=3",basis:v1-v0,11,"clifford",0.5686,,,,
+basis_ceiling,0x00C2B10D20260707,"RUN1 run>=3 of >=3",basis:inversion,29,"cmp(all28)",0.6057,,,,
+basis_ceiling,0x00C2B10D20260707,"RUN1 run>=3 of >=3",basis:max_cell,6,"pipeline(max)",0.5686,,,,
+basis_ceiling,0x00C2B10D20260707,"RUN1 run>=3 of >=3",basis:sum01,11,"pipeline(sum01)",0.6383,,,,
+base_rate,0x00C2B10D20260707,"RATIO1 prod%3==0",-,0,"-",0.5099,,,,
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",EXIST monomial(deg<=8),255,"phi(0xB3)",0.5514,0.5109,0,0.5474,-0.0272
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",EXIST pair_relation,28,"pair(0,3)",0.5354,0.5211,0,0.5537,-0.0695
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",EXIST walsh(sign bits),255,"chi(0x4F)",0.5371,0.4914,0,0.5457,-0.0564
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",EXIST spectral cos(w*c3),800,"cos(w*c3),w=1.3980",0.5583,0.5491,0,0.5474,-0.0398
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",EXIST clifford,64,"sin(1.080(v1-v0))",0.5269,0.5097,0,0.5537,0.9363
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",EXIST world_sum_mod,19,"sum%13==0",0.5429,0.5223,0,0.5497,-0.0916
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",EXIST world_sign_mod,19,"sign%10==0",0.5246,0.5023,0,0.5434,0.0786
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",EARNED cmp(round c),1030,"cmp(cross16,cos w=1.995)",0.5429,0.5091,0,0.5469,-0.1047
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",NEW thresh,264,"thresh(k=4,mod3)",0.8171,0.8177,0,0.7543,-0.0827
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",NEW mixr,396,"mixr(sum,count3,3x3,cos w=1.466)",0.5491,0.5177,0,0.5497,-0.0447
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",NEW ratio,381,"ratio(prod,hi4lo1,mod3)",1.0000,1.0000,1,1.0000,-0.0286
+family_diag,0x00C2B10D20260707,"RATIO1 prod%3==0",NEW run,330,"run(maxRunGE4,cos w=2.566)",0.5623,0.5646,0,0.5989,-0.0065
+basis_ceiling,0x00C2B10D20260707,"RATIO1 prod%3==0",basis:count3,9,"spectral+modsynth(count)",0.5691,,,,
+basis_ceiling,0x00C2B10D20260707,"RATIO1 prod%3==0",basis:gridSum,41,"world_sum_mod",0.5926,,,,
+basis_ceiling,0x00C2B10D20260707,"RATIO1 prod%3==0",basis:signPattern,256,"walsh+world_sign_mod",0.5337,,,,
+basis_ceiling,0x00C2B10D20260707,"RATIO1 prod%3==0",basis:v1-v0,11,"clifford",0.5114,,,,
+basis_ceiling,0x00C2B10D20260707,"RATIO1 prod%3==0",basis:inversion,29,"cmp(all28)",0.5251,,,,
+basis_ceiling,0x00C2B10D20260707,"RATIO1 prod%3==0",basis:max_cell,6,"pipeline(max)",0.5234,,,,
+basis_ceiling,0x00C2B10D20260707,"RATIO1 prod%3==0",basis:sum01,11,"pipeline(sum01)",0.5171,,,,
+base_rate,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",-,0,"-",0.3279,,,,
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",EXIST monomial(deg<=8),255,"phi(0x4C)",0.6720,0.6829,0,0.6789,-0.0550
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",EXIST pair_relation,28,"pair(0,1)",0.6703,0.6914,0,0.6766,-0.0564
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",EXIST walsh(sign bits),255,"chi(0x01)",0.6703,0.6914,0,0.6771,0.7638
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",EXIST spectral cos(w*c3),800,"cos(w*c3),w=0.0039",0.6703,0.6914,0,0.6743,0.7249
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",EXIST clifford,64,"sin(0.049(v1-v0))",0.6703,0.6914,0,0.6754,0.9363
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",EXIST world_sum_mod,19,"sum%19==0",0.6811,0.6800,0,0.6766,-0.0305
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",EXIST world_sign_mod,19,"sign%2==0",0.6703,0.6914,0,0.6771,0.7638
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",EARNED cmp(round c),1030,"cmp(all28,cos w=0.157)",0.6726,0.6874,0,0.6743,0.8198
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",NEW thresh,264,"thresh(k=1,ident)",0.6720,0.6897,0,0.6754,0.4176
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",NEW mixr,396,"mixr(sum,count3,3x3,mod4)",1.0000,1.0000,1,1.0000,-0.0594
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",NEW ratio,381,"ratio(prod,hi3lo2,cos w=2.251)",0.6731,0.6931,0,0.6766,-0.0426
+family_diag,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",NEW run,330,"run(maxRunGE2,ident)",0.6703,0.6914,0,0.6737,0.4766
+basis_ceiling,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",basis:count3,9,"spectral+modsynth(count)",0.6914,,,,
+basis_ceiling,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",basis:gridSum,41,"world_sum_mod",0.6886,,,,
+basis_ceiling,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",basis:signPattern,256,"walsh+world_sign_mod",0.6463,,,,
+basis_ceiling,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",basis:v1-v0,11,"clifford",0.6914,,,,
+basis_ceiling,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",basis:inversion,29,"cmp(all28)",0.6869,,,,
+basis_ceiling,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",basis:max_cell,6,"pipeline(max)",0.6914,,,,
+basis_ceiling,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",basis:sum01,11,"pipeline(sum01)",0.6914,,,,
+ladder_attr,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",BASE,0,"-",0.4851,,0,1671,18
+ladder_attr,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",ALL,0,"-",0.4851,,0,2118,22
+ladder_attr,0xF0235A11CE0FF1CE,"C03 XOR 0x55",BASE,0,"-",0.5029,,0,1671,18
+ladder_attr,0xF0235A11CE0FF1CE,"C03 XOR 0x55",ALL,0,"-",0.5029,,0,2118,22
+ladder_attr,0xF0235A11CE0FF1CE,"C09 inv parity",BASE,0,"cmp(all28,mod2)",1.0000,,1,1671,6
+ladder_attr,0xF0235A11CE0FF1CE,"C09 inv parity",ALL,0,"cmp(all28,mod2)",1.0000,,1,1671,6
+ladder_attr,0xF0235A11CE0FF1CE,"C11 XOR 0x37",BASE,0,"-",0.5074,,0,1671,18
+ladder_attr,0xF0235A11CE0FF1CE,"C11 XOR 0x37",ALL,0,"-",0.5074,,0,2118,22
+ladder_attr,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",BASE,0,"-",0.5823,,0,1415,17
+ladder_attr,0xF0235A11CE0FF1CE,"ORDER2 rank0 parity",ALL,0,"-",0.5823,,0,1862,21
+ladder_attr,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",BASE,0,"-",0.7960,,0,1415,17
+ladder_attr,0xF0235A11CE0FF1CE,"RUN1 run>=3 of >=3",ALL,0,"-",0.7960,,0,1862,21
+ladder_attr,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",BASE,0,"-",0.4806,,0,1671,18
+ladder_attr,0xF0235A11CE0FF1CE,"RATIO1 prod%3==0",ALL,0,"ratio(prod,hi4lo1,mod3)",1.0000,,1,2008,9
+ladder_attr,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",BASE,0,"-",0.5743,,0,1415,17
+ladder_attr,0xF0235A11CE0FF1CE,"MIXMOD1 sum3==count3(mod3)",ALL,0,"mixr(sum,count3,3x3,mod4)",1.0000,,1,1635,7
+ladder_attr,0x00C1B10D20260706,"C01 XOR 0x0F",BASE,0,"-",0.5023,,0,1671,18
+ladder_attr,0x00C1B10D20260706,"C01 XOR 0x0F",ALL,0,"-",0.5023,,0,2118,22
+ladder_attr,0x00C1B10D20260706,"C03 XOR 0x55",BASE,0,"-",0.5097,,0,1671,18
+ladder_attr,0x00C1B10D20260706,"C03 XOR 0x55",ALL,0,"-",0.5097,,0,2118,22
+ladder_attr,0x00C1B10D20260706,"C09 inv parity",BASE,0,"cmp(all28,mod2)",1.0000,,1,1671,6
+ladder_attr,0x00C1B10D20260706,"C09 inv parity",ALL,0,"cmp(all28,mod2)",1.0000,,1,1671,6
+ladder_attr,0x00C1B10D20260706,"C11 XOR 0x37",BASE,0,"-",0.4880,,0,1671,18
+ladder_attr,0x00C1B10D20260706,"C11 XOR 0x37",ALL,0,"-",0.4880,,0,2118,22
+ladder_attr,0x00C1B10D20260706,"ORDER2 rank0 parity",BASE,0,"-",0.5931,,0,1415,17
+ladder_attr,0x00C1B10D20260706,"ORDER2 rank0 parity",ALL,0,"-",0.5931,,0,1862,21
+ladder_attr,0x00C1B10D20260706,"RUN1 run>=3 of >=3",BASE,0,"-",0.7891,,0,1415,17
+ladder_attr,0x00C1B10D20260706,"RUN1 run>=3 of >=3",ALL,0,"-",0.7891,,0,1862,21
+ladder_attr,0x00C1B10D20260706,"RATIO1 prod%3==0",BASE,0,"-",0.5171,,0,1671,18
+ladder_attr,0x00C1B10D20260706,"RATIO1 prod%3==0",ALL,0,"ratio(prod,hi4lo1,mod3)",1.0000,,1,2008,9
+ladder_attr,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",BASE,0,"-",0.6583,,0,1415,17
+ladder_attr,0x00C1B10D20260706,"MIXMOD1 sum3==count3(mod3)",ALL,0,"mixr(sum,count3,3x3,mod4)",1.0000,,1,1635,7
+ladder_attr,0x00C2B10D20260707,"C01 XOR 0x0F",BASE,0,"-",0.5006,,0,1671,18
+ladder_attr,0x00C2B10D20260707,"C01 XOR 0x0F",ALL,0,"-",0.5006,,0,2118,22
+ladder_attr,0x00C2B10D20260707,"C03 XOR 0x55",BASE,0,"-",0.5000,,0,1671,18
+ladder_attr,0x00C2B10D20260707,"C03 XOR 0x55",ALL,0,"-",0.5000,,0,2118,22
+ladder_attr,0x00C2B10D20260707,"C09 inv parity",BASE,0,"cmp(all28,mod2)",1.0000,,1,1671,6
+ladder_attr,0x00C2B10D20260707,"C09 inv parity",ALL,0,"cmp(all28,mod2)",1.0000,,1,1671,6
+ladder_attr,0x00C2B10D20260707,"C11 XOR 0x37",BASE,0,"-",0.4869,,0,1671,18
+ladder_attr,0x00C2B10D20260707,"C11 XOR 0x37",ALL,0,"-",0.4869,,0,2118,22
+ladder_attr,0x00C2B10D20260707,"ORDER2 rank0 parity",BASE,0,"-",0.5857,,0,1415,17
+ladder_attr,0x00C2B10D20260707,"ORDER2 rank0 parity",ALL,0,"-",0.5857,,0,1862,21
+ladder_attr,0x00C2B10D20260707,"RUN1 run>=3 of >=3",BASE,0,"-",0.7926,,0,1415,17
+ladder_attr,0x00C2B10D20260707,"RUN1 run>=3 of >=3",ALL,0,"-",0.7926,,0,1862,21
+ladder_attr,0x00C2B10D20260707,"RATIO1 prod%3==0",BASE,0,"-",0.5480,,0,1671,18
+ladder_attr,0x00C2B10D20260707,"RATIO1 prod%3==0",ALL,0,"ratio(prod,hi4lo1,mod3)",1.0000,,1,2008,9
+ladder_attr,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",BASE,0,"-",0.6777,,0,1415,17
+ladder_attr,0x00C2B10D20260707,"MIXMOD1 sum3==count3(mod3)",ALL,0,"mixr(sum,count3,3x3,mod4)",1.0000,,1,1635,7
+ladder,0xF0235A11CE0FF1CE,"B1 random monomial deg2",BASE(earned:menuacc+cmp),0,"battB",1.0000,,1,151,1
+ladder,0xF0235A11CE0FF1CE,"B2 random monomial deg3",BASE(earned:menuacc+cmp),1,"battB",1.0000,,1,150,1
+ladder,0xF0235A11CE0FF1CE,"B3 sum(g) % 7",BASE(earned:menuacc+cmp),2,"battB",1.0000,,1,1413,17
+ladder,0xF0235A11CE0FF1CE,"B4 sign%mod 11",BASE(earned:menuacc+cmp),3,"battB",0.9017,,1,0,0
+ladder,0xF0235A11CE0FF1CE,"B5 Walsh χ{S=0x11}",BASE(earned:menuacc+cmp),4,"battB",1.0000,,1,28,1
+ladder,0xF0235A11CE0FF1CE,"B6 Walsh χ{S=0xA4}",BASE(earned:menuacc+cmp),5,"battB",1.0000,,1,287,2
+ladder,0xF0235A11CE0FF1CE,"B7 Walsh χ{S=0x0A}",BASE(earned:menuacc+cmp),6,"battB",1.0000,,1,28,1
+ladder,0xF0235A11CE0FF1CE,"B8 parity-of-count",BASE(earned:menuacc+cmp),7,"battB",1.0000,,1,287,2
+ladder,0xF0235A11CE0FF1CE,"B9 oriented v1>v0",BASE(earned:menuacc+cmp),8,"battB",1.0000,,1,0,0
+ladder,0xF0235A11CE0FF1CE,"B10 parity AND sum%5",BASE(earned:menuacc+cmp),9,"battB",1.0000,,1,1264,15
+ladder,0xF0235A11CE0FF1CE,"B11 inversion parity",BASE(earned:menuacc+cmp),10,"battB",1.0000,,1,1520,5
+ladder,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",BASE(earned:menuacc+cmp),0,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C02 parity XOR 0x33",BASE(earned:menuacc+cmp),1,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C03 XOR 0x55",BASE(earned:menuacc+cmp),2,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C04 XOR 0xAA",BASE(earned:menuacc+cmp),3,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C05 XOR 0x3C",BASE(earned:menuacc+cmp),4,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C06 XOR 0x66",BASE(earned:menuacc+cmp),5,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C07 XOR 0x99",BASE(earned:menuacc+cmp),6,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C08 parity count",BASE(earned:menuacc+cmp),7,"battC",1.0000,,1,438,3
+ladder,0xF0235A11CE0FF1CE,"C09 inv parity",BASE(earned:menuacc+cmp),8,"battC",1.0000,,1,1671,6
+ladder,0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",BASE(earned:menuacc+cmp),9,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C11 XOR 0x37",BASE(earned:menuacc+cmp),10,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"D01 sum%2",BASE(earned:menuacc+cmp),0,"battD",1.0000,,1,1671,18
+ladder,0xF0235A11CE0FF1CE,"D02 sum%3",BASE(earned:menuacc+cmp),1,"battD",1.0000,,1,1415,17
+ladder,0xF0235A11CE0FF1CE,"D03 sum%5",BASE(earned:menuacc+cmp),2,"battD",1.0000,,1,1415,17
+ladder,0xF0235A11CE0FF1CE,"D04 sum%7",BASE(earned:menuacc+cmp),3,"battD",1.0000,,1,1415,17
+ladder,0xF0235A11CE0FF1CE,"D05 sum%11",BASE(earned:menuacc+cmp),4,"battD",0.9040,,1,0,0
+ladder,0xF0235A11CE0FF1CE,"D06 sum%13",BASE(earned:menuacc+cmp),5,"battD",0.9269,,1,0,0
+ladder,0xF0235A11CE0FF1CE,"D07 count3%3",BASE(earned:menuacc+cmp),6,"battD",1.0000,,1,185,3
+ladder,0xF0235A11CE0FF1CE,"D08 count3%4",BASE(earned:menuacc+cmp),7,"battD",1.0000,,1,385,4
+ladder,0xF0235A11CE0FF1CE,"D09 count3%5",BASE(earned:menuacc+cmp),8,"battD",1.0000,,1,185,3
+ladder,0xF0235A11CE0FF1CE,"D10 count3%6",BASE(earned:menuacc+cmp),9,"battD",1.0000,,1,185,3
+ladder,0xF0235A11CE0FF1CE,"D11 subset-parity{0-3}",BASE(earned:menuacc+cmp),10,"battD",0.9994,,1,151,1
+ladder,0xF0235A11CE0FF1CE,"B1 random monomial deg2",ALL(+thresh+mixr+ratio+run),0,"battB",1.0000,,1,151,1
+ladder,0xF0235A11CE0FF1CE,"B2 random monomial deg3",ALL(+thresh+mixr+ratio+run),1,"battB",1.0000,,1,150,1
+ladder,0xF0235A11CE0FF1CE,"B3 sum(g) % 7",ALL(+thresh+mixr+ratio+run),2,"battB",1.0000,,1,1860,21
+ladder,0xF0235A11CE0FF1CE,"B4 sign%mod 11",ALL(+thresh+mixr+ratio+run),3,"battB",0.9017,,1,0,0
+ladder,0xF0235A11CE0FF1CE,"B5 Walsh χ{S=0x11}",ALL(+thresh+mixr+ratio+run),4,"battB",1.0000,,1,28,1
+ladder,0xF0235A11CE0FF1CE,"B6 Walsh χ{S=0xA4}",ALL(+thresh+mixr+ratio+run),5,"battB",1.0000,,1,287,2
+ladder,0xF0235A11CE0FF1CE,"B7 Walsh χ{S=0x0A}",ALL(+thresh+mixr+ratio+run),6,"battB",1.0000,,1,28,1
+ladder,0xF0235A11CE0FF1CE,"B8 parity-of-count",ALL(+thresh+mixr+ratio+run),7,"battB",1.0000,,1,287,2
+ladder,0xF0235A11CE0FF1CE,"B9 oriented v1>v0",ALL(+thresh+mixr+ratio+run),8,"battB",1.0000,,1,0,0
+ladder,0xF0235A11CE0FF1CE,"B10 parity AND sum%5",ALL(+thresh+mixr+ratio+run),9,"battB",1.0000,,1,1711,19
+ladder,0xF0235A11CE0FF1CE,"B11 inversion parity",ALL(+thresh+mixr+ratio+run),10,"battB",1.0000,,1,1520,5
+ladder,0xF0235A11CE0FF1CE,"C01 XOR 0x0F",ALL(+thresh+mixr+ratio+run),0,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C02 parity XOR 0x33",ALL(+thresh+mixr+ratio+run),1,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C03 XOR 0x55",ALL(+thresh+mixr+ratio+run),2,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C04 XOR 0xAA",ALL(+thresh+mixr+ratio+run),3,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C05 XOR 0x3C",ALL(+thresh+mixr+ratio+run),4,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C06 XOR 0x66",ALL(+thresh+mixr+ratio+run),5,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C07 XOR 0x99",ALL(+thresh+mixr+ratio+run),6,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C08 parity count",ALL(+thresh+mixr+ratio+run),7,"battC",1.0000,,1,438,3
+ladder,0xF0235A11CE0FF1CE,"C09 inv parity",ALL(+thresh+mixr+ratio+run),8,"battC",1.0000,,1,1671,6
+ladder,0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",ALL(+thresh+mixr+ratio+run),9,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"C11 XOR 0x37",ALL(+thresh+mixr+ratio+run),10,"battC_skipXORwall",0.5000,,0,0,0
+ladder,0xF0235A11CE0FF1CE,"D01 sum%2",ALL(+thresh+mixr+ratio+run),0,"battD",1.0000,,1,1891,8
+ladder,0xF0235A11CE0FF1CE,"D02 sum%3",ALL(+thresh+mixr+ratio+run),1,"battD",1.0000,,1,1635,7
+ladder,0xF0235A11CE0FF1CE,"D03 sum%5",ALL(+thresh+mixr+ratio+run),2,"battD",1.0000,,1,1862,21
+ladder,0xF0235A11CE0FF1CE,"D04 sum%7",ALL(+thresh+mixr+ratio+run),3,"battD",1.0000,,1,1862,21
+ladder,0xF0235A11CE0FF1CE,"D05 sum%11",ALL(+thresh+mixr+ratio+run),4,"battD",0.9040,,1,0,0
+ladder,0xF0235A11CE0FF1CE,"D06 sum%13",ALL(+thresh+mixr+ratio+run),5,"battD",0.9269,,1,0,0
+ladder,0xF0235A11CE0FF1CE,"D07 count3%3",ALL(+thresh+mixr+ratio+run),6,"battD",1.0000,,1,185,3
+ladder,0xF0235A11CE0FF1CE,"D08 count3%4",ALL(+thresh+mixr+ratio+run),7,"battD",1.0000,,1,385,4
+ladder,0xF0235A11CE0FF1CE,"D09 count3%5",ALL(+thresh+mixr+ratio+run),8,"battD",1.0000,,1,185,3
+ladder,0xF0235A11CE0FF1CE,"D10 count3%6",ALL(+thresh+mixr+ratio+run),9,"battD",1.0000,,1,185,3
+ladder,0xF0235A11CE0FF1CE,"D11 subset-parity{0-3}",ALL(+thresh+mixr+ratio+run),10,"battD",0.9994,,1,151,1
+regression_summary,0xF0235A11CE0FF1CE,"-",summary,0,"-",0.0000,,0,0,
