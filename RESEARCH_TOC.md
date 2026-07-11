@@ -1656,8 +1656,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 ### [docs/research/research_round_2026_07_11b.md](docs/research/research_round_2026_07_11b.md)
 - **Tried:** Six experiments building the arc's named next lever (machine-driven representability via learned structural priors): F1 infer-the-prior, F2 auto-family for ORDER2, F3 RUN1 novelty-gate audit, F4 prior transfer, F5 assembled generator-of-generators, F6 residual human-insight bit.
-- **Result:** In progress.
-- **Aftermath:** OPEN — live round master doc, updated per landing.
+- **Result:** COMPLETE (6/6) — ORDER2's missing family is machine-discovered; mechanisms and priors transfer; the assembled loop reaches 58/73 vs hand 59/73. But F1 is invalid/inconclusive, F3 finds a known-bad novelty gate, and full autonomy is not established.
+- **Aftermath:** MODIFIED — a compounding partially autonomous representability engine exists; the generator-of-generators claim remains OPEN pending a leakage-clean production-derived selector and a rerun under F3's corrected gate.
 
 ### [docs/research/insight_ledger.md](docs/research/insight_ledger.md)
 - **Tried:** Quantify how much of the insight to solve a target is machine-supplied vs human-supplied per arc method (hand-curriculum / D5 blind bulk / E3 smart-gen / F1 projected), via a 9-unit ingredient decomposition tagged human-vs-machine, plus an independent bit-narrowing cross-check.
@@ -1683,3 +1683,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Learn a k-NN selector over failure descriptors for four structural-prior pools on a fresh proxy VM, with target-level splits and fixed/random controls.
 - **Result:** INCONCLUSIVE — the instrument fails before learner evaluation: own-prior recall 14/20 vs no-prior 12/20, non-binary and degenerate targets, cross-family collisions, zero train/test descriptor distance, and router/fixed/random tied at 3/4.
 - **Aftermath:** REBUILD REQUIRED — no positive or clean negative on learned priors; F6's 85–90% estimate remains projected. Require a binary non-degenerate battery, 20/20 own-prior reachability, meaningful exclusive labels, and a leakage-clean frozen split before rerunning.
+
+### [wcore/docs/research/prior_transfer.md](wcore/docs/research/prior_transfer.md)
+- **Tried:** Withhold or retain E3's promoted mechanism across ten held-out targets, comparing full transfer, prior-only regeneration, and equal-size cold generation.
+- **Result:** Layered positive — the promoted atom composes into 5/10 targets at 0–4 ms and cuts total evaluation time 57.9%; the structural prior reaches 9/10 versus cold 2/10, while new siblings still need fresh generation.
+- **Aftermath:** ADOPTED — discoveries amortize strongly through downstream composition and priors transfer across siblings, but atoms do not automatically stand in for whole families and one deeper target remains unreachable in every arm.

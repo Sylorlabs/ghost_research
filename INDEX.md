@@ -415,22 +415,29 @@ than a hand curriculum (0/9→6/9 where blind bulk fails); E2 — aim automates
 (32 experiments): machine invention is gated by representability, steered by aim;
 the missing generator is machine-findable but only with a small structural prior.**
 
-**Highest-priority open experiments (updated after round E → the Round F frontier):**
-1. **Learned structural priors (generator-of-generators)** — E3 hand-supplied the
-   RMW-shape prior; can the machine *infer* which prior a target needs from its
-   failure signature (the E2-router idea, one level up)?
-2. **Auto-family discovery for ORDER2** — E1's standing unreachable target; apply
-   E3's smart-generation method with a comparison/order prior to discover the
-   family that unlocks it
-3. **The RUN1 certifier-boundary** — audit whether the novelty gate's rejection of
-   the exact `run(maxRunGE3)` member is correct (genuinely reconstructible) or a
-   false rejection the program is missing
-4. **Prior transfer / compounding** — does a machine-discovered mechanism + its
-   prior generalize to the rest of its family without re-supplying the prior?
-5. **Quantify the residual human-insight bit** — how much of "insight" is now
-   machine-supplied vs handed-in (prior/alphabet/menu), and is it shrinking?
-6. **Records, not baselines** — LABS even-N / addchain records still need a
-   representability escape, not more aim or budget (E4 confirmed)
+**2026-07-11b round (Round F): representability expansion compounds, full
+autonomy remains open** (see `docs/research/research_round_2026_07_11b.md`,
+6/6): F2 machine-discovers ORDER2's missing comparison family (1.000, four
+seeds, zero regressions); F4 shows promoted mechanisms compound through 5/10
+cheap compositions and priors transfer 9/10 vs 2/10 cold; F5's assembled loop
+coheres at 58/73 vs hand 59/73, with smart generation supplying reach and the
+router saving 32.2% evaluations; F3 catches a 33% novelty-gate false-rejection
+rate. The headline F1 selector is invalid/inconclusive, so F6's measured result
+remains 66.7% machine-supplied insight and 85–90% remains projected.
+
+**Highest-priority open experiments (updated after Round F):**
+1. **Rebuild F1 on valid production-derived targets** — binary, non-degenerate,
+   20/20 own-prior reachability, exclusive benefit labels, leakage-clean split.
+2. **Install and freeze F3's corrected novelty gate** — multi-feature COVER
+   reconstruction, then rerun all newly admitted RUN-family capabilities.
+3. **Rerun the assembled loop with corrected gate + valid selector** — the
+   decisive full-autonomy equivalence test; current result is 58/73 vs 59/73.
+4. **Cross-seed prior-transfer curve** — F4 is one seed/one budget; measure how
+   atom and prior amortization scale across targets, depth, seeds, and budgets.
+5. **Attack the shared depth boundary** — `shift->dist->gxor` missed every F4
+   arm; it is the clean next representability target.
+6. **Records, not baselines** — LABS even-N / addchain records still require a
+   representability escape, not more aim or budget.
 
 ---
 
