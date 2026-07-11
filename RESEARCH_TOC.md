@@ -1678,3 +1678,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Assemble learned routing, signature probing, exhaustive family search, certification, and within-pass promotion into one autonomous 73-target loop, with hand-oracle, no-smart-generation, and no-router controls over three seeds.
 - **Result:** Positive coherence, negative full equivalence — autonomous 58/73 vs hand 59/73; smart generation is load-bearing (36–37/73 without it; frontier 3/10→8/10), while routing preserves the ceiling and reduces mean evaluations 45,029→30,546 (32.2%).
 - **Aftermath:** MODIFIED — adopt the integration and ablation result, not a full generator-of-generators victory; rerun with F3's corrected novelty gate and F1's inferred selector, and retain the honest blind-control caveat on WALL_HARD.
+
+### [wcore/docs/research/prior_selector.md](wcore/docs/research/prior_selector.md)
+- **Tried:** Learn a k-NN selector over failure descriptors for four structural-prior pools on a fresh proxy VM, with target-level splits and fixed/random controls.
+- **Result:** INCONCLUSIVE — the instrument fails before learner evaluation: own-prior recall 14/20 vs no-prior 12/20, non-binary and degenerate targets, cross-family collisions, zero train/test descriptor distance, and router/fixed/random tied at 3/4.
+- **Aftermath:** REBUILD REQUIRED — no positive or clean negative on learned priors; F6's 85–90% estimate remains projected. Require a binary non-degenerate battery, 20/20 own-prior reachability, meaningful exclusive labels, and a leakage-clean frozen split before rerunning.
