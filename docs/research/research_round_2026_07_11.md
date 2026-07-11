@@ -1,6 +1,6 @@
 # Research Round 2026-07-11 (Round E) — attacking the two real levers: aim × representability
 
-**Status:** LIVE — updated as each experiment lands. 3/6 complete.
+**Status:** LIVE — updated as each experiment lands. 4/6 complete.
 **Plan:** `research_round_2026_07_11_PLAN.md`. **Premise (the four-round arc):**
 the ceiling is **AIM × REPRESENTABILITY** — not compute (H50), not quantity
 (D1/D2), not diversity-alone (D6: conditional), not human-vs-non-human grammar
@@ -27,7 +27,7 @@ commit + TOC + "Belongs to" banner per landing.
 | E3 | Smart generation for auto-discovery | meta (generation) | pending | — | `wcore/docs/research/smart_gen.md` |
 | E4 | Assembled aimed engine on an OPEN target | the goal | **DONE** | **Aim buys efficiency, not ceiling-crossing — no record.** N=61 (closest gap: 4 above best-known): aim improves reliability (6/6 vs 5/6 reach E=230 at equal budget) but both arms plateau at E=230 even at 500M evals — a hard representability ceiling. Aim's *biggest* win was on the less-representable N=48 (148 vs 160) — the E5 signature exactly. 8/8 verified, planted-lie refuted. | `boundary_crossing/docs/research/aimed_open.md` |
 | E5 | Aim × representability unified predictor | theory capstone | **DONE** | **The arc's law, quantified.** Representability dominates reach (R²=0.65, 5–100× every other factor); aim is a **phase boundary** above it — corr(aim,reach) 0.00/0.00/0.18 across LOW/MID/HIGH representability, solve rate 0%/0%/45.9%. **Diversity (D6) was a proxy for representability**; controlling for it, D flips negative. Falsification clean. | `docs/research/aim_repr_predictor.md` |
-| E6 | coevo-side 12×32 matcher audit | instrument trust | pending | — | `wcore/docs/research/coevo_matcher_falsification.md` |
+| E6 | coevo-side 12×32 matcher audit | instrument trust | **DONE** | **Same false-equal bug class confirmed, but the 85/86 headline STANDS.** 7/9 constructed adversaries fool the matcher; 1 false-equal in the real census (0.87%) — but **0/86 in the fingerprint-novel bucket** that IS the headline. Corrected exact-64×256 protocol is cheaper and re-confirms 115/116. False-different 0/1200; seed-flip 0/11,500. | `wcore/docs/research/coevo_matcher_falsification.md` |
 
 ---
 
