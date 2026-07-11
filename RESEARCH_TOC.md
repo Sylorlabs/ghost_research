@@ -1571,3 +1571,22 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Documented the built-but-unrun LLM-as-addition-chain-generator baseline: `claude -p` proposes a chain per target, every reply forced through the SAME independent verifier (`addchain_check`) the engine uses; cost measured in API calls.
 - **Result:** N/A — harness built, not run (running makes live API calls, the user's call). No results claimed.
 - **Aftermath:** OPEN — the fair AlphaEvolve head-to-head (LLM proposer + our sound verifier vs the engine + same verifier); when run, results go to `results/lm_baseline_<date>.csv`. Distinct from [llm_proposer.md](boundary_crossing/docs/research/llm_proposer.md).
+
+---
+
+## 16. Research round 2026-07-10d — does MORE go further? (breadth / diversity / non-human grammars)
+
+### [docs/research/research_round_2026_07_10d.md](docs/research/research_round_2026_07_10d.md)
+- **Tried:** Six experiments testing the user hypothesis (thinks-like-humans; pump-more-diverse-at-once), made falsifiable: breadth-vs-depth, breadth scaling law, non-human grammar, LABS swarm, auto-curriculum, diversity predictor.
+- **Result:** In progress.
+- **Aftermath:** OPEN — live round master doc, updated per landing.
+
+### [wcore/docs/research/nonhuman_grammar.md](wcore/docs/research/nonhuman_grammar.md)
+- **Tried:** Whether bulk machine-invented (non-human) atom grammars reach a proven out-of-human-family target (descent-parity, a streaming C09 analogue) that human-family proposers can't — testing "the ceiling is that it thinks in human primitive families."
+- **Result:** Refuted both ways — 92.4% (1109/1200) of forged atoms are genuinely non-human (joint behavioral + opcode criterion), so it is NOT confined to human families; but the machine-atom pool reaches only ~chance (0.519 re-verified) on the target, WORSE than raw search (0.713) and human-op search (0.691) at equal budget; no arm crosses 0.95 (hand-written alien control confirms it IS solvable at 1.000).
+- **Aftermath:** ADOPTED — grammar-level confirmation that the ceiling is AIM not grammar (escaping closure is cheap, escaping toward a target needs direction); consistent with [aimed_forge.md](wcore/docs/research/aimed_forge.md) and [conjunction_wall.md](wcore/docs/research/conjunction_wall.md).
+
+### [boundary_crossing/docs/research/labs_swarm.md](boundary_crossing/docs/research/labs_swarm.md)
+- **Tried:** Whether a diverse strategy swarm (3-arm / 9-arm pools, equal + adaptive allocation) beats a single concentrated arm on the 12 open LABS even-N gaps at EQUAL total budget (50M evals) — the round-b "concentrate beats split" rematch done apples-to-apples.
+- **Result:** Diversity won 9/12 at equal budget (reverses round b), but the best single arm led all 48/48 pool runs (avg 3.25-3.5/9 arms contributed) — the edge is restart-diversification of one strategy, not diverse strategies winning; vs best prior number 2/12 improved, 3/12 tied, 7/12 regressed; no record; verifier 12/12, 2/2 lies caught.
+- **Aftermath:** MODIFIED — refines [labs_even_n.md](boundary_crossing/docs/research/labs_even_n.md)'s "concentrate" lesson (diversity helps at equal budget but as restart-diversification, not structural diversity); records still need new theory / B&B (OPEN).
