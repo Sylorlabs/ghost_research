@@ -1,6 +1,6 @@
 # Research Round 2026-07-11 (Round E) — attacking the two real levers: aim × representability
 
-**Status:** LIVE — updated as each experiment lands. 4/6 complete.
+**Status:** LIVE — updated as each experiment lands. 5/6 complete.
 **Plan:** `research_round_2026_07_11_PLAN.md`. **Premise (the four-round arc):**
 the ceiling is **AIM × REPRESENTABILITY** — not compute (H50), not quantity
 (D1/D2), not diversity-alone (D6: conditional), not human-vs-non-human grammar
@@ -22,7 +22,7 @@ commit + TOC + "Belongs to" banner per landing.
 
 | # | Experiment | Lever | Status | Headline | Doc |
 |---|-----------|-------|--------|----------|-----|
-| E1 | Representability expansion | representability | pending | — | `docs/research/repr_expansion.md` |
+| E1 | Representability expansion | representability | **DONE** | 4-family menu earned under the certifier: **mixr unlocks MIXMOD1, ratio unlocks RATIO1** (+2 fresh targets, 1.000 certified 3/3 seeds); thresh unlocks 0; run *represents* RUN1 (exact 1.000 member) but is **R²-novelty-blocked** (certifier boundary, not family). mixr also re-derives C09 (overlaps earned cmp). **0 regressions** on B+D + solvable C. Standing core: GF(2)-XOR wall (C01/C03/C11) + **ORDER2** (order-stat variant no family reaches, ceiling .646). | `docs/research/repr_expansion.md` |
 | E2 | Learned aim / target router | aim | **DONE** | **Aim generalizes to a learned selector.** A router over a 10-feature failure descriptor picks the winning family: **12/13 (92.3%)** held-out vs fixed-best 46.2% vs random 7.7% — and cheaper. Needs ~20–24 labeled examples. Leakage guard caught a real duplicate-target leak; 12/12 solves re-derived exactly. | `docs/research/target_router.md` |
 | E3 | Smart generation for auto-discovery | meta (generation) | pending | — | `wcore/docs/research/smart_gen.md` |
 | E4 | Assembled aimed engine on an OPEN target | the goal | **DONE** | **Aim buys efficiency, not ceiling-crossing — no record.** N=61 (closest gap: 4 above best-known): aim improves reliability (6/6 vs 5/6 reach E=230 at equal budget) but both arms plateau at E=230 even at 500M evals — a hard representability ceiling. Aim's *biggest* win was on the less-representable N=48 (148 vs 160) — the E5 signature exactly. 8/8 verified, planted-lie refuted. | `boundary_crossing/docs/research/aimed_open.md` |
@@ -55,6 +55,32 @@ it would bound machine auto-discovery precisely.
 ---
 
 ## Completed-experiment detail
+
+### E1. Representability expansion — it grows by hand, with a boundary in three parts
+- 4-family menu offered to the ladder (thresh, mixr = mixed-radix joint
+  residue, ratio = count products/ratios, run = adjacency/sequence stats),
+  each candidate unlock proven unrepresentable *before* via Bayes ceilings over
+  every existing basis, then certified after adding the family:
+  - **mixr → MIXMOD1** (ceiling .682 → 1.000, 3/3 seeds) — genuinely new.
+  - **ratio → RATIO1** (ceiling .582 → 1.000, 3/3 seeds) — genuinely new.
+  - **thresh → nothing.** mixr also re-derives C09 (a real overlap with
+    round-c's earned cmp family, both independently certified).
+  - **0 regressions** on Battery B/D + solvable C.
+- **The finding is the three-part boundary:**
+  1. **Family-unlocked** (MIXMOD1, RATIO1): representability *does* grow by
+     hand — add the right family, unlock the target.
+  2. **Standing unrepresentable core** no menu family reaches: the GF(2)-XOR
+     wall (C01/C03/C11, family-level impossible) and **ORDER2** (an
+     order-statistic variant — not the full inversion count, not any of cmp's
+     5 fixed pair-sets; best-any-family ceiling .646). The cleanest open
+     frontier — exactly what E3's auto-*family* discovery would need to reach.
+  3. **RUN1 — a CERTIFIER boundary, not a family boundary** (the most
+     instructive negative): the `run` family holds the *exact* 1.000 member
+     `run(maxRunGE3)`, but the R²<0.40 novelty gate rejects it (R²=0.51–0.53,
+     too reconstructible from the count basis). Representable, yet
+     certifier-blocked. Growing representability can be defeated not by
+     inexpressibility but by the *novelty gate* deciding the expression isn't
+     new enough.
 
 ### E2. Learned aim / target router — aim generalizes from handed-in to learned
 - A 10-feature descriptor of a target's *failure signal* (weak near-miss
