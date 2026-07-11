@@ -1,6 +1,6 @@
 # Research Round 2026-07-11 (Round E) — attacking the two real levers: aim × representability
 
-**Status:** LIVE — updated as each experiment lands. 1/6 complete.
+**Status:** LIVE — updated as each experiment lands. 2/6 complete.
 **Plan:** `research_round_2026_07_11_PLAN.md`. **Premise (the four-round arc):**
 the ceiling is **AIM × REPRESENTABILITY** — not compute (H50), not quantity
 (D1/D2), not diversity-alone (D6: conditional), not human-vs-non-human grammar
@@ -25,7 +25,7 @@ commit + TOC + "Belongs to" banner per landing.
 | E1 | Representability expansion | representability | pending | — | `docs/research/repr_expansion.md` |
 | E2 | Learned aim / target router | aim | pending | — | `docs/research/target_router.md` |
 | E3 | Smart generation for auto-discovery | meta (generation) | pending | — | `wcore/docs/research/smart_gen.md` |
-| E4 | Assembled aimed engine on an OPEN target | the goal | pending | — | `boundary_crossing/docs/research/aimed_open.md` |
+| E4 | Assembled aimed engine on an OPEN target | the goal | **DONE** | **Aim buys efficiency, not ceiling-crossing — no record.** N=61 (closest gap: 4 above best-known): aim improves reliability (6/6 vs 5/6 reach E=230 at equal budget) but both arms plateau at E=230 even at 500M evals — a hard representability ceiling. Aim's *biggest* win was on the less-representable N=48 (148 vs 160) — the E5 signature exactly. 8/8 verified, planted-lie refuted. | `boundary_crossing/docs/research/aimed_open.md` |
 | E5 | Aim × representability unified predictor | theory capstone | **DONE** | **The arc's law, quantified.** Representability dominates reach (R²=0.65, 5–100× every other factor); aim is a **phase boundary** above it — corr(aim,reach) 0.00/0.00/0.18 across LOW/MID/HIGH representability, solve rate 0%/0%/45.9%. **Diversity (D6) was a proxy for representability**; controlling for it, D flips negative. Falsification clean. | `docs/research/aim_repr_predictor.md` |
 | E6 | coevo-side 12×32 matcher audit | instrument trust | pending | — | `wcore/docs/research/coevo_matcher_falsification.md` |
 
@@ -55,6 +55,32 @@ it would bound machine auto-discovery precisely.
 ---
 
 ## Completed-experiment detail
+
+### E4. Aimed engine on an open target — aim buys efficiency, not the ceiling
+- Chose **LABS N=61** (best 230 vs best-known 226 = gap of 4, the smallest
+  absolute *and* relative gap in the 12-length miss table; odd, so the proven
+  skew-symmetric restriction applies). Addition chains were ruled out — their
+  random targets have no curated best-known to verify against.
+- Aim = **residual-autocorrelation steering**: since E = Σ C_k², the
+  largest-|C_k| lags dominate the energy, so the aimed arm samples pair-flip
+  partners at the magnitude-weighted dominant lag-gaps instead of uniformly. A
+  clean `aim=true/false` ablation — one boolean, same code path.
+- **Result: aim improves efficiency and reliability, not the ceiling.** N=61:
+  aim wins strictly at low budget (262 vs 310), converges more reliably (6/6 vs
+  5/6 seeds reach the E=230 floor), but **both arms plateau at exactly E=230
+  even at 500M evals** (2,500× more budget) — the E=230 skew-manifold floor is a
+  hard representability ceiling aim cannot cross. Gap of 4 not closed.
+- **The E5 signature, from the open-target side:** aim's *biggest* win was on
+  the *less*-representable secondary target N=48 (148 vs undirected 160 —
+  closing the whole undirected-vs-historical gap the swarm round needed a 9-arm
+  pool to find). Aim pays most where there is representable structure to steer
+  within, and nothing where the target sits outside the manifold's span —
+  exactly E5's phase boundary.
+- Verifier: all 8 claims (N=61 + N=48) independently re-verified by unmodified
+  `labs_check`; planted-lie test (fake E=226 "record" + corrupted entry)
+  refuted both; EXTRAORDINARY never fired. **No record, nothing
+  new-to-humanity** — the honest deliverable is a verified best attempt + the
+  measured finding that aim is an efficiency lever, not a ceiling lever.
 
 ### E5. Aim × representability predictor — the capstone law, quantified
 - 6,480-cell sweep (0.6s), representability defined as the budget-independent
