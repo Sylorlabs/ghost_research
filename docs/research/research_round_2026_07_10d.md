@@ -1,6 +1,6 @@
 # Research Round 2026-07-10d — does MORE go further? (breadth, diversity, non-human grammars)
 
-**Status:** LIVE — updated as each experiment lands. 4/6 complete.
+**Status:** LIVE — updated as each experiment lands. 5/6 complete.
 **Origin:** A user hypothesis, made falsifiable: *"maybe it thinks the same way as
 humans — maybe if we pump more out at once it will go further."* This round tests
 it rigorously rather than arguing from the H50 prior.
@@ -35,7 +35,7 @@ commits centrally, doc + commit + TOC per landing.
 | 2 | Breadth scaling law | The H50 counterpart: does out-of-closure reach grow with N diverse proposers, or plateau? Diverse-vs-identical control. | **DONE** | **Breadth plateaus like depth — diversity is NOT the lever.** Diverse reach flat at 1 across N=1→32; identical copies reached 2 at N=32. The wall is *representability* (brute-verified: only 4/15 cells representable; C09 provably at chance), not budget. Breadth beats single-shot depth in the needle regime, but neither crosses the closure boundary. | `docs/research/breadth_scaling.md` |
 | 3 | Non-human grammar | Do bulk machine-invented (non-human) atoms escape a proven family-level wall that human families can't? | **DONE** | **Refuted both ways:** the engine ALREADY thinks non-human (92.4% of forged atoms genuinely non-human) — so "thinks like humans" is false — but that buys NO reach: bulk machine grammar scores ~chance (0.519), *worse* than raw search (0.713) and human-op search (0.691) at equal budget. **The ceiling is AIM, not grammar.** | `wcore/docs/research/nonhuman_grammar.md` |
 | 4 | Parallel swarm on LABS | Does a massively-parallel diverse strategy pool crack an open LABS even-N gap a single method can't? (round-b rematch) | **DONE** | **Diversity beats concentration 9/12 at equal budget** (reverses round-b's blanket claim) — but the edge is *restart-diversification of one arm* (the best arm led all 48/48 pool runs), not diverse strategies each winning; vs best prior number only 2/12 improved, 7/12 regressed. **No record.** Verifier clean (12/12, 2/2 lies caught). | `boundary_crossing/docs/research/labs_swarm.md` |
-| 5 | Auto-discover curriculum | Can bulk parallel proposal DISCOVER the conjunction-wall decomposition autonomously (no hand-designed stones)? | pending | — | `wcore/docs/research/auto_curriculum.md` |
+| 5 | Auto-discover curriculum | Can bulk parallel proposal DISCOVER the conjunction-wall decomposition autonomously (no hand-designed stones)? | **DONE** | **No — 0 stones across 54,432 candidates.** Reach 0/9 both seeds at every bulk {0→1000} vs the hand-curriculum's 6/9; 20× more bulk changed cost not outcome. Detection works (positive control recognizes S1/S2); the failure is in GENERATION. **Quantity does NOT substitute for insight** when the insight isn't cheap to stumble into. | `wcore/docs/research/auto_curriculum.md` |
 | 6 | Diversity predictor | Is out-of-closure reach predicted by generator DIVERSITY (spans-of-closures), not eval count or raw N? (with R²) | **DONE** | **Yes, conditionally:** diversity D predicts reach (R²≈0.4, partial 0.607) — dominant over count (partial −0.058) and budget (0.092); every D=1 row = 0 reach. BUT only when D spans the target's closure (falsification: wrong-direction diversity buys nothing). Resolves with #2 (see synthesis). | `docs/research/diversity_predictor.md` |
 
 ---
@@ -152,4 +152,45 @@ This is the precise, measured form of your hypothesis, and it splits the verdict
   unaimed richness underperforms aimed search. The ceiling is **aim ×
   representability**, not quantity and not human-vs-non-human grammar.
 
-*(Experiments 1 and 5 pending; final verdict on completion.)*
+### 5. Auto-discover curriculum — quantity does NOT substitute for insight
+- Replaced round c's hand-given membership→noveltyflag ladder with a
+  mechanism-blind generate-and-filter loop (bulk random programs + archive
+  prefixes; filtered by the standard depth-3&4 certifier AND a payoff test:
+  does adding the candidate make a wall target composable at depth ≤3).
+- **Zero stones discovered across the entire sweep.** Frontier reach **0/9**
+  on both seeds at every bulk size {0, 50, 300, 1000} vs the hand-curriculum's
+  6/9. **54,432 total candidate-behaviours**; `n_payoff_pos` = `n_certified`
+  = 0 in literally every round; 20× more bulk changed cost, not outcome.
+- **The detection apparatus works** — a positive control run directly on the
+  real S1/S2 stones correctly recognizes membership as
+  necessary-but-insufficient (payoff 0/7) and noveltyflag as sufficient
+  (payoff 6/7), reproducing round c from scratch. **The failure is entirely in
+  GENERATION**, not detection.
+- **Verdict:** bulk parallel proposal cannot find the decomposition; the human
+  insight is still required. Quantity substitutes for insight only when the
+  insight is cheap to stumble into by construction — here it is not, and three
+  orders of magnitude of candidates never surfaced it. This is the sharpest
+  bound in the round on "pump more out at once."
+
+## Synthesis (addendum) — the fifth result completes the picture
+
+D5 is the capstone negative: even the one place where a genuinely new
+capability (auto-discovering a decomposition) could have made "more" pay,
+**more did not pay** — 54k candidates, zero finds, while a human found it
+immediately. Combined with D2 (breadth plateaus), D3 (grammar already
+non-human but unaimed), D6 (diversity pays only when it spans the target):
+
+> **"More" — more compute, more breadth, more diversity, more non-human
+> supply, more bulk proposal — moves you *within* what your generator can
+> already represent and aim at. It does not manufacture the missing generator
+> or the missing aim. Those require an insight (a new family, a decomposition,
+> a spanning direction), and insight is exactly what quantity cannot buy when
+> it isn't cheap to stumble into.**
+
+This is not a dead end — it is a *direction*. It says the next capability is
+not a bigger machine but a smarter *generator of generators*: the auto-family
+and learned-aim work of Round E. D5's positive control (detection works,
+generation fails) localizes the problem precisely — Round E's E2/E3 attack
+generation directly.
+
+*(Experiment 1 pending; final round verdict on its completion.)*
