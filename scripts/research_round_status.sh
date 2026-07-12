@@ -26,7 +26,7 @@ while IFS= read -r line; do
     id=${BASH_REMATCH[1]}
 
     total=$((total + 1))
-    if [[ "$line" == *"**BLOCKED"* ]]; then
+    if [[ "$line" == *"**BLOCKED"* || "$line" =~ \|[[:space:]]*blocked[[:space:]] ]]; then
         state=BLOCKED
         blocked=$((blocked + 1))
     elif [[ "$line" == *"**INCONCLUSIVE"* || "$line" == *"VALID NEGATIVE"* ]]; then
