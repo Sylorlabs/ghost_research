@@ -1702,3 +1702,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Replace F3's single-column R² novelty decision with candidate-excluded greedy multi-feature held-out-label COVER reconstruction, frozen over the original six-novel/three-remix battery.
 - **Result:** 7/9→9/9 correct; both novel false rejections are repaired (2/6→0/6), while all three remix rejections remain correct (0/3 false admits).
 - **Aftermath:** ADOPTED as Round G's decision-layer certification standard, with the explicit requirement that G5 execute it live before any production-wiring claim.
+
+### [docs/research/prior_corpus_round_g.md](docs/research/prior_corpus_round_g.md)
+- **Tried:** Rebuild F1's invalid proxy corpus from production-shaped 8-cell targets, with executable prior witnesses, quantitative/exclusive benefits, frozen 12/4/4 split, and descriptor leakage guards.
+- **Result:** VALID — all 20 targets pass binary/non-degenerate, designated-prior exactness, benefit, and exclusivity checks; minimum standardized train-to-validation/test descriptor distance is 0.792565, above the 0.05 duplicate-warning gate.
+- **Aftermath:** ADOPTED as the frozen input to G3; it establishes corpus validity only, not learned-selector performance.
