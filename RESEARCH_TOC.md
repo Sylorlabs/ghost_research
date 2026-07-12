@@ -1736,3 +1736,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Let labelled failure behaviour open a generic directed-partition grammar, then enumerate it symmetrically and compare global-threshold and blind directed search at the same 1,270 candidate evaluations.
 - **Result:** CONSTRAINED POSITIVE — direct proposal is exact on three seeds and a held-out pivot/modulus variant; threshold menu is ≤0.649, while equal-budget blind directed search has 0.484–0.734 exact-hit frequency across 64 trials per data set.
 - **Aftermath:** ADOPTED as reliable aiming inside a finite human-supplied grammar, not as primitive invention or proof of broad random-search separation; H6 may use it as a proposer input under live certification.
+
+### [docs/research/gate_v6_live_round_h.md](docs/research/gate_v6_live_round_h.md)
+- **Tried:** Execute G1's candidate-excluded multi-feature COVER rule live inside a deterministic promotion loop over RUN1, RUN-var2, a known count remix, and a G4-type directed candidate; compare legacy raw-R² decisions.
+- **Result:** POSITIVE LIVE EVIDENCE — v6 is 4/4 correct versus legacy 2/4, admits both RUN novelties, preserves the remix rejection, and promotes 3 candidates versus legacy's 1.
+- **Aftermath:** ADOPTED for the next experimental assembly as a live-tested certification standard; not production-adopted because the compact four-control synthetic loop does not establish broader engine economics.
