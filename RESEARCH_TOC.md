@@ -1785,3 +1785,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Independently replay I1–I3, attack candidate enumeration/uniformity, probe-label assumptions, unseen partitions, unrelated controls, and equal-budget accounting.
 - **Result:** MIXED AUDIT — I1's uniform partition probe is refuted by 254 duplicate candidates; I2's four-cell coverage and negative rejection survive but cost 2,540 calls; I3's guided=fixed valid negative is confirmed.
 - **Aftermath:** ADOPTED as the Round I correction — I1 cannot be a downstream descriptor source, I2 is near-solve coverage only, and no general allocation claim survives.
+
+---
+
+## 22. Research round 2026-07-12c (Round J) — corrected trajectory evidence before allocation
+
+### [docs/research/research_round_2026_07_12c.md](docs/research/research_round_2026_07_12c.md)
+- **Tried:** Repair I1's malformed directed sampler, then test whether correctly-enumerated cheap trajectory evidence can earn a new equal-cost allocator trial.
+- **Result:** Live; J1 has repaired the sampler substrate.
+- **Aftermath:** OPEN — repaired enumeration is necessary but does not establish a cheap useful response representation.
+
+### [docs/research/directed_sampler_round_j.md](docs/research/directed_sampler_round_j.md)
+- **Tried:** Assert exact 1,270-key directed grammar enumeration and generate uniform, stratified, and affine target-blind without-replacement prefix streams with mask/residue permutation controls.
+- **Result:** POSITIVE SUBSTRATE REPAIR — all 45 raw prefix rows pass uniqueness, no-duplicate, and permutation-integrity checks; full coverage has the correct 254 masks and 508/762 mod-2/mod-3 split.
+- **Aftermath:** ADOPTED as the only valid Round J sampler substrate; it makes no target-routing or efficiency claim.

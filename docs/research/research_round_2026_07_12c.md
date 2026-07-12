@@ -1,6 +1,6 @@
 # Research Round 2026-07-12c (Round J) — corrected trajectory evidence before allocation
 
-**Status:** LIVE — 0/6 experiments complete.
+**Status:** LIVE — 1/6 experiments complete; sampler substrate is repaired.
 
 **Premise:** Round I settled the response-allocation question negatively. I1's
 apparent response atlas is invalidated by a duplicate-candidate enumeration
@@ -34,7 +34,7 @@ that earns the right to be tested as an allocator input.
 
 | # | Tier/role | Experiment | Question | Status | Acceptance gate | Planned artifacts |
 |---|---|---|---|---|---|---|
-| J1 | Luna medium | Enumeration and sampler repair | Can a unique, permutation-invariant 1,270-member directed sampler provide valid low-budget prefix probes? | running | Exact uniqueness; residue/mask permutation invariance; no duplicate keys; raw prefix ledgers. | `docs/research/directed_sampler_round_j.md`, `results/directed_sampler_round_j.csv`, `sparse_poly_discovery/directed_sampler_round_j.zig` |
+| J1 | Luna medium | Enumeration and sampler repair | Can a unique, permutation-invariant 1,270-member directed sampler provide valid low-budget prefix probes? | **DONE — POSITIVE SUBSTRATE REPAIR** | Exact 1,270 unique candidates; every prefix duplicate-free; mask/residue permutation checks pass across three samplers/seeds and all raw integrity rows. This repairs fairness substrate only—no routing/efficiency claim. | `docs/research/directed_sampler_round_j.md`, `results/directed_sampler_round_j.csv`, `sparse_poly_discovery/directed_sampler_round_j.zig` |
 | J2 | Terra medium | Trajectory/near-miss representation | Do corrected cheap prefix-search trajectories separate global, singleton, multi-cell, and no-grammar holdouts better than I1, without near-solving? | running | Cost below full scan; frozen split; no forbidden fields; held-out separation > I1 2/4; leakage/permutation guards pass. | `docs/research/trajectory_repr_round_j.md`, `results/trajectory_repr_round_j.csv`, `sparse_poly_discovery/trajectory_repr_round_j.zig` |
 | J3 | Luna medium | Response-cost lower bound | What is the minimum correctly-enumerated prefix budget that separates target types, and does it remain cheaper than near-solve coverage? | running | Sweep costs/seeds; compare full-scan 2,540-call reference; raw accuracy/cost frontier. | `docs/research/trajectory_cost_round_j.md`, `results/trajectory_cost_round_j.csv`, `sparse_poly_discovery/trajectory_cost_round_j.zig` |
 | J4 | Luna medium | Corrected trajectory allocator | Does an accepted J1/J2 representation beat fixed/random/target-blind allocation under equal total cost? | blocked on J1/J2/J3 | Strict held-out improvement over fixed and all baselines; integrity/cost gates retained. | `docs/research/trajectory_allocator_round_j.md`, `results/trajectory_allocator_round_j.csv`, `sparse_poly_discovery/trajectory_allocator_round_j.zig` |
