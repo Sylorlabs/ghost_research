@@ -1809,3 +1809,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Sweep correctly-enumerated target-blind directed-prefix response budgets 16–2,540 calls over seeds and mask/residue permutations, with iid controls and global/no-grammar absence checks.
 - **Result:** TERMINAL NEGATIVE — reliable all-route separation appears first at the 2,540-call full scan; cheap prefixes never reach singleton and only partly reach multi-cell at half scan.
 - **Aftermath:** ADOPTED as a lower bound — any cheap allocator gain must use J2-style labelled trajectory/near-miss evidence, not target-blind prefix best score.
+
+### [docs/research/trajectory_allocator_round_j.md](docs/research/trajectory_allocator_round_j.md)
+- **Tried:** Use J2's frozen labelled trajectory response to route a 384-call selection budget after charging all arms the same 216-call response cost, against fixed, iid random, and target-blind directed coverage over structural holdouts.
+- **Result:** VALID NEGATIVE — guided allocation reaches 10/12 held-out cells versus fixed 12/12 at identical 600-call cost (iid random 0/12; blind coverage 6/12).
+- **Aftermath:** REJECTED as an autonomy component — a valid cheap representation does not automatically yield a superior allocation policy; J6 is blocked and later policies must beat fixed coverage under the same charge.
