@@ -436,6 +436,17 @@ leakage-clean production-derived prior corpus; G3 is a **valid negative**
 **G5 is correctly blocked, not missing:** an end-to-end autonomous routing
 claim cannot use G3's known-failing selector.
 
+**2026-07-12 round (Round H): settled constrained direct proposal, not general
+autonomy** (see `docs/research/research_round_2026_07_12.md`): H5 moves v6
+novelty certification into a live loop (4/4 correct vs legacy 2/4); H3/H6
+reliably propose and v6-promote 2/3 held-out directed variants, producing an
+assembly score of 3/4 vs hand 4/4 and fixed/cold 1/4. H1 is a valid negative
+(richer static descriptors still 1/4 holdout), so H2 is not run. H4 narrows
+the positive to a human-supplied singleton regime: equal-budget blind directed
+search exact-hits 56–69%, and a representable two-cell partition fails the
+singleton admission signal. The next frontier is search-response representations
+that can license both singleton and multi-cell directed structures.
+
 **Highest-priority open experiments (updated after Round F):**
 1. **Rebuild F1 on valid production-derived targets** — binary, non-degenerate,
    20/20 own-prior reachability, exclusive benefit labels, leakage-clean split.

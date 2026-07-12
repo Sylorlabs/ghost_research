@@ -1724,8 +1724,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 ### [docs/research/research_round_2026_07_12.md](docs/research/research_round_2026_07_12.md)
 - **Tried:** Turn Round G's constrained grammar-invention positive into trustworthy autonomous prior choice, while testing richer failure evidence, equal-budget proposing, and live corrected certification.
-- **Result:** Live; H1 has landed as a valid negative.
-- **Aftermath:** OPEN — H2 requires an actually improved frozen descriptor contract; direct proposing and live certification continue independently.
+- **Result:** SETTLED — H1 is a valid negative and blocks H2; H3/H6 demonstrate constrained direct proposal (assembly 3/4 vs hand 4/4, fixed/cold 1/4); H4 narrows the regime; H5 supplies live gate evidence.
+- **Aftermath:** MODIFIED — the result is reliable aiming inside a supplied singleton grammar regime, not autonomous general prior choice; next work must learn from search response and admit multi-cell directed structure.
 
 ### [docs/research/failure_repr_round_h.md](docs/research/failure_repr_round_h.md)
 - **Tried:** Audit generic residual/orientation/probe-response descriptor banks under G2's frozen 12/4/4 split and train-only normalization, selecting the contract on validation only.
@@ -1746,3 +1746,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Adversarially retest G4/H3 across pivots, moduli, residues, equal 1,270-candidate blind-directed controls, and a held-out two-cell partition.
 - **Result:** MIXED — singleton variants are exact and robust, but equal-budget blind search exact-hits 56.25–68.75% of trials and the representable two-cell variant fails the singleton-orientation admission signal (0.592 < 0.75).
 - **Aftermath:** NARROWED — the evidence supports selection inside a human-supplied singleton regime, not broad directed-partition grammar invention or a decisive random-search advantage.
+
+### [docs/research/genofgen_round_h.md](docs/research/genofgen_round_h.md)
+- **Tried:** Assemble H3's direct failure-guided proposer with H5's live candidate-excluded v6 promotion, comparing hand, fixed/cold, equal-budget random, no-signature, and no-v6 arms on held-out directed variants plus a threshold control.
+- **Result:** CONSTRAINED PARTIAL POSITIVE — direct proposal exact-promotes 2/3 directed variants and safely declines the third; the full assembly reaches 3/4 versus hand 4/4 and fixed/cold 1/4.
+- **Aftermath:** ADOPTED as a bounded direct-proposer path, not a learned router or human-structural-language escape; H4's two-cell miss marks the exact next representational gap.
