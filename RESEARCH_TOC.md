@@ -1712,3 +1712,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** After fixed threshold-menu failure plus an orientation-residual probe, search a fixed directed-partition comparison/residue grammar symmetrically for a held-out rank-modulo target; compare fixed-menu and random controls.
 - **Result:** Constrained positive — it selects `mask=0x08, mod3==1` and reaches 1.000 validation/test on three seeds plus a held-out fourth, versus fixed-menu ≤0.647 and random ≤0.627.
 - **Aftermath:** ADOPTED as grammar/parameter-level prior invention inside a human-provided primitive alphabet; it is not primitive invention and cannot be production-promoted until G1's live gate re-certifies it.
+
+### [docs/research/prior_selector_round_g.md](docs/research/prior_selector_round_g.md)
+- **Tried:** Fit a validation-selected 1-NN selector over only G2's six allowed behavioural descriptors, then compare it with fixed order and a frozen random arm on G2's untouched held-out targets under matched witness-evaluation budgets.
+- **Result:** VALID NEGATIVE — all split and leakage gates pass (minimum distance 0.792634 > 0.05), but learned routing reaches 0/4 held-out versus fixed 1/4 and random 0/4 (uniform expectation 1/4).
+- **Aftermath:** REJECTED for autonomous routing — the current six-descriptor nearest-neighbour design does not remove the human prior-choice bottleneck; G5 cannot claim an end-to-end autonomy result with it.
