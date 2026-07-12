@@ -1775,3 +1775,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Sweep equal budgets 25/100/300/635/1,270 across target-blind directed without-replacement scan, blind iid random, and fixed threshold menu on singleton, multi-cell, and threshold targets over three seeds.
 - **Result:** NEGATIVE for early guidance-derived efficiency — deterministic scan solves only once its fixed order reaches the member; random is already competitive (e.g. 25/64 singleton hits at 635), while fixed solves just the threshold control.
 - **Aftermath:** ADOPTED as I3's minimum baseline — merely opening a finite grammar or exhaustively scanning it is representability coverage, not autonomous aiming.
+
+### [docs/research/response_allocator_round_i.md](docs/research/response_allocator_round_i.md)
+- **Tried:** Allocate an equal 420-call budget across global, singleton, symmetric-partition, and irrelevant menus using only I1's frozen gain/residual response fields; compare fixed, iid random, and directed-only coverage across five structural holdouts and three seeds.
+- **Result:** VALID NEGATIVE — response-guided allocation is 9/15, exactly matching fixed allocation; it beats weak random (mean 6/15) and directed-only coverage (3/15) but misses its predeclared requirement to exceed fixed.
+- **Aftermath:** REJECTED as an autonomy component — short response summaries do not provide enough information to improve allocation; the next representation must capture trajectory or near-miss evidence at equal cost.
