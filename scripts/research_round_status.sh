@@ -29,7 +29,7 @@ while IFS= read -r line; do
     if [[ "$line" == *"**BLOCKED"* || "$line" =~ \|[[:space:]]*blocked[[:space:]] ]]; then
         state=BLOCKED
         blocked=$((blocked + 1))
-    elif [[ "$line" == *"**INCONCLUSIVE"* || "$line" == *"VALID NEGATIVE"* ]]; then
+    elif [[ "$line" == *"**INCONCLUSIVE"* || "$line" == *"VALID NEGATIVE"* || "$line" == *"**INVALIDATED"* ]]; then
         state=TERMINAL_NEGATIVE
         negative=$((negative + 1))
     elif [[ "$line" == *"**DONE"* ]]; then
