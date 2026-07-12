@@ -1707,3 +1707,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Rebuild F1's invalid proxy corpus from production-shaped 8-cell targets, with executable prior witnesses, quantitative/exclusive benefits, frozen 12/4/4 split, and descriptor leakage guards.
 - **Result:** VALID — all 20 targets pass binary/non-degenerate, designated-prior exactness, benefit, and exclusivity checks; minimum standardized train-to-validation/test descriptor distance is 0.792565, above the 0.05 duplicate-warning gate.
 - **Aftermath:** ADOPTED as the frozen input to G3; it establishes corpus validity only, not learned-selector performance.
+
+### [docs/research/prior_invention_round_g.md](docs/research/prior_invention_round_g.md)
+- **Tried:** After fixed threshold-menu failure plus an orientation-residual probe, search a fixed directed-partition comparison/residue grammar symmetrically for a held-out rank-modulo target; compare fixed-menu and random controls.
+- **Result:** Constrained positive — it selects `mask=0x08, mod3==1` and reaches 1.000 validation/test on three seeds plus a held-out fourth, versus fixed-menu ≤0.647 and random ≤0.627.
+- **Aftermath:** ADOPTED as grammar/parameter-level prior invention inside a human-provided primitive alphabet; it is not primitive invention and cannot be production-promoted until G1's live gate re-certifies it.
