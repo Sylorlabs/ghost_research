@@ -6,13 +6,14 @@
 
 ## Verdict
 
-**LIMITED POSITIVE FOR AN ATLAS; NOT AN ALLOCATOR RESULT.** A frozen
-search-response descriptor contract, chosen on validation, separates all four
-route types on its four validation targets (**4/4**).  Its untouched holdout
-classification is **2/4**: global and singleton-directed are correct;
-multi-cell partition-directed and no-grammar are confused.  This is above the
-Round H static-descriptor result (1/4), but too small and too incomplete to
-claim that a response-guided allocator works.
+**SUPERSEDED / NOT A VALID DOWNSTREAM ATLAS.** The original run appeared to be
+a limited positive (4/4 validation, 2/4 holdout), but Round I I5 independently
+found a material enumeration-integrity defect in its partition micro-search:
+the harness declares 1,524 candidates for a grammar containing 1,270 and
+duplicates 254 mod-3/residue-2 members. The claimed equal/uniform 30-candidate
+partition probe is therefore false. Preserve the raw result as a diagnostic,
+but do not use it as a frozen descriptor contract or evidence of clean
+response-guided routing.
 
 The useful result is narrow: equal-budget searches expose enough observable
 response to distinguish some reachable structures without target names or
@@ -57,13 +58,12 @@ no-grammar control can have a superficially similar weak response.
 
 ## What this enables and does not enable
 
-I1 supplies a predeclared response representation for I2/I3-style work.  It
-does **not** establish a learned allocator, because the exact frozen holdout
-score is only 2/4 and has the critical symmetric error: it neither admits the
-held-out partition nor rejects the negative control.  A downstream allocator
-must improve this on new held-out targets under the same 30-per-route budget,
-and must report fixed/random allocation controls.  It may not select a
-different contract after inspecting these holdout rows.
+I5 invalidates I1 as a predeclared response representation for I2/I3-style
+work. Even before that audit, its 2/4 holdout score had the critical symmetric
+error of neither admitting the held-out partition nor rejecting the negative
+control. A successor must correct the 1,270-member enumeration, separate the
+availability of probe labels from final-evaluation labels, and test residue/mask
+permutation controls before any allocation claim.
 
 ## Reproduce
 

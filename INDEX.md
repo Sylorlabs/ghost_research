@@ -447,6 +447,16 @@ search exact-hits 56–69%, and a representable two-cell partition fails the
 singleton admission signal. The next frontier is search-response representations
 that can license both singleton and multi-cell directed structures.
 
+**2026-07-12b round (Round I): settled negative for cheap response-driven
+admission/allocation** (see `docs/research/research_round_2026_07_12b.md`):
+I2 symmetrically recovers singleton through fresh four-cell partitions and
+rejects unrelated controls, but I5 measures it as a 2,540-call train+validation
+near-solve; I4 finds blind random competitive in the supplied finite grammar;
+I3 is a valid negative (guided 9/15 = fixed 9/15). Crucially, I5 invalidates
+I1's supposed uniform response atlas: its declared 1,524-candidate partition
+probe duplicates 254 members of the actual 1,270 grammar. **No autonomous
+general-prior claim survives; I6 is correctly blocked.**
+
 **Highest-priority open experiments (updated after Round F):**
 1. **Rebuild F1 on valid production-derived targets** — binary, non-degenerate,
    20/20 own-prior reachability, exclusive benefit labels, leakage-clean split.

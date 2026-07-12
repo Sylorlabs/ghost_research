@@ -1758,18 +1758,18 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 ### [docs/research/research_round_2026_07_12b.md](docs/research/research_round_2026_07_12b.md)
 - **Tried:** Replace Round H's singleton-shaped static admission with target-agnostic search-response evidence, symmetric multi-cell admission, equal-budget scaling, allocation, and adversarial audit.
-- **Result:** Live; I1 has landed as a limited positive.
-- **Aftermath:** OPEN — static response atlas improves separation but has the decisive multi-cell/no-grammar confusion; allocator and audit are still required.
+- **Result:** SETTLED — I1 is invalidated by an enumeration-integrity defect; I2 is narrow 2,540-call coverage; I3 is a valid negative matching fixed allocation; I4 rejects early efficiency; I5 confirms the boundaries and I6 is blocked.
+- **Aftermath:** REJECTED as autonomous general prior admission — a correct, cheap trajectory/near-miss representation is required before allocation can be retried.
 
 ### [docs/research/search_response_atlas_round_i.md](docs/research/search_response_atlas_round_i.md)
 - **Tried:** Build a 30-evaluation-per-route, target-agnostic micro-search response atlas across global, singleton-directed, partition-directed, and irrelevant routes, choosing descriptor contract only on validation.
-- **Result:** LIMITED POSITIVE — gain/residual8 scores 4/4 validation and 2/4 untouched holdout, improving on H1's static 1/4 but confusing multi-cell and no-grammar; leakage/copy distance is 0.038243 >= 0.03.
-- **Aftermath:** ADOPTED only as I3 input — it supports a predeclared allocator test, not an autonomous routing claim.
+- **Result:** INVALIDATED — I5 finds the declared 1,524-candidate partition probe duplicates 254 members of its actual 1,270-member grammar, so its claimed equal/uniform probe schedule is false.
+- **Aftermath:** RETRACTED as I3 input — retain the 2/4 diagnostic only; repair enumeration and audit probe-label availability before reuse.
 
 ### [docs/research/multicell_admission_round_i.md](docs/research/multicell_admission_round_i.md)
 - **Tried:** Replace H4's singleton-only admission probe with one symmetric full-partition response over all 1,270 supplied directed candidates, with singleton/two-cell/held-out-three-cell targets and negative controls.
 - **Result:** CONSTRAINED POSITIVE — all three directed structures admit and are exact on test; threshold and random-label controls remain closed. Blind equal-budget directed search remains competitive at 63–72% exact-hit frequency.
-- **Aftermath:** ADOPTED as a finite-grammar coverage rule, not a new grammar discovery, early-efficiency, or autonomy claim; it supplies a broader admissible route for I3/I6.
+- **Aftermath:** NARROWED to a finite-grammar near-solve — I5 confirms coverage including a fresh four-cell partition, but train+validation scans consume 2,540 calls, so it is not an efficient admission/routing input.
 
 ### [docs/research/grammar_scaling_round_i.md](docs/research/grammar_scaling_round_i.md)
 - **Tried:** Sweep equal budgets 25/100/300/635/1,270 across target-blind directed without-replacement scan, blind iid random, and fixed threshold menu on singleton, multi-cell, and threshold targets over three seeds.
@@ -1780,3 +1780,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Allocate an equal 420-call budget across global, singleton, symmetric-partition, and irrelevant menus using only I1's frozen gain/residual response fields; compare fixed, iid random, and directed-only coverage across five structural holdouts and three seeds.
 - **Result:** VALID NEGATIVE — response-guided allocation is 9/15, exactly matching fixed allocation; it beats weak random (mean 6/15) and directed-only coverage (3/15) but misses its predeclared requirement to exceed fixed.
 - **Aftermath:** REJECTED as an autonomy component — short response summaries do not provide enough information to improve allocation; the next representation must capture trajectory or near-miss evidence at equal cost.
+
+### [docs/research/search_response_audit_round_i.md](docs/research/search_response_audit_round_i.md)
+- **Tried:** Independently replay I1–I3, attack candidate enumeration/uniformity, probe-label assumptions, unseen partitions, unrelated controls, and equal-budget accounting.
+- **Result:** MIXED AUDIT — I1's uniform partition probe is refuted by 254 duplicate candidates; I2's four-cell coverage and negative rejection survive but cost 2,540 calls; I3's guided=fixed valid negative is confirmed.
+- **Aftermath:** ADOPTED as the Round I correction — I1 cannot be a downstream descriptor source, I2 is near-solve coverage only, and no general allocation claim survives.
