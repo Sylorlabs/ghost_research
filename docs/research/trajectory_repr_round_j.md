@@ -79,6 +79,16 @@ selection calls against fixed, random, and target-blind controls.  J5 must
 also independently challenge whether the target construction or prefix order
 provides answer-shaped access.
 
+### I5 audit update
+
+Round J I5 confirms the sampler keys and fixed prefix membership are valid, but
+narrows this result further: the 120-member directed prefix's best response is
+order-sensitive across valid affine/identity orders (0.5667, 0.5689, 0.6178),
+and the stated `none` class is an explicit adjacency grammar rather than an
+arbitrary no-grammar control. Therefore retain this only as a **fixed-order,
+labelled-evaluator signature on the supplied four route families**; do not use
+it as permutation-robust general routing evidence.
+
 ## Reproduce
 
 ```bash

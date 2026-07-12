@@ -1792,8 +1792,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 ### [docs/research/research_round_2026_07_12c.md](docs/research/research_round_2026_07_12c.md)
 - **Tried:** Repair I1's malformed directed sampler, then test whether correctly-enumerated cheap trajectory evidence can earn a new equal-cost allocator trial.
-- **Result:** Live; J1 has repaired the sampler substrate.
-- **Aftermath:** OPEN — repaired enumeration is necessary but does not establish a cheap useful response representation.
+- **Result:** SETTLED — sampler repair passes; J2 yields only a conditional fixed-order trajectory signature; J3/J4 are valid negatives and J5 confirms the limits; J6 is blocked.
+- **Aftermath:** REJECTED as an allocator advance — no trajectory policy beats strong fixed coverage at equal cost; future work must avoid useful fixed grammar/order encoded in the probe bank.
 
 ### [docs/research/directed_sampler_round_j.md](docs/research/directed_sampler_round_j.md)
 - **Tried:** Assert exact 1,270-key directed grammar enumeration and generate uniform, stratified, and affine target-blind without-replacement prefix streams with mask/residue permutation controls.
@@ -1803,7 +1803,7 @@ chronology). Every Result sentence quotes the doc's own numbers.
 ### [docs/research/trajectory_repr_round_j.md](docs/research/trajectory_repr_round_j.md)
 - **Tried:** Use 216 calls of correctly-enumerated, target-agnostic prefix search to form validation-gain, near-miss, residual, diversity, and cost trajectories across four route banks under frozen 12/4/4 splits.
 - **Result:** NARROW POSITIVE — the trajectory representation classifies all four held-out routes correctly (4/4), exceeds I1's invalidated 2/4, passes permutation/distance guards, and costs 8.5% of I2's full scan.
-- **Aftermath:** ADOPTED as J4 input only where labeled verifier/evaluator examples exist before routing; it is not yet an allocation or autonomy result.
+- **Aftermath:** NARROWED by I5 — retain only as a fixed-order, labelled-evaluator signature over supplied families; order sensitivity and explicit adjacency `none` class prevent a general route-representation claim.
 
 ### [docs/research/trajectory_cost_round_j.md](docs/research/trajectory_cost_round_j.md)
 - **Tried:** Sweep correctly-enumerated target-blind directed-prefix response budgets 16–2,540 calls over seeds and mask/residue permutations, with iid controls and global/no-grammar absence checks.
@@ -1814,3 +1814,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Use J2's frozen labelled trajectory response to route a 384-call selection budget after charging all arms the same 216-call response cost, against fixed, iid random, and target-blind directed coverage over structural holdouts.
 - **Result:** VALID NEGATIVE — guided allocation reaches 10/12 held-out cells versus fixed 12/12 at identical 600-call cost (iid random 0/12; blind coverage 6/12).
 - **Aftermath:** REJECTED as an autonomy component — a valid cheap representation does not automatically yield a superior allocation policy; J6 is blocked and later policies must beat fixed coverage under the same charge.
+
+### [docs/research/trajectory_audit_round_j.md](docs/research/trajectory_audit_round_j.md)
+- **Tried:** Independently audit J1 sampler keys, J2 prefix-order and label-availability assumptions, supplied `none` controls, and J4's equal-cost ledger.
+- **Result:** MIXED AUDIT — J1 keys pass; J2 is only fixed-order labelled-evaluator separation (valid orders change prefix response and `none` is adjacency); J4's guided 10/12 vs fixed 12/12 negative is confirmed.
+- **Aftermath:** ADOPTED as the closing constraint — no general trajectory representation or allocation advance survives; J6 must remain blocked.

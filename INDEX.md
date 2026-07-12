@@ -457,6 +457,15 @@ I1's supposed uniform response atlas: its declared 1,524-candidate partition
 probe duplicates 254 members of the actual 1,270 grammar. **No autonomous
 general-prior claim survives; I6 is correctly blocked.**
 
+**2026-07-12c round (Round J): sampler repaired, trajectory allocation still
+negative** (see `docs/research/research_round_2026_07_12c.md`): J1 proves a
+correct 1,270-key sampler; J2 initially separates 4/4 route families at 216
+calls, but J5 narrows it to a fixed-order labelled-evaluator signature (order
+sensitive and its `none` class is adjacency). J4 then fails the decisive
+equal-cost test: guided trajectory allocation 10/12 vs fixed coverage 12/12
+at 600 calls; J5 independently confirms it. **No autonomous allocation claim
+survives; J6 is correctly blocked.**
+
 **Highest-priority open experiments (updated after Round F):**
 1. **Rebuild F1 on valid production-derived targets** — binary, non-degenerate,
    20/20 own-prior reachability, exclusive benefit labels, leakage-clean split.
