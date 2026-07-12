@@ -1,0 +1,136 @@
+target,seed,budget,arm,mean_validation_accuracy,mean_or_best_test_accuracy,exact_rate_or_flag,replicates,detail
+singleton_directed,0xA400000000000001,25,guided_without_replacement,0.5983,0.6150,NO,1,permuted full grammar
+singleton_directed,0xA400000000000001,25,blind_random_with_replacement,0.6043,0.6483,0.0000,0,64 iid trials
+singleton_directed,0xA400000000000001,25,fixed_threshold_menu,0.6567,0.6067,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000001,100,guided_without_replacement,0.6783,0.6417,NO,1,permuted full grammar
+singleton_directed,0xA400000000000001,100,blind_random_with_replacement,0.6417,1.0000,0.0313,2,64 iid trials
+singleton_directed,0xA400000000000001,100,fixed_threshold_menu,0.6567,0.6067,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000001,300,guided_without_replacement,0.6783,0.6417,NO,1,permuted full grammar
+singleton_directed,0xA400000000000001,300,blind_random_with_replacement,0.7130,1.0000,0.2031,13,64 iid trials
+singleton_directed,0xA400000000000001,300,fixed_threshold_menu,0.6567,0.6067,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000001,635,guided_without_replacement,0.6850,0.6383,NO,1,permuted full grammar
+singleton_directed,0xA400000000000001,635,blind_random_with_replacement,0.7829,1.0000,0.3906,25,64 iid trials
+singleton_directed,0xA400000000000001,635,fixed_threshold_menu,0.6567,0.6067,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000001,1270,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+singleton_directed,0xA400000000000001,1270,blind_random_with_replacement,0.8666,1.0000,0.6250,40,64 iid trials
+singleton_directed,0xA400000000000001,1270,fixed_threshold_menu,0.6567,0.6067,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000001,25,guided_without_replacement,0.5967,0.6017,NO,1,permuted full grammar
+multicell_directed,0xA400000000000001,25,blind_random_with_replacement,0.5448,1.0000,0.0156,1,64 iid trials
+multicell_directed,0xA400000000000001,25,fixed_threshold_menu,0.5650,0.5300,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000001,100,guided_without_replacement,0.5967,0.6017,NO,1,permuted full grammar
+multicell_directed,0xA400000000000001,100,blind_random_with_replacement,0.6141,1.0000,0.0938,6,64 iid trials
+multicell_directed,0xA400000000000001,100,fixed_threshold_menu,0.5650,0.5300,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000001,300,guided_without_replacement,0.5967,0.6017,NO,1,permuted full grammar
+multicell_directed,0xA400000000000001,300,blind_random_with_replacement,0.6439,1.0000,0.1250,8,64 iid trials
+multicell_directed,0xA400000000000001,300,fixed_threshold_menu,0.5650,0.5300,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000001,635,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+multicell_directed,0xA400000000000001,635,blind_random_with_replacement,0.7919,1.0000,0.4844,31,64 iid trials
+multicell_directed,0xA400000000000001,635,fixed_threshold_menu,0.5650,0.5300,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000001,1270,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+multicell_directed,0xA400000000000001,1270,blind_random_with_replacement,0.8397,1.0000,0.5781,37,64 iid trials
+multicell_directed,0xA400000000000001,1270,fixed_threshold_menu,0.5650,0.5300,NO,1,25 legal candidates then cycle
+threshold_control,0xA400000000000001,25,guided_without_replacement,0.5900,0.5867,NO,1,permuted full grammar
+threshold_control,0xA400000000000001,25,blind_random_with_replacement,0.5578,0.6150,0.0000,0,64 iid trials
+threshold_control,0xA400000000000001,25,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000001,100,guided_without_replacement,0.5900,0.5867,NO,1,permuted full grammar
+threshold_control,0xA400000000000001,100,blind_random_with_replacement,0.5722,0.6150,0.0000,0,64 iid trials
+threshold_control,0xA400000000000001,100,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000001,300,guided_without_replacement,0.6033,0.5783,NO,1,permuted full grammar
+threshold_control,0xA400000000000001,300,blind_random_with_replacement,0.5854,0.6150,0.0000,0,64 iid trials
+threshold_control,0xA400000000000001,300,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000001,635,guided_without_replacement,0.6033,0.5783,NO,1,permuted full grammar
+threshold_control,0xA400000000000001,635,blind_random_with_replacement,0.5915,0.6150,0.0000,0,64 iid trials
+threshold_control,0xA400000000000001,635,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000001,1270,guided_without_replacement,0.6100,0.5767,NO,1,permuted full grammar
+threshold_control,0xA400000000000001,1270,blind_random_with_replacement,0.5950,0.6150,0.0000,0,64 iid trials
+threshold_control,0xA400000000000001,1270,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000002,25,guided_without_replacement,0.6167,0.5967,NO,1,permuted full grammar
+singleton_directed,0xA400000000000002,25,blind_random_with_replacement,0.5890,0.6783,0.0000,0,64 iid trials
+singleton_directed,0xA400000000000002,25,fixed_threshold_menu,0.6383,0.6400,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000002,100,guided_without_replacement,0.6667,0.6567,NO,1,permuted full grammar
+singleton_directed,0xA400000000000002,100,blind_random_with_replacement,0.6418,1.0000,0.0469,3,64 iid trials
+singleton_directed,0xA400000000000002,100,fixed_threshold_menu,0.6383,0.6400,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000002,300,guided_without_replacement,0.6783,0.6367,NO,1,permuted full grammar
+singleton_directed,0xA400000000000002,300,blind_random_with_replacement,0.7130,1.0000,0.1875,12,64 iid trials
+singleton_directed,0xA400000000000002,300,fixed_threshold_menu,0.6383,0.6400,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000002,635,guided_without_replacement,0.6783,0.6367,NO,1,permuted full grammar
+singleton_directed,0xA400000000000002,635,blind_random_with_replacement,0.7952,1.0000,0.3906,25,64 iid trials
+singleton_directed,0xA400000000000002,635,fixed_threshold_menu,0.6383,0.6400,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000002,1270,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+singleton_directed,0xA400000000000002,1270,blind_random_with_replacement,0.8687,1.0000,0.6094,39,64 iid trials
+singleton_directed,0xA400000000000002,1270,fixed_threshold_menu,0.6383,0.6400,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000002,25,guided_without_replacement,0.5633,0.6067,NO,1,permuted full grammar
+multicell_directed,0xA400000000000002,25,blind_random_with_replacement,0.5455,1.0000,0.0156,1,64 iid trials
+multicell_directed,0xA400000000000002,25,fixed_threshold_menu,0.5467,0.5200,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000002,100,guided_without_replacement,0.6017,0.5850,NO,1,permuted full grammar
+multicell_directed,0xA400000000000002,100,blind_random_with_replacement,0.6146,1.0000,0.0938,6,64 iid trials
+multicell_directed,0xA400000000000002,100,fixed_threshold_menu,0.5467,0.5200,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000002,300,guided_without_replacement,0.6033,0.6017,NO,1,permuted full grammar
+multicell_directed,0xA400000000000002,300,blind_random_with_replacement,0.6494,1.0000,0.1406,9,64 iid trials
+multicell_directed,0xA400000000000002,300,fixed_threshold_menu,0.5467,0.5200,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000002,635,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+multicell_directed,0xA400000000000002,635,blind_random_with_replacement,0.7983,1.0000,0.5000,32,64 iid trials
+multicell_directed,0xA400000000000002,635,fixed_threshold_menu,0.5467,0.5200,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000002,1270,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+multicell_directed,0xA400000000000002,1270,blind_random_with_replacement,0.8382,1.0000,0.5781,37,64 iid trials
+multicell_directed,0xA400000000000002,1270,fixed_threshold_menu,0.5467,0.5200,NO,1,25 legal candidates then cycle
+threshold_control,0xA400000000000002,25,guided_without_replacement,0.6000,0.5867,NO,1,permuted full grammar
+threshold_control,0xA400000000000002,25,blind_random_with_replacement,0.5481,0.6117,0.0000,0,64 iid trials
+threshold_control,0xA400000000000002,25,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000002,100,guided_without_replacement,0.6000,0.5867,NO,1,permuted full grammar
+threshold_control,0xA400000000000002,100,blind_random_with_replacement,0.5718,0.6117,0.0000,0,64 iid trials
+threshold_control,0xA400000000000002,100,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000002,300,guided_without_replacement,0.6000,0.5867,NO,1,permuted full grammar
+threshold_control,0xA400000000000002,300,blind_random_with_replacement,0.5782,0.6117,0.0000,0,64 iid trials
+threshold_control,0xA400000000000002,300,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000002,635,guided_without_replacement,0.6000,0.5867,NO,1,permuted full grammar
+threshold_control,0xA400000000000002,635,blind_random_with_replacement,0.5818,0.6117,0.0000,0,64 iid trials
+threshold_control,0xA400000000000002,635,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000002,1270,guided_without_replacement,0.6183,0.5850,NO,1,permuted full grammar
+threshold_control,0xA400000000000002,1270,blind_random_with_replacement,0.5826,0.6000,0.0000,0,64 iid trials
+threshold_control,0xA400000000000002,1270,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000003,25,guided_without_replacement,0.6033,0.6150,NO,1,permuted full grammar
+singleton_directed,0xA400000000000003,25,blind_random_with_replacement,0.6020,0.7067,0.0000,0,64 iid trials
+singleton_directed,0xA400000000000003,25,fixed_threshold_menu,0.6733,0.6467,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000003,100,guided_without_replacement,0.6400,0.7017,NO,1,permuted full grammar
+singleton_directed,0xA400000000000003,100,blind_random_with_replacement,0.6507,1.0000,0.0469,3,64 iid trials
+singleton_directed,0xA400000000000003,100,fixed_threshold_menu,0.6733,0.6467,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000003,300,guided_without_replacement,0.6433,0.6433,NO,1,permuted full grammar
+singleton_directed,0xA400000000000003,300,blind_random_with_replacement,0.7263,1.0000,0.2031,13,64 iid trials
+singleton_directed,0xA400000000000003,300,fixed_threshold_menu,0.6733,0.6467,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000003,635,guided_without_replacement,0.6683,0.6500,NO,1,permuted full grammar
+singleton_directed,0xA400000000000003,635,blind_random_with_replacement,0.7986,1.0000,0.3906,25,64 iid trials
+singleton_directed,0xA400000000000003,635,fixed_threshold_menu,0.6733,0.6467,NO,1,25 legal candidates then cycle
+singleton_directed,0xA400000000000003,1270,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+singleton_directed,0xA400000000000003,1270,blind_random_with_replacement,0.8824,1.0000,0.6250,40,64 iid trials
+singleton_directed,0xA400000000000003,1270,fixed_threshold_menu,0.6733,0.6467,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000003,25,guided_without_replacement,0.5833,0.5767,NO,1,permuted full grammar
+multicell_directed,0xA400000000000003,25,blind_random_with_replacement,0.5498,1.0000,0.0156,1,64 iid trials
+multicell_directed,0xA400000000000003,25,fixed_threshold_menu,0.5467,0.5700,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000003,100,guided_without_replacement,0.5833,0.5767,NO,1,permuted full grammar
+multicell_directed,0xA400000000000003,100,blind_random_with_replacement,0.6222,1.0000,0.0781,5,64 iid trials
+multicell_directed,0xA400000000000003,100,fixed_threshold_menu,0.5467,0.5700,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000003,300,guided_without_replacement,0.6217,0.6267,NO,1,permuted full grammar
+multicell_directed,0xA400000000000003,300,blind_random_with_replacement,0.6605,1.0000,0.1406,9,64 iid trials
+multicell_directed,0xA400000000000003,300,fixed_threshold_menu,0.5467,0.5700,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000003,635,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+multicell_directed,0xA400000000000003,635,blind_random_with_replacement,0.8010,1.0000,0.4844,31,64 iid trials
+multicell_directed,0xA400000000000003,635,fixed_threshold_menu,0.5467,0.5700,NO,1,25 legal candidates then cycle
+multicell_directed,0xA400000000000003,1270,guided_without_replacement,1.0000,1.0000,YES,1,permuted full grammar
+multicell_directed,0xA400000000000003,1270,blind_random_with_replacement,0.8531,1.0000,0.6094,39,64 iid trials
+multicell_directed,0xA400000000000003,1270,fixed_threshold_menu,0.5467,0.5700,NO,1,25 legal candidates then cycle
+threshold_control,0xA400000000000003,25,guided_without_replacement,0.5750,0.5917,NO,1,permuted full grammar
+threshold_control,0xA400000000000003,25,blind_random_with_replacement,0.5442,0.6250,0.0000,0,64 iid trials
+threshold_control,0xA400000000000003,25,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000003,100,guided_without_replacement,0.5817,0.5333,NO,1,permuted full grammar
+threshold_control,0xA400000000000003,100,blind_random_with_replacement,0.5550,0.6117,0.0000,0,64 iid trials
+threshold_control,0xA400000000000003,100,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000003,300,guided_without_replacement,0.6100,0.5517,NO,1,permuted full grammar
+threshold_control,0xA400000000000003,300,blind_random_with_replacement,0.5630,0.6083,0.0000,0,64 iid trials
+threshold_control,0xA400000000000003,300,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000003,635,guided_without_replacement,0.6100,0.5517,NO,1,permuted full grammar
+threshold_control,0xA400000000000003,635,blind_random_with_replacement,0.5538,0.6083,0.0000,0,64 iid trials
+threshold_control,0xA400000000000003,635,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle
+threshold_control,0xA400000000000003,1270,guided_without_replacement,0.6417,0.5650,NO,1,permuted full grammar
+threshold_control,0xA400000000000003,1270,blind_random_with_replacement,0.5628,0.6083,0.0000,0,64 iid trials
+threshold_control,0xA400000000000003,1270,fixed_threshold_menu,1.0000,1.0000,YES,1,25 legal candidates then cycle

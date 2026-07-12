@@ -1770,3 +1770,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Replace H4's singleton-only admission probe with one symmetric full-partition response over all 1,270 supplied directed candidates, with singleton/two-cell/held-out-three-cell targets and negative controls.
 - **Result:** CONSTRAINED POSITIVE — all three directed structures admit and are exact on test; threshold and random-label controls remain closed. Blind equal-budget directed search remains competitive at 63–72% exact-hit frequency.
 - **Aftermath:** ADOPTED as a finite-grammar coverage rule, not a new grammar discovery, early-efficiency, or autonomy claim; it supplies a broader admissible route for I3/I6.
+
+### [docs/research/grammar_scaling_round_i.md](docs/research/grammar_scaling_round_i.md)
+- **Tried:** Sweep equal budgets 25/100/300/635/1,270 across target-blind directed without-replacement scan, blind iid random, and fixed threshold menu on singleton, multi-cell, and threshold targets over three seeds.
+- **Result:** NEGATIVE for early guidance-derived efficiency — deterministic scan solves only once its fixed order reaches the member; random is already competitive (e.g. 25/64 singleton hits at 635), while fixed solves just the threshold control.
+- **Aftermath:** ADOPTED as I3's minimum baseline — merely opening a finite grammar or exhaustively scanning it is representability coverage, not autonomous aiming.
