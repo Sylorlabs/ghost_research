@@ -1741,3 +1741,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Execute G1's candidate-excluded multi-feature COVER rule live inside a deterministic promotion loop over RUN1, RUN-var2, a known count remix, and a G4-type directed candidate; compare legacy raw-R² decisions.
 - **Result:** POSITIVE LIVE EVIDENCE — v6 is 4/4 correct versus legacy 2/4, admits both RUN novelties, preserves the remix rejection, and promotes 3 candidates versus legacy's 1.
 - **Aftermath:** ADOPTED for the next experimental assembly as a live-tested certification standard; not production-adopted because the compact four-control synthetic loop does not establish broader engine economics.
+
+### [docs/research/prior_invention_audit_round_h.md](docs/research/prior_invention_audit_round_h.md)
+- **Tried:** Adversarially retest G4/H3 across pivots, moduli, residues, equal 1,270-candidate blind-directed controls, and a held-out two-cell partition.
+- **Result:** MIXED — singleton variants are exact and robust, but equal-budget blind search exact-hits 56.25–68.75% of trials and the representable two-cell variant fails the singleton-orientation admission signal (0.592 < 0.75).
+- **Aftermath:** NARROWED — the evidence supports selection inside a human-supplied singleton regime, not broad directed-partition grammar invention or a decisive random-search advantage.
