@@ -425,6 +425,17 @@ router saving 32.2% evaluations; F3 catches a 33% novelty-gate false-rejection
 rate. The headline F1 selector is invalid/inconclusive, so F6's measured result
 remains 66.7% machine-supplied insight and 85–90% remains projected.
 
+**2026-07-11c round (Round G): live, with the instrument repaired and the
+current selector negatively resolved** (see
+`docs/research/research_round_2026_07_11c.md`, 4/5 settled): G1's frozen
+multi-feature COVER novelty decision repairs F3's battery (7/9→9/9; novel
+false rejections 2/6→0/6, no remix admits); G2 supplies a valid 20/20,
+leakage-clean production-derived prior corpus; G3 is a **valid negative**
+(six-descriptor 1-NN 0/4 held-out vs fixed 1/4); G4 is a constrained positive
+(grammar/parameter prior invention 1.000 on three seeds plus holdout).
+**G5 is correctly blocked, not missing:** an end-to-end autonomous routing
+claim cannot use G3's known-failing selector.
+
 **Highest-priority open experiments (updated after Round F):**
 1. **Rebuild F1 on valid production-derived targets** — binary, non-degenerate,
    20/20 own-prior reachability, exclusive benefit labels, leakage-clean split.
