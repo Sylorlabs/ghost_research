@@ -41,3 +41,12 @@ results against the report, commit only the agent's scoped harness/CSV/report,
 then update this table and the research TOC. The round closes only after Terra's
 cross-experiment review verifies that no downstream experiment used an
 unaccepted gate or invalid corpus.
+
+## Completion harness
+
+Run `./scripts/research_round_status.sh` from the repository root for a
+one-shot machine-readable status line per G experiment plus `ROUND_SETTLED` and
+`ROUND_COMPLETE`. It returns zero only when all listed experiments have reached
+terminal, non-blocked states; it returns one while work is live or a dependency
+remains blocked. An optional master-document path lets the same harness monitor
+future rounds once their tables retain `G1`–`G5`-style identifiers.
