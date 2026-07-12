@@ -1765,3 +1765,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Build a 30-evaluation-per-route, target-agnostic micro-search response atlas across global, singleton-directed, partition-directed, and irrelevant routes, choosing descriptor contract only on validation.
 - **Result:** LIMITED POSITIVE — gain/residual8 scores 4/4 validation and 2/4 untouched holdout, improving on H1's static 1/4 but confusing multi-cell and no-grammar; leakage/copy distance is 0.038243 >= 0.03.
 - **Aftermath:** ADOPTED only as I3 input — it supports a predeclared allocator test, not an autonomous routing claim.
+
+### [docs/research/multicell_admission_round_i.md](docs/research/multicell_admission_round_i.md)
+- **Tried:** Replace H4's singleton-only admission probe with one symmetric full-partition response over all 1,270 supplied directed candidates, with singleton/two-cell/held-out-three-cell targets and negative controls.
+- **Result:** CONSTRAINED POSITIVE — all three directed structures admit and are exact on test; threshold and random-label controls remain closed. Blind equal-budget directed search remains competitive at 63–72% exact-hit frequency.
+- **Aftermath:** ADOPTED as a finite-grammar coverage rule, not a new grammar discovery, early-efficiency, or autonomy claim; it supplies a broader admissible route for I3/I6.
