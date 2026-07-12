@@ -1,0 +1,13 @@
+section,seed,target,truth,k,cover_before,r2_old,v5_verdict,v6_verdict,delta,validity
+case,3seed_min,RUN1,novel,12,0.8789,0.7347,reject_remix,admit_novel,flip,pass
+case,0xF0235A11CE0FF1CE,RUN-var2,novel,8,0.8686,0.7222,reject_remix,admit_novel,flip,pass
+case,0xF0235A11CE0FF1CE,RUN-var3,remix,8,1.0000,0.5004,reject_remix,reject_remix,unchanged,pass
+case,0xF0235A11CE0FF1CE,RUN-var4,novel,8,0.6954,0.2778,admit_novel,admit_novel,unchanged,pass
+case,0xF0235A11CE0FF1CE,C09,novel,8,0.4869,-0.0167,admit_novel,admit_novel,unchanged,pass
+case,0xF0235A11CE0FF1CE,RATIO1,novel,6,0.5069,-0.0166,admit_novel,admit_novel,unchanged,pass
+case,0xF0235A11CE0FF1CE,MIXMOD1,novel,6,0.6560,0.0321,admit_novel,admit_novel,unchanged,pass
+case,0xF0235A11CE0FF1CE,REMIX-A,remix,4,1.0000,0.7539,reject_remix,reject_remix,unchanged,pass
+case,0xF0235A11CE0FF1CE,REMIX-B,remix,7,0.9983,0.9621,reject_remix,reject_remix,unchanged,pass
+summary,-,battery,-,-,-,-,v5_correct=7/9,v6_correct=9/9,delta_correct=+2,protocol=pass
+summary,-,novel_false_rejects,-,-,-,-,v5=2/6,v6=0/6,delta=-2,protocol=pass
+summary,-,remix_false_admits,-,-,-,-,v5=0/3,v6=0/3,delta=0,protocol=pass

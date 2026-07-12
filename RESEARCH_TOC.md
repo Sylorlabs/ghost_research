@@ -1688,3 +1688,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Withhold or retain E3's promoted mechanism across ten held-out targets, comparing full transfer, prior-only regeneration, and equal-size cold generation.
 - **Result:** Layered positive — the promoted atom composes into 5/10 targets at 0–4 ms and cuts total evaluation time 57.9%; the structural prior reaches 9/10 versus cold 2/10, while new siblings still need fresh generation.
 - **Aftermath:** ADOPTED — discoveries amortize strongly through downstream composition and priors transfer across siblings, but atoms do not automatically stand in for whole families and one deeper target remains unreachable in every arm.
+
+---
+
+## 19. Research round 2026-07-11c (Round G) — remove the human prior choice
+
+### [docs/research/research_round_2026_07_11c.md](docs/research/research_round_2026_07_11c.md)
+- **Tried:** Repair the two blockers to the Round-F generator-of-generators claim—an over-rejecting novelty gate and invalid prior-selector corpus—then test learned selection and prior invention under frozen controls.
+- **Result:** Live; G1 has landed.
+- **Aftermath:** OPEN — only an end-to-end run with accepted gate/corpus can establish removal of the human per-target prior choice.
+
+### [docs/research/gate_v6_round_g.md](docs/research/gate_v6_round_g.md)
+- **Tried:** Replace F3's single-column R² novelty decision with candidate-excluded greedy multi-feature held-out-label COVER reconstruction, frozen over the original six-novel/three-remix battery.
+- **Result:** 7/9→9/9 correct; both novel false rejections are repaired (2/6→0/6), while all three remix rejections remain correct (0/3 false admits).
+- **Aftermath:** ADOPTED as Round G's decision-layer certification standard, with the explicit requirement that G5 execute it live before any production-wiring claim.
