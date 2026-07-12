@@ -1799,3 +1799,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Assert exact 1,270-key directed grammar enumeration and generate uniform, stratified, and affine target-blind without-replacement prefix streams with mask/residue permutation controls.
 - **Result:** POSITIVE SUBSTRATE REPAIR — all 45 raw prefix rows pass uniqueness, no-duplicate, and permutation-integrity checks; full coverage has the correct 254 masks and 508/762 mod-2/mod-3 split.
 - **Aftermath:** ADOPTED as the only valid Round J sampler substrate; it makes no target-routing or efficiency claim.
+
+### [docs/research/trajectory_repr_round_j.md](docs/research/trajectory_repr_round_j.md)
+- **Tried:** Use 216 calls of correctly-enumerated, target-agnostic prefix search to form validation-gain, near-miss, residual, diversity, and cost trajectories across four route banks under frozen 12/4/4 splits.
+- **Result:** NARROW POSITIVE — the trajectory representation classifies all four held-out routes correctly (4/4), exceeds I1's invalidated 2/4, passes permutation/distance guards, and costs 8.5% of I2's full scan.
+- **Aftermath:** ADOPTED as J4 input only where labeled verifier/evaluator examples exist before routing; it is not yet an allocation or autonomy result.
