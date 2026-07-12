@@ -1751,3 +1751,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Assemble H3's direct failure-guided proposer with H5's live candidate-excluded v6 promotion, comparing hand, fixed/cold, equal-budget random, no-signature, and no-v6 arms on held-out directed variants plus a threshold control.
 - **Result:** CONSTRAINED PARTIAL POSITIVE — direct proposal exact-promotes 2/3 directed variants and safely declines the third; the full assembly reaches 3/4 versus hand 4/4 and fixed/cold 1/4.
 - **Aftermath:** ADOPTED as a bounded direct-proposer path, not a learned router or human-structural-language escape; H4's two-cell miss marks the exact next representational gap.
+
+---
+
+## 21. Research round 2026-07-12b (Round I) — search response to general prior admission
+
+### [docs/research/research_round_2026_07_12b.md](docs/research/research_round_2026_07_12b.md)
+- **Tried:** Replace Round H's singleton-shaped static admission with target-agnostic search-response evidence, symmetric multi-cell admission, equal-budget scaling, allocation, and adversarial audit.
+- **Result:** Live; I1 has landed as a limited positive.
+- **Aftermath:** OPEN — static response atlas improves separation but has the decisive multi-cell/no-grammar confusion; allocator and audit are still required.
+
+### [docs/research/search_response_atlas_round_i.md](docs/research/search_response_atlas_round_i.md)
+- **Tried:** Build a 30-evaluation-per-route, target-agnostic micro-search response atlas across global, singleton-directed, partition-directed, and irrelevant routes, choosing descriptor contract only on validation.
+- **Result:** LIMITED POSITIVE — gain/residual8 scores 4/4 validation and 2/4 untouched holdout, improving on H1's static 1/4 but confusing multi-cell and no-grammar; leakage/copy distance is 0.038243 >= 0.03.
+- **Aftermath:** ADOPTED only as I3 input — it supports a predeclared allocator test, not an autonomous routing claim.
