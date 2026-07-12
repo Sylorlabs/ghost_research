@@ -1731,3 +1731,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Audit generic residual/orientation/probe-response descriptor banks under G2's frozen 12/4/4 split and train-only normalization, selecting the contract on validation only.
 - **Result:** VALID NEGATIVE — validation-selected `full16` reaches 4/4 validation but only 1/4 untouched holdout, equal to fixed routing; leakage distance is 1.448328 > 0.05.
 - **Aftermath:** REJECTED as an H2 input — adding static generic response correlations does not repair routing; future work must use a different observation, such as actual equal-budget search response.
+
+### [docs/research/direct_proposer_round_h.md](docs/research/direct_proposer_round_h.md)
+- **Tried:** Let labelled failure behaviour open a generic directed-partition grammar, then enumerate it symmetrically and compare global-threshold and blind directed search at the same 1,270 candidate evaluations.
+- **Result:** CONSTRAINED POSITIVE — direct proposal is exact on three seeds and a held-out pivot/modulus variant; threshold menu is ≤0.649, while equal-budget blind directed search has 0.484–0.734 exact-hit frequency across 64 trials per data set.
+- **Aftermath:** ADOPTED as reliable aiming inside a finite human-supplied grammar, not as primitive invention or proof of broad random-search separation; H6 may use it as a proposer input under live certification.

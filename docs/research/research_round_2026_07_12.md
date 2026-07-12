@@ -1,6 +1,6 @@
 # Research Round 2026-07-12 (Round H) — failure evidence to autonomous prior choice
 
-**Status:** LIVE — 1/6 experiments complete; H2 is blocked by H1's valid negative.
+**Status:** LIVE — 2/6 experiments complete; H2 is blocked by H1's valid negative.
 
 **Premise:** Round G repaired the novelty gate (G1), built a valid
 production-derived corpus (G2), and showed both a valid negative for the
@@ -29,10 +29,10 @@ one on held-out targets under fair budgets and live certification.
 |---|---|---|---|---|---|---|
 | H1 | Luna medium | Failure-representation audit | Do richer residual/probe descriptors separate the G2 prior needs without leakage? | **DONE — VALID NEGATIVE** | **No accepted descriptor contract.** Validation-selected `full16` reaches 4/4 validation but only 1/4 untouched holdout, equal to fixed routing; split, forbidden-field, and leakage gates pass (distance 1.448328 > 0.05). | `docs/research/failure_repr_round_h.md`, `results/failure_repr_round_h.csv`, `sparse_poly_discovery/failure_repr_round_h.zig` |
 | H2 | Luna medium | Learned-router rematch | Does an H1-derived frozen representation beat fixed/random routing on G2 holdout? | **BLOCKED BY VALID NEGATIVE** | H1 supplies no improved frozen descriptor contract; launching H2 would post-hoc repeat a known non-improvement. | — |
-| H3 | Terra medium | Direct grammar proposer | Can failure evidence choose a grammar search space directly, bypassing fixed-family classification? | running | No named menu/answer input; equal-budget fixed/random controls; held-out target/family result. | `docs/research/direct_proposer_round_h.md`, `results/direct_proposer_round_h.csv`, `sparse_poly_discovery/direct_proposer_round_h.zig` |
+| H3 | Terra medium | Direct grammar proposer | Can failure evidence choose a grammar search space directly, bypassing fixed-family classification? | **DONE — CONSTRAINED POSITIVE** | Failure-guided admission deterministically finds an exact directed grammar on 3 seeds plus held-out pivot/modulus variant; threshold menu is 0.611–0.649. Equal-budget blind directed search remains competitive (exact-hit 0.484–0.734), so the gain is reliable aim inside a finite human-supplied grammar, not escape from random search/primitives. | `docs/research/direct_proposer_round_h.md`, `results/direct_proposer_round_h.csv`, `sparse_poly_discovery/direct_proposer_round_h.zig` |
 | H4 | Terra medium | G4 fairness and robustness audit | Does G4 survive equal candidate budgets, varied anchors/residues, and unseen structural variants? | queued | Equal-budget controls plus held-out structural variants; distinguish grammar prior from target leakage. | `docs/research/prior_invention_audit_round_h.md`, `results/prior_invention_audit_round_h.csv`, `sparse_poly_discovery/prior_invention_audit_round_h.zig` |
 | H5 | Terra medium | Live gate-v6 integration | Does G1's gate behave correctly and economically inside a real promotion loop, including G4/RUN cases? | running | Execute candidate-excluded multi-feature reconstruction live; quantify decisions, regressions, and cost. | `docs/research/gate_v6_live_round_h.md`, `results/gate_v6_live_round_h.csv`, `sparse_poly_discovery/gate_v6_live_round_h.zig` |
-| H6 | Luna medium + Terra review | Conditional autonomous assembly | Does an accepted H2 or H3 plus H5 remove per-target human prior choice end-to-end? | blocked on H2/H3/H5 | Frozen components; held-out family test; equal-budget hand/fixed/random/cold controls; Terra acceptance review. | `docs/research/genofgen_round_h.md`, `results/genofgen_round_h.csv`, `sparse_poly_discovery/genofgen_round_h.zig` |
+| H6 | Luna medium + Terra review | Conditional autonomous assembly | Does an accepted H2 or H3 plus H5 remove per-target human prior choice end-to-end? | ready for H3/H5 inputs | Frozen components; held-out family test; equal-budget hand/fixed/random/cold controls; Terra acceptance review. | `docs/research/genofgen_round_h.md`, `results/genofgen_round_h.csv`, `sparse_poly_discovery/genofgen_round_h.zig` |
 
 ## Completion protocol
 
