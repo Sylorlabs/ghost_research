@@ -1717,3 +1717,17 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Fit a validation-selected 1-NN selector over only G2's six allowed behavioural descriptors, then compare it with fixed order and a frozen random arm on G2's untouched held-out targets under matched witness-evaluation budgets.
 - **Result:** VALID NEGATIVE — all split and leakage gates pass (minimum distance 0.792634 > 0.05), but learned routing reaches 0/4 held-out versus fixed 1/4 and random 0/4 (uniform expectation 1/4).
 - **Aftermath:** REJECTED for autonomous routing — the current six-descriptor nearest-neighbour design does not remove the human prior-choice bottleneck; G5 cannot claim an end-to-end autonomy result with it.
+
+---
+
+## 20. Research round 2026-07-12 (Round H) — failure evidence to autonomous prior choice
+
+### [docs/research/research_round_2026_07_12.md](docs/research/research_round_2026_07_12.md)
+- **Tried:** Turn Round G's constrained grammar-invention positive into trustworthy autonomous prior choice, while testing richer failure evidence, equal-budget proposing, and live corrected certification.
+- **Result:** Live; H1 has landed as a valid negative.
+- **Aftermath:** OPEN — H2 requires an actually improved frozen descriptor contract; direct proposing and live certification continue independently.
+
+### [docs/research/failure_repr_round_h.md](docs/research/failure_repr_round_h.md)
+- **Tried:** Audit generic residual/orientation/probe-response descriptor banks under G2's frozen 12/4/4 split and train-only normalization, selecting the contract on validation only.
+- **Result:** VALID NEGATIVE — validation-selected `full16` reaches 4/4 validation but only 1/4 untouched holdout, equal to fixed routing; leakage distance is 1.448328 > 0.05.
+- **Aftermath:** REJECTED as an H2 input — adding static generic response correlations does not repair routing; future work must use a different observation, such as actual equal-budget search response.
