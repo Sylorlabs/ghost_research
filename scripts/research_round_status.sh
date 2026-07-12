@@ -29,12 +29,12 @@ for id in G1 G2 G3 G4 G5; do
     if [[ "$line" == *"**BLOCKED"* ]]; then
         state=BLOCKED
         blocked=$((blocked + 1))
-    elif [[ "$line" == *"**DONE"* ]]; then
-        state=DONE
-        done=$((done + 1))
     elif [[ "$line" == *"**INCONCLUSIVE"* || "$line" == *"**VALID NEGATIVE"* ]]; then
         state=TERMINAL_NEGATIVE
         negative=$((negative + 1))
+    elif [[ "$line" == *"**DONE"* ]]; then
+        state=DONE
+        done=$((done + 1))
     else
         state=LIVE
         live=$((live + 1))
