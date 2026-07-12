@@ -1804,3 +1804,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Use 216 calls of correctly-enumerated, target-agnostic prefix search to form validation-gain, near-miss, residual, diversity, and cost trajectories across four route banks under frozen 12/4/4 splits.
 - **Result:** NARROW POSITIVE — the trajectory representation classifies all four held-out routes correctly (4/4), exceeds I1's invalidated 2/4, passes permutation/distance guards, and costs 8.5% of I2's full scan.
 - **Aftermath:** ADOPTED as J4 input only where labeled verifier/evaluator examples exist before routing; it is not yet an allocation or autonomy result.
+
+### [docs/research/trajectory_cost_round_j.md](docs/research/trajectory_cost_round_j.md)
+- **Tried:** Sweep correctly-enumerated target-blind directed-prefix response budgets 16–2,540 calls over seeds and mask/residue permutations, with iid controls and global/no-grammar absence checks.
+- **Result:** TERMINAL NEGATIVE — reliable all-route separation appears first at the 2,540-call full scan; cheap prefixes never reach singleton and only partly reach multi-cell at half scan.
+- **Aftermath:** ADOPTED as a lower bound — any cheap allocator gain must use J2-style labelled trajectory/near-miss evidence, not target-blind prefix best score.
