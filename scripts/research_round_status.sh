@@ -19,11 +19,11 @@ negative=0
 blocked=0
 live=0
 
-for id in G1 G2 G3 G4 G5; do
-    line=$(rg -m1 "^\\| ${id} \\|" "$round_doc" || true)
-    if [[ -z "$line" ]]; then
+while IFS= read -r line; do
+    if [[ ! "$line" =~ ^\|[[:space:]]*([A-Z][0-9]+)[[:space:]]*\| ]]; then
         continue
     fi
+    id=${BASH_REMATCH[1]}
 
     total=$((total + 1))
     if [[ "$line" == *"**BLOCKED"* ]]; then
@@ -40,7 +40,12 @@ for id in G1 G2 G3 G4 G5; do
         live=$((live + 1))
     fi
     printf '%s=%s\n' "$id" "$state"
-done
+done < "$round_doc"
+
+if (( total == 0 )); then
+    printf 'ROUND_STATUS_ERROR: no experiment rows found\n' >&2
+    exit 2
+fi
 
 printf 'SUMMARY: total=%d done=%d terminal_negative=%d blocked=%d live=%d\n' \
     "$total" "$done" "$negative" "$blocked" "$live"
