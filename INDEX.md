@@ -504,7 +504,6 @@ aligns public trace direction with two fixed bit predicates, and evaluator
 isolation remains protocol-level—so it is not open-ended autonomous
 map-making.
 
-**Highest-priority open experiments (updated after Round K):**
 **Highest-priority open experiments (updated after Round M):**
 1. **Break trace-to-tool alignment** — build fresh sealed generators where a
    public trace does not directly encode the winning supplied predicate;
