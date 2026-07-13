@@ -489,18 +489,33 @@ reuses exposed labels, padding calls lack per-call rows, and the boundary is
 protocol-level rather than OS-isolated. **The bench is adopted; autonomous
 map expansion is not.**
 
+**2026-07-13 round (Round M): the bounded map→split→propose→fresh-test loop
+works under enforced accounting** (see
+`docs/research/research_round_2026_07_13.md`): M1 replaces recorded-only
+budgets with a persistent evaluator-owned 12-call ledger; M2 splits controlled
+blank traces 12/12 versus 6/12 unsplit; M3 measures fresh within-region
+transfer 48/48 versus cross/control 24/48; M4 derives a two-production public
+grammar and reaches 48/48 fresh versus menu 24/48. The assembled M5 loop then
+reaches **72/72 fresh tests versus fixed 36/72 and blind 54/72**, at exactly
+29 individually logged calls per arm/target. M6 fresh-cache replay confirms
+the accounting, privacy, order, and train/test controls. **This is a narrowed
+controlled strict positive:** the supplied synthetic generator intentionally
+aligns public trace direction with two fixed bit predicates, and evaluator
+isolation remains protocol-level—so it is not open-ended autonomous
+map-making.
+
 **Highest-priority open experiments (updated after Round K):**
-**Highest-priority open experiments (updated after Round L):**
-1. **Fresh sealed evaluation split + complete call ledger** — evaluator-owned
-   train/query/test partitions, persistent per-session budget, and one row for
-   every charged call; this is required before another autonomy-positive claim.
-2. **Blank-region splitting** — distinguish multiple missing tool territories
-   before imposing a shared-transfer requirement on every detected blank.
-3. **Trace-derived proposal grammar expansion** — generate small nonredundant
-   public candidate languages from trace regions, then test transfer on fresh
-   sealed targets rather than a single predeclared extension.
-4. **Generalization beyond finite coverage** — evaluate unseen grammar families
-   rather than another repartition of the current menu.
+**Highest-priority open experiments (updated after Round M):**
+1. **Break trace-to-tool alignment** — build fresh sealed generators where a
+   public trace does not directly encode the winning supplied predicate;
+   preserve M1's full accounting and fresh-test protocol.
+2. **Expand the proposal alphabet from evidence** — choose or construct its
+   candidate primitives from prior failures, rather than selecting among the
+   two bit predicates embedded in the current synthetic world.
+3. **External-family transfer** — test map splits and proposed grammars on
+   independently generated families outside the M2/M5 construction.
+4. **Harden evaluator isolation** — separate evaluator service/account and
+   hidden manifest from the policy process, beyond protocol-only separation.
 5. **Records, not baselines** — LABS even-N / addchain records still require a
    representability escape, not more aim or budget.
 

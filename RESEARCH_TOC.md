@@ -1921,3 +1921,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Integrate opaque trace mapping, split-driven public proposal grammar, TRAIN selection, evaluator-owned fresh TEST, persistent budget, and equal-cost fixed/blind controls on post-M4 cells.
 - **Result:** CONTROLLED STRICT POSITIVE — 72/72 fresh closed-loop tests versus fixed 36/72 and blind 54/72 at 29 individually ledgered calls per arm/target; restart, order, privacy, and duplicate checks pass.
 - **Aftermath:** PENDING AUDIT — this is a bounded supplied trace/operator/verifier result, not open-ended map-making. M6 must independently reproduce and attack it.
+
+### [docs/research/round_m_audit.md](docs/research/round_m_audit.md)
+- **Tried:** Independently rebuild and attack M1–M5's split, proposal, fresh-test, privacy, budget, baseline, and every-call accounting claims.
+- **Result:** M5 NARROWED/CONFIRMED — 72/72 closed loop versus 36/72 fixed and 54/72 blind at 6×3×29 individually recorded calls survives fresh-cache replay. The CSV schema and generic selftest were corrected during audit closure.
+- **Aftermath:** SETTLES Round M as a controlled strict positive only: the evaluator's supplied synthetic generator deliberately aligns public trace direction with two fixed bit predicates, and its boundary remains protocol-level rather than OS-isolated.

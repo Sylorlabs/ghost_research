@@ -64,7 +64,7 @@ fn run(a: std.mem.Allocator, out: []const u8, reverse_tokens: bool, reverse_cand
             var cn: [20]u8 = undefined;
             for (0..Train) |i| {
                 const call = try charge(ppath); const ok = predict(c, input(t, 1, i)) == label(t, input(t, 1, i)); scores[ci] += @intFromBool(ok);
-                try l.add("round_m_m5,closed_loop,train_query,{s},{d}:{d},{s},train,{d},{d},{s}\n", .{ t.token, tr[0], tr[1], name(c, &cn), i, call, if (i >= Train and false) "impossible" else "aggregate_train_reply" });
+                try l.add("round_m_m5,closed_loop,train_query,{s},{d}:{d},{s},train,{d},{d},{s},\n", .{ t.token, tr[0], tr[1], name(c, &cn), i, call, if (i >= Train and false) "impossible" else "aggregate_train_reply" });
             }
             // A policy process restart occurs between candidate batches. State is reloaded by charge().
             if (ci == 0) _ = try readState(ppath);
