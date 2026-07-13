@@ -1916,3 +1916,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Derive a small public candidate grammar from aggregate trace direction, freeze it on train examples, and compare it with the existing menu on fresh evaluator-owned tests at equal cost.
 - **Result:** CONTROLLED LIMITED POSITIVE — two trace-derived bit-predicate productions reach 48/48 fresh tests versus menu 24/48, with 29 individually logged calls per arm/target and order/privacy controls passing.
 - **Aftermath:** ADOPTED as a bounded proposal result only. The grammar alphabet and trace construction are supplied; M5 must show the full enforced loop and M6 must audit it.
+
+### [docs/research/closed_loop_round_m.md](docs/research/closed_loop_round_m.md)
+- **Tried:** Integrate opaque trace mapping, split-driven public proposal grammar, TRAIN selection, evaluator-owned fresh TEST, persistent budget, and equal-cost fixed/blind controls on post-M4 cells.
+- **Result:** CONTROLLED STRICT POSITIVE — 72/72 fresh closed-loop tests versus fixed 36/72 and blind 54/72 at 29 individually ledgered calls per arm/target; restart, order, privacy, and duplicate checks pass.
+- **Aftermath:** PENDING AUDIT — this is a bounded supplied trace/operator/verifier result, not open-ended map-making. M6 must independently reproduce and attack it.
