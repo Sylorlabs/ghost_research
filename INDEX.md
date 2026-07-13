@@ -466,18 +466,42 @@ equal-cost test: guided trajectory allocation 10/12 vs fixed coverage 12/12
 at 600 calls; J5 independently confirms it. **No autonomous allocation claim
 survives; J6 is correctly blocked.**
 
-**Highest-priority open experiments (updated after Round F):**
-1. **Rebuild F1 on valid production-derived targets** — binary, non-degenerate,
-   20/20 own-prior reachability, exclusive benefit labels, leakage-clean split.
-2. **Install and freeze F3's corrected novelty gate** — multi-feature COVER
-   reconstruction, then rerun all newly admitted RUN-family capabilities.
-3. **Rerun the assembled loop with corrected gate + valid selector** — the
-   decisive full-autonomy equivalence test; current result is 58/73 vs 59/73.
-4. **Cross-seed prior-transfer curve** — F4 is one seed/one budget; measure how
-   atom and prior amortization scale across targets, depth, seeds, and budgets.
-5. **Attack the shared depth boundary** — `shift->dist->gxor` missed every F4
-   arm; it is the clean next representability target.
-6. **Records, not baselines** — LABS even-N / addchain records still require a
+**2026-07-12d round (Round K): adaptive allocation remains negative under a
+fresh holdout** (see `docs/research/research_round_2026_07_12d.md`): K1 shows
+the old fixed policy wins through broad finite coverage (a 127-call witness on
+its frozen battery); K2 yields a limited, labelled-evaluator-only
+permutation-invariant route representation; K4 supplies a deterministic
+post-freeze 24-target hidden suite. The decisive K3 comparison is a **valid
+negative** at 600 charged calls: adaptive 10/24 = fixed 10/24 = blind 10/24,
+with IID 9/24. K5 independently confirms the ledger and warns that the
+holdout boundary is procedural rather than process-isolated. **No autonomous
+allocation claim survives; K6 is correctly blocked.**
+
+**2026-07-12e round (Round L): a safe experiment bench works, but map-guided
+family transfer does not yet** (see `docs/research/research_round_2026_07_12e.md`):
+L1/L2 are controlled trace-map and blank-detection positives; L3 now supplies
+opaque diagnostics and charged candidate queries without formula/mask/audit
+fields. The revised L4 therefore runs an honest equal-cost expedition and
+finds one exact sealed win (12/12 versus 10/12), but misses its other blank
+target (10/12 versus 11/12), so the two-target transfer criterion is a **valid
+negative**. L5 confirms the result and adds the hard limits: query scoring
+reuses exposed labels, padding calls lack per-call rows, and the boundary is
+protocol-level rather than OS-isolated. **The bench is adopted; autonomous
+map expansion is not.**
+
+**Highest-priority open experiments (updated after Round K):**
+**Highest-priority open experiments (updated after Round L):**
+1. **Fresh sealed evaluation split + complete call ledger** — evaluator-owned
+   train/query/test partitions, persistent per-session budget, and one row for
+   every charged call; this is required before another autonomy-positive claim.
+2. **Blank-region splitting** — distinguish multiple missing tool territories
+   before imposing a shared-transfer requirement on every detected blank.
+3. **Trace-derived proposal grammar expansion** — generate small nonredundant
+   public candidate languages from trace regions, then test transfer on fresh
+   sealed targets rather than a single predeclared extension.
+4. **Generalization beyond finite coverage** — evaluate unseen grammar families
+   rather than another repartition of the current menu.
+5. **Records, not baselines** — LABS even-N / addchain records still require a
    representability escape, not more aim or budget.
 
 ---

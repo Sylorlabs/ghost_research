@@ -1819,3 +1819,71 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Independently audit J1 sampler keys, J2 prefix-order and label-availability assumptions, supplied `none` controls, and J4's equal-cost ledger.
 - **Result:** MIXED AUDIT — J1 keys pass; J2 is only fixed-order labelled-evaluator separation (valid orders change prefix response and `none` is adjacency); J4's guided 10/12 vs fixed 12/12 negative is confirmed.
 - **Aftermath:** ADOPTED as the closing constraint — no general trajectory representation or allocation advance survives; J6 must remain blocked.
+
+---
+
+## 23. Research round 2026-07-12d (Round K) — adaptive allocation versus fixed coverage
+
+### [docs/research/research_round_2026_07_12d.md](docs/research/research_round_2026_07_12d.md)
+- **Tried:** Test whether order-invariant early search outcomes can adapt budget allocation better than strong fixed human coverage, on post-freeze hidden structures.
+- **Result:** Live — K2 and K4 have landed; K1 is under repair after coordinator compilation verification failed.
+- **Aftermath:** OPEN — no allocator is permitted until the forensic harness executes and the foundation contracts are runtime-verified.
+
+### [docs/research/invariant_trajectory_round_k.md](docs/research/invariant_trajectory_round_k.md)
+- **Tried:** Build 24 permutation-invariant distribution/trajectory features over correctly enumerated directed search outcomes, without target identity/family metadata or a useful fixed candidate order.
+- **Result:** LIMITED POSITIVE — 4/4 frozen held-out route separation at 254 calls, with unique-enumeration and order/mask/residue guards; requires labelled evaluator examples before routing.
+- **Aftermath:** ADOPTED only as a candidate K3 input — it is not yet an allocation or fixed-baseline win.
+
+### [docs/research/hidden_holdout_round_k.md](docs/research/hidden_holdout_round_k.md)
+- **Tried:** Generate a deterministic post-freeze 24-target hidden suite across random directed partitions of sizes 1–4 plus threshold, adjacency, XOR, and parity controls, separating policy-safe from audit fields.
+- **Result:** VALID EVALUATION INFRASTRUCTURE — all targets are nondegenerate and audit-unique; deterministic regeneration byte-compares cleanly.
+- **Aftermath:** ADOPTED as K3/K5's holdout surface; no policy success claim is implied.
+
+### [docs/research/fixed_policy_forensic_round_k.md](docs/research/fixed_policy_forensic_round_k.md)
+- **Tried:** Replay J4's fixed 12/12 coverage with exact per-call attribution, bank-removal and directed-prefix ablations, unique-key/reverse-order assertions, and deterministic selftest.
+- **Result:** RUNTIME VERIFIED — global, adjacency, and directed each carry a distinct 3/12 loss when removed; singleton is redundant because directed index 35 covers it. Directed-200 is sufficient, and the post-hoc frozen-suite minimum is 127 calls.
+- **Aftermath:** ADOPTED as K3's hard baseline explanation — the policy wins through broad finite coverage, and an adaptive policy must beat this compact 127-call witness schedule on K4 hidden structures.
+
+### [docs/research/adaptive_allocator_round_k.md](docs/research/adaptive_allocator_round_k.md)
+- **Tried:** Charge every arm 600 calls per target, using the same labelled evaluator access, then compare a frozen adaptive elimination policy with K1-informed fixed coverage, blind directed coverage, and IID random on K4's post-freeze hidden suite.
+- **Result:** VALID NEGATIVE — adaptive, fixed, and blind each reach 10/24; IID reaches 9/24. Adaptive does not meet its predeclared strict-win criterion.
+- **Aftermath:** REJECTED as an autonomous allocation advance. K6 is blocked; K5 may only audit scope and integrity, not rescue the failed comparative claim.
+
+### [docs/research/adaptive_policy_audit_round_k.md](docs/research/adaptive_policy_audit_round_k.md)
+- **Tried:** Independently attack K2's claimed feature invariance and label boundary, K4's hidden-holdout integrity and information boundary, and every K3 cost and outcome row.
+- **Result:** AUDIT PASS FOR THE NEGATIVE — all 96 K3 arm-target rows charge 600 calls and recount adaptive/fixed/blind/IID as 10/10/10/9. K2 remains a labelled-evaluator-only representation; K4 is deterministic, unique, and opaque to the policy, but the manifest boundary is procedural rather than process-isolated.
+- **Aftermath:** SETTLES Round K: no adaptive-allocation advance is established, and K6 remains blocked. Any future positive requires a sealed evaluator/manifest as well as a strict equal-cost win.
+
+---
+
+## 24. Research round 2026-07-12e (Round L) — map-making and family invention
+
+### [docs/research/research_round_2026_07_12e.md](docs/research/research_round_2026_07_12e.md)
+- **Tried:** Move beyond allocation over human-designed banks: organize search failures into a map, detect a blank region, seal evaluator data, then attempt reusable family invention.
+- **Result:** Live — L1/L2/L3 supply limited map/detection/boundary substrate; L4 is the gated invention expedition.
+- **Aftermath:** OPEN — only a sealed, multi-target, equal-cost L4 win can support a map-expansion claim.
+
+### [docs/research/failure_atlas_round_l.md](docs/research/failure_atlas_round_l.md)
+- **Tried:** Cluster score-outcome histograms without target, formula, route, mask, candidate identity, or audit fields.
+- **Result:** LIMITED POSITIVE — 12/12 controlled held-out trace-property predictions versus 8/12 majority, with reverse-order and duplicate guards.
+- **Aftermath:** ADOPTED as controlled atlas substrate only; it is not semantic map-making.
+
+### [docs/research/blank_region_round_l.md](docs/research/blank_region_round_l.md)
+- **Tried:** Detect trace-only blanks outside the current grammar map on held-out synthetic cells.
+- **Result:** LIMITED POSITIVE — 4/4 blank detections and 8/8 represented retentions, precision/recall 1.000; permutation and duplicate controls pass.
+- **Aftermath:** ADOPTED as L4's blank signal only; it does not invent the missing family.
+
+### [docs/research/sealed_evaluator_round_l.md](docs/research/sealed_evaluator_round_l.md)
+- **Tried:** Separate evaluator-owned private target data from policy-visible opaque labelled transcripts.
+- **Result:** PROTOCOL BOUNDARY — 36-example opaque transcript, audit-column rejection, evaluator-to-policy run, and deterministic replay pass.
+- **Aftermath:** ADOPTED with limit: this is not OS isolation, so future strong positives still need a separately held manifest or hardened runner.
+
+### [docs/research/family_expedition_round_l.md](docs/research/family_expedition_round_l.md)
+- **Tried:** Repair the sealed interface with policy-safe current-menu diagnostics and charged candidate queries, then derive a public-language extension from opaque trace evidence and compare it at equal cost.
+- **Result:** VALID NEGATIVE — the threshold extension exact-wins one blank opaque target (12/12 versus existing menu 10/12) at 412 charged calls, but misses the second (10/12 versus 11/12). It does not meet the predeclared two-target transfer criterion.
+- **Aftermath:** ADOPTED as a protocol repair, not a map-expansion success: safe experimental access is sufficient to run an honest expedition, but this proposed family does not generalize across the detected blank region.
+
+### [docs/research/cartography_audit_round_l.md](docs/research/cartography_audit_round_l.md)
+- **Tried:** Independently attack the trace atlas, blank detector, sealed public API, candidate enumeration, target eligibility, and L4's equal-cost result.
+- **Result:** AUDIT CONFIRMS THE NEGATIVE — one of two blank tokens exact-wins and the other fails; API replies contain no private formula/mask/audit data. The protocol is not OS-isolated, query scoring reuses exposed labelled examples, and 332 padding calls are summarized rather than individually ledgered.
+- **Aftermath:** SETTLES Round L. Any future positive needs a fresh sealed evaluation split, enforced budget/session accounting, and a complete per-call ledger.

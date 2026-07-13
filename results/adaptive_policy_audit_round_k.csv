@@ -1,0 +1,9 @@
+check,scope,result,evidence,classification
+k2_heldout_replay,K2,PASS,4/4 heldout correct at 254 charged calls,limited_positive_representation_only
+k2_order_and_enum_gates,K2,PASS,8 reported validation/heldout rows; reverse-order/enumeration/permutation gates all pass,no_fixed_prefix_evidence
+k2_label_availability,K2,ATTACK_SURVIVES,features are scores against labelled evaluator examples; no unlabelled-target claim,limit_requires_labels
+k4_manifest_replay,K4,PASS,24/24 opaque tokens; committed seed and nondegenerate/unique/permutation fields replay,valid_holdout_manifest
+k4_information_boundary,K4,WARN,audit fields are published in the manifest and suite source; K3 policy does not read them but no OS/process sandbox enforces that,procedural_not_hardened
+k3_call_accounting,K3,PASS,96 arm-target rows; bad_cost=0; bad_integrity=0,equal_cost_valid
+k3_comparative_recount,K3,PASS,adaptive=10; fixed=10; blind=10; iid=9,VALID_NEGATIVE
+VERDICT,Round_K_K5,PASS,K3 tie survives order-label-baseline-accounting attacks; no strict adaptive advantage,K3_VALID_NEGATIVE
