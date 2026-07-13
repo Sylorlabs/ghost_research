@@ -1887,3 +1887,27 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Independently attack the trace atlas, blank detector, sealed public API, candidate enumeration, target eligibility, and L4's equal-cost result.
 - **Result:** AUDIT CONFIRMS THE NEGATIVE — one of two blank tokens exact-wins and the other fails; API replies contain no private formula/mask/audit data. The protocol is not OS-isolated, query scoring reuses exposed labelled examples, and 332 padding calls are summarized rather than individually ledgered.
 - **Aftermath:** SETTLES Round L. Any future positive needs a fresh sealed evaluation split, enforced budget/session accounting, and a complete per-call ledger.
+
+---
+
+## 25. Research round 2026-07-13 (Round M) — split the blank, then prove transfer
+
+### [docs/research/research_round_2026_07_13.md](docs/research/research_round_2026_07_13.md)
+- **Tried:** Repair L5's fresh-test and complete-ledger limits, then test whether trace-defined blank subregions predict family transfer before attempting proposal grammar invention.
+- **Result:** Live — M1–M3 are verified infrastructure/controlled positives; M4 is the gated proposal-grammar test.
+- **Aftermath:** OPEN — no autonomous proposal or closed-loop win is claimed until fresh-test M4/M5 and audit pass.
+
+### [docs/research/hardened_evaluator_round_m.md](docs/research/hardened_evaluator_round_m.md)
+- **Tried:** Enforce evaluator-owned opaque train/query/test splits, persistent budget state, and an individual row for every charged action.
+- **Result:** EVALUATION INFRASTRUCTURE PASS — 12 calls ledgered, restart cannot reset state, a thirteenth call is rejected, and schema/replay checks pass.
+- **Aftermath:** ADOPTED as M4/M5's protocol substrate, with explicit protocol-not-OS-isolation limitation.
+
+### [docs/research/blank_split_round_m.md](docs/research/blank_split_round_m.md)
+- **Tried:** Split blank traces using only four aggregate current-menu maxima.
+- **Result:** CONTROLLED LIMITED POSITIVE — 12/12 held-out subregion predictions versus 6/12 unsplit, with token/order/permutation/duplicate guards.
+- **Aftermath:** ADOPTED as a controlled map-refinement input, not external-family generalization.
+
+### [docs/research/family_transfer_matrix_round_m.md](docs/research/family_transfer_matrix_round_m.md)
+- **Tried:** Measure pre-existing public-family transfer on fresh evaluator-owned test splits across trace-defined regions.
+- **Result:** LIMITED POSITIVE — 48/48 within-region fresh transfer versus 24/48 cross-region and equal-cost menu control; train/test and all calls are disjoint/ledgered.
+- **Aftermath:** ADOPTED as evidence that blank subregions matter; it does not invent a family or beat fixed coverage through a closed loop.
