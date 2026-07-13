@@ -1911,3 +1911,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Measure pre-existing public-family transfer on fresh evaluator-owned test splits across trace-defined regions.
 - **Result:** LIMITED POSITIVE — 48/48 within-region fresh transfer versus 24/48 cross-region and equal-cost menu control; train/test and all calls are disjoint/ledgered.
 - **Aftermath:** ADOPTED as evidence that blank subregions matter; it does not invent a family or beat fixed coverage through a closed loop.
+
+### [docs/research/proposal_grammar_round_m.md](docs/research/proposal_grammar_round_m.md)
+- **Tried:** Derive a small public candidate grammar from aggregate trace direction, freeze it on train examples, and compare it with the existing menu on fresh evaluator-owned tests at equal cost.
+- **Result:** CONTROLLED LIMITED POSITIVE — two trace-derived bit-predicate productions reach 48/48 fresh tests versus menu 24/48, with 29 individually logged calls per arm/target and order/privacy controls passing.
+- **Aftermath:** ADOPTED as a bounded proposal result only. The grammar alphabet and trace construction are supplied; M5 must show the full enforced loop and M6 must audit it.
