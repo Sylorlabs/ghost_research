@@ -1926,3 +1926,12 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Independently rebuild and attack M1–M5's split, proposal, fresh-test, privacy, budget, baseline, and every-call accounting claims.
 - **Result:** M5 NARROWED/CONFIRMED — 72/72 closed loop versus 36/72 fixed and 54/72 blind at 6×3×29 individually recorded calls survives fresh-cache replay. The CSV schema and generic selftest were corrected during audit closure.
 - **Aftermath:** SETTLES Round M as a controlled strict positive only: the evaluator's supplied synthetic generator deliberately aligns public trace direction with two fixed bit predicates, and its boundary remains protocol-level rather than OS-isolated.
+
+---
+
+## 26. Research round 2026-07-14 (Round N) — break trace-to-tool alignment
+
+### [docs/research/research_round_2026_07_14.md](docs/research/research_round_2026_07_14.md)
+- **Tried:** Remove the supplied trace-to-predicate shortcut behind Round M, then test whether public failure memory can rank and generate useful tools on decoupled sealed targets.
+- **Result:** Live — N1 benchmark, N2 leakage audit, and N3 memory proposer are running in parallel.
+- **Aftermath:** OPEN — N4/N5 are forbidden unless N1/N2 prove the public trace is non-diagnostic.
