@@ -1955,3 +1955,12 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Freeze two history-supported public compositions, refuse all held-out candidate queries, and compare one evaluator-owned fresh score per arm on trace-decoupled targets.
 - **Result:** VALID NEGATIVE — history grammar 4/8 versus fixed atoms 0/8, but blind composition also 4/8; the grammar solves only one of two hidden kinds.
 - **Aftermath:** SETTLES Round N — memory can retain promising compositions but cannot select which applies to a genuinely fresh trace-decoupled target. N5/N6 are correctly blocked.
+
+---
+
+## 27. Research round 2026-07-14b (Round O) — active probes before tool commitment
+
+### [docs/research/research_round_2026_07_14b.md](docs/research/research_round_2026_07_14b.md)
+- **Tried:** Add a budgeted, evaluator-owned active-probe stage so a policy can acquire permitted conditional information before committing a grammar on Round N-style decoupled targets.
+- **Result:** Live — O1 probe catalog, O2 probe policy, and O3 independent cost/leakage audit are running in parallel.
+- **Aftermath:** OPEN — no grammar or closed-loop test may run until probes are shown to be informative, fair, and non-leaking.
