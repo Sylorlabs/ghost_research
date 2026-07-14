@@ -1979,3 +1979,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Independently attack passive trace, token/ID, heldout probe access, persistent budget, and per-action equal-cost accounting.
 - **Result:** PROTOCOL AUDIT PASS — base trace is prior, heldout probes are denied, 96 individual equal-cost actions and restart/privacy/order controls pass.
 - **Aftermath:** AUTHORIZES O4 within the stated synthetic/protocol limits.
+
+### [docs/research/probe_guided_grammar_round_o.md](docs/research/probe_guided_grammar_round_o.md)
+- **Tried:** Buy one permitted aggregate probe, freeze one public grammar before fresh score, and compare against equal-cost fixed, blind, prior, and no-probe arms across two evaluator partitions.
+- **Result:** CONTROLLED STRICT POSITIVE — guided grammar 16/16 fresh versus every control 8/16, with 8/8 in each partition at four individually logged calls per arm/target.
+- **Aftermath:** ADOPTED as a bounded active-commitment result. O5 must test the full post-policy-freeze active loop and O6 must audit it.
