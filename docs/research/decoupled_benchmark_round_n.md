@@ -2,8 +2,8 @@
 
 **Verdict: PASS — benchmark foundation; not an invention result.**
 
-Harness: `sparse_poly_discovery/decoupled_benchmark_round_n.zig`  
-Public result: `results/decoupled_benchmark_round_n.csv`  
+Harness: `sparse_poly_discovery/decoupled_benchmark_round_n.zig`
+Public result: `results/decoupled_benchmark_round_n.csv`
 Per-action evaluator ledger: `results/decoupled_benchmark_round_n.ledger.csv`
 
 ## Question
