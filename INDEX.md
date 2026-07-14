@@ -504,15 +504,27 @@ aligns public trace direction with two fixed bit predicates, and evaluator
 isolation remains protocol-level—so it is not open-ended autonomous
 map-making.
 
-**Highest-priority open experiments (updated after Round M):**
-1. **Break trace-to-tool alignment** — build fresh sealed generators where a
-   public trace does not directly encode the winning supplied predicate;
-   preserve M1's full accounting and fresh-test protocol.
-2. **Expand the proposal alphabet from evidence** — choose or construct its
-   candidate primitives from prior failures, rather than selecting among the
-   two bit predicates embedded in the current synthetic world.
-3. **External-family transfer** — test map splits and proposed grammars on
-   independently generated families outside the M2/M5 construction.
+**2026-07-14 round (Round N): removing trace-to-tool leakage removes the
+closed-loop advantage** (see `docs/research/research_round_2026_07_14.md`):
+N1/N2 establish an evaluator-owned, trace-decoupled substrate (router equals
+family prior; exact counterfactual trace-only bound is chance); N3's controlled
+failure memory ranks primitives 12/12 versus family prior 6/12 and blind 4/12.
+But N4's decisive fresh evaluation is a **valid negative**: history grammar
+4/8 beats fixed atoms 0/8 but ties blind composition 4/8 and transfers to only
+one hidden kind. **The Round M loop was exploiting trace-to-tool alignment;
+memory alone does not yet choose a tool for a genuinely fresh decoupled target.
+N5/N6 are correctly blocked.**
+
+**Highest-priority open experiments (updated after Round N):**
+1. **Active information acquisition** — on decoupled targets, can a policy
+   choose *which permitted diagnostic or probe to buy* to distinguish candidate
+   families before committing a grammar, under equal total cost?
+2. **Memory representation beyond a lookup table** — learn reusable relations
+   between prior failures and diagnostic responses that transfer across new
+   decoupled generators, rather than ranking a finite supplied history bin.
+3. **Proposal alphabet expansion from evidence** — choose or construct
+   primitives from past failures without embedding the winning composition
+   language in the benchmark.
 4. **Harden evaluator isolation** — separate evaluator service/account and
    hidden manifest from the policy process, beyond protocol-only separation.
 5. **Records, not baselines** — LABS even-N / addchain records still require a

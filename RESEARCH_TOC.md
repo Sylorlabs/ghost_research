@@ -1950,3 +1950,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Rank public primitives from a frozen shuffled ledger of prior aggregate diagnostic/outcome rows, with only a current diagnostic bin for held-out cases.
 - **Result:** CONTROLLED LIMITED POSITIVE — memory ranking 12/12, family prior 6/12, blind 4/12; ID/order/duplicate/private-field controls pass.
 - **Aftermath:** ADOPTED as a controlled evidence-memory signal only; it must transfer to N1's decoupled evaluator before supporting a broader claim.
+
+### [docs/research/decoupled_grammar_round_n.md](docs/research/decoupled_grammar_round_n.md)
+- **Tried:** Freeze two history-supported public compositions, refuse all held-out candidate queries, and compare one evaluator-owned fresh score per arm on trace-decoupled targets.
+- **Result:** VALID NEGATIVE — history grammar 4/8 versus fixed atoms 0/8, but blind composition also 4/8; the grammar solves only one of two hidden kinds.
+- **Aftermath:** SETTLES Round N — memory can retain promising compositions but cannot select which applies to a genuinely fresh trace-decoupled target. N5/N6 are correctly blocked.
