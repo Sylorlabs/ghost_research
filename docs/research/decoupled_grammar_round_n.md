@@ -7,7 +7,7 @@ It did not beat blind selection or transfer across both independent hidden
 kinds. This is the correct result once N1's prohibition on held-out target
 queries is preserved.
 
-Harness: `sparse_poly_discovery/decoupled_grammar_round_n.zig`  
+Harness: `sparse_poly_discovery/decoupled_grammar_round_n.zig`
 Ledger: `results/decoupled_grammar_round_n.csv`
 
 ## Protocol
