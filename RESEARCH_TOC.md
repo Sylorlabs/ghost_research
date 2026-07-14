@@ -1964,3 +1964,18 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Add a budgeted, evaluator-owned active-probe stage so a policy can acquire permitted conditional information before committing a grammar on Round N-style decoupled targets.
 - **Result:** Live — O1 probe catalog, O2 probe policy, and O3 independent cost/leakage audit are running in parallel.
 - **Aftermath:** OPEN — no grammar or closed-loop test may run until probes are shown to be informative, fair, and non-leaking.
+
+### [docs/research/probe_catalog_round_o.md](docs/research/probe_catalog_round_o.md)
+- **Tried:** Measure declared aggregate probe information and cost over a counterfactually trace-decoupled sealed fixture.
+- **Result:** CONTROLLED PROTOCOL POSITIVE — passive trace/prior is 4/8, either one-cost probe routes 8/8, and a redundant second probe lowers information per cost.
+- **Aftermath:** ADOPTED as a safe charged-diagnostic interface, not discovered experimental design or natural-target evidence.
+
+### [docs/research/probe_policy_round_o.md](docs/research/probe_policy_round_o.md)
+- **Tried:** Use frozen public history to choose which permitted probe to purchase before routing a candidate.
+- **Result:** CONTROLLED POSITIVE — learned policy 12/12 versus fixed/blind 9/12 and prior/no-probe 6/12 at three charged calls per case.
+- **Aftermath:** ADOPTED as a bounded active-information policy; O4 must test whether it improves fresh grammar commitment rather than only family routing.
+
+### [docs/research/probe_audit_round_o.md](docs/research/probe_audit_round_o.md)
+- **Tried:** Independently attack passive trace, token/ID, heldout probe access, persistent budget, and per-action equal-cost accounting.
+- **Result:** PROTOCOL AUDIT PASS — base trace is prior, heldout probes are denied, 96 individual equal-cost actions and restart/privacy/order controls pass.
+- **Aftermath:** AUTHORIZES O4 within the stated synthetic/protocol limits.
