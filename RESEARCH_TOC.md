@@ -1935,3 +1935,18 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Remove the supplied trace-to-predicate shortcut behind Round M, then test whether public failure memory can rank and generate useful tools on decoupled sealed targets.
 - **Result:** Live — N1 benchmark, N2 leakage audit, and N3 memory proposer are running in parallel.
 - **Aftermath:** OPEN — N4/N5 are forbidden unless N1/N2 prove the public trace is non-diagnostic.
+
+### [docs/research/decoupled_benchmark_round_n.md](docs/research/decoupled_benchmark_round_n.md)
+- **Tried:** Build evaluator-owned opaque train/query/test targets with independent public diagnostics and two public candidate families.
+- **Result:** BENCHMARK PASS — trace router 2/4 equals family prior 2/4; all 12 targets are valid/nondegenerate, and persistent budget/restart/heldout-query/individual-ledger controls pass.
+- **Aftermath:** ADOPTED as the N4 decoupled substrate; it removes Round M's direct public trace shortcut but is not OS-isolated.
+
+### [docs/research/trace_information_audit_round_n.md](docs/research/trace_information_audit_round_n.md)
+- **Tried:** Prove or refute trace-only family leakage using counterfactual paired traces, frozen classifiers, all field permutations, and ID/duplicate attacks.
+- **Result:** AUDIT PASS — every deterministic trace-only rule is exactly 12/24, family-prior chance; no classifier/permutation improves it.
+- **Aftermath:** ADOPTED as a strict no-trace-family-information fixture, with explicit artificial-corpus limitation.
+
+### [docs/research/failure_memory_proposer_round_n.md](docs/research/failure_memory_proposer_round_n.md)
+- **Tried:** Rank public primitives from a frozen shuffled ledger of prior aggregate diagnostic/outcome rows, with only a current diagnostic bin for held-out cases.
+- **Result:** CONTROLLED LIMITED POSITIVE — memory ranking 12/12, family prior 6/12, blind 4/12; ID/order/duplicate/private-field controls pass.
+- **Aftermath:** ADOPTED as a controlled evidence-memory signal only; it must transfer to N1's decoupled evaluator before supporting a broader claim.
