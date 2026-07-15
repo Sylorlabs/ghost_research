@@ -2023,3 +2023,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Compose a diagnostic from generic Boolean/comparison atoms using only answer-free causal calibration classes, then validate under score-private aggregate closure.
 - **Result:** CONTROLLED POSITIVE — forged count-then-compare separates 12/12 sealed validation sessions versus generic parity fold 6/12 at equal cost; structural/privacy/order/duplicate controls pass.
 - **Aftermath:** ADOPTED as a bounded raw-atom measurement-forge result. P5 must forge a reusable operation on fresh hidden multi-kind tasks and P6 must audit it.
+
+### [docs/research/tool_forge_round_p.md](docs/research/tool_forge_round_p.md)
+- **Tried:** Use answer-free causal memory and an atom-composed measurement to retain a nonredundant raw-atom operation before evaluator-owned score-private fresh closure across three hidden kinds.
+- **Result:** CONTROLLED STRICT POSITIVE — forged operation 24/24 fresh aggregate versus raw/fixed 0/24 and blind 8/24, at three persistent calls/session; no individual target answer or target-operation link is released.
+- **Aftermath:** PENDING AUDIT — supplied atom grammar, evaluator, and causal classes remain a bounded substrate; P6 must independently test answer leakage, renamed tools, accounting, and replay.
