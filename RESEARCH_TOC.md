@@ -2018,3 +2018,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Attack policy-visible notebook records for target identity, family, fresh answer, winner, association, injected schema, joins, and carryover.
 - **Result:** CONFIRMED, NARROWED — recovery remains at chance and eight answer-bearing fields quarantine deterministically; no answer join path exists in the fixture.
 - **Aftermath:** AUTHORIZES P4, but does not constitute cryptographic or OS-isolation proof.
+
+### [docs/research/measurement_forge_round_p.md](docs/research/measurement_forge_round_p.md)
+- **Tried:** Compose a diagnostic from generic Boolean/comparison atoms using only answer-free causal calibration classes, then validate under score-private aggregate closure.
+- **Result:** CONTROLLED POSITIVE — forged count-then-compare separates 12/12 sealed validation sessions versus generic parity fold 6/12 at equal cost; structural/privacy/order/duplicate controls pass.
+- **Aftermath:** ADOPTED as a bounded raw-atom measurement-forge result. P5 must forge a reusable operation on fresh hidden multi-kind tasks and P6 must audit it.
