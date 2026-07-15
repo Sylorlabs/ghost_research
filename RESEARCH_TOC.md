@@ -2062,3 +2062,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Scout and quarantine admitted typed materials, then forge a content-lineaged primitive and score only aggregate fresh transfer across three hidden variants.
 - **Result:** CONTROLLED STRICT POSITIVE — count+relation material 24/24 versus count/relation/fixed 0/24 and blind 8/24, at four individually ledgered actions per session.
 - **Aftermath:** ADOPTED as a bounded supply-chain forge. Q5 must test the full request→expedition loop and Q6 must reconstruct provenance/answer boundaries.
+
+### [docs/research/material_expedition_round_q.md](docs/research/material_expedition_round_q.md)
+- **Tried:** Run request/residual → public-passport scout → quarantine → lineaged forge → measurement → pre-score commitment → score-private fresh closure on a new three-cohort suite.
+- **Result:** CONTROLLED STRICT POSITIVE — full expedition 24/24 versus raw/fixed/no-prior 0/24 and blind 8/24 at six persistent ledgered actions/session; it wins 8/8 in each cohort.
+- **Aftermath:** PENDING AUDIT — this is an approved fixture universe, not unrestricted external acquisition. Q6 must attack provenance, aliases, answer boundaries, cost, and replay.
