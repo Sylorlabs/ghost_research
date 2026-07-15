@@ -1,0 +1,6 @@
+material_id,source_class,content_hash,capability_descriptor,cost,policy_tag,lineage,admission
+QMAT-1,safe_local_corpus,246c0056dbff59cb,state_transition_vocabulary,1,local_safe_excerpt,local_fixture_corpus_v1,accepted
+QMAT-2,generic_atom,3a8490803f0413dd,boolean_relation_fold,1,approved_generic,raw_atom_v1,accepted
+QMAT-3,public_forge_artifact,9e211793d9a03477,aggregate_measurement_shape,2,public_prior_artifact,round_p_p4_public,accepted
+QMAT-4,generic_atom,cf4ccde68a0fdf19,bounded_count_comparison,1,approved_generic,raw_atom_v1,accepted
+QMAT-5,synthetic_simulator,e71d61897bf06a50,safe_counterfactual_observation,3,approved_synthetic,simulator_fixture_v1,accepted

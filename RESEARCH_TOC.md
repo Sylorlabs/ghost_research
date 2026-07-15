@@ -2042,3 +2042,18 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Replace the fixed raw-material box with an approved, provenance-tracked material universe; gate scouting, quarantine, forging, and autonomous expedition behind answer-key firewalls.
 - **Result:** Live — Q1 registry, Q2 scout, and Q3 quarantine are running in parallel.
 - **Aftermath:** OPEN — material discovery cannot inspect hidden evaluator/test state and no forge/expedition runs until provenance and leakage gates pass.
+
+### [docs/research/material_universe_round_q.md](docs/research/material_universe_round_q.md)
+- **Tried:** Establish a typed, content-addressed, lineage-bearing approved material registry and reject answer/evaluator sources and aliases.
+- **Result:** REGISTRY FOUNDATION — five canonical fixture materials pass provenance/hash/privacy gates; missing provenance, duplicates, and evaluator/test origins reject.
+- **Aftermath:** ADOPTED as a controlled supply-chain boundary, not literal Internet/world access.
+
+### [docs/research/material_scout_round_q.md](docs/research/material_scout_round_q.md)
+- **Tried:** Retrieve approved material passports from answer-free causal residual summaries under equal persistent cost.
+- **Result:** CONTROLLED POSITIVE — scout 12/12 held-out calibration retrieval versus material-prior/blind 4/12.
+- **Aftermath:** ADOPTED as bounded material retrieval; descriptors/residual vocabulary are supplied and no external material is acquired yet.
+
+### [docs/research/material_quarantine_round_q.md](docs/research/material_quarantine_round_q.md)
+- **Tried:** Fail closed on provenance, aliases, private origins/joins, correlation, post-test selection, free-text laundering, and undercounted admission cost.
+- **Result:** SAFETY FOUNDATION — 2/11 qualified materials admitted, nine unsafe/duplicate routes rejected with deterministic individual inspection ledger.
+- **Aftermath:** AUTHORIZES Q4; material acquisition remains a controlled provenance fixture.
