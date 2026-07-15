@@ -1,0 +1,13 @@
+audit,attack,observed_recovery,baseline,verdict,evidence
+p3,target_identity_fingerprint,1/12,1/12,PASS,only_fourfold_duplicate_public_signatures; no_token_column
+p3,hidden_family_classifier,6/12,6/12,PASS,balanced_fixture; public fields held invariant under family swap
+p3,per_target_fresh_result,6/12,6/12,PASS,score_private; final result absent from records
+p3,winning_tool_recovery,6/12,6/12,PASS,tool winner absent from records
+p3,target_to_tool_join,6/12,6/12,PASS,no target key or answer-side foreign key in policy schema
+p3,token_permutation,1/12,1/12,PASS,opaque ordering unavailable and signature duplicates remain
+p3,record_order_permutation,1/12,1/12,PASS,canonical sort is by public fields only
+p3,duplicate_attack,1/12,1/12,PASS,duplicates lower rather than increase identity resolution
+p3,free_text_schema_injection,0/8,0/8,PASS,all eight forbidden keys deterministically quarantined
+p3,persistent_campaign_boundary,0/1,0/1,PASS,closed campaign exports aggregate only; no per-target carryover
+p3,answer_join_path,0/1,0/1,PASS,PublicRecord has no target or answer identifier
+p3,verdict,NA,NA,CONFIRMED_NARROWED,fixture proves schema/protocol boundary not cryptographic or OS isolation

@@ -2003,3 +2003,18 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Replace post-run answer-bearing artifacts with a score-private evaluator vault and answer-free causal experience notebook, then gate measurement/tool forging on an adversarial memory-leak audit.
 - **Result:** Live — P1 vault, P2 causal notebook, and P3 memory-leak audit are running in parallel.
 - **Aftermath:** OPEN — no forge step is allowed until policy memory is demonstrated unable to recover target-level answers.
+
+### [docs/research/score_private_vault_round_p.md](docs/research/score_private_vault_round_p.md)
+- **Tried:** Build an evaluator-owned anonymous campaign whose policy artifact retains only allowed calibration experience and releases aggregate-only closure totals.
+- **Result:** VAULT FOUNDATION — zero identity/fresh-outcome recovery, no join keys, schema rejection, persistent budget, and byte replay pass.
+- **Aftermath:** ADOPTED as score-private protocol substrate, with explicit no-OS-isolation limitation.
+
+### [docs/research/causal_memory_round_p.md](docs/research/causal_memory_round_p.md)
+- **Tried:** Store only canonical generic attempt, observation, residual, cost, hypothesis, and calibration effect fields, then use history for permitted calibration choice.
+- **Result:** CONTROLLED LIMITED POSITIVE — answer-free notebook 12/12 versus blind 2/12, with schema/privacy/order/duplicate/replay gates.
+- **Aftermath:** ADOPTED as experience-memory substrate only; it is not a hidden-task or forged-tool result.
+
+### [docs/research/memory_leak_audit_round_p.md](docs/research/memory_leak_audit_round_p.md)
+- **Tried:** Attack policy-visible notebook records for target identity, family, fresh answer, winner, association, injected schema, joins, and carryover.
+- **Result:** CONFIRMED, NARROWED — recovery remains at chance and eight answer-bearing fields quarantine deterministically; no answer join path exists in the fixture.
+- **Aftermath:** AUTHORIZES P4, but does not constitute cryptographic or OS-isolation proof.
