@@ -1984,3 +1984,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Buy one permitted aggregate probe, freeze one public grammar before fresh score, and compare against equal-cost fixed, blind, prior, and no-probe arms across two evaluator partitions.
 - **Result:** CONTROLLED STRICT POSITIVE — guided grammar 16/16 fresh versus every control 8/16, with 8/8 in each partition at four individually logged calls per arm/target.
 - **Aftermath:** ADOPTED as a bounded active-commitment result. O5 must test the full post-policy-freeze active loop and O6 must audit it.
+
+### [docs/research/active_closed_loop_round_o.md](docs/research/active_closed_loop_round_o.md)
+- **Tried:** Run map trace → frozen history → one charged probe → pre-score grammar commitment → fresh evaluator test on a new three-cohort decoupled suite, against equal-cost controls.
+- **Result:** CONTROLLED STRICT POSITIVE — active loop 24/24 fresh versus fixed, blind, and no-probe each 12/24 at four persistent calls per arm/target; it wins 8/8 in each cohort.
+- **Aftermath:** PENDING AUDIT — this is supplied probe/history/grammar/evaluator infrastructure, not open-ended experimental or tool invention.
