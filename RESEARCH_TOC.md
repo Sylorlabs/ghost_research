@@ -1994,3 +1994,12 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Independently rebuild and attack Round O's passive-trace, probe, policy, grammar, fresh-test, accounting, and commitment claims.
 - **Result:** CONFIRMED, NARROWED — active 24/24 versus fixed/blind/no-probe 12/24 survives 480-action/96-rejection recount and trace/order/duplicate/cost checks.
 - **Aftermath:** SETTLES Round O as a controlled strict positive. Per-token post-commit scores in the published CSV make it protocol-sealed, not score-private; a stronger successor must release only aggregates through a hardened evaluator.
+
+---
+
+## 28. Research round 2026-07-14c (Round P) — experience, not answers: the forge loop
+
+### [docs/research/research_round_2026_07_14c.md](docs/research/research_round_2026_07_14c.md)
+- **Tried:** Replace post-run answer-bearing artifacts with a score-private evaluator vault and answer-free causal experience notebook, then gate measurement/tool forging on an adversarial memory-leak audit.
+- **Result:** Live — P1 vault, P2 causal notebook, and P3 memory-leak audit are running in parallel.
+- **Aftermath:** OPEN — no forge step is allowed until policy memory is demonstrated unable to recover target-level answers.
