@@ -1,6 +1,6 @@
 # Research Round 2026-07-14e (Round R) — the self-governing knowledge expedition
 
-**Status:** LIVE — 0/6 experiments complete.
+**Status:** GATED — 3/6 foundation experiments replayed; R4–R6 must not run as an architecture-complete claim.
 
 **Premise:** Rounds P/Q build an answer-free bounded forge and an approved
 fixture-material expedition. Round R removes human per-material curation. The
@@ -44,12 +44,12 @@ human-maintained material list or hidden evaluator/test data.
 
 | # | Tier/role | Experiment | Question | Status | Acceptance gate | Planned artifacts |
 |---|---|---|---|---|---|---|
-| R1 | Terra medium | Hardened evaluator service | Can score-private evaluator/test state run behind a policy-unreadable service boundary with aggregate-only closure? | **RUNNING** | Separate process/storage boundary; policy read/score attacks denied; persistent budget and deterministic audit replay pass. | `docs/research/hardened_evaluator_service_round_r.md`, `results/hardened_evaluator_service_round_r.csv`, `sparse_poly_discovery/hardened_evaluator_service_round_r.zig` |
-| R2 | Terra medium | Self-governing knowledge world | Can a source governor autonomously discover and manage candidate public materials without human source curation? | **RUNNING** | Dynamic candidate discovery and content capture; policy-based admit/quarantine/retire; no evaluator/test/credential access; deterministic provenance replay. | `docs/research/autonomous_knowledge_world_round_r.md`, `results/autonomous_knowledge_world_round_r.csv`, `sparse_poly_discovery/autonomous_knowledge_world_round_r.zig` |
-| R3 | Luna medium | Principle refinery | Can acquired source material be distilled into falsifiable, answer-safe mechanisms that improve held-out calibration over raw retrieval? | **RUNNING** | Structured principles beat raw retrieval/prior on independent calibration and pass contradiction/answer-leak checks. | `docs/research/principle_refinery_round_r.md`, `results/principle_refinery_round_r.csv`, `sparse_poly_discovery/principle_refinery_round_r.zig` |
-| R4 | Luna medium | Self-expanding atom forge | Can source-derived principles autonomously add a nonredundant raw material/primitive beyond the prior atom alphabet? | blocked on R1/R2/R3 | New admitted primitive has provenance, survives quarantine, and beats source atoms on fresh hidden transfer. | `docs/research/atom_expansion_round_r.md`, `results/atom_expansion_round_r.csv`, `sparse_poly_discovery/atom_expansion_round_r.zig` |
-| R5 | Terra medium | Real-world transfer expedition | Does autonomous request → discovery → refinement → expansion → forge beat baselines on independently selected non-synthetic tasks? | blocked on R1/R2/R3/R4 | Fresh multi-kind equal-total-cost win; no human material/source/tool selection; score-private closure. | `docs/research/real_world_expedition_round_r.md`, `results/real_world_expedition_round_r.csv`, `sparse_poly_discovery/real_world_expedition_round_r.zig` |
-| R6 | Terra medium | Architecture certification audit | Does source governance, evaluator isolation, principles, atoms, and transfer claim survive provenance/leakage/copy/replay/cost attacks? | blocked on R1/R2/R3/R4/R5 | Independent reconstruction and claim-by-claim pass; no architecture-complete claim without it. | `docs/research/round_r_audit.md`, `results/round_r_audit.csv`, `sparse_poly_discovery/round_r_audit.zig` |
+| R1 | Terra medium | Hardened evaluator service | Can score-private evaluator/test state run behind a policy-unreadable service boundary with aggregate-only closure? | **DONE — limited foundation** | Protocol attacks denied; persistent budget and deterministic replay pass. **Not hostile same-user isolation**: separate OS account/container/MAC remains required. | `docs/research/hardened_evaluator_service_round_r.md`, `results/hardened_evaluator_service_round_r.csv`, `sparse_poly_discovery/hardened_evaluator_service_round_r.zig` |
+| R2 | Terra medium | Self-governing knowledge world | Can a source governor autonomously discover and manage candidate public materials without human source curation? | **DONE — limited foundation** | Dynamic local-public discovery/capture/quarantine/replay pass. **No live network/corpus adapter** (`NOT_AVAILABLE`), so it does not meet real-world transfer admission. | `docs/research/autonomous_knowledge_world_round_r.md`, `results/autonomous_knowledge_world_round_r.csv`, `sparse_poly_discovery/autonomous_knowledge_world_round_r.zig` |
+| R3 | Luna medium | Principle refinery | Can acquired source material be distilled into falsifiable, answer-safe mechanisms that improve held-out calibration over raw retrieval? | **DONE — controlled fixture positive** | 12/12 vs raw/prior 4/12 at equal cost; answer/contradiction controls pass. **Uses hashed fixture receipts, not live captures.** | `docs/research/principle_refinery_round_r.md`, `results/principle_refinery_round_r.csv`, `sparse_poly_discovery/principle_refinery_round_r.zig` |
+| R4 | Luna medium | Self-expanding atom forge | Can source-derived principles autonomously add a nonredundant raw material/primitive beyond the prior atom alphabet? | **BLOCKED — prerequisite gap** | Requires a real autonomous source adapter and stronger evaluator boundary before an expansion result can support the requested claim. | `docs/research/atom_expansion_round_r.md`, `results/atom_expansion_round_r.csv`, `sparse_poly_discovery/atom_expansion_round_r.zig` |
+| R5 | Terra medium | Real-world transfer expedition | Does autonomous request → discovery → refinement → expansion → forge beat baselines on independently selected non-synthetic tasks? | **BLOCKED — prerequisite gap** | Requires R4 plus live independent tasks and a strong score-private evaluator; not authorized from local/fixture foundations. | `docs/research/real_world_expedition_round_r.md`, `results/real_world_expedition_round_r.csv`, `sparse_poly_discovery/real_world_expedition_round_r.zig` |
+| R6 | Terra medium | Architecture certification audit | Does source governance, evaluator isolation, principles, atoms, and transfer claim survive provenance/leakage/copy/replay/cost attacks? | **BLOCKED — prerequisite gap** | Cannot certify an architecture-complete claim before R4/R5 have a real-world evidence trail. | `docs/research/round_r_audit.md`, `results/round_r_audit.csv`, `sparse_poly_discovery/round_r_audit.zig` |
 
 ## Landing protocol
 
@@ -59,3 +59,16 @@ table and TOC/index, commits scoped work, and launches only dependencies whose
 gates pass. Run
 `./scripts/research_round_status.sh docs/research/research_round_2026_07_14e.md`
 for live status.
+
+## Coordinator gate decision (2026-07-14)
+
+Fresh-cache rebuilds and selftests passed for R1, R2, and R3.  They are not
+failures and their reported effects are reproducible.  They also do **not**
+close the requested architecture: R1 is only a same-user local protocol
+boundary; R2 has no live external knowledge adapter; and R3 consequently
+learns from explicitly labelled fixture receipts.  Therefore R4–R6 remain
+blocked by missing architecture prerequisites, not by a negative experimental
+result.  The next authorized work is to replace those two foundations with a
+real read-only world adapter and an independently protected evaluator service,
+then feed genuine captures through the refinery before attempting atom growth
+or messy-world transfer.

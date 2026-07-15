@@ -2079,5 +2079,5 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 ### [docs/research/research_round_2026_07_14e.md](docs/research/research_round_2026_07_14e.md)
 - **Tried:** Replace human source/material curation with autonomous read-only source governance, provenance/quarantine, principle refinement, atom expansion, hardened score-private evaluation, and real-world transfer gates.
-- **Result:** Live — R1 evaluator service, R2 self-governing knowledge world, and R3 principle refinery are running in parallel.
-- **Aftermath:** OPEN — source autonomy does not include evaluator/answer/credential access; no expansion or transfer claim may run until those firewalls and refinement gates pass.
+- **Result:** Gated after verified foundations. R1's local protocol boundary passed (6 sealed sessions, aggregate-only closure), R2 autonomously discovered/governed local public docs but reported `live_network_adapter=NOT_AVAILABLE`, and R3's fixture-backed refinery scored 12/12 vs raw/prior 4/12.
+- **Aftermath:** R1 is not hostile same-user isolation, and R2/R3 are not real-world source learning. R4–R6 are **blocked by those architecture prerequisites**, not negative results; no atom-expansion, transfer, or completion claim is authorized yet.

@@ -554,6 +554,18 @@ controlled approved-fixture expedition, not literal external-world material
 discovery:** no live corpus/web/world adapter is yet used and isolation remains
 protocol-level.
 
+**2026-07-14e round (Round R): foundations landed; real-world architecture is
+still gated** (see `docs/research/research_round_2026_07_14e.md`): R1's
+evaluator service passes protocol denial/replay checks (6 sealed sessions,
+aggregate-only closure) but is not hostile same-user isolation; R2 autonomously
+discovers and governs local public documents with provenance/quarantine but
+truthfully reports no live network adapter; R3's answer-free structured
+refinery wins **12/12** against raw/prior **4/12**, but uses labelled fixture
+receipts. **These are reproducible limited foundations, not completion of the
+outside-world inventor:** atom expansion, messy-world transfer, and
+architecture certification are blocked until real read-only acquisition and a
+separately protected evaluator are installed.
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
