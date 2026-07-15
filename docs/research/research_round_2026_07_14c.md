@@ -1,6 +1,6 @@
 # Research Round 2026-07-14c (Round P) — experience, not answers: the forge loop
 
-**Status:** LIVE — P1–P5 are coordinator-verified; P5 is a controlled score-private forge positive and P6 is independently auditing the full claim.
+**Status:** SETTLED — P1–P5 form a score-private bounded forge loop; P6 confirms the result and narrows it to the supplied substrate and protocol-isolation boundary.
 
 **Premise:** Round O proves that a supplied active probe, supplied history, and
 supplied grammar can beat equal-cost controls on a decoupled synthetic suite.
@@ -46,7 +46,7 @@ generic raw primitives.
 | P3 | Terra medium | Memory leakage red team | Can any policy-visible memory field reconstruct hidden target/family/fresh answer/winner? | **DONE — CONFIRMED, NARROWED** | Identity recovery 1/12 and every balanced hidden outcome 6/12 (chance); eight forbidden/injected fields quarantined and no answer join/carryover path. Fixture/protocol audit only. | `docs/research/memory_leak_audit_round_p.md`, `results/memory_leak_audit_round_p.csv`, `sparse_poly_discovery/memory_leak_audit_round_p.zig` |
 | P4 | Luna medium | Measurement forger | From causal failure hypotheses and generic atoms, can the system synthesize a cheap diagnostic that separates competing explanations? | **DONE — CONTROLLED POSITIVE** | Atom-composed count-then-compare measurement separates 12/12 score-private validations versus generic parity fold 6/12 at equal one-call cost; nonredundancy/privacy/order/duplicate controls pass. | `docs/research/measurement_forge_round_p.md`, `results/measurement_forge_round_p.csv`, `sparse_poly_discovery/measurement_forge_round_p.zig` |
 | P5 | Terra medium | Tool/material forger | Can score-private causal experience plus forged measurement produce a reusable operation that beats the pre-campaign raw baseline? | **DONE — CONTROLLED STRICT POSITIVE** | Aggregate score-private fresh closure: forged raw-atom operation 24/24 across three kinds versus raw/fixed 0/24 and blind 8/24, all at three persistent calls/session; pre-score/nonredundancy/privacy/order/ledger controls pass. | `docs/research/tool_forge_round_p.md`, `results/tool_forge_round_p.csv`, `sparse_poly_discovery/tool_forge_round_p.zig` |
-| P6 | Terra medium | Independent forge audit | Do vault, memory, measurement, and tool-forge claims survive answer-recovery, renamed-tool, replay, and accounting attacks? | **RUNNING** | Independent rebuild and claim-by-claim pass; no forge claim without it. | `docs/research/round_p_audit.md`, `results/round_p_audit.csv`, `sparse_poly_discovery/round_p_audit.zig` |
+| P6 | Terra medium | Independent forge audit | Do vault, memory, measurement, and tool-forge claims survive answer-recovery, renamed-tool, replay, and accounting attacks? | **DONE — CONFIRMED, NARROWED** | Fresh-cache P1–P5 replay passes; memory attacks stay chance, public schemas have no per-target answers, P5 has 288 equal-cost actions and aggregate-only closure. Substrate/evaluator/causal classes supplied; protocol not OS isolated. | `docs/research/round_p_audit.md`, `results/round_p_audit.csv`, `sparse_poly_discovery/round_p_audit.zig` |
 
 ## Landing protocol
 

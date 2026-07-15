@@ -2028,3 +2028,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Use answer-free causal memory and an atom-composed measurement to retain a nonredundant raw-atom operation before evaluator-owned score-private fresh closure across three hidden kinds.
 - **Result:** CONTROLLED STRICT POSITIVE — forged operation 24/24 fresh aggregate versus raw/fixed 0/24 and blind 8/24, at three persistent calls/session; no individual target answer or target-operation link is released.
 - **Aftermath:** PENDING AUDIT — supplied atom grammar, evaluator, and causal classes remain a bounded substrate; P6 must independently test answer leakage, renamed tools, accounting, and replay.
+
+### [docs/research/round_p_audit.md](docs/research/round_p_audit.md)
+- **Tried:** Fresh-cache rebuild and red-team audit of vault, canonical memory, measurement forge, tool forge, answer recovery, renamed tools, replay, commitment, and equal-cost accounting.
+- **Result:** CONFIRMED, NARROWED — answer attacks remain at chance; public schemas expose no per-target answers; forged measurement 12/12 versus 6/12 and tool forge 24/24 versus raw/fixed 0/24/blind 8/24 survive 288-action aggregate-only replay.
+- **Aftermath:** SETTLES Round P as a controlled answer-free forge positive. Atoms, causal classes, evaluator, and fixture are supplied; isolation is protocol-level, not OS/process-level.

@@ -528,18 +528,31 @@ commitment ordering. **This is a controlled strict positive, narrowed because
 published per-token post-commit scores are protocol-sealed rather than
 score-private; probe/history/grammar/evaluator remain supplied.**
 
-**Highest-priority open experiments (updated after Round O):**
-1. **Score-private hardened evaluator** — withhold per-token test scores and
-   release only aggregates after session close; independently protect manifest
-   and persistent budget state from policy/source access.
-2. **Probe discovery rather than probe choice** — derive new diagnostics from
-   prior failures instead of choosing among the two supplied aggregate probes.
-3. **Memory representation beyond a lookup table** — learn reusable relations
-   between failures and probe responses that transfer across fresh decoupled
-   generators rather than finite supplied history bins.
-4. **Proposal alphabet expansion from evidence** — choose or construct
-   primitives from past failures without embedding the winning grammar language
-   in the benchmark.
+**2026-07-14c round (Round P): answer-free experience can forge a bounded
+measurement and operation** (see
+`docs/research/research_round_2026_07_14c.md`): P1/P3 establish a
+score-private, no-answer-join protocol (identity/family/fresh-answer attacks
+at chance); P2's canonical causal notebook improves permitted calibration
+choice 12/12 versus blind 2/12. From generic supplied Boolean/count atoms,
+P4 composes a count-then-compare measurement (12/12 versus parity 6/12) and
+P5 composes a reusable operation with aggregate fresh success **24/24 across
+three hidden kinds**, versus raw/fixed 0/24 and blind 8/24. P6 confirms all
+claims under fresh-cache replay, 288 equal-cost actions, aggregate-only
+closure, and answer-recovery attacks. **This is an audited bounded toolmaker,
+not an open-world inventor:** substrate, causal classes, evaluator, and
+protocol-only isolation remain supplied.
+
+**Highest-priority open experiments (updated after Round P):**
+1. **Harden score-private isolation** — move evaluator state/manifest and
+   answer closure into a separately protected service/process, beyond
+   deterministic protocol boundary.
+2. **Controlled material discovery** — let the forge request observations or
+   candidate primitive materials from an approved external corpus/simulator,
+   quarantine them, and retain only sealed-transfer improvements.
+3. **Discover the atom alphabet** — expand raw materials from causal failures
+   rather than composing only the supplied Boolean/count substrate.
+4. **External-family forge transfer** — test forged measurements/operations on
+   independently generated task worlds outside the P causal fixture.
 5. **Records, not baselines** — LABS even-N / addchain records still require a
    representability escape, not more aim or budget.
 
