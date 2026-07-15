@@ -2033,3 +2033,12 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Fresh-cache rebuild and red-team audit of vault, canonical memory, measurement forge, tool forge, answer recovery, renamed tools, replay, commitment, and equal-cost accounting.
 - **Result:** CONFIRMED, NARROWED — answer attacks remain at chance; public schemas expose no per-target answers; forged measurement 12/12 versus 6/12 and tool forge 24/24 versus raw/fixed 0/24/blind 8/24 survive 288-action aggregate-only replay.
 - **Aftermath:** SETTLES Round P as a controlled answer-free forge positive. Atoms, causal classes, evaluator, and fixture are supplied; isolation is protocol-level, not OS/process-level.
+
+---
+
+## 29. Research round 2026-07-14d (Round Q) — the material expedition
+
+### [docs/research/research_round_2026_07_14d.md](docs/research/research_round_2026_07_14d.md)
+- **Tried:** Replace the fixed raw-material box with an approved, provenance-tracked material universe; gate scouting, quarantine, forging, and autonomous expedition behind answer-key firewalls.
+- **Result:** Live — Q1 registry, Q2 scout, and Q3 quarantine are running in parallel.
+- **Aftermath:** OPEN — material discovery cannot inspect hidden evaluator/test state and no forge/expedition runs until provenance and leakage gates pass.
