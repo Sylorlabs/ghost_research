@@ -2057,3 +2057,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Fail closed on provenance, aliases, private origins/joins, correlation, post-test selection, free-text laundering, and undercounted admission cost.
 - **Result:** SAFETY FOUNDATION — 2/11 qualified materials admitted, nine unsafe/duplicate routes rejected with deterministic individual inspection ledger.
 - **Aftermath:** AUTHORIZES Q4; material acquisition remains a controlled provenance fixture.
+
+### [docs/research/material_forge_round_q.md](docs/research/material_forge_round_q.md)
+- **Tried:** Scout and quarantine admitted typed materials, then forge a content-lineaged primitive and score only aggregate fresh transfer across three hidden variants.
+- **Result:** CONTROLLED STRICT POSITIVE — count+relation material 24/24 versus count/relation/fixed 0/24 and blind 8/24, at four individually ledgered actions per session.
+- **Aftermath:** ADOPTED as a bounded supply-chain forge. Q5 must test the full request→expedition loop and Q6 must reconstruct provenance/answer boundaries.
