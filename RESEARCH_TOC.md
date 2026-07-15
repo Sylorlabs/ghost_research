@@ -1989,3 +1989,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Run map trace → frozen history → one charged probe → pre-score grammar commitment → fresh evaluator test on a new three-cohort decoupled suite, against equal-cost controls.
 - **Result:** CONTROLLED STRICT POSITIVE — active loop 24/24 fresh versus fixed, blind, and no-probe each 12/24 at four persistent calls per arm/target; it wins 8/8 in each cohort.
 - **Aftermath:** PENDING AUDIT — this is supplied probe/history/grammar/evaluator infrastructure, not open-ended experimental or tool invention.
+
+### [docs/research/round_o_audit.md](docs/research/round_o_audit.md)
+- **Tried:** Independently rebuild and attack Round O's passive-trace, probe, policy, grammar, fresh-test, accounting, and commitment claims.
+- **Result:** CONFIRMED, NARROWED — active 24/24 versus fixed/blind/no-probe 12/24 survives 480-action/96-rejection recount and trace/order/duplicate/cost checks.
+- **Aftermath:** SETTLES Round O as a controlled strict positive. Per-token post-commit scores in the published CSV make it protocol-sealed, not score-private; a stronger successor must release only aggregates through a hardened evaluator.

@@ -1,6 +1,6 @@
 # Research Round 2026-07-14b (Round O) — active probes before tool commitment
 
-**Status:** LIVE — O1–O5 are coordinator-verified; O5 is a controlled strict positive and O6 is independently auditing the full active loop.
+**Status:** SETTLED — O1–O5 establish a controlled active-probe loop; O6 confirms the advantage and narrows it to protocol-sealed rather than score-private evaluation.
 
 **Premise:** Round N removed the trace-to-tool shortcut and thereby removed
 the Round M closed-loop gain: frozen failure memory retained promising
@@ -41,7 +41,7 @@ hidden trace/ID shortcut—improve fresh equal-cost discovery.
 | O3 | Terra medium | Probe leakage/equal-cost audit | Do O1/O2 preserve decoupling, avoid target-ID/order leakage, and charge every information action fairly? | **DONE — PROTOCOL AUDIT PASS** | Base trace 2/4 = prior; tokens never policy inputs; heldout probe denied; 96 individually logged cost-matched train calls, restart and private-field controls pass. | `docs/research/probe_audit_round_o.md`, `results/probe_audit_round_o.csv`, `sparse_poly_discovery/probe_audit_round_o.zig` |
 | O4 | Luna medium | Probe-guided grammar commitment | Do active probe replies choose a memory-supported grammar better than blind/fixed commitment on fresh targets? | **DONE — CONTROLLED STRICT POSITIVE** | Guided grammar 16/16 fresh versus fixed/blind/prior/no-probe 8/16 at equal four-call budgets; 8/8 in each two evaluator-owned cohorts, commitment precedes scoring. | `docs/research/probe_guided_grammar_round_o.md`, `results/probe_guided_grammar_round_o.csv`, `sparse_poly_discovery/probe_guided_grammar_round_o.zig` |
 | O5 | Terra medium | Active closed loop | Does map → memory → probe → propose → fresh-test beat controls on a post-policy-freeze decoupled suite? | **DONE — CONTROLLED STRICT POSITIVE** | New 24-token three-cohort suite: active 24/24 versus fixed/blind/no-probe 12/24 at equal four persistent calls/arm/target; commitment, reversal, privacy, and ledger controls pass. | `docs/research/active_closed_loop_round_o.md`, `results/active_closed_loop_round_o.csv`, `sparse_poly_discovery/active_closed_loop_round_o.zig` |
-| O6 | Terra medium | Red-team active-probe audit | Do probe catalog, policy, grammar, and closed-loop claims survive adaptive leakage and accounting attacks? | **RUNNING** | Independent replay; no broad claim without pass. | `docs/research/round_o_audit.md`, `results/round_o_audit.csv`, `sparse_poly_discovery/round_o_audit.zig` |
+| O6 | Terra medium | Red-team active-probe audit | Do probe catalog, policy, grammar, and closed-loop claims survive adaptive leakage and accounting attacks? | **DONE — CONFIRMED, NARROWED** | Fresh-cache replay confirms active 24/24 versus controls 12/24, 480 action rows/96 rejected fifth calls, and commitment/order/trace/cost checks. Published CSV reveals post-commit per-token scores, so evaluation is protocol-sealed not score-private. | `docs/research/round_o_audit.md`, `results/round_o_audit.csv`, `sparse_poly_discovery/round_o_audit.zig` |
 
 ## Landing protocol
 

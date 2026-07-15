@@ -515,18 +515,31 @@ one hidden kind. **The Round M loop was exploiting trace-to-tool alignment;
 memory alone does not yet choose a tool for a genuinely fresh decoupled target.
 N5/N6 are correctly blocked.**
 
-**Highest-priority open experiments (updated after Round N):**
-1. **Active information acquisition** — on decoupled targets, can a policy
-   choose *which permitted diagnostic or probe to buy* to distinguish candidate
-   families before committing a grammar, under equal total cost?
-2. **Memory representation beyond a lookup table** — learn reusable relations
-   between prior failures and diagnostic responses that transfer across new
-   decoupled generators, rather than ranking a finite supplied history bin.
-3. **Proposal alphabet expansion from evidence** — choose or construct
-   primitives from past failures without embedding the winning composition
-   language in the benchmark.
-4. **Harden evaluator isolation** — separate evaluator service/account and
-   hidden manifest from the policy process, beyond protocol-only separation.
+**2026-07-14b round (Round O): active information acquisition restores a
+bounded decoupled-loop advantage** (see
+`docs/research/research_round_2026_07_14b.md`): O1/O3 establish that base
+trace remains at prior while a charged aggregate probe supplies conditional
+information without formula/ID leakage; O2 learns probe choice (12/12 versus
+fixed/blind 9/12 and no-probe 6/12); O4 commits a grammar before fresh score
+and reaches 16/16 versus controls 8/16. The new three-cohort O5 active loop
+then reaches **24/24 fresh versus fixed/blind/no-probe 12/24** at four
+persistent calls per arm/target. O6 independently confirms the accounting and
+commitment ordering. **This is a controlled strict positive, narrowed because
+published per-token post-commit scores are protocol-sealed rather than
+score-private; probe/history/grammar/evaluator remain supplied.**
+
+**Highest-priority open experiments (updated after Round O):**
+1. **Score-private hardened evaluator** — withhold per-token test scores and
+   release only aggregates after session close; independently protect manifest
+   and persistent budget state from policy/source access.
+2. **Probe discovery rather than probe choice** — derive new diagnostics from
+   prior failures instead of choosing among the two supplied aggregate probes.
+3. **Memory representation beyond a lookup table** — learn reusable relations
+   between failures and probe responses that transfer across fresh decoupled
+   generators rather than finite supplied history bins.
+4. **Proposal alphabet expansion from evidence** — choose or construct
+   primitives from past failures without embedding the winning grammar language
+   in the benchmark.
 5. **Records, not baselines** — LABS even-N / addchain records still require a
    representability escape, not more aim or budget.
 
