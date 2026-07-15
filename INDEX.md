@@ -542,17 +542,28 @@ closure, and answer-recovery attacks. **This is an audited bounded toolmaker,
 not an open-world inventor:** substrate, causal classes, evaluator, and
 protocol-only isolation remain supplied.
 
-**Highest-priority open experiments (updated after Round P):**
-1. **Harden score-private isolation** — move evaluator state/manifest and
-   answer closure into a separately protected service/process, beyond
-   deterministic protocol boundary.
-2. **Controlled material discovery** — let the forge request observations or
-   candidate primitive materials from an approved external corpus/simulator,
-   quarantine them, and retain only sealed-transfer improvements.
+**2026-07-14d round (Round Q): a bounded provenance-safe material expedition
+works** (see `docs/research/research_round_2026_07_14d.md`): Q1 supplies a
+typed content-addressed approved material registry; Q2 scouts answer-free
+residuals 12/12 versus prior/blind 4/12; Q3 admits only 2/11 qualified
+materials. Q4 forges a count+relation material (24/24 versus components/fixed
+0/24 and blind 8/24), and the full Q5 expedition repeats **24/24 across three
+fresh cohorts** versus fixed/prior 0/24 and blind 8/24 at equal six-call cost.
+Q6 confirms 675-row provenance/accounting/answer-boundary replay. **This is a
+controlled approved-fixture expedition, not literal external-world material
+discovery:** no live corpus/web/world adapter is yet used and isolation remains
+protocol-level.
+
+**Highest-priority open experiments (updated after Round Q):**
+1. **Live approved-world adapter** — permit material scouting from a real,
+   read-only approved corpus/simulator with content capture, provenance hash,
+   quarantine, and no evaluator/test overlap.
+2. **Harden score-private isolation** — move evaluator state/manifest and
+   answer closure into a separately protected service/process beyond protocol.
 3. **Discover the atom alphabet** — expand raw materials from causal failures
-   rather than composing only the supplied Boolean/count substrate.
-4. **External-family forge transfer** — test forged measurements/operations on
-   independently generated task worlds outside the P causal fixture.
+   rather than composing only the supplied fixture atoms/passports.
+4. **External-family expedition transfer** — test materials/forges on task
+   worlds generated independently of Q's residual/passport alignment.
 5. **Records, not baselines** — LABS even-N / addchain records still require a
    representability escape, not more aim or budget.
 

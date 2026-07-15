@@ -1,6 +1,6 @@
 # Research Round 2026-07-14d (Round Q) — the material expedition
 
-**Status:** LIVE — Q1–Q5 are coordinator-verified; Q5 is a controlled strict material-expedition positive and Q6 is independently auditing the full provenance chain.
+**Status:** SETTLED — Q1–Q5 form a provenance-safe bounded material expedition; Q6 confirms the result and narrows it to the approved fixture universe and protocol-isolation boundary.
 
 **Premise:** Round P proves an answer-free bounded forge can compose supplied
 raw atoms into a measurement and reusable operation. The next boundary is
@@ -46,7 +46,7 @@ discoveries are auditable rather than answer-key access.
 | Q3 | Terra medium | Material quarantine and leakage audit | Can unsafe, duplicate, answer-correlated, or unproven materials be rejected before forge admission? | **DONE — SAFETY FOUNDATION** | Admits 2/11 provenance-qualified materials and rejects all nine unsafe/duplicate routes with individual charged inspections and deterministic replay. | `docs/research/material_quarantine_round_q.md`, `results/material_quarantine_round_q.csv`, `sparse_poly_discovery/material_quarantine_round_q.zig` |
 | Q4 | Luna medium | Material forger | Can admitted materials be combined or transformed into a nonredundant primitive that beats its component materials? | **DONE — CONTROLLED STRICT POSITIVE** | Provenance-lineaged count+relation material 24/24 aggregate fresh across three variants versus components/fixed 0/24 and blind 8/24, all at four ledgered actions/session. Fixture registry/residual vocabulary supplied. | `docs/research/material_forge_round_q.md`, `results/material_forge_round_q.csv`, `sparse_poly_discovery/material_forge_round_q.zig` |
 | Q5 | Terra medium | Autonomous material expedition | Does request → gap → scout → quarantine → forge → measure → tool → fresh test beat pre-expedition baselines? | **DONE — CONTROLLED STRICT POSITIVE** | Post-freeze three-cohort expedition 24/24 versus pre-expedition raw/fixed/no-prior 0/24 and blind 8/24 at equal six persistent calls/session; lineage, alias, privacy, order, closure-only, and ledger gates pass. | `docs/research/material_expedition_round_q.md`, `results/material_expedition_round_q.csv`, `sparse_poly_discovery/material_expedition_round_q.zig` |
-| Q6 | Terra medium | Independent expedition audit | Does the full provenance chain and expedition result survive source/leakage/alias/cost/replay attacks? | **RUNNING** | Independent claim-by-claim pass; no open-material claim without it. | `docs/research/round_q_audit.md`, `results/round_q_audit.csv`, `sparse_poly_discovery/round_q_audit.zig` |
+| Q6 | Terra medium | Independent expedition audit | Does the full provenance chain and expedition result survive source/leakage/alias/cost/replay attacks? | **DONE — CONFIRMED, NARROWED** | Fresh-cache Q1–Q5 replay and canonical Q5 byte comparison pass; 675 rows/96 commitments/96 sealed sixth tests/96 rejected seventh calls, aggregate 24/24 vs fixed/prior 0/24 and blind 8/24. Approved fixture universe/protocol only, no live external adapter or OS isolation. | `docs/research/round_q_audit.md`, `results/round_q_audit.csv`, `sparse_poly_discovery/round_q_audit.zig` |
 
 ## Landing protocol
 

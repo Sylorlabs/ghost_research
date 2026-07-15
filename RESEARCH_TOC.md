@@ -2067,3 +2067,8 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Run request/residual → public-passport scout → quarantine → lineaged forge → measurement → pre-score commitment → score-private fresh closure on a new three-cohort suite.
 - **Result:** CONTROLLED STRICT POSITIVE — full expedition 24/24 versus raw/fixed/no-prior 0/24 and blind 8/24 at six persistent ledgered actions/session; it wins 8/8 in each cohort.
 - **Aftermath:** PENDING AUDIT — this is an approved fixture universe, not unrestricted external acquisition. Q6 must attack provenance, aliases, answer boundaries, cost, and replay.
+
+### [docs/research/round_q_audit.md](docs/research/round_q_audit.md)
+- **Tried:** Fresh-cache provenance-chain reconstruction and attacks on registry sources, aliases, quarantine, answer joins, score privacy, commitments, cost, replay, and material-expedition aggregate result.
+- **Result:** CONFIRMED, NARROWED — Q5's 24/24 versus fixed/prior 0/24 and blind 8/24 survives 675-row/96-commitment/96-test/96-rejection recount, with no public target/formula/family/winner/score/token/manifest fields.
+- **Aftermath:** SETTLES Round Q as a controlled strict approved-material expedition. It is not live external corpus/web/world acquisition and evaluator isolation remains protocol-level.
