@@ -2072,3 +2072,12 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Fresh-cache provenance-chain reconstruction and attacks on registry sources, aliases, quarantine, answer joins, score privacy, commitments, cost, replay, and material-expedition aggregate result.
 - **Result:** CONFIRMED, NARROWED — Q5's 24/24 versus fixed/prior 0/24 and blind 8/24 survives 675-row/96-commitment/96-test/96-rejection recount, with no public target/formula/family/winner/score/token/manifest fields.
 - **Aftermath:** SETTLES Round Q as a controlled strict approved-material expedition. It is not live external corpus/web/world acquisition and evaluator isolation remains protocol-level.
+
+---
+
+## 30. Research round 2026-07-14e (Round R) — the self-governing knowledge expedition
+
+### [docs/research/research_round_2026_07_14e.md](docs/research/research_round_2026_07_14e.md)
+- **Tried:** Replace human source/material curation with autonomous read-only source governance, provenance/quarantine, principle refinement, atom expansion, hardened score-private evaluation, and real-world transfer gates.
+- **Result:** Live — R1 evaluator service, R2 self-governing knowledge world, and R3 principle refinery are running in parallel.
+- **Aftermath:** OPEN — source autonomy does not include evaluator/answer/credential access; no expansion or transfer claim may run until those firewalls and refinement gates pass.
