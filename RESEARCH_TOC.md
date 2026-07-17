@@ -2200,3 +2200,13 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Aftermath:** A gain counts only if an organism-made relation is necessary, replaceable, fresh-world useful, and survives destruction of all bootstrap identity against fixed equally expressive controls.
 - **Result:** Gated after fresh coordinator replay with three valid negatives. AF1's relation scores 6030→8640 but fixed invariant ties exactly. AF2's closure scores 57365→58073 but fixed closure wins 58165. AF3 replaces relations in 32/32 cohorts at 220→1833, but fixed criterion ties exactly.
 - **Final aftermath:** AF4–AF6 remain blocked. The next experiment must eliminate host observation/action and scalar-acceptance semantics entirely: persistent self-maintained loops in raw finite-resource interaction physics, with equal expressive fixed-loop controls.
+
+## 45. Research round 2026-07-16d (Round AG) — persistent causal loops
+
+### [docs/research/research_round_2026_07_16d.md](docs/research/research_round_2026_07_16d.md)
+- **Tried:** Remove organism-visible score, sensor/action split, and criterion algebra: test self-maintaining causal loops, endogenous boundary/reproduction, and transfer across changed raw interaction physics.
+- **Boundary:** Only lower-level raw interaction transport, finite resources, sandbox/provenance, sealed media, and safety are fixed. No template, loop grammar, fitness value, boundary, controller, relation, mutation menu, or task may be visible to organisms.
+- **Status:** Live — AG1 autopoietic loop birth, AG2 endogenous boundary/reproduction, and AG3 physics-shift loop transfer run in parallel. AG4–AG6 are gated.
+- **Aftermath:** A positive must demonstrate a self-built persistent constraint that survives perturbation, ablation, private identity change, and changed media against equal-material fixed-loop controls.
+- **Result:** Gated after fresh coordinator replay with three valid negatives. AG1's host-seeded/repaired loop reaches 128 persistent ticks but fixed host loop ties. AG2's mutable lineage reaches 21807 with 552 events but inherits tags, proposal/revision grammar, viability scalar, and scheduler. AG3 rebuilds 566→4472 after physics shift, but fixed loop ties exactly at equal charge.
+- **Final aftermath:** AG4–AG6 remain blocked. The next medium must evolve all particles uniformly—no enumerated candidates, loop pattern, repair template, or reproduction routine—with persistence measured only externally after the fact.

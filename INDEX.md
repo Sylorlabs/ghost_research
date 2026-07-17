@@ -834,6 +834,25 @@ acceptance. The next substrate must supply no organism-visible score or
 sensor/action split: criterion-like structure must persist as a self-maintained
 causal loop under raw finite-resource physics.**
 
+**2026-07-16d round (Round AG): persistent causal loops launched** (see
+`docs/research/research_round_2026_07_16d.md`): AG1 tests self-assembled,
+self-restoring loops in a raw finite-resource medium; AG2 tests emergent
+boundary and reproduction without a template; AG3 tests reconstruction or
+evolution after private changes to interaction physics. **There is no
+organism-visible reward, score, sensor/action split, relation register, or loop
+grammar. The only selection is physical persistence; a real internal criterion
+must be a causally necessary self-maintained constraint.**
+
+**2026-07-16d update (Round AG): physical persistence remains template-shaped**
+(see `docs/research/research_round_2026_07_16d.md`): AG1's 128-tick loop is
+host-seeded/repaired and ties a fixed loop; AG2's 21807 lineage gain inherits
+boundary tags, candidate/revision grammar, viability scalar and scheduler; AG3
+rebuilds 566→4472 across a private physics shift but ties a fixed loop at equal
+charge. **All three are valid negatives. The next medium must evolve every
+particle uniformly, with no host-enumerated loop, repair, boundary, candidate,
+or reproduction structure; conservation and persistence may be measured only
+outside the organism after the fact.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

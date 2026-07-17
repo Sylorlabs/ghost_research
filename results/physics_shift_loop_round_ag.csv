@@ -1,0 +1,17 @@
+artifact,policy,charged_raw_interactions,old_physics_private_material,new_physics_private_material,ablation_material,recovered_cohorts,rollbacks,verdict
+round_ag_ag3,constructed,18880,566,4472,566,31,1,BOUNDED_CAPABILITY:rebuilds_useful_tape_after_private_physics_identity_shift
+round_ag_ag3,fixed_equal_loop,18880,566,4472,566,31,1,CONTROL:equal_material_equal_language_fixed_loop_ties_constructed
+round_ag_ag3,random,18880,566,1203,566,18,14,CONTROL:equal_evaluation_random_matter
+round_ag_ag3,replay,18880,566,1281,566,17,15,CONTROL:preceding_lineage_replay
+round_ag_ag3,static,18880,566,1336,566,15,17,CONTROL:fixed_static_matter
+round_ag_ag3,ablated,18880,566,566,566,0,32,CONTROL:loop_ablation
+round_ag_ag3,shuffled_lineage,18880,566,1117,566,15,17,CONTROL:shuffled_lineage_address_binding
+round_ag_ag3,false_lineage,18880,566,566,566,0,32,CONTROL:false_lineage_inverts_raw_consequences
+round_ag_ag3,identity_and_physics_shift,18880,566,4472,566,31,1,CONTROL:combined_shift_rebuilt_by_host_language
+round_ag_ag3,audit,0,0,0,0,0,0,CONTROL_PASS:private_new_dynamics_and_address_value_boundary_recoding_apply_before_evaluation
+round_ag_ag3,audit,0,0,0,0,0,0,CONTROL_PASS:random_replay_static_equal_loop_ablation_shuffled_false_controls_charged_and_replayed
+round_ag_ag3,audit,0,0,0,0,0,0,CONTROL_PASS:constructed_tape_beats_old_random_replay_static_false_and_ablation_returns_old_material
+round_ag_ag3,audit,0,0,0,0,0,0,CONTROL_FAIL:equal_fixed_loop_ties_exactly
+round_ag_ag3,audit,0,0,0,0,0,0,CONTROL_FAIL:host_provides_cell_atoms_loop_decoder_sign_interpretation_tape_builder_and_rebuild_timing
+round_ag_ag3,audit,0,0,0,0,0,0,CONTROL_FAIL:raw_interaction_is_host_selected_consequence_channel_not_self_discovered_physics
+round_ag_ag3,audit,0,0,0,0,0,0,VALID_NEGATIVE:physics_shift_recovery_is_host_language_adaptation_not_organism_owned_constraint_evolution
