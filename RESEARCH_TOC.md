@@ -2220,3 +2220,13 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Aftermath:** The next behavior experiment may run only if the mutant is *unable* to access forbidden capabilities, not merely instructed not to use them.
 - **Result:** Gated after fresh coordinator replay. AH1 blocks 7/7 seeded forbidden requests in a uniform fixture; AH3 blocks 11 scaffold fixtures with a fail-closed manifest; AH2 denies 15 mounted capabilities and evaluator writeback. All are valid-negative infrastructure results because same-process Zig can bypass API-level containment and local scanning cannot prove binary/kernel/side-channel absence.
 - **Final aftermath:** AH4–AH6 remain blocked. The next required work is an OS/process-level capability boundary with an unprivileged raw-medium process, no filesystem/network/process authority, evaluator one-way post-run collection, and independent launch/binary/trace audit.
+
+## 47. Research round 2026-07-17 (Round AI) — process-level organism isolation
+
+### [docs/research/research_round_2026_07_17.md](docs/research/research_round_2026_07_17.md)
+- **Tried:** Convert AH's in-process exclusion protocol into actual process-level containment: raw-worker sandbox, one-way evaluator transport, and independent breakout audit.
+- **Boundary:** Mutant receives one initial raw stream and emits one final raw stream after exit. It may not access filesystem, environment, network, process control, evaluator data/handles, templates, scores, callbacks, or post-run feedback.
+- **Status:** Live — AI1 real sandbox test, AI2 one-way transport, and AI3 independent breakout audit run in parallel. AI4–AI6 are gated.
+- **Aftermath:** `bwrap`, namespaces, and wrapper APIs are mechanisms under test; only demonstrated local-kernel denial with runtime evidence can unlock behavior experiments.
+- **Result:** Gated after fresh coordinator replay. AI1's real bwrap blocks host files/environment/imports/IPC/tree but worker sockets and fork succeed. AI2's exact 16-byte post-exit pipe protocol rejects malformed/reverse streams but cannot remove syscall authority. AI3 independently confirms held-FD denial and socket/spawn/IPC/signal/clock/stdout breakouts.
+- **Final aftermath:** AI4–AI6 remain blocked. The next prerequisite is a minimal launcher with close-all-except-stdio plus an enforceable syscall allowlist, re-audited by the independent breakout suite; a kernel policy block must remain documented rather than relaxed away.

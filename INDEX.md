@@ -875,6 +875,25 @@ side-channel absence. **The next prerequisite is a process-level raw-medium
 sandbox with no filesystem/network/process authority and one-way evaluator
 collection, independently audited from launch policy through runtime traces.**
 
+**2026-07-17 round (Round AI): process-level organism isolation launched**
+(see `docs/research/research_round_2026_07_17.md`): AI1 tests actual local
+kernel containment for an unprivileged raw-medium worker; AI2 proves a one-way
+initial-state/final-state-only evaluator protocol; AI3 attacks the real
+launcher through mounts, procfs, FDs, environment, network, process trees,
+signals, timing and malformed streams. **Sandbox tools are not trusted by name:
+the mutant must demonstrably be unable to access human scaffolds. AI4 remains
+blocked until all three tests pass with runtime evidence.**
+
+**2026-07-17 update (Round AI): Bubblewrap hides the host but does not remove
+raw-worker syscall authority** (see
+`docs/research/research_round_2026_07_17.md`): AI1 blocks host filesystem,
+environment, imports, IPC and process-tree access, while AI2 proves exact
+one-way post-exit transport and AI3 confirms held-FD denial. But AI3 also
+demonstrates worker socket creation, self-spawn, local IPC, signaling, clock
+access and arbitrary stdout. **All are valid negatives for raw-only
+containment. The next gate is a minimal syscall-allowlisted launcher with
+explicit FD closure, followed by the same independent breakout audit.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
