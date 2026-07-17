@@ -2230,3 +2230,13 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Aftermath:** `bwrap`, namespaces, and wrapper APIs are mechanisms under test; only demonstrated local-kernel denial with runtime evidence can unlock behavior experiments.
 - **Result:** Gated after fresh coordinator replay. AI1's real bwrap blocks host files/environment/imports/IPC/tree but worker sockets and fork succeed. AI2's exact 16-byte post-exit pipe protocol rejects malformed/reverse streams but cannot remove syscall authority. AI3 independently confirms held-FD denial and socket/spawn/IPC/signal/clock/stdout breakouts.
 - **Final aftermath:** AI4–AI6 remain blocked. The next prerequisite is a minimal launcher with close-all-except-stdio plus an enforceable syscall allowlist, re-audited by the independent breakout suite; a kernel policy block must remain documented rather than relaxed away.
+
+## 48. Research round 2026-07-17b (Round AJ) — reusable discovery under a frozen substrate
+
+### [docs/research/research_round_2026_07_17b.md](docs/research/research_round_2026_07_17b.md)
+- **Tried:** End the infinite-regress purity test: freeze an explicit generic trusted substrate, then measure reusable causal abstraction and experience compounding across pre-registered unseen world families.
+- **Boundary:** The substrate may provide uniform transport, generic variation/execution, bounded resources, provenance and sealed worlds; it may not provide targets, task labels, semantic decoders, answer traces, tool menus, world-family labels, or evaluator feedback.
+- **Status:** Live — AJ1 contract audit, AJ2 reusable abstraction transfer, and AJ3 experience compounding run in parallel. AJ4–AJ6 are gated.
+- **Aftermath:** Foundation positives are allowed when strong transfer/ablation/answer-memory controls pass. Full hostile autonomy/security remains separately blocked on Round AI containment.
+- **Result:** Fresh coordinator replay validates the pivot. AJ1 is a foundation contract pass (3/3 generic fixtures, 11/11 leak denials). AJ2 is a **foundation positive**: signed causal relation transfer scores 26069 versus fixed/ablation 21390 and all other equal-cost controls. AJ3 is a **compounding positive**: answer-scrubbed experience yields 1920 versus fresh/answer/retained/ablation 599 at 581 versus 960/965 raw interactions.
+- **Final aftermath:** AJ4 is released: self-chosen causal experiment above the frozen substrate. AJ5–AJ6 remain gated. These are bounded synthetic-world discoveries, not substrate ownership, hostile containment, open-ended invention, or full autonomy.

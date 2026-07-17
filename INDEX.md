@@ -894,6 +894,10 @@ access and arbitrary stdout. **All are valid negatives for raw-only
 containment. The next gate is a minimal syscall-allowlisted launcher with
 explicit FD closure, followed by the same independent breakout audit.**
 
+**2026-07-17b round (Round AJ): reusable discovery under a frozen substrate launched** (see `docs/research/research_round_2026_07_17b.md`): the research contract now declares the irreducible universal substrate rather than calling it mutant-invented, then tests AJ1 mechanical separation, AJ2 reusable causal abstraction across hidden world families, and AJ3 answer-scrubbed experience compounding. **A bounded foundation positive may now count when transfer, ablation and answer/history controls pass; it never becomes a full autonomy/security claim without Round AI process containment.**
+
+**2026-07-17b update (Round AJ): the architecture reset produces the first reusable-discovery positives** (see `docs/research/research_round_2026_07_17b.md`): AJ1's frozen-substrate contract passes 3/3 generic fixtures and denies all 11 seeded semantic/evaluator leaks. AJ2 is a **foundation positive**: an earned signed rank-order relation transfers to hidden delayed-relay worlds at 26069 versus fixed/ablation 21390 and other equal-cost controls. AJ3 is a **compounding positive**: answer-scrubbed causal experience transfers, enables a distinct withheld discovery in 48/48 cohorts, reaches 1920 versus fresh/answer/retained/ablation 599, and costs 581 versus 960/965 interactions. **AJ4 is released. These results are real but bounded: synthetic frozen substrate only, with no claim of open-ended autonomy, substrate ownership, or adversarial containment.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

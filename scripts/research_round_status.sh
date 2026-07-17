@@ -16,6 +16,8 @@ printf 'ROUND_STATUS: %s\n' "$round_doc"
 total=0
 done=0
 negative=0
+foundation=0
+compounding=0
 blocked=0
 live=0
 
@@ -32,6 +34,14 @@ while IFS= read -r line; do
     elif [[ "$line" == *"**INCONCLUSIVE"* || "$line" == *"VALID NEGATIVE"* || "$line" == *"**INVALIDATED"* ]]; then
         state=TERMINAL_NEGATIVE
         negative=$((negative + 1))
+    elif [[ "$line" == *"**COMPOUNDING POSITIVE"* ]]; then
+        state=COMPOUNDING_POSITIVE
+        done=$((done + 1))
+        compounding=$((compounding + 1))
+    elif [[ "$line" == *"**FOUNDATION POSITIVE"* || "$line" == *"**FOUNDATION PASS"* ]]; then
+        state=FOUNDATION_POSITIVE
+        done=$((done + 1))
+        foundation=$((foundation + 1))
     elif [[ "$line" == *"**DONE"* ]]; then
         state=DONE
         done=$((done + 1))
@@ -47,8 +57,8 @@ if (( total == 0 )); then
     exit 2
 fi
 
-printf 'SUMMARY: total=%d done=%d terminal_negative=%d blocked=%d live=%d\n' \
-    "$total" "$done" "$negative" "$blocked" "$live"
+printf 'SUMMARY: total=%d done=%d foundation_positive=%d compounding_positive=%d terminal_negative=%d blocked=%d live=%d\n' \
+    "$total" "$done" "$foundation" "$compounding" "$negative" "$blocked" "$live"
 
 if (( live > 0 )); then
     printf 'ROUND_SETTLED=NO\nROUND_COMPLETE=NO\n'

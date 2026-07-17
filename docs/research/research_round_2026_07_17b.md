@@ -1,0 +1,40 @@
+# Research Round 2026-07-17b (Round AJ) — reusable discovery under a frozen substrate
+
+**Status:** PARTIALLY UNLOCKED — AJ1 foundation pass, AJ2 foundation positive, AJ3 compounding positive replayed; AJ4 is released, AJ5–AJ6 remain gated.
+
+## Architecture reset
+
+Rounds T–AI correctly showed that a local program cannot prove it invented the physical and computational substrate beneath itself. Treating every fixed machine law as a disqualifying human scaffold creates an infinite regress and makes any positive impossible. Round AJ freezes a small explicit trusted substrate and tests reusable discovery, experience, causal verification, and compounding under unknown worlds.
+
+**Trusted substrate (declared, not mutant-invented):** uniform raw state transport; bounded memory/time/resource accounting; generic reversible variation and execution; append-only causal-event provenance; sealed hidden-world generation; and evaluator post-run measurement. It may not include task-specific features, target functions, answer traces, semantic decoders, task/curriculum menus, candidate/tool libraries, intermediate correctness or novelty reward, world-family labels, or evaluator feedback during a run.
+
+No LLM, token/text prediction, embedding, neuro-symbolic wrapper, or preloaded solution memory is allowed. In-process execution can support **foundation positives** here; it does not establish hostile process containment. Full autonomy/security remains blocked on Round AI's syscall-allowlist prerequisite.
+
+## Claim tiers
+
+- **Foundation positive:** an organism-owned mechanism is causally necessary, transfers to pre-registered hidden worlds, beats strong equal-cost controls, and survives answer-memory/history/ablation attacks under the frozen substrate.
+- **Compounding positive:** a first discovered mechanism makes a second causally distinct discovery cheaper or newly reachable in a withheld world family, without retaining world answers.
+- **Full autonomy/security:** not authorized by this wave; requires verified process-level containment and independent hostile audit.
+
+## Verdict table
+
+| # | Tier/role | Experiment | Question | Status | Acceptance gate | Planned artifacts |
+|---|---|---|---|---|---|---|
+| AJ1 | Terra medium | Frozen-substrate contract | Can a generic non-task-specific substrate be specified and mechanically audited so hidden worlds, evaluator, and organism capabilities remain separated while permitting generic variation, memory and causal provenance? | **FOUNDATION PASS** | Generic fixtures 3/3 pass and 11/11 seeded target/answer/decoder/menu/reward/evaluator leaks deny. The contract explicitly leaves OS/process/syscall containment unresolved. | `docs/research/frozen_substrate_round_aj.md`, `results/frozen_substrate_round_aj.csv`, `sparse_poly_discovery/frozen_substrate_round_aj.zig` |
+| AJ2 | Terra medium | Reusable causal abstraction | From raw transitions in one world family, can the organism create a generic internal structure that improves control in pre-registered unseen worlds from a different family, without target-specific representation or answer retention? | **FOUNDATION POSITIVE** | Earned signed rank-order relation transfers direct-material → hidden delayed-relay worlds after private recoding: 26069 versus fixed/ablation 21390, shuffled 19365, random 16659, replay 16841 and answer-memory 16915; 768/768 commits and equal 6144 probe cost. | `docs/research/reusable_abstraction_round_aj.md`, `results/reusable_abstraction_round_aj.csv`, `sparse_poly_discovery/reusable_abstraction_round_aj.zig` |
+| AJ3 | Luna medium | Experience compounding | Can a first earned causal mechanism reduce the cost or unlock a causally distinct second discovery in a withheld regime, while scrubbing answers and preserving only experience/provenance? | **COMPOUNDING POSITIVE** | Answer-scrubbed polarity record transfers 480/480 contacts, enables distinct withheld phase discovery 48/48, and yields 1920 versus fresh/answer/retained/ablation 599, replay 1224, shuffled 1434, fixed-generalist 1178 at 581 versus 960/965 raw interactions. | `docs/research/experience_compounding_round_aj.md`, `results/experience_compounding_round_aj.csv`, `sparse_poly_discovery/experience_compounding_round_aj.zig` |
+| AJ4 | Terra medium | Self-chosen experiment program | Can the organism use its earned reusable mechanisms to choose and execute a new causal experiment that improves unseen-world performance without a human-selected bottleneck? | **RELEASED by AJ1/AJ2/AJ3** | Pre-registered unseen world gain over fixed/random/replay experiment controls; causal experiment structure is organism-owned above frozen substrate. | `docs/research/self_chosen_experiment_round_aj.md`, `results/self_chosen_experiment_round_aj.csv`, `sparse_poly_discovery/self_chosen_experiment_round_aj.zig` |
+| AJ5 | Terra medium | Multi-domain discovery portfolio | Can the organism retain a portfolio of mechanisms and route them across several unknown world regimes without retaining answers or a human task router? | blocked on AJ4 | Portfolio outperforms fresh/replay/fixed-generalist/answer-memory controls across pre-registered hidden regimes with auditable causal use. | `docs/research/discovery_portfolio_round_aj.md`, `results/discovery_portfolio_round_aj.csv`, `sparse_poly_discovery/discovery_portfolio_round_aj.zig` |
+| AJ6 | Terra medium | Foundation-positive hostile audit | Does every foundation/compounding claim survive target leakage, answer-memory, history, fixed representation, fixed generic control, hidden world overlap, cost, lineage, and containment-tier attacks? | blocked on AJ2/AJ3/AJ4/AJ5 | Independent reconstruction validates claim tier, provenance, controls, and limits; it cannot elevate result to full autonomy without AI containment. | `docs/research/foundation_discovery_audit_round_aj.md`, `results/foundation_discovery_audit_round_aj.csv`, `sparse_poly_discovery/foundation_discovery_audit_round_aj.zig` |
+
+## Landing protocol
+
+Workers edit only their named source, CSV, and report. Every landing fresh-builds, selftests, deterministically replays, uses pre-registered hidden-world seeds, records all cost, tests causal ablation and answer/history leakage, and labels **FOUNDATION POSITIVE**, **COMPOUNDING POSITIVE**, **VALID NEGATIVE**, or **BLOCKED**. The coordinator independently replays and alone updates this master, `RESEARCH_TOC.md`, and `INDEX.md`.
+
+## Coordinator verdict (2026-07-17)
+
+Fresh independent coordinator builds, selftests, executions, and byte-identical CSV comparisons pass for AJ1–AJ3. AJ1 establishes the declared foundation contract: all 3 generic fixtures pass while all 11 seeded semantic/evaluator leaks deny. It is an infrastructure foundation pass, not OS containment.
+
+AJ2 is a **foundation positive**: an earned signed rank-order causal relation transfers from direct-material training worlds to pre-registered hidden delayed-relay worlds after private action/value recoding. It beats equal-cost fixed-generic, random, replay, shuffled-history and answer-memory controls; ablation returns exactly to the fixed baseline. AJ3 is a **compounding positive**: answer-scrubbed causal polarity evidence transfers, enables a causally distinct withheld phase discovery in every cohort, and cuts raw interaction cost while beating fresh, answer, retained-answer, replay, shuffled-history and fixed-generalist controls.
+
+These claims remain intentionally narrow: reusable and compounding causal discovery in the declared synthetic frozen substrate. They do not establish open-ended invention, substrate ownership, adversarial process containment, or full autonomy. AJ4 is released as the next meaningful question: can earned mechanisms choose a new causal experiment without a human-selected bottleneck? AJ5–AJ6 remain gated.
