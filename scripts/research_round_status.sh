@@ -20,7 +20,7 @@ blocked=0
 live=0
 
 while IFS= read -r line; do
-    if [[ ! "$line" =~ ^\|[[:space:]]*([A-Z][0-9]+)[[:space:]]*\| ]]; then
+    if [[ ! "$line" =~ ^\|[[:space:]]*([A-Z]+[0-9]+)[[:space:]]*\| ]]; then
         continue
     fi
     id=${BASH_REMATCH[1]}

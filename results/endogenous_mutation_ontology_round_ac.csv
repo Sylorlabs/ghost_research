@@ -1,0 +1,13 @@
+experiment,verdict,cohorts,charged_trials,resource
+endogenous,VALID_NEGATIVE,24,18432,52735
+raw_bit,CONTROL,24,18432,42612
+raw_byte,CONTROL,24,18432,41691
+static,CONTROL,24,0,38580
+random,CONTROL,24,18432,35227
+replay,CONTROL,24,0,36101
+ablation,CONTROL,24,0,42712
+relocate_value_recode,ATTACK,24,18432,52683
+resegmentation,ATTACK,24,18432,52378
+shuffled_evidence,ATTACK,24,18432,37195
+false_evidence,ATTACK,24,18432,37941
+oracle_private,CEILING,24,0,65952

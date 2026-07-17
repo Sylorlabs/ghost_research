@@ -1,0 +1,17 @@
+schema,ledger_stage,test,result,detail
+round_u_u2,scratch,empty_start,PASS,durable_store=0; candidate_rank=noise; opaque_bytes=4
+round_u_u2,scratch,independent_recurrence,PASS,independent_origins=2; rank=emerging
+round_u_u2,scratch,duplicate_alias_attack,PASS,copied_origin_votes=0; premature_promotion=denied
+round_u_u2,scratch,withheld_prediction,PASS,fresh_origin=103; prediction_precommitted
+round_u_u2,scratch,controlled_intervention,PASS,paired_action_control; fresh_origin=104
+round_u_u2,committed,frozen_transfer,PASS,mechanism_frozen_before_hidden_world; permitted_outcome=success; hidden_fields=0
+round_u_u2,committed,post_test_edit_attack,PASS,mutation_after_commit=denied
+round_u_u2,scratch,contradiction_demotion,PASS,verified_claim_reopened; rank=pattern; context_specialization_required
+round_u_u2,snapshot,contradiction_retirement,PASS,independent_contradictions=3; stale_generalization=retired
+round_u_u2,scratch,merge_requires_reearning,PASS,parents=verified; child=noise; inherited_evidence=0
+round_u_u2,snapshot,merge_reearned_transfer,PASS,child_fresh_origins=5; lineage_preserved; transfer_reearned
+round_u_u2,snapshot,bloat_decay_attack,PASS,cost=40; idle_epochs=4; no_transfer; retired
+round_u_u2,snapshot,answer_injection_schema,PASS,hidden_seed=absent; answer=absent; per_target_score=absent; evaluator_state=absent; text=absent
+round_u_u2,snapshot,lineage_forging_attack,PASS,parent_change_invalidates_digest
+round_u_u2,snapshot,replay_attack,PASS,same-origin replay cannot promote or rescue contradicted rune
+round_u_u2,snapshot,VERDICT,PASS,memory_machinery=ESTABLISHED; intelligence=NOT_CLAIMED; empty_start=PASS; adversarial=8/8

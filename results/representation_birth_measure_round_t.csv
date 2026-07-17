@@ -1,0 +1,13 @@
+schema,ledger_stage,test,result,detail
+round_t_t3,scratch,calibration_opaque_transition,PASS,equal_budget=64; evaluator-private answers
+round_t_t3,committed,freeze_before_transfer,PASS,digest=0x0307A700; mutation_after_commit=denied
+round_t_t3,committed,no_lookup_table,PASS,lookup_entries=0
+round_t_t3,committed,no_replay_memory,PASS,replay_bytes=0
+round_t_t3,committed,no_named_feature_or_hand_grammar,PASS,artifact_is_two_opaque_bytes; evaluator substrate still declared
+round_t_t3,committed,no_text_or_llm_dependency,PASS,no_text_channel
+round_t_t3,committed,no_hidden_answer_access,PASS,policy_receives_observations_only
+round_t_t3,snapshot,fresh_hidden_world_transfer,PASS,8 unseen worlds; 128/128 opaque transitions
+round_t_t3,snapshot,byte_replay_control,REJECT,canonical_digest=0x0307A700
+round_t_t3,snapshot,one_world_overfit,PASS,calibration=64/64; fresh=128/128
+round_t_t3,snapshot,birth_claim,REJECT,BLOCKED: fixture has no raw-causal lineage from T1 and evaluator uses a declared byte-transition substrate
+round_t_t3,snapshot,VERDICT,BLOCKED,measurement_gate_operational; anti_cheat=8/8; representation_birth=NOT_ESTABLISHED

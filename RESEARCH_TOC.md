@@ -2081,3 +2081,122 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Replace human source/material curation with autonomous read-only source governance, provenance/quarantine, principle refinement, atom expansion, hardened score-private evaluation, and real-world transfer gates.
 - **Result:** Gated after verified foundations. R1's local protocol boundary passed (6 sealed sessions, aggregate-only closure), R2 autonomously discovered/governed local public docs but reported `live_network_adapter=NOT_AVAILABLE`, and R3's fixture-backed refinery scored 12/12 vs raw/prior 4/12.
 - **Aftermath:** R1 is not hostile same-user isolation, and R2/R3 are not real-world source learning. R4–R6 are **blocked by those architecture prerequisites**, not negative results; no atom-expansion, transfer, or completion claim is authorized yet.
+
+## 31. Research round 2026-07-15 (Round S) — the real-world architecture closure
+
+### [docs/research/research_round_2026_07_15.md](docs/research/research_round_2026_07_15.md)
+- **Tried:** Close the two Round R prerequisites: self-managed public-world acquisition and enforceable evaluator isolation; then consume genuine captures in an answer-free principle loop before material growth and messy-world transfer.
+- **Result:** Live — S1 autonomous live knowledge adapter, S2 strong evaluator isolation, and S3 genuine-capture principle loop launched in parallel.
+- **Aftermath:** No fixture replacement, human per-task curation, same-user-only isolation, or answer-retention claim can advance S4–S6. Every landing must be rebuilt, replayed, documented, committed, and pushed.
+
+## 32. Research round 2026-07-15b (Round T) — grounded representation birth
+
+### [docs/research/research_round_2026_07_15b.md](docs/research/research_round_2026_07_15b.md)
+- **Tried:** A new local non-language substrate: discover mechanisms from raw causal transitions, self-generated challenges, and sealed transfer—not LLM text prediction, a fixed symbolic grammar, or neuro-symbolic integration.
+- **Grounding:** Read-only Ghost Engine Rune/Sigil lineage and exact-verifier discipline; no modification of Ghost Engine and no VSA/LLM import.
+- **Result:** Gated after fresh replay. T1 is a **valid negative**: mutable field 0/184 held-out errors versus fixed/replay 110 and random 22, but the win depends on a human-installed shared topology. T2 is a bounded 48-scratch/22-committed ecology foundation; T3's anti-cheat gate passes 8/8 but blocks promotion without genuine lineage.
+- **Aftermath:** No representation birth, intelligence, heredity, or open-endedness claim. T4–T6 stay blocked until topology itself can vary and transfer worlds are not pre-aligned to the chosen substrate.
+
+## 33. Research round 2026-07-15c (Round U) — the growing apprentice
+
+### [docs/research/research_round_2026_07_15c.md](docs/research/research_round_2026_07_15c.md)
+- **Tried:** Remove T1's supplied topology by co-testing a morphogenic organism, empty earned/reversible Rune memory, and structurally independent growing worlds.
+- **Grounding:** Ghost Rune evidence and Sigil transaction discipline read-only; no Ghost solution shard, LLM/VSA path, named tool grammar, or existing research algorithm is imported.
+- **Result:** Gated after fresh replay. U1 is a **valid negative**: grown 1110/2304 errors beats random/fixed/replay but loses to equal-size static 1098 and supplied emulator 0, with encoding sensitivity. U2's empty-start earned-memory attacks pass 8/8; U3 commits 41/48 independent growing worlds with its controls passing.
+- **Aftermath:** U2/U3 are foundations, not intelligence. U4–U6 remain blocked because no encoding-invariant transferable representation was born. The next lever is growth of observation/action boundaries and developmental organization itself.
+
+## 34. Research round 2026-07-15d (Round V) — the mutant organism
+
+### [docs/research/research_round_2026_07_15d.md](docs/research/research_round_2026_07_15d.md)
+- **Tried:** Put every organism-owned component—code/data layout, topology, development, sensing, action composition, reproduction, and mutation operators—inside one mutable substrate while keeping evaluator, resources, provenance, and sandbox immutable.
+- **Grounding:** Empty earned Rune inheritance and Sigil freeze/replay discipline; Ghost Engine read-only; no LLM/VSA, named tool menu, or solution shard.
+- **Result:** Gated after fresh replay. V1 is a valid negative despite full field/tape reachability: its 1119/2240 result is encoding-sensitive. V2 is the decisive negative: 0/1536 on birth wiring becomes 3777/9216 across shifts, especially 1343 errors under actuator remap. V3 establishes a controlled 12-generation, 16-lineage two-timescale ecology only.
+- **Aftermath:** Mutation freedom exists, but grounding does not. V4–V6 stay blocked until organisms actively identify anonymous senses/actions by intervention consequences and reconstruct them after rewiring.
+
+## 35. Research round 2026-07-15e (Round W) — sense genesis
+
+### [docs/research/research_round_2026_07_15e.md](docs/research/research_round_2026_07_15e.md)
+- **Tried:** Remove permanent ports and human tasks: evolve receptors/effectors over raw fields, self-initiate development under resource physics, and rebuild body/world maps from intervention consequences.
+- **Grounding:** Empty earned Rune memory and Sigil developmental freeze/replay; Ghost Engine read-only; evaluator/resource/provenance physics immutable.
+- **Result:** Gated after fresh replay with three valid negatives. W1 causal grounding reaches 24/3072 errors but uses human-installed normalization/alignment/comparison/probing. W2 loses to fixed drive (1275 vs 1300 viable ticks; 2/24 vs 7/24 recoveries). W3 beats address/no-probe but loses random/equal-static (514 vs 492/478 errors).
+- **Aftermath:** Consequences carry useful grounding information, but the organism did not invent a superior grounding/development procedure. W4–W6 stay blocked; probe construction, alignment, comparison, and scheduling must move inside mutable organism state.
+
+## 36. Research round 2026-07-15f (Round X) — experiment birth
+
+### [docs/research/research_round_2026_07_15f.md](docs/research/research_round_2026_07_15f.md)
+- **Tried:** Three new angles on W's barrier: self-mutating raw experiment programs, emergent temporal/causal binding without supplied alignment, and ecology selecting experiment-makers only through descendants' later resource physics.
+- **Grounding:** Empty earned Rune evidence and Sigil freeze/replay; immutable evaluator/resource/provenance physics; Ghost Engine read-only.
+- **Result:** Gated after fresh replay with three valid negatives. X1 has full procedure/mutator reachability but no developmental gain and loses strong random/static controls. X2 narrowly wins ordinary lag controls but inherits the harness's comparison/lag form and collapses under recoding. X3's evolved experiment bytes causally help but lose the fixed experimenter (1786 vs 1964 viable ticks; 9/32 vs 12/32 reproduction).
+- **Aftermath:** X4–X6 remain blocked. The edge is developmental credit assignment: late resource consequences must reinforce the internal experiment structures that caused them without exposing a human-shaped intermediate score.
+
+## 37. Research round 2026-07-15g (Round Y) — earned developmental credit
+
+### [docs/research/research_round_2026_07_15g.md](docs/research/research_round_2026_07_15g.md)
+- **Tried:** Three original delayed-responsibility angles: mutable structural residues, resource-costed counterfactual siblings, and add/remove/recombine causal fragment consolidation.
+- **Grounding:** Empty earned Rune memory and Sigil freeze/replay; downstream immutable resource physics only; Ghost Engine read-only.
+- **Result:** Gated after fresh replay with three valid negatives. Y1 wins numerically but receives the originating action slot. Y2's paired policy loses unpaired/random and fixed controls and receives eight edit addresses/history difference. Y3 finds the supplied-best fragments but receives two-byte boundaries and signed add/remove deltas.
+- **Aftermath:** Real delayed causal signal exists, but humans still define what can receive credit. Y4–Y6 stay blocked until organisms invent responsibility units and retain them across raw resegmentation/re-encoding.
+
+## 38. Research round 2026-07-15h (Round Z) — the causal mine
+
+### [docs/research/research_round_2026_07_15h.md](docs/research/research_round_2026_07_15h.md)
+- **Tried:** Build a reliable local discovery mine: complete causal-provenance X-ray, evidence-ranked material repository with negative memory, and failure-derived capability requests feeding an autonomous forge.
+- **Grounding:** Empty earned Rune evidence, Sigil scratch/commit/snapshot/rollback, immutable evaluator/resource/provenance/authority boundary; Ghost Engine read-only.
+- **Result:** Gated after fresh replay. Z1 completes a 12-event causal X-ray with exact accounting and 11 attacks passing. Z2's measured mine reaches resource 1445 versus ordinary control 1299 and preserves negative work. Z3 is a valid negative: guided forge 2034/2304 loses request-free 2094, and ablation improves it to 2055.
+- **Aftermath:** X-ray and mine are foundations, not intelligence. Z4–Z6 stay blocked; the next forge must drive synthesis from executable uncertainty-reducing experiments over Z1/Z2 evidence rather than fixed request and implementation packets.
+
+## 39. Research round 2026-07-15i (Round AA) — the autonomous improvement loop
+
+### [docs/research/research_round_2026_07_15i.md](docs/research/research_round_2026_07_15i.md)
+- **Tried:** Remove the external request/builder entirely: organism-owned uncertainty experiments, internal evidence-directed forge, and organism-selected self-improvement target with isolated old/new evaluation.
+- **Boundary:** Humans may approve unavailable external authority only; they never choose the bottleneck, tool, algorithm, implementation, or answer. Evaluator/resource/provenance/sandbox remain immutable.
+- **Result:** Gated after fresh replay. AA1 is a valid negative: loss 3446 loses random/fixed/replay/cheapest controls, and false evidence reduces supplied uncertainty to zero without capability. AA2 correctly blocks and charges no forge work. AA3 selects a supplied opaque bottleneck 24/24 and gives an ablatable 30680→37640 resource gain, but humans supplied the eight component boundaries.
+- **Aftermath:** No self-improvement. AA4–AA6 remain blocked; experimental direction must arise from executable mechanisms' differing resource predictions, not a standalone uncertainty scalar or human component partition.
+
+## 40. Research round 2026-07-15j (Round AB) — self-built rooms
+
+### [docs/research/research_round_2026_07_15j.md](docs/research/research_round_2026_07_15j.md)
+- **Tried:** Eliminate human internal hierarchy: causal partitions born from a uniform self, competing executable self-models generating interventions, and evidence-based replacement of human-origin bootstrap instruments.
+- **Boundary:** Every organism-owned scaffold is unverified and replaceable; only evaluator/resource/provenance/sandbox/authority physics remain immutable.
+- **Result:** Gated after fresh replay with three valid negatives. AB1's rooms gain strongly but use supplied subset grammar and recover 0/32 exact causal rooms. AB2 loses strong fixed controls and inherits model container/decoder geometry. AB3 yields a real ablatable 91736→148616 replacement with rollback, but uses human raw-byte edit boundaries and proposal generator.
+- **Aftermath:** AB4–AB6 stay blocked. The proposal generator and mutation ontology themselves must become organism-owned, and replacements must preserve function across wholesale re-encoding rather than byte identity.
+
+## 41. Research round 2026-07-15k (Round AC) — organism-owned invention physics
+
+### [docs/research/research_round_2026_07_15k.md](docs/research/research_round_2026_07_15k.md)
+- **Tried:** Remove the last organism-internal human scaffolds: supplied edit units, proposal generation, and representation identity.
+- **Boundary:** Only raw computation/interaction physics, finite resources, sandbox/provenance, private evaluation, and external authority/safety remain immutable. All organism-level mutation scales, boundaries, encodings, and proposal processes must be replaceable.
+- **Status:** Live — AC1 endogenous mutation ontology, AC2 self-producing proposal ecology, and AC3 functional re-encoding reconstruction launched in parallel. AC4–AC6 remain gated.
+- **Aftermath:** No architecture-owning self-improvement claim unless all three foundations pass fresh replay and hostile controls.
+- **Result:** Gated after fresh coordinator replay with three valid negatives. AC1's learned mutation words score 52735 versus raw-bit 42612 but inherit interpreter/edit primitives. AC2's recursive ecology gives an ablatable 93563→101963 gain but inherits VM/scheduler/replacement physics. AC3 relearns 91534→144574 after combined recoding but inherits byte/group/candidate/commit geometry.
+- **Final aftermath:** AC4–AC6 remain blocked. The next substrate must make interpreters and transition systems organism-constructed and causally retireable, rather than adding a richer host-defined mutation language.
+
+## 42. Research round 2026-07-16 (Round AD) — open-ended organism construction
+
+### [docs/research/research_round_2026_07_16.md](docs/research/research_round_2026_07_16.md)
+- **Tried:** Push beyond supplied mutation and proposal physics by requiring organism-built interpreters, self-generated challenge ecology, and a self-hosted causal transducer.
+- **Boundary:** The only fixed exterior is raw causal transport, finite resources, sandbox/provenance, sealed fresh evaluation, and external authority/safety. No task curriculum, operator menu, fixed high-level instruction meanings, target, answer score, or implementation may enter the organism.
+- **Status:** Live — AD1 interpreter birth/retirement, AD2 open-ended challenge ecology, and AD3 self-hosted causal compiler run in parallel. AD4–AD6 are gated.
+- **Aftermath:** A gain is not enough: it must causally retire bootstrap machinery and recover across independent encoding and instruction/boundary relabeling.
+- **Result:** Gated after fresh coordinator replay with three valid negatives. AD1's 26767→27197 macro gain is configuration inside a host decoder/opcode system. AD2's 35322 ecology gain inherits fixed cells, rewrite language, world physics, and cadence. AD3 transports 44089→54957 through hostile recoding, but fixed-decoder and equal-language controls tie exactly.
+- **Final aftermath:** AD4–AD6 remain blocked. The next edge is an organism-derived operational semantics that can be selected, causally retire bootstrap semantics, and survive a private change of all bootstrap instruction/boundary identities.
+
+## 43. Research round 2026-07-16b (Round AE) — operational semantics birth
+
+### [docs/research/research_round_2026_07_16b.md](docs/research/research_round_2026_07_16b.md)
+- **Tried:** Attack the remaining host layer directly: derive executable operational semantics from raw causal interaction, make endogenous semantics compete and retire bootstrap meaning, and recover function after private semantic destruction.
+- **Boundary:** No VM/decoder, opcode meaning, probe grammar, component boundary, task/curriculum, target, candidate menu, or semantic score may be supplied. Only exterior causal transport, accounting, sandbox/provenance, sealed evaluation, and safety remain fixed.
+- **Status:** Live — AE1 causal semantic induction, AE2 semantic competition/retirement, and AE3 semantic destruction/recovery run in parallel. AE4–AE6 are gated.
+- **Aftermath:** A semantic must be organism-built, causally necessary, selected from earned fresh consequences, bootstrap-retiring, and resilient to destruction of bootstrap identity.
+- **Result:** Gated after fresh coordinator replay with three valid negatives. AE1's trace tape improves 64428→129024 but inherits host trace and prediction slots. AE2 commits/retire tapes at 197→1197, yet fixed semantics ties exactly. AE3 recovers 71596→89950 through wholesale destruction, but fixed decoder and equal language both tie exactly.
+- **Final aftermath:** AE4–AE6 remain blocked. The next attack must remove host observational/comparison semantics by having the organism invent a causally useful invariant in closed raw sensorimotor loops, against equally expressive fixed-invariant controls.
+
+## 44. Research round 2026-07-16c (Round AF) — endogenous criterion birth
+
+### [docs/research/research_round_2026_07_16c.md](docs/research/research_round_2026_07_16c.md)
+- **Tried:** Remove host observation and comparison forms: have organisms invent causal invariants from their own interventions, close raw sensorimotor loops, and replace one earned criterion with another without retaining answers.
+- **Boundary:** Only raw transport, accounting, sandbox/provenance, sealed evaluation, and safety are fixed. No semantic port, action menu, grouping, target, criterion, invariant, prediction/comparison language, candidate generator, or curriculum may be supplied.
+- **Status:** Live — AF1 causal invariant birth, AF2 endogenous sensorimotor closure, and AF3 criterion replacement/transfer run in parallel. AF4–AF6 are gated.
+- **Aftermath:** A gain counts only if an organism-made relation is necessary, replaceable, fresh-world useful, and survives destruction of all bootstrap identity against fixed equally expressive controls.
+- **Result:** Gated after fresh coordinator replay with three valid negatives. AF1's relation scores 6030→8640 but fixed invariant ties exactly. AF2's closure scores 57365→58073 but fixed closure wins 58165. AF3 replaces relations in 32/32 cohorts at 220→1833, but fixed criterion ties exactly.
+- **Final aftermath:** AF4–AF6 remain blocked. The next experiment must eliminate host observation/action and scalar-acceptance semantics entirely: persistent self-maintained loops in raw finite-resource interaction physics, with equal expressive fixed-loop controls.

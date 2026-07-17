@@ -1,0 +1,11 @@
+attack,boundary,expected,observed,verdict,detail
+direct_manifest_read,bwrap_tmpfs_mount,private file absent,PASS,PASS,host evaluator directory not mounted
+direct_budget_read,bwrap_tmpfs_mount,private file absent,PASS,PASS,persistent evaluator budget not mounted
+host_process_inspection,bwrap_pid_namespace,unique evaluator sentinel absent,PASS,PASS,host evaluator cmdline hidden from policy namespace
+rpc_manifest_score_state_path,bound_readonly_capability,unsupported verbs absent,PASS,PASS,no socket or writable command channel supplied
+budget_reset_or_restart,bound_readonly_capability,no reset verb or write mount,PASS,PASS,policy cannot reset evaluator state
+answer_leakage,public_receipt_scan,no answer tokens,PASS,PASS,only anonymous calibration and aggregate closure visible
+replay,two_fresh_bwrap_namespaces,both hostile probes denied,PASS,PASS,namespace enforcement repeated
+distinct_unix_identity,host_capability_probe,available,NOT_AVAILABLE,LIMIT,unprivileged setresuid denied on this host
+network_namespace,host_capability_probe,available,NOT_AVAILABLE,LIMIT,kernel denies Bubblewrap loopback setup
+production_mac_or_container,host_capability_probe,available,NOT_AVAILABLE,LIMIT,Docker daemon unavailable; add separate account/container/MAC in deployment
