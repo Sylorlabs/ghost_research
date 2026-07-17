@@ -853,6 +853,28 @@ particle uniformly, with no host-enumerated loop, repair, boundary, candidate,
 or reproduction structure; conservation and persistence may be measured only
 outside the organism after the fact.**
 
+**2026-07-16e round (Round AH): human-scaffold exclusion launched** (see
+`docs/research/research_round_2026_07_16e.md`): a source search found that
+AF–AG fixtures still expose host trace/score/closure/resource routines,
+decoders, candidate/revision paths, boundary tags/templates, loop seeds/repair,
+viability scalars and replication schedules. AH1 builds a uniform
+capability-free medium; AH2 enforces a runtime deny-by-default firewall; AH3
+independently audits source, manifests and traces for direct/indirect leaks.
+**The mutant must be unable to use human semantic, boundary, mutation, repair,
+selection, or reproduction machinery. AH4 is prohibited until all three gates
+pass.**
+
+**2026-07-16e update (Round AH): capability exclusion works as a fixture gate,
+not yet as hostile containment** (see
+`docs/research/research_round_2026_07_16e.md`): AH1 blocks 7/7 seeded forbidden
+requests before allocation; AH3 blocks 11 direct/indirect scaffold fixtures;
+AH2 denies 15 mounted capabilities and evaluator writeback. All are valid
+negative infrastructure results because same-process, same-UID Zig code can
+bypass an API/struct firewall and local scans cannot prove binary/kernel/
+side-channel absence. **The next prerequisite is a process-level raw-medium
+sandbox with no filesystem/network/process authority and one-way evaluator
+collection, independently audited from launch policy through runtime traces.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

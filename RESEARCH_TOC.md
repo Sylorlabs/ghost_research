@@ -2210,3 +2210,13 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Aftermath:** A positive must demonstrate a self-built persistent constraint that survives perturbation, ablation, private identity change, and changed media against equal-material fixed-loop controls.
 - **Result:** Gated after fresh coordinator replay with three valid negatives. AG1's host-seeded/repaired loop reaches 128 persistent ticks but fixed host loop ties. AG2's mutable lineage reaches 21807 with 552 events but inherits tags, proposal/revision grammar, viability scalar, and scheduler. AG3 rebuilds 566→4472 after physics shift, but fixed loop ties exactly at equal charge.
 - **Final aftermath:** AG4–AG6 remain blocked. The next medium must evolve all particles uniformly—no enumerated candidates, loop pattern, repair template, or reproduction routine—with persistence measured only externally after the fact.
+
+## 46. Research round 2026-07-16e (Round AH) — human-scaffold exclusion
+
+### [docs/research/research_round_2026_07_16e.md](docs/research/research_round_2026_07_16e.md)
+- **Tried:** Convert the AF–AG human-scaffold search into enforcement: remove organism access to decoders/scores/comparisons, candidate/mutation grammar, boundaries/templates, repair, viability, and scheduler/reproduction services.
+- **Search evidence:** The named residual paths include `hostTrace`, `hostScore`, `hostClosure`, `hostResource`, `execute`, relation builders, `hostProposeBoundary`, `externalLoop`, host repair, viability scalar, and copy scheduling.
+- **Status:** Live — AH1 capability-free uniform medium, AH2 runtime capability firewall, and AH3 independent scaffold-audit gate run in parallel. AH4–AH6 are gated.
+- **Aftermath:** The next behavior experiment may run only if the mutant is *unable* to access forbidden capabilities, not merely instructed not to use them.
+- **Result:** Gated after fresh coordinator replay. AH1 blocks 7/7 seeded forbidden requests in a uniform fixture; AH3 blocks 11 scaffold fixtures with a fail-closed manifest; AH2 denies 15 mounted capabilities and evaluator writeback. All are valid-negative infrastructure results because same-process Zig can bypass API-level containment and local scanning cannot prove binary/kernel/side-channel absence.
+- **Final aftermath:** AH4–AH6 remain blocked. The next required work is an OS/process-level capability boundary with an unprivileged raw-medium process, no filesystem/network/process authority, evaluator one-way post-run collection, and independent launch/binary/trace audit.
