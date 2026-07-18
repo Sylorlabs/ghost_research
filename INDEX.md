@@ -912,6 +912,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18c update (Round AM): topology clears the relevance bar; temporal motifs do not** (see `docs/research/research_round_2026_07_18c.md`): AM1 is a valid negative—learned temporal motif 8,448 ties its fixed temporal control and drops to 924 under causal-law shift. AM2 is a **foundation positive**—earned intervention topology reaches 24,960/96 perfect after recoding and changed law, exceeding every equal-contact graph/vector/last-outcome/schedule/random/replay/shuffled/answer/ablation control. AM3 is **GATE READY**, rejecting 21/21 hostile manifests and conditionally admitting 2/2 response-only provenance manifests. **This is a bounded synthetic causal-relevance result, not open-ended autonomy; AM4 may now test whether it improves experiment allocation.**
 
+**2026-07-18c AM4 update: earned causal relevance now improves experiment allocation** (see `docs/research/research_round_2026_07_18c.md`): the topology→value→reuse/explore chain is a **foundation positive**—3,600 hidden material at 1,920 contacts, strictly over strong broad coverage 1,660, AJ4 fixed allocation 1,380, replay 1,410, random 1,290, shuffled 840, and every blank/answer/history/value/arbitration ablation. **The next test is portfolio transfer across multiple anonymous mechanisms; this still does not demonstrate open-ended invention or hostile autonomy.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
