@@ -2251,3 +2251,21 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Aftermath:** A positive must beat random, replay, shuffled-history, and a fixed explore/reuse mix at equal cost on pre-registered hidden regimes.
 - **Result:** Fresh coordinator replay gives two foundation positives and one valid negative. AK1 reaches 18432 but fixed generic matching ties exactly, so relevance remains supplied. AK2's causal-value allocation wins 44153 versus random 27193, replay 35353, shuffled 33753 and fixed/ablation 32953. AK3's provenance-bound explore/reuse arbitration wins both total and per-cost across hidden regime changes.
 - **Final aftermath:** AK4–AK6 remain gated on organism-owned relevance. The next edge is constructing relevance without fixed content-addressable matching, then retesting self-chosen experiment allocation above that replacement.
+
+## 50. Research round 2026-07-18b (Round AL) — matcher-free causal relevance
+
+### [docs/research/research_round_2026_07_18b.md](docs/research/research_round_2026_07_18b.md)
+- **Tried:** Replace AK1's tied fixed matcher with relevance derived from shared causal response: causal fingerprints, endogenous context segmentation, and an independent matcher-free audit.
+- **Boundary:** No raw similarity/matching function, regime label/key, change-point score, target, decoder, experiment menu, answer trace, reward/uncertainty, evaluator feedback, or task router.
+- **Status:** Live — AL1 causal fingerprint birth, AL2 context segmentation, and AL3 matcher-free audit run in parallel. AL4–AL6 are gated.
+- **Aftermath:** A positive must beat the fixed generic matcher itself, as well as random/replay/shuffled/fixed routing, after hostile recoding and changed causal mechanisms.
+- **Result:** Gated after fresh coordinator replay. AL1's causal-effect fingerprint reaches 19008 but fixed effect-vector matching ties exactly. AL2's learned segmentation reaches 17348 but generic last-consequence matching reaches 17578 and fixed periodic routing 19008. AL3 is a **GATE READY** fail-closed manifest audit: 16/16 seeded matcher/identifier/routing/answer leaks reject, 1/1 response-only manifest conditionally admits.
+- **Final aftermath:** AL4–AL6 remain blocked. The next relevance mechanism must exceed fixed vector matching and binary last-consequence routing; AL3 must audit it, and the gate is not a behavior or ownership positive.
+
+## 51. Research round 2026-07-18c (Round AM) — higher-order causal relevance
+
+### [docs/research/research_round_2026_07_18c.md](docs/research/research_round_2026_07_18c.md)
+- **Tried:** Move beyond static fingerprint matching and binary last-consequence routing: temporal causal motifs, intervention topology, and an independent higher-order leakage audit.
+- **Boundary:** No fixed vector/static matcher, temporal motif, graph, schedule, regime key, router, label, target, decoder, answer, score, evaluator feedback, or task menu.
+- **Status:** Partially landed — AM1 is a valid negative (fixed temporal tie and shift failure); AM2 is a foundation positive; AM3 is gate-ready infrastructure. AM4 is ready on AM2+AM3; AM5–AM6 remain gated.
+- **Result:** Earned intervention topology reaches **24,960 / 96 perfect** at 1,536 contacts, strictly beating fixed graph (9,100), vector (1,560), last-outcome/replay (8,320), schedule (9,100), random/answer/ablation (8,060), and shuffled (10,400), after private recoding and causal-law shift. AM3 rejects 21/21 hostile manifests and conditionally admits 2/2 response-only provenance cases.
