@@ -2241,3 +2241,13 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Result:** Fresh coordinator replay validates the pivot. AJ1 is a foundation contract pass (3/3 generic fixtures, 11/11 leak denials). AJ2 is a **foundation positive**: signed causal relation transfer scores 26069 versus fixed/ablation 21390 and all other equal-cost controls. AJ3 is a **compounding positive**: answer-scrubbed experience yields 1920 versus fresh/answer/retained/ablation 599 at 581 versus 960/965 raw interactions.
 - **Final aftermath:** AJ4 is released: self-chosen causal experiment above the frozen substrate. AJ5–AJ6 remain gated. These are bounded synthetic-world discoveries, not substrate ownership, hostile containment, open-ended invention, or full autonomy.
 - **AJ4 update:** Valid negative after fresh replay. The earned non-fixed program scores 412 and beats fixed 273 plus blank/answer/retained/ablation, but loses random 526, replay 632 and shuffled 604 at equal 960 interactions. The next edge is causal experiment allocation, not reusable abstraction or answer-scrubbed compounding. AJ5–AJ6 remain blocked.
+
+## 49. Research round 2026-07-18 (Round AK) — causal experiment allocation
+
+### [docs/research/research_round_2026_07_18.md](docs/research/research_round_2026_07_18.md)
+- **Tried:** Turn AJ2/AJ3's reusable experience into better experiment allocation: relevance binding, intervention-value calibration, and explore/reuse arbitration.
+- **Boundary:** Frozen generic substrate only; no regime labels, target, semantic decoder, experiment menu, answer trace, intermediate uncertainty/reward score, evaluator feedback, or task router.
+- **Status:** Live — AK1 relevance binding, AK2 intervention-value calibration, and AK3 explore/reuse arbitration run in parallel. AK4–AK6 are gated.
+- **Aftermath:** A positive must beat random, replay, shuffled-history, and a fixed explore/reuse mix at equal cost on pre-registered hidden regimes.
+- **Result:** Fresh coordinator replay gives two foundation positives and one valid negative. AK1 reaches 18432 but fixed generic matching ties exactly, so relevance remains supplied. AK2's causal-value allocation wins 44153 versus random 27193, replay 35353, shuffled 33753 and fixed/ablation 32953. AK3's provenance-bound explore/reuse arbitration wins both total and per-cost across hidden regime changes.
+- **Final aftermath:** AK4–AK6 remain gated on organism-owned relevance. The next edge is constructing relevance without fixed content-addressable matching, then retesting self-chosen experiment allocation above that replacement.

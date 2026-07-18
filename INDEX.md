@@ -900,6 +900,10 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-17b AJ4 update: self-chosen experiment allocation is the active bottleneck** (see `docs/research/research_round_2026_07_17b.md`): AJ4's earned non-fixed experiment program reaches 412 and beats fixed 273 plus blank/answer/retained/ablation, but loses random 526, replay 632 and shuffled history 604 at equal cost. **It is a valid negative: reuse and compounding are real, but causal evidence is not yet being allocated into better experiments than strong generic search. AJ5–AJ6 remain blocked.**
 
+**2026-07-18 round (Round AK): causal experiment allocation launched** (see `docs/research/research_round_2026_07_18.md`): AK1 tests whether causal records can bind to the right anonymous regime; AK2 tests value calibration for generic perturbations without a supplied uncertainty score; AK3 tests when to explore versus reuse. **The new positive bar is explicit: the earned allocation policy must beat random, replay, shuffled history and a fixed explore/reuse mix at equal cost in hidden regimes.**
+
+**2026-07-18 update (Round AK): experiment allocation works; relevance ownership does not yet** (see `docs/research/research_round_2026_07_18.md`): AK2 is a **foundation positive**—earned causal value reaches 44153 versus random 27193, replay 35353, shuffled 33753 and fixed/ablation 32953 in private recoding. AK3 is a **foundation positive**—provenance-bound explore/reuse arbitration wins total and per-cost material through hidden regime change. AK1 is a valid negative because its 18432 relevance result ties an equal-cost fixed generic matcher exactly. **The next bottleneck is constructing relevance without supplied content-addressable matching; AJ4/AK4 remains gated until then.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
