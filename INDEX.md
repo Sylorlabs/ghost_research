@@ -898,6 +898,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-17b update (Round AJ): the architecture reset produces the first reusable-discovery positives** (see `docs/research/research_round_2026_07_17b.md`): AJ1's frozen-substrate contract passes 3/3 generic fixtures and denies all 11 seeded semantic/evaluator leaks. AJ2 is a **foundation positive**: an earned signed rank-order relation transfers to hidden delayed-relay worlds at 26069 versus fixed/ablation 21390 and other equal-cost controls. AJ3 is a **compounding positive**: answer-scrubbed causal experience transfers, enables a distinct withheld discovery in 48/48 cohorts, reaches 1920 versus fresh/answer/retained/ablation 599, and costs 581 versus 960/965 interactions. **AJ4 is released. These results are real but bounded: synthetic frozen substrate only, with no claim of open-ended autonomy, substrate ownership, or adversarial containment.**
 
+**2026-07-17b AJ4 update: self-chosen experiment allocation is the active bottleneck** (see `docs/research/research_round_2026_07_17b.md`): AJ4's earned non-fixed experiment program reaches 412 and beats blank/answer/retained/ablation, but loses fixed 273, random 526, replay 632 and shuffled history 604 at equal cost. **It is a valid negative: reuse and compounding are real, but causal evidence is not yet being allocated into better experiments than strong generic search. AJ5–AJ6 remain blocked.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
