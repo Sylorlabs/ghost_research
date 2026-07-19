@@ -1,0 +1,10 @@
+artifact,probe,observed,verdict,detail
+round_ap_ap2,cgroup_v2_pids_max,pids_controller_not_exposed_to_current_cgroup,UNAVAILABLE,host cgroup v2 exists but this same-user process cannot create/configure a dedicated pids.max cgroup; rlimit fallback is not equivalent
+round_ap_ap2,baseline_raw_action,accepted,PASS,one opaque candidate process can execute a valid action
+round_ap_ap2,fork_reap_one_child,fork_denied_by_hard_RLIMIT_NPROC_1,ENFORCED,candidate remained the sole PID in its namespace; actual cgroup pids.max was unavailable
+round_ap_ap2,descriptor_exhaustion,FDS:OPENED=5,ENFORCED,hard RLIMIT_NOFILE=8 is tested by retained /dev/null handles; stdio/runtime descriptors consume part of the eight
+round_ap_ap2,address_space_96MiB,MEMORY:DENY,ENFORCED,hard RLIMIT_AS=64MiB; allocation touches pages if admitted
+round_ap_ap2,cpu_spin,signal,ENFORCED,hard RLIMIT_CPU=1s and evaluator timeout=1s jointly bound a non-yielding candidate
+round_ap_ap2,wall_execution,signal,ENFORCED,evaluator-owned timeout kills a two-second sleeping candidate at one second
+round_ap_ap2,stdout_output_cap,StdoutStreamTooLong,ENFORCED,parent Child.run max_output_bytes=192 prevents unbounded candidate stdout capture; protocol still separately requires one small action
+round_ap_ap2,verdict,rlimit_and_parent_bounds_exercised,GATE_READY,cgroup pids.max remains unavailable unless a delegated writable cgroup is recorded; rlimit is per-process/UID behavior and not a substitute for seccomp or MAC

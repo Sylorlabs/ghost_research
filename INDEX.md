@@ -930,6 +930,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18f round (Round AP): syscall, PID, and time containment launched** (see `docs/research/research_round_2026_07_18f.md`): AP1 enforces a pre-exec candidate syscall policy; AP2 measures single-process/resource containment; AP3 removes direct timing routes in favor of logical turns. **Only a post-hardening hostile runtime audit may unblock AM replays.**
 
+**2026-07-18f update (Round AP): direct fork/syscall controls hold; vDSO time remains** (see `docs/research/research_round_2026_07_18f.md`): AP1's real two-stage seccomp denies direct fork/clone/exec/open/socket/mount/signal/time probes; AP2's hard rlimits deny fork and enforce FD/memory/CPU/output caps. AP3 discovers libc can still read vDSO clocks without a syscall, and physical timing survives. **AP4 must attack the combined launcher and determine whether that residual becomes evaluator leakage; AM replay remains blocked.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
