@@ -922,6 +922,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18d update (Round AN): protocol boundary exists; process containment is still untested** (see `docs/research/research_round_2026_07_18d.md`): AN1 runs evaluator-parent/fresh-candidate-child separation and denies score/forged protocol requests; AN2 rejects 15/15 hostile parser fixtures but did not attack the launched child process's OS capabilities; AN3 admits 1 precommitted causal record and rejects 9 answer/trace/post-hoc/correlation/decoder/feedback fixtures. **AM replay remains blocked until a process-level escape audit hardens and attacks the actual candidate boundary.**
 
+**2026-07-18e round (Round AO): capability-hardened evaluation launched** (see `docs/research/research_round_2026_07_18e.md`): AO1 builds the actual restricted candidate launcher; AO2 maps live same-user escape routes; AO3 makes evaluator transcript, budget, nonce, and end-only score tamper-evident. **Only an integrated runtime attack may unblock clean-room AM replays.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

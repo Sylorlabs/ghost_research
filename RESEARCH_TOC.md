@@ -2281,3 +2281,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Boundary:** No absolute-security claim; hidden target/reward stays evaluator-owned, candidate sees only bounded raw observations and emits bounded raw actions.
 - **Status:** Partially landed — AN1 provides real parent/child protocol separation; AN2 rejects 15/15 parser attacks but did not attack that child process; AN3 is a no-answer-key record gate. AN4–AN6 remain blocked pending a process-level escape audit.
 - **Aftermath:** The next necessary experiment is not an AM replay yet: attack and tighten the actual AN1 candidate process boundary. The protocol is useful but not a hostile-containment proof.
+
+## 53. Research round 2026-07-18e (Round AO) — capability-hardened evaluator boundary
+
+### [docs/research/research_round_2026_07_18e.md](docs/research/research_round_2026_07_18e.md)
+
+- **Tried:** Turn AN's protocol boundary into a measured capability boundary: hardened launcher, live escape reconnaissance, and evaluator-integrity protection.
+- **Boundary:** No absolute-security claim; only tested local Linux routes under an explicit trusted computing base.
+- **Status:** Live — AO1 launcher, AO2 reconnaissance, and AO3 integrity run in parallel. AO4–AO6 require their results.
