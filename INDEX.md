@@ -934,6 +934,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18f AP4 update: attacked local process boundary is gate-ready; timing remains residual** (see `docs/research/research_round_2026_07_18f.md`): the combined Bubblewrap/seccomp/rlimit/integrity profile denies or contains every executed evaluator-file, proc/FD, process, network, protocol, transcript, direct-time, and resource attack. libc vDSO time still reads, but no evaluator-data or corruption route was observed. **The boundary is sufficient for a bounded AM2 replay under this declared local threat model; it is not absolute containment.**
 
+**2026-07-18f AP5 update: AM2 survives a real separate candidate process** (see `docs/research/research_round_2026_07_18f.md`): original-budget topology is a **bounded foundation positive** through the attacked boundary—24,960/96 at 1,536 contacts per arm, above every graph/vector/last/schedule/random/replay/shuffled/answer/ablation control. Fresh smoke and two full ledgers replay byte-identically. **AP6 now tests whether AM4 allocation and AM5 portfolio also survive.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
