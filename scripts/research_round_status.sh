@@ -16,6 +16,7 @@ printf 'ROUND_STATUS: %s\n' "$round_doc"
 total=0
 done=0
 negative=0
+inconclusive=0
 foundation=0
 compounding=0
 gate_ready=0
@@ -33,7 +34,10 @@ while IFS= read -r line; do
     if [[ "$line" == *"**BLOCKED"* || "$line" =~ \|[[:space:]]*blocked[[:space:]] ]]; then
         state=BLOCKED
         blocked=$((blocked + 1))
-    elif [[ "$line" == *"**INCONCLUSIVE"* || "$line" == *"VALID NEGATIVE"* || "$line" == *"**INVALIDATED"* ]]; then
+    elif [[ "$line" == *"**INCONCLUSIVE"* ]]; then
+        state=INCONCLUSIVE
+        inconclusive=$((inconclusive + 1))
+    elif [[ "$line" == *"VALID NEGATIVE"* || "$line" == *"**INVALIDATED"* ]]; then
         state=TERMINAL_NEGATIVE
         negative=$((negative + 1))
     elif [[ "$line" =~ \|[[:space:]]*ready[[:space:]] || "$line" == *"**READY"* ]]; then
@@ -66,8 +70,8 @@ if (( total == 0 )); then
     exit 2
 fi
 
-printf 'SUMMARY: total=%d done=%d foundation_positive=%d compounding_positive=%d gate_ready=%d terminal_negative=%d ready=%d blocked=%d live=%d\n' \
-    "$total" "$done" "$foundation" "$compounding" "$gate_ready" "$negative" "$ready" "$blocked" "$live"
+printf 'SUMMARY: total=%d done=%d foundation_positive=%d compounding_positive=%d gate_ready=%d terminal_negative=%d inconclusive=%d ready=%d blocked=%d live=%d\n' \
+    "$total" "$done" "$foundation" "$compounding" "$gate_ready" "$negative" "$inconclusive" "$ready" "$blocked" "$live"
 
 if (( live > 0 || ready > 0 )); then
     printf 'ROUND_SETTLED=NO\nROUND_COMPLETE=NO\n'
