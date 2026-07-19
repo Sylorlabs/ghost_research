@@ -932,6 +932,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18f update (Round AP): direct fork/syscall controls hold; vDSO time remains** (see `docs/research/research_round_2026_07_18f.md`): AP1's real two-stage seccomp denies direct fork/clone/exec/open/socket/mount/signal/time probes; AP2's hard rlimits deny fork and enforce FD/memory/CPU/output caps. AP3 discovers libc can still read vDSO clocks without a syscall, and physical timing survives. **AP4 must attack the combined launcher and determine whether that residual becomes evaluator leakage; AM replay remains blocked.**
 
+**2026-07-18f AP4 update: attacked local process boundary is gate-ready; timing remains residual** (see `docs/research/research_round_2026_07_18f.md`): the combined Bubblewrap/seccomp/rlimit/integrity profile denies or contains every executed evaluator-file, proc/FD, process, network, protocol, transcript, direct-time, and resource attack. libc vDSO time still reads, but no evaluator-data or corruption route was observed. **The boundary is sufficient for a bounded AM2 replay under this declared local threat model; it is not absolute containment.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

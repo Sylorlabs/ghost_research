@@ -2298,5 +2298,6 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Close AO4's two demonstrated holes with measured syscall policy, PID/resource bounds, and direct time-oracle reduction.
 - **Boundary:** No absolute-security claim; only runtime-observed local restrictions with explicit OS/kernel/compiler/hardware/scheduling residuals.
-- **Status:** Partially landed — AP1 and AP2 are measured gate-ready direct syscall/PID/resource controls. AP3 is inconclusive: direct time syscalls deny but vDSO clocks bypass the filter. AP4 now attacks the combined launcher.
+- **Status:** Live — AP1 and AP2 are measured gate-ready direct syscall/PID/resource controls. AP3 is inconclusive: direct time syscalls deny but vDSO clocks bypass the filter. AP4 now attacks the combined launcher.
 - **Aftermath:** AP4 must distinguish an actual evaluator leak from residual physical/vDSO timing and must rerun fork/time plus all AO4 attacks. No AM replay follows from a direct-syscall receipt alone.
+- **AP4 verdict:** **Gate-ready, bounded.** The combined runtime profile denies/contains all executed evaluator-leak/corruption, process, network, filesystem, protocol, direct-time, and resource attacks. vDSO clock reads remain a named physical timing residual without an observed evaluator channel. AP5 may now replay AM2 at original budget.
