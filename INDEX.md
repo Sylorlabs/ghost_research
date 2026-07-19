@@ -920,6 +920,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18d round (Round AN): clean-room evaluation launched** (see `docs/research/research_round_2026_07_18d.md`): AN1 separates evaluator-owned hidden state from candidate actions through a bounded protocol; AN2 attacks every declared capability path; AN3 defines open discovery evaluation without matching a human answer. **Only after the boundary survives can AM2–AM5 be replayed and any causal-invention claim advance.**
 
+**2026-07-18d update (Round AN): protocol boundary exists; process containment is still untested** (see `docs/research/research_round_2026_07_18d.md`): AN1 runs evaluator-parent/fresh-candidate-child separation and denies score/forged protocol requests; AN2 rejects 15/15 hostile parser fixtures but did not attack the launched child process's OS capabilities; AN3 admits 1 precommitted causal record and rejects 9 answer/trace/post-hoc/correlation/decoder/feedback fixtures. **AM replay remains blocked until a process-level escape audit hardens and attacks the actual candidate boundary.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

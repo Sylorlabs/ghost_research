@@ -2279,4 +2279,5 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Replace AM's protocol-only boundary with a separate evaluator/candidate protocol, attack it, and design no-answer-key discovery evaluation.
 - **Boundary:** No absolute-security claim; hidden target/reward stays evaluator-owned, candidate sees only bounded raw observations and emits bounded raw actions.
-- **Status:** Live — AN1 clean-room protocol, AN2 escape audit, and AN3 open-discovery evaluator design run in parallel. AN4–AN6 wait for the boundary.
+- **Status:** Partially landed — AN1 provides real parent/child protocol separation; AN2 rejects 15/15 parser attacks but did not attack that child process; AN3 is a no-answer-key record gate. AN4–AN6 remain blocked pending a process-level escape audit.
+- **Aftermath:** The next necessary experiment is not an AM replay yet: attack and tighten the actual AN1 candidate process boundary. The protocol is useful but not a hostile-containment proof.
