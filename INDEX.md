@@ -928,6 +928,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18e AO4 update: hardened storage/protocol boundary holds, syscall boundary does not** (see `docs/research/research_round_2026_07_18e.md`): AO4's live hostile child cannot access evaluator files, env secrets, extra FDs, host process, network, malformed/forged protocol, or evaluator transcript—but can read monotonic time and fork/reap. **Containment is INCONCLUSIVE, not negative; add and attack syscall plus PID/cgroup policy before replaying AM.**
 
+**2026-07-18f round (Round AP): syscall, PID, and time containment launched** (see `docs/research/research_round_2026_07_18f.md`): AP1 enforces a pre-exec candidate syscall policy; AP2 measures single-process/resource containment; AP3 removes direct timing routes in favor of logical turns. **Only a post-hardening hostile runtime audit may unblock AM replays.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

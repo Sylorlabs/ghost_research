@@ -2291,3 +2291,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Status:** Live — AO1 runtime-tested Bubblewrap launcher and AO3 protocol-integrity gate are ready. AO2 exposed the old same-user child. AO4 now launches hostile fixtures against the hardened child.
 - **Aftermath:** AO1 is a capability receipt, not containment proof. AO4 must run the actual AO2 hostile fixtures through it before AM replays can begin.
 - **AO4 verdict:** **Inconclusive.** The live hardened child denied evaluator-file/env/FD/host-process/network/protocol/transcript attacks, but could read a monotonic clock and fork/reap. Syscall and PID/cgroup policy must be added and attacked before any AM replay.
+
+## 54. Research round 2026-07-18f (Round AP) — syscall, process, and time containment
+
+### [docs/research/research_round_2026_07_18f.md](docs/research/research_round_2026_07_18f.md)
+
+- **Tried:** Close AO4's two demonstrated holes with measured syscall policy, PID/resource bounds, and direct time-oracle reduction.
+- **Boundary:** No absolute-security claim; only runtime-observed local restrictions with explicit OS/kernel/compiler/hardware/scheduling residuals.
+- **Status:** Live — AP1 syscall policy, AP2 PID/resource boundary, and AP3 time-oracle reduction run in parallel. AP4–AP6 are gated.
