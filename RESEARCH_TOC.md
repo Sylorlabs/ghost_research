@@ -2272,3 +2272,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **AM4 result:** The complete earned topology→value→arbitration chain reaches **3,600** hidden material at 1,920 contacts, over broad coverage 1,660, AJ4 fixed 1,380, replay 1,410, random 1,290, shuffled 840, blank/answer/topology ablation 1,320, value ablation 990, and arbitration ablation 1,230. This is bounded causal-allocation evidence, not open-ended autonomy.
 - **AM5 result:** Earned cohort-local portfolio routing reaches **5,760 / 288 exact routes** at 4,320 contacts, above AM4 single-record 2,880, random 1,500, fixed coverage/schedule 1,400, replay 1,160, shuffled 1,420, and all ablations. A same-evidence, wrong-record misrouting control reaches **0**, showing that the result requires correct causal record routing rather than mere reuse.
 - **AM6 verdict:** **Inconclusive, not a negative.** All ledger contrasts and equal-contact arithmetic reconstruct, but AM2–AM5 compile policy alongside callable hidden target/reward helpers. The source-manifest audit cannot enforce evaluator isolation. Required repair: a capability-limited separate evaluator protocol, then equal-budget replay and a rerun of AM6.
+
+## 52. Research round 2026-07-18d (Round AN) — capability-limited clean-room evaluation
+
+### [docs/research/research_round_2026_07_18d.md](docs/research/research_round_2026_07_18d.md)
+
+- **Tried:** Replace AM's protocol-only boundary with a separate evaluator/candidate protocol, attack it, and design no-answer-key discovery evaluation.
+- **Boundary:** No absolute-security claim; hidden target/reward stays evaluator-owned, candidate sees only bounded raw observations and emits bounded raw actions.
+- **Status:** Live — AN1 clean-room protocol, AN2 escape audit, and AN3 open-discovery evaluator design run in parallel. AN4–AN6 wait for the boundary.

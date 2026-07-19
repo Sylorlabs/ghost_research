@@ -918,6 +918,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18c Round AM verdict: behavior reproduces, but the claimed isolation does not** (see `docs/research/research_round_2026_07_18c.md`): AM6 independently reproduces AM2/AM4/AM5's fixture contrasts and equal charged-contact accounting, but finds hidden target/reward helpers callable beside policy in the same compilation units. **The result is INCONCLUSIVE—not a failed behavioral result—but it cannot support an isolated-foundation, autonomy, security, or general-intelligence claim. The next gate is capability-limited separate evaluation followed by same-budget replay.**
 
+**2026-07-18d round (Round AN): clean-room evaluation launched** (see `docs/research/research_round_2026_07_18d.md`): AN1 separates evaluator-owned hidden state from candidate actions through a bounded protocol; AN2 attacks every declared capability path; AN3 defines open discovery evaluation without matching a human answer. **Only after the boundary survives can AM2–AM5 be replayed and any causal-invention claim advance.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
