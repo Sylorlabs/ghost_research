@@ -2288,5 +2288,6 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Turn AN's protocol boundary into a measured capability boundary: hardened launcher, live escape reconnaissance, and evaluator-integrity protection.
 - **Boundary:** No absolute-security claim; only tested local Linux routes under an explicit trusted computing base.
-- **Status:** Partially landed — AO1 runtime-tested Bubblewrap launcher and AO3 protocol-integrity gate are ready. AO2 is inconclusive for the old same-user child, exposing env/cwd/proc/files/stdout/clock. AO4 now attacks the hardened launcher.
+- **Status:** Live — AO1 runtime-tested Bubblewrap launcher and AO3 protocol-integrity gate are ready. AO2 exposed the old same-user child. AO4 now launches hostile fixtures against the hardened child.
 - **Aftermath:** AO1 is a capability receipt, not containment proof. AO4 must run the actual AO2 hostile fixtures through it before AM replays can begin.
+- **AO4 verdict:** **Inconclusive.** The live hardened child denied evaluator-file/env/FD/host-process/network/protocol/transcript attacks, but could read a monotonic clock and fork/reap. Syscall and PID/cgroup policy must be added and attacked before any AM replay.

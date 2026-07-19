@@ -926,6 +926,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18e update (Round AO): the old child is porous; the hardened launcher is ready to attack** (see `docs/research/research_round_2026_07_18e.md`): AO2 exposes env/cwd/`/proc`/adjacent-file/stdout/clock access in the AN1-style child, correctly making containment inconclusive. AO1 separately demonstrates Bubblewrap namespace isolation, empty env, private tmpfs, absent evaluator path, dropped capabilities, no network, closed descriptors, and resource bounds; AO3 detects declared transcript/budget/nonce tampering. **AO4 must now attack the actual AO1 child at runtime—no AM replay is licensed yet.**
 
+**2026-07-18e AO4 update: hardened storage/protocol boundary holds, syscall boundary does not** (see `docs/research/research_round_2026_07_18e.md`): AO4's live hostile child cannot access evaluator files, env secrets, extra FDs, host process, network, malformed/forged protocol, or evaluator transcript—but can read monotonic time and fork/reap. **Containment is INCONCLUSIVE, not negative; add and attack syscall plus PID/cgroup policy before replaying AM.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
