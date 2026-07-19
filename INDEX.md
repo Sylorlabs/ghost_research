@@ -914,6 +914,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18c AM4 update: earned causal relevance now improves experiment allocation** (see `docs/research/research_round_2026_07_18c.md`): the topology→value→reuse/explore chain is a **foundation positive**—3,600 hidden material at 1,920 contacts, strictly over strong broad coverage 1,660, AJ4 fixed allocation 1,380, replay 1,410, random 1,290, shuffled 840, and every blank/answer/history/value/arbitration ablation. **The next test is portfolio transfer across multiple anonymous mechanisms; this still does not demonstrate open-ended invention or hostile autonomy.**
 
+**2026-07-18c AM5 update: causal allocation transfers across an anonymous portfolio** (see `docs/research/research_round_2026_07_18c.md`): earned cohort-local causal portfolios are a **foundation positive**—5,760 material and 288/288 exact hidden routes at 4,320 contacts, over AM4 single-record 2,880, random 1,500, fixed coverage/schedule 1,400, replay 1,160, shuffled 1,420, and all ablations. A same-evidence wrong-mechanism reuse scores 0. **The remaining round gate is independent hostile reconstruction; this remains bounded synthetic transfer, not open-ended autonomy.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
