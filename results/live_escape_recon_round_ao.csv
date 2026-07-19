@@ -1,0 +1,13 @@
+artifact,route,verdict,detail
+round_ao_ao2,inherited_environment,EXPOSED,candidate queries inherited PATH
+round_ao_ao2,working_directory,EXPOSED,candidate resolves inherited repository cwd
+round_ao_ao2,proc_self,EXPOSED,candidate reads proc self status
+round_ao_ao2,proc_parent,EXPOSED,candidate reads parent process status
+round_ao_ao2,adjacent_evaluator_read,EXPOSED,candidate reads same-cwd evaluator sentinel
+round_ao_ao2,adjacent_evaluator_write,EXPOSED,candidate creates same-cwd sentinel then fixture removes it
+round_ao_ao2,stdout_protocol_injection,EXPOSED,child emits arbitrary stdout; parser acceptance is separate
+round_ao_ao2,clock_timing,EXPOSED,local clock API available to same-user child
+round_ao_ao2,signals,UNTESTED,not sent; safe bounded reconnaissance only
+round_ao_ao2,fork_resource,UNTESTED,not attempted; no destabilizing resource probe
+round_ao_ao2,ipc_network,UNTESTED,not attempted in bounded probe
+round_ao_ao2,nonce_transcript_tamper,UNTESTED,requires evaluator-integrity fixture

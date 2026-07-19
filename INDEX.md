@@ -924,6 +924,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18e round (Round AO): capability-hardened evaluation launched** (see `docs/research/research_round_2026_07_18e.md`): AO1 builds the actual restricted candidate launcher; AO2 maps live same-user escape routes; AO3 makes evaluator transcript, budget, nonce, and end-only score tamper-evident. **Only an integrated runtime attack may unblock clean-room AM replays.**
 
+**2026-07-18e update (Round AO): the old child is porous; the hardened launcher is ready to attack** (see `docs/research/research_round_2026_07_18e.md`): AO2 exposes env/cwd/`/proc`/adjacent-file/stdout/clock access in the AN1-style child, correctly making containment inconclusive. AO1 separately demonstrates Bubblewrap namespace isolation, empty env, private tmpfs, absent evaluator path, dropped capabilities, no network, closed descriptors, and resource bounds; AO3 detects declared transcript/budget/nonce tampering. **AO4 must now attack the actual AO1 child at runtime—no AM replay is licensed yet.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
