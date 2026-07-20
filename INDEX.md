@@ -950,6 +950,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20 round (Round AS): real-artifact workbench launched** (see `docs/research/research_round_2026_07_20.md`): AS1 exposes a hashed read-only local artifact snapshot; AS2 captures a fixed public GET-only web surface with provenance; AS3 builds a checkpointed multi-episode scheduler. **The candidate cannot browse freely, write/post, use credentials, or see answers/scores; held-out real-artifact discovery must come before any broad web claim.**
 
+**2026-07-20 update (Round AS): controlled real-artifact plumbing works and a scheduler beats broad workflow** (see `docs/research/research_round_2026_07_20.md`): AS1 is a local snapshot gate with 10 scope denials; AS2 makes two 200 unauthenticated public GET captures to a fixed endpoint and rejects 8 unsafe request forms; AS3 runs 12.5 seconds over 96 evaluator-owned artifacts/192 episodes and learned provenance 9,648 beats fixed/replay 9,216 and random 9,165. **This is controlled local snapshot/web-capture evidence, not unrestricted web or real-world understanding. AS4 now tests a held-out local-artifact discovery process.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

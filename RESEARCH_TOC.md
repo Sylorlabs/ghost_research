@@ -2329,4 +2329,5 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Build the bridge from generated worlds to real artifacts: read-only local source/data snapshots, a fixed public GET-only web capture, and a checkpointed long-running workbench.
 - **Boundary:** No unrestricted filesystem/web, credentials, writing, posting, answer lookup, or score feedback. Every capture and claim is hashed/provenance-bound.
-- **Status:** Live — AS1 local adapter, AS2 web adapter, and AS3 scheduler run in parallel. AS4–AS6 are gated.
+- **Status:** Live — AS1 local and AS2 cached public-web adapters are gate-ready; AS3 is a 12.5-second, 96-artifact/192-episode bounded scheduler positive. AS4 held-out local-artifact discovery is running; AS5–AS6 remain gated.
+- **Results:** AS1 denies 10 out-of-scope request forms; AS2 makes two 200 public GET captures and rejects 8 unsafe request shapes; AS3 learned provenance reaches 9,648 over fixed/replay 9,216 and random 9,165 at equal 18,432 tests. These remain controlled snapshots/captures, not unrestricted host/web intelligence.
