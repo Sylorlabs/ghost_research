@@ -1,6 +1,6 @@
 # Research Round 2026-07-20c (Round AU) — sealed integration test
 
-**Status:** LIVE — 0/3 complete.
+**Status:** LIVE — AU3 measurement gate complete; AU1/AU2 still running.
 
 ## Premise
 
@@ -27,7 +27,7 @@ analyzer from opaque receipts, and a literal equal-budget measurement harness.
 |---|---|---|---|---|---|---|
 | AU1 | Luna | Isolated evaluator protocol | Can candidate/worker/evaluator/sealed state communicate through a one-way receipt protocol without answer, score, path, or post-hoc channels? | running | Distinct roles, hostile-denial tests, clean replay, explicit residual containment limit. | `docs/research/isolated_evaluator_protocol_round_au.md`, `results/isolated_evaluator_protocol_round_au.csv`, `sparse_poly_discovery/isolated_evaluator_protocol_round_au.zig` |
 | AU2 | Luna | Candidate analyzer loop | Can a non-LLM candidate make competing hypotheses, write/repair a restricted analyzer after failure receipts, and precommit a final claim? | running | Fork/repair receipts and fixed/random/replay/no-repair/post-hoc controls. No discovery claim. | `docs/research/candidate_analyzer_loop_round_au.md`, `results/candidate_analyzer_loop_round_au.csv`, `sparse_poly_discovery/candidate_analyzer_loop_round_au.zig` |
-| AU3 | Luna | Equal-budget audit | Can the candidate and all baselines be run under literally identical work budgets, with derived rather than hardcoded scores/curves? | running | Per-policy ledger, equal-budget assertions, leak/curve/post-hoc attacks, replay. | `docs/research/equal_budget_audit_round_au.md`, `results/equal_budget_audit_round_au.csv`, `sparse_poly_discovery/equal_budget_audit_round_au.zig` |
+| AU3 | Luna | Equal-budget audit | Can the candidate and all baselines be run under literally identical work budgets, with derived rather than hardcoded scores/curves? | **MEASUREMENT READY** | Seven policies each get 12 instances, 120 receipts, identical steps/tools/restarts; unequal-budget, target-leak, hardcoded-curve, and post-hoc attacks reject; replay identical. | `docs/research/equal_budget_audit_round_au.md`, `results/equal_budget_audit_round_au.csv`, `sparse_poly_discovery/equal_budget_audit_round_au.zig` |
 
 ## Landing protocol
 

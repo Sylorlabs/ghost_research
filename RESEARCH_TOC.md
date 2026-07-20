@@ -2347,4 +2347,4 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Connect the three AT workshop primitives only behind separated roles, literal equal budgets, and a candidate-written restricted analyzer.
 - **Boundary:** No hidden task/answer/score reachability, no LLM/network, no arbitrary program claim, and no positive claim before an independent reduction audit.
-- **Status:** Live — AU1 protocol isolation, AU2 candidate repair loop, and AU3 equal-budget audit are running.
+- **Status:** Live — AU3 is measurement-ready: seven policies receive identical 12-instance/120-receipt budgets and its leak/curve/post-hoc attacks reject. AU1 protocol isolation and AU2 candidate repair loop are still running.
