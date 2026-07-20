@@ -1,0 +1,13 @@
+round,kind,id,observation_hash,plan_hash,source_hash,receipt_tag,compile_ok,test_ok,fork_state,evidence_hash,claim_hash,notes
+round_au2,observation,opaque,cfcc41051e7e21dc,-,-,-,-,-,-,-,-,structural_frame_only
+round_au2,fork,1,cfcc41051e7e21dc,948a58413af8334b,-,-,-,-,supported,bcb8de77e1165a2,-,-,delta_is_reproducible|arithmetic_probe_does_not_reach_12
+round_au2,fork,2,cfcc41051e7e21dc,948a58413af8334b,-,-,-,-,falsified,bcb8de77e1165a2,-,-,delta_is_noise|arithmetic_probe_reaches_12
+round_au2,fork,3,cfcc41051e7e21dc,948a58413af8334b,-,-,-,-,unreached,0,-,-,alternate_structure|requires_second_observation
+round_au2,receipt,candidate_initial_compile_failure,cfcc41051e7e21dc,948a58413af8334b,4e4a6f7447863fac,compile_bad_integer,false,false,-,-,-,-
+round_au2,receipt,candidate_repaired_precommitted,cfcc41051e7e21dc,948a58413af8334b,88b6dc5c1ab452a,ok,true,true,-,-,-,-
+round_au2,receipt,control_no_repair,cfcc41051e7e21dc,948a58413af8334b,4e4a6f7447863fac,compile_bad_integer,false,false,-,-,-,-
+round_au2,receipt,control_fixed_analyzer,cfcc41051e7e21dc,948a58413af8334b,88b6dc5c1ab452a,ok,true,true,-,-,-,-
+round_au2,receipt,control_random_analyzer,cfcc41051e7e21dc,948a58413af8334b,a2e83ec44e24ff35,test_expectation_failed,true,false,-,-,-,-
+round_au2,receipt,control_replay,cfcc41051e7e21dc,948a58413af8334b,88b6dc5c1ab452a,ok,true,true,-,-,-,-
+round_au2,guard,post_hoc_plan_change,cfcc41051e7e21dc,948a58413af8334b,-,-,-,-,-,-,-,-,rejected=true
+round_au2,final,sealed_claim,cfcc41051e7e21dc,948a58413af8334b,88b6dc5c1ab452a,ok,true,true,-,bcb8de77e1165a2,247943b01e68c90f,not_a_hidden_evaluator_verdict

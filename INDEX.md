@@ -964,6 +964,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20c round (Round AU): sealed integration test launched** (see `docs/research/research_round_2026_07_20c.md`): AU1 separates candidate/worker/evaluator roles, AU2 makes the candidate write and repair a restricted analyzer, and AU3 enforces literal equal budgets. **This is the first attempt to connect the workshop without repeating AS3/AS4's false-positive paths.**
 
+**2026-07-20c update (Round AU): integration plumbing complete** (see `docs/research/research_round_2026_07_20c.md`): AU1's separate role processes reject six hostile channels and post-hoc rewrite; AU2 records opaque fork → compile failure → repair mechanics but ties a fixed control; AU3 gives seven policies identical work and derives scores from receipts. **The plumbing is ready; no sealed real-artifact, learned-invention result has yet been run.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
