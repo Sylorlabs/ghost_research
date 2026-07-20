@@ -2340,3 +2340,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Build the three minimum workshop components before claiming an inventor: a knownness gate, a restricted program forge, and a multi-fork experience ledger.
 - **Boundary:** No LLM, answer retrieval, hidden evaluator state, arbitrary host execution, or claim that exhausting a bounded frontier exhausts reality.
 - **Status:** Complete — AT1 is a five-class frozen-citation knownness gate; AT2 is a tiny DSL source/repair/test forge gate; AT3 is append-only fork/receipt mechanics. All fresh replays pass. These remain infrastructure only until an isolated, equal-budget, sealed-artifact integration test survives an adversarial audit.
+
+## 59. Research round 2026-07-20c (Round AU) — sealed integration test
+
+### [docs/research/research_round_2026_07_20c.md](docs/research/research_round_2026_07_20c.md)
+
+- **Tried:** Connect the three AT workshop primitives only behind separated roles, literal equal budgets, and a candidate-written restricted analyzer.
+- **Boundary:** No hidden task/answer/score reachability, no LLM/network, no arbitrary program claim, and no positive claim before an independent reduction audit.
+- **Status:** Live — AU1 protocol isolation, AU2 candidate repair loop, and AU3 equal-budget audit are running.
