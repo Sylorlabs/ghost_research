@@ -2320,4 +2320,5 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Stop relying on millisecond tiny fixtures: build a large anonymous world foundry, let candidate propose raw world compositions, and run a multi-second many-world lifetime.
 - **Boundary:** Actual work must take seconds because of meaningful world computation, never sleeps/no-ops. Worlds remain models, not claims of physical reality; no answer, rule text, family ID, or progress channel reaches candidate.
-- **Status:** Live — AR1 foundry, AR2 self-authored worlds, and AR3 multi-second lifetime run in parallel. AR4–AR6 are gated.
+- **Status:** Partially landed — AR1 is a 60,000-world/1.843B-event, 5.8-second foundry gate; AR2 is a bounded self-authored-world positive; AR3 is a valid negative at 10.16 real seconds. AR4–AR6 remain blocked on repairing large-world experiment allocation.
+- **Large-world verdict:** More scale revealed the active failure: earned experience+forge reaches 20,140 but fixed broad coverage 21,070, random 20,840, and replay 20,830 at equal work. The system is not yet choosing experiments better than broad search in a serious many-world setting.
