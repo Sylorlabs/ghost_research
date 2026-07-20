@@ -952,6 +952,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20 update (Round AS): controlled real-artifact plumbing works and a scheduler beats broad workflow** (see `docs/research/research_round_2026_07_20.md`): AS1 is a local snapshot gate with 10 scope denials; AS2 makes two 200 unauthenticated public GET captures to a fixed endpoint and rejects 8 unsafe request forms; AS3 runs 12.5 seconds over 96 evaluator-owned artifacts/192 episodes and learned provenance 9,648 beats fixed/replay 9,216 and random 9,165. **This is controlled local snapshot/web-capture evidence, not unrestricted web or real-world understanding. AS4 now tests a held-out local-artifact discovery process.**
 
+**2026-07-20 AS4 update: separate-child local structural discovery process passes** (see `docs/research/research_round_2026_07_20.md`): a restricted child makes 4/4 precommitted opaque structural predictions and 4/4 changed-encoding replications over fixed/broad/random/replay/shuffled controls. **This is not semantic reading, a bug discovery, novelty, or autonomous engineering. AS5 now tests a tightly limited public-web capture transfer process.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
