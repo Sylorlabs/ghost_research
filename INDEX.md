@@ -944,6 +944,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-19 AQ4 update: no-answer-key process works, but is not yet isolated** (see `docs/research/research_round_2026_07_19.md`): one opaque precommitted causal record admits after 12 primary/recoded/changed-condition contacts while six post-hoc/answer/correlation/replication/alternative controls reject. **It is a narrow synthetic discovery-process positive, not novelty or autonomy evidence, because candidate and evaluator still share one executable. The next gate is the same process replay through the AP boundary.**
 
+**2026-07-19b round (Round AR): nontrivial world foundry launched** (see `docs/research/research_round_2026_07_19b.md`): AR1 generates thousands of anonymous dynamic worlds with real multi-second compute; AR2 tests raw self-authored world proposals; AR3 runs a multi-second many-world lifetime with checkpoints and transfer controls. **Seconds must come from meaningful propagation/evaluation, not sleep padding; generated worlds remain models, not real-world invention.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

@@ -2313,3 +2313,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Status:** Partially landed — AQ1 is gate-ready; AQ2 earned pair-composition forge and AQ3 million-tick experience ecology are bounded positives; AQ4 admits one precommitted no-answer process record and rejects six bad-process controls, but shares its executable with evaluation. AQ5–AQ6 remain blocked on an isolated AQ4 replay.
 - **Results:** AQ2 reaches 4,080 over fixed pair 1,360 at equal 2,016 contacts. AQ3 reaches 1,000,000/100,000 held-out correct after 1,000,000 virtual ticks versus blank/answer 762,430; the first ledger takes ~44 ms wall time. Both remain small synthetic results.
 - **AQ4 boundary:** Its 12-contact record passes precommitment, recoding, changed-condition, attacker, and simplicity gates without answer matching. It is not process isolation evidence because candidate/evaluator share an executable; do not promote to transfer/novelty before replaying through AP.
+
+## 56. Research round 2026-07-19b (Round AR) — nontrivial world foundry and self-authored worlds
+
+### [docs/research/research_round_2026_07_19b.md](docs/research/research_round_2026_07_19b.md)
+
+- **Tried:** Stop relying on millisecond tiny fixtures: build a large anonymous world foundry, let candidate propose raw world compositions, and run a multi-second many-world lifetime.
+- **Boundary:** Actual work must take seconds because of meaningful world computation, never sleeps/no-ops. Worlds remain models, not claims of physical reality; no answer, rule text, family ID, or progress channel reaches candidate.
+- **Status:** Live — AR1 foundry, AR2 self-authored worlds, and AR3 multi-second lifetime run in parallel. AR4–AR6 are gated.
