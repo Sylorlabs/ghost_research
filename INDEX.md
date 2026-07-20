@@ -938,6 +938,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-18f Round AP verdict: AM2, AM4, and AM5 survive separate candidate-process replay** (see `docs/research/research_round_2026_07_18f.md`): AP5 preserves topology at 24,960/96; AP6 preserves allocation at 3,600 vs broad 1,380 and portfolio at 5,760 vs shuffled 1,680, single 1,620, and wrong-route 0, all at original equal budgets. **This is the first bounded local process-isolation foundation for the synthetic causal results—not an absolute-security, open-ended-invention, novelty, or general-intelligence claim. vDSO/physical timing and the declared local TCB remain explicit residuals.**
 
+**2026-07-19 round (Round AQ): open workshop and accumulated experience launched** (see `docs/research/research_round_2026_07_19.md`): AQ1 opens evaluator-owned read-only raw worlds; AQ2 earns instruments from failed distinctions; AQ3 runs a checkpointed long virtual-horizon experience ecology. **The test is not raw simulated speed: experience must improve held-out causal behavior without answer memory, target matching, or source-world mutation.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
