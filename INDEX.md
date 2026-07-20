@@ -960,6 +960,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20b round (Round AT): real inventor workshop bootstrap launched** (see `docs/research/research_round_2026_07_20b.md`): AT1 builds a provenance-bound knownness gate, AT2 a constrained scratch-program forge, and AT3 an append-only hypothesis/fork frontier. **They are workshop infrastructure only: no LLM, hidden answers, arbitrary execution, or intelligence claim.**
 
+**2026-07-20b update (Round AT): three workshop gates landed** (see `docs/research/research_round_2026_07_20b.md`): AT1 classifies five frozen-citation states with five hostile-request denials; AT2 proves bad-source → repair → tested-source receipts in a tiny safe DSL with four unsafe denials; AT3 preserves fork/split/dead-end history and reports unreached branches. **All replay identically, but none is yet an inventor, arbitrary program executor, isolated evaluator, or real-artifact discovery result.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

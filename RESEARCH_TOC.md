@@ -2339,4 +2339,4 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Build the three minimum workshop components before claiming an inventor: a knownness gate, a restricted program forge, and a multi-fork experience ledger.
 - **Boundary:** No LLM, answer retrieval, hidden evaluator state, arbitrary host execution, or claim that exhausting a bounded frontier exhausts reality.
-- **Status:** Live — AT1, AT2, and AT3 are running independently. Their outputs are infrastructure only until an isolated, equal-budget, sealed-artifact integration test survives an adversarial audit.
+- **Status:** Complete — AT1 is a five-class frozen-citation knownness gate; AT2 is a tiny DSL source/repair/test forge gate; AT3 is append-only fork/receipt mechanics. All fresh replays pass. These remain infrastructure only until an isolated, equal-budget, sealed-artifact integration test survives an adversarial audit.

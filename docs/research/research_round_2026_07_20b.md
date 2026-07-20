@@ -1,6 +1,6 @@
 # Research Round 2026-07-20b (Round AT) — real inventor workshop bootstrap
 
-**Status:** LIVE — 0/3 complete.
+**Status:** COMPLETE — 3/3 workshop components landed; none is an invention result.
 
 ## Premise
 
@@ -29,9 +29,9 @@ multiple competing hypotheses and failed attempts.
 
 | # | Role | Experiment | Question | Status | Required evidence | Planned artifacts |
 |---|---|---|---|---|---|---|
-| AT1 | Luna | Knownness/research broker | Can the system decide whether a proposed claim is already known, mismatched, unverified, or unknown from frozen provenance without receiving an answer key? | running | Hashed citation fixtures, leakage denials, replay, and classification distinct from truth/evaluation. | `docs/research/knownness_broker_round_at.md`, `results/knownness_broker_round_at.csv`, `sparse_poly_discovery/knownness_broker_round_at.zig` |
-| AT2 | Luna | Scratch-program forge | Can an inventor submit source and a test plan, have a separate restricted worker compile/test it, learn from failure, and receive provenance receipts? | running | Compile/fail/repair receipts, sandbox denials, resource hashes, deterministic replay; no arbitrary-code claim. | `docs/research/scratch_program_forge_round_at.md`, `results/scratch_program_forge_round_at.csv`, `sparse_poly_discovery/scratch_program_forge_round_at.zig` |
-| AT3 | Luna | Frontier explorer | Can a planner retain competing hypotheses and forks, precommit falsifiers, learn from failed branches, and report finite unresolved frontier honestly? | running | Append-only receipt chain, anti-post-hoc controls, fork/split/dead-end mechanics, replay, unreached-branch report. | `docs/research/frontier_explorer_round_at.md`, `results/frontier_explorer_round_at.csv`, `sparse_poly_discovery/frontier_explorer_round_at.zig` |
+| AT1 | Luna | Knownness/research broker | Can the system decide whether a proposed claim is already known, mismatched, unverified, or unknown from frozen provenance without receiving an answer key? | **GATE READY** | Five precommitted classes, hashed frozen citations, five hostile-query denials, and byte-identical replay. Evidence is not treated as truth. | `docs/research/knownness_broker_round_at.md`, `results/knownness_broker_round_at.csv`, `sparse_poly_discovery/knownness_broker_round_at.zig` |
+| AT2 | Luna | Scratch-program forge | Can an inventor submit source and a test plan, have a separate restricted worker compile/test it, learn from failure, and receive provenance receipts? | **GATE READY (tiny DSL only)** | Compile failure → repair → test success, wrong-expectation failure, four unsafe-request denials, deterministic replay. No arbitrary-code or OS-isolation claim. | `docs/research/scratch_program_forge_round_at.md`, `results/scratch_program_forge_round_at.csv`, `sparse_poly_discovery/scratch_program_forge_round_at.zig` |
+| AT3 | Luna | Frontier explorer | Can a planner retain competing hypotheses and forks, precommit falsifiers, learn from failed branches, and report finite unresolved frontier honestly? | **MECHANICS READY** | Append-only receipts, split/dead-end/retry controls, deterministic replay, and explicit unreached forks 4/5. Synthetic receipt mechanics only. | `docs/research/frontier_explorer_round_at.md`, `results/frontier_explorer_round_at.csv`, `sparse_poly_discovery/frontier_explorer_round_at.zig` |
 
 ## Landing protocol
 
@@ -41,3 +41,19 @@ then commits only scoped files. These are workshop components, not intelligence
 or invention results. A future integrated evaluation must show an isolated
 inventor writing and repairing a useful program over sealed real artifacts,
 beating equal-budget baselines, and surviving reduction audit.
+
+## Results
+
+Fresh coordinator builds, self-tests, and deterministic replays pass for all
+three components. AT1 is an offline frozen-citation classifier with five
+knownness states; it rejects answer, score, hidden-verdict, arbitrary-file, and
+web-search requests. AT2 demonstrates a deliberately tiny in-memory language:
+a bad program fails to compile, a repaired one passes its precommitted test, and
+unsafe requests reject. AT3 demonstrates durable frontier mechanics with opaque
+receipts, branch splits, justified retries, and two explicitly unreached forks.
+
+**Round verdict:** the workshop floor is now more concrete, but it still is not
+an inventor. There is no arbitrary program synthesis/execution, separate hidden
+evaluator, real held-out artifact task, or evidence that the three components
+cohere into learning or invention. The next experiment must integrate them
+under a genuinely isolated evaluator and equal-budget baselines.
