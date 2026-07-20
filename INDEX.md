@@ -956,6 +956,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20 AS5 update: bounded web transfer does not survive generic controls** (see `docs/research/research_round_2026_07_20.md`): exactly two public unauthenticated GET captures and byte-identical cached replays pass the safety/provenance protocol, but the candidate's correct nonempty/mostly-printable prediction ties fixed, broad, replay, shuffled, and answer-scrubbed structural controls. **Valid negative: this is safe web-capture plumbing, not learned web transfer, browsing, or understanding.**
 
+**2026-07-20 AS6 correction: Round AS discovery positives retracted** (see `docs/research/research_round_2026_07_20.md`): the independent local audit found AS3's corpus/target/scoring live in one executable, unequal long-run treatment, and literal curve output; it found AS4 directly encodes the target index into the isolated child's input, including its recoding. **AS3 and AS4 are invalid as discovery evidence. AS1/AS2 remain only narrow protocol plumbing; AS5 remains an honest negative. The durable result is stronger evaluation discipline, not a real-artifact intelligence positive.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

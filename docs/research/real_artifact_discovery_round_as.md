@@ -1,6 +1,6 @@
 # AS4 — Held-out local-artifact structural-discovery pilot
 
-**Status:** COMPLETE — source is a parent evaluator over four allowlisted local Markdown snapshots. The candidate is a fresh bounded child and observes only opaque structural frames. It cannot receive paths, artifact text, labels, target IDs, scores, progress, or held-out outcomes.
+**Status:** RETRACTED — invalid structural-discovery claim.** AS6 found a direct answer leak: `candidateInput()` computes the target index, writes an identifying sentinel into that index, and passes the sentinel to the child; the child selects the matching index. The changed-encoding replication repeats the same leak. This file is retained as the original implementation record, not positive evidence.
 
 ## Protocol
 
