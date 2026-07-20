@@ -2348,3 +2348,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Connect the three AT workshop primitives only behind separated roles, literal equal budgets, and a candidate-written restricted analyzer.
 - **Boundary:** No hidden task/answer/score reachability, no LLM/network, no arbitrary program claim, and no positive claim before an independent reduction audit.
 - **Status:** Complete — AU1 separate role-process protocol, AU2 candidate repair-loop mechanics, and AU3 equal-budget audit all pass fresh replay. This is integration plumbing, not a real inventor result; components have not yet run together over sealed real artifacts.
+
+## 60. Research round 2026-07-20d (Round AV) — first real local-code trial
+
+### [docs/research/research_round_2026_07_20d.md](docs/research/research_round_2026_07_20d.md)
+
+- **Tried:** Run a candidate-authored scratch analyzer against frozen copies of real tracked Zig source in a Bubblewrap worker, then transfer its repair to a held-out file.
+- **Result:** Raw token counting fails at 26 versus hidden 10 on training; comment-stripping repairs to 10 and transfers at 3. Fresh replay is byte-identical and no expected numeric answer appears in candidate source.
+- **Verdict:** Operational real-source repair only. A strong fixed comment scanner ties, so this is not learned advantage, general program invention, or autonomy.
