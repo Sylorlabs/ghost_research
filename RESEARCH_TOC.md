@@ -2310,4 +2310,5 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Move from fixed synthetic batteries toward an open workshop: evaluator-owned approved raw worlds, earned instruments, provenance-bound experience, and long virtual-horizon learning.
 - **Boundary:** No LLM, training-answer store, target label, progress score, answer matching, or source-world mutation. Virtual time records real CPU/wall cost and deterministic checkpoints.
-- **Status:** Live — AQ1 adapter, AQ2 instrument forge, and AQ3 long-horizon ecology run in parallel. AQ4–AQ6 are gated.
+- **Status:** Live — AQ1 is gate-ready; AQ2 earned pair-composition forge and AQ3 million-tick experience ecology are bounded positives. AQ4 no-answer-key discovery pilot is running; AQ5–AQ6 remain gated.
+- **Results:** AQ2 reaches 4,080 over fixed pair 1,360 at equal 2,016 contacts. AQ3 reaches 1,000,000/100,000 held-out correct after 1,000,000 virtual ticks versus blank/answer 762,430; the first ledger takes ~44 ms wall time. Both remain small synthetic results.

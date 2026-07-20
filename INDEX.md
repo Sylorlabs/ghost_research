@@ -940,6 +940,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-19 round (Round AQ): open workshop and accumulated experience launched** (see `docs/research/research_round_2026_07_19.md`): AQ1 opens evaluator-owned read-only raw worlds; AQ2 earns instruments from failed distinctions; AQ3 runs a checkpointed long virtual-horizon experience ecology. **The test is not raw simulated speed: experience must improve held-out causal behavior without answer memory, target matching, or source-world mutation.**
 
+**2026-07-19 update (Round AQ): experience and small instrument growth both improve held-out behavior** (see `docs/research/research_round_2026_07_19.md`): AQ1 is a narrow adapter gate; AQ2's failure-authorized pair forge reaches 4,080 over fixed pair 1,360 at equal cost; AQ3 revises four causal records across one million virtual ticks and reaches 1,000,000 material / 100,000 held-out correct over blank/answer 762,430. **These are bounded synthetic grammar/record results, not open-ended invention. AQ4 now tests discovery without a human answer key.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
