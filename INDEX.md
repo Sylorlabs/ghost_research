@@ -942,6 +942,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-19 update (Round AQ): experience and small instrument growth both improve held-out behavior** (see `docs/research/research_round_2026_07_19.md`): AQ1 is a narrow adapter gate; AQ2's failure-authorized pair forge reaches 4,080 over fixed pair 1,360 at equal cost; AQ3 revises four causal records across one million virtual ticks and reaches 1,000,000 material / 100,000 held-out correct over blank/answer 762,430. **These are bounded synthetic grammar/record results, not open-ended invention. AQ4 now tests discovery without a human answer key.**
 
+**2026-07-19 AQ4 update: no-answer-key process works, but is not yet isolated** (see `docs/research/research_round_2026_07_19.md`): one opaque precommitted causal record admits after 12 primary/recoded/changed-condition contacts while six post-hoc/answer/correlation/replication/alternative controls reject. **It is a narrow synthetic discovery-process positive, not novelty or autonomy evidence, because candidate and evaluator still share one executable. The next gate is the same process replay through the AP boundary.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
