@@ -948,6 +948,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-19b update (Round AR): the world is finally nontrivial; allocation still fails at scale** (see `docs/research/research_round_2026_07_19b.md`): AR1 verifies 60,000 worlds / 1.843B propagation events in 5.8 real seconds; AR2's precommitted self-authored worlds reach 216/384 held-out distinctions over fixed 108 and random 98. But AR3 is a valid negative: after 10.16 seconds of genuine many-world computation, earned experience+forge 20,140 loses fixed broad coverage 21,070, random 20,840, and replay 20,830. **The next lever is large-world experiment allocation, not more simulated days or more world complexity.**
 
+**2026-07-20 round (Round AS): real-artifact workbench launched** (see `docs/research/research_round_2026_07_20.md`): AS1 exposes a hashed read-only local artifact snapshot; AS2 captures a fixed public GET-only web surface with provenance; AS3 builds a checkpointed multi-episode scheduler. **The candidate cannot browse freely, write/post, use credentials, or see answers/scores; held-out real-artifact discovery must come before any broad web claim.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

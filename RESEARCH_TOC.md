@@ -2322,3 +2322,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Boundary:** Actual work must take seconds because of meaningful world computation, never sleeps/no-ops. Worlds remain models, not claims of physical reality; no answer, rule text, family ID, or progress channel reaches candidate.
 - **Status:** Partially landed — AR1 is a 60,000-world/1.843B-event, 5.8-second foundry gate; AR2 is a bounded self-authored-world positive; AR3 is a valid negative at 10.16 real seconds. AR4–AR6 remain blocked on repairing large-world experiment allocation.
 - **Large-world verdict:** More scale revealed the active failure: earned experience+forge reaches 20,140 but fixed broad coverage 21,070, random 20,840, and replay 20,830 at equal work. The system is not yet choosing experiments better than broad search in a serious many-world setting.
+
+## 57. Research round 2026-07-20 (Round AS) — real-artifact workbench
+
+### [docs/research/research_round_2026_07_20.md](docs/research/research_round_2026_07_20.md)
+
+- **Tried:** Build the bridge from generated worlds to real artifacts: read-only local source/data snapshots, a fixed public GET-only web capture, and a checkpointed long-running workbench.
+- **Boundary:** No unrestricted filesystem/web, credentials, writing, posting, answer lookup, or score feedback. Every capture and claim is hashed/provenance-bound.
+- **Status:** Live — AS1 local adapter, AS2 web adapter, and AS3 scheduler run in parallel. AS4–AS6 are gated.
