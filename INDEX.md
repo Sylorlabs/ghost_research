@@ -954,6 +954,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20 AS4 update: separate-child local structural discovery process passes** (see `docs/research/research_round_2026_07_20.md`): a restricted child makes 4/4 precommitted opaque structural predictions and 4/4 changed-encoding replications over fixed/broad/random/replay/shuffled controls. **This is not semantic reading, a bug discovery, novelty, or autonomous engineering. AS5 now tests a tightly limited public-web capture transfer process.**
 
+**2026-07-20 AS5 update: bounded web transfer does not survive generic controls** (see `docs/research/research_round_2026_07_20.md`): exactly two public unauthenticated GET captures and byte-identical cached replays pass the safety/provenance protocol, but the candidate's correct nonempty/mostly-printable prediction ties fixed, broad, replay, shuffled, and answer-scrubbed structural controls. **Valid negative: this is safe web-capture plumbing, not learned web transfer, browsing, or understanding.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
