@@ -2332,3 +2332,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Status:** Complete. AS1 and AS2 remain narrow protocol gates; AS3 and AS4 are retracted/invalid; AS5 is a valid negative; AS6 independently verified the reductions.
 - **AS6 correction:** AS3 generated its corpus/target/scoring in one executable, ran only learned policy for the long wall-time condition, and printed its curve as literals. AS4 encoded the target index directly into the child frame; its changed-encoding replication repeated that leak. Neither is discovery evidence.
 - **AS5 result:** Two fixed public GET captures and cached replays are safely reproducible, but the candidate ties fixed/broad/replay/shuffled/answer-scrubbed controls. Valid negative: generic response-shape facts, not learned web transfer.
+
+## 58. Research round 2026-07-20b (Round AT) — real inventor workshop bootstrap
+
+### [docs/research/research_round_2026_07_20b.md](docs/research/research_round_2026_07_20b.md)
+
+- **Tried:** Build the three minimum workshop components before claiming an inventor: a knownness gate, a restricted program forge, and a multi-fork experience ledger.
+- **Boundary:** No LLM, answer retrieval, hidden evaluator state, arbitrary host execution, or claim that exhausting a bounded frontier exhausts reality.
+- **Status:** Live — AT1, AT2, and AT3 are running independently. Their outputs are infrastructure only until an isolated, equal-budget, sealed-artifact integration test survives an adversarial audit.

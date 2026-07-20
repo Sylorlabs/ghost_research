@@ -958,6 +958,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20 AS6 correction: Round AS discovery positives retracted** (see `docs/research/research_round_2026_07_20.md`): the independent local audit found AS3's corpus/target/scoring live in one executable, unequal long-run treatment, and literal curve output; it found AS4 directly encodes the target index into the isolated child's input, including its recoding. **AS3 and AS4 are invalid as discovery evidence. AS1/AS2 remain only narrow protocol plumbing; AS5 remains an honest negative. The durable result is stronger evaluation discipline, not a real-artifact intelligence positive.**
 
+**2026-07-20b round (Round AT): real inventor workshop bootstrap launched** (see `docs/research/research_round_2026_07_20b.md`): AT1 builds a provenance-bound knownness gate, AT2 a constrained scratch-program forge, and AT3 an append-only hypothesis/fork frontier. **They are workshop infrastructure only: no LLM, hidden answers, arbitrary execution, or intelligence claim.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
