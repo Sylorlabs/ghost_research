@@ -2366,3 +2366,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Status:** Components complete, but first combined attempt invalidated: bare numeric claims let an unrelated source scanner coincide with all four task values, so every policy falsely appeared 4/4. No milestone result. Revised evaluation must require typed structural witnesses before another run.
 - **LLM critic pilot:** Safe report-only and full source/replay review of ten claims retained only narrow scopes, preserved AS3/AS4 retractions, and produced no new success. The LLM is advisory only; executable receipt audits remain authority.
 - **LLM trace audit:** Complete 14-trace read-only audit found three narrow causal AV traces, but confirmed AW's scalar coincidence and insufficient AW3 evidence. It recommends typed claims/witnesses plus counterfactual mutation checks; it cannot score tasks.
+
+## 62. Research round 2026-07-21b (Round AX) — diverse parallel invention grids
+
+### [docs/research/research_round_2026_07_21b.md](docs/research/research_round_2026_07_21b.md)
+
+- **Tried:** Scale invention by variety: distinct 2D grid flavors and explicit interiors under one equal total compute budget.
+- **Boundary:** No score from a bare scalar. Every claimed result must carry a typed structural witness validated by AX1; renamed duplicate workers do not count as diversity.
+- **Status:** Live — AX1 typed evaluator, AX2 flavor-grid runner, and AX3 equal-budget scaling audit are running. Only the later sealed integration can test whether variety helps real task completion.

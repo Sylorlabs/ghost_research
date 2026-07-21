@@ -978,6 +978,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-21 LLM trace audit: causal work separated from lucky scalars** (see `docs/research/llm_trace_audit_round_aw.md`): 14 traces retain only three narrow causal AV scanner traces; they confirm raw-scanner coincidence, AW3's insufficient unscored receipts, AW2's four scalar-risk tasks, and the invalid AW 4/4. **Next gate is typed task witnesses plus evaluator-derived summaries and counterfactual mutations—not an LLM score.**
 
+**2026-07-21b round (Round AX): diverse parallel invention grids launched** (see `docs/research/research_round_2026_07_21b.md`): AX1 builds typed witness scoring; AX2 defines genuinely different native-Zag/Zagscript invention flavors; AX3 compares 1×1, 2×2, and 3×3 populations at equal total work. **Variety counts only if it creates distinct work and survives typed evaluation—more workers alone is not a win.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
