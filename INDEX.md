@@ -974,6 +974,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-21 AW integration correction: bare-number scoring invalidated** (see `docs/research/round_aw_integration_attempt.md`): the first combined run appeared 4/4 for every policy only because a source scanner's unrelated scalar outputs coincided with each task's answer. **Invalid measurement, no capability result. The replacement requires typed claims and sealed task-specific witnesses, not a naked integer.**
 
+**2026-07-21 LLM critic pilot: ten claims reviewed safely then fully** (see `docs/research/llm_judge_pilot_10_claims.md`): report-only review and source/replay review both retained AS1/AS2, AT1–AT3, AU1, AV, and AW1 only at narrow scope and kept AS3/AS4 retracted. **The LLM adds red-team hypotheses, not authority: deterministic evaluator receipts decide claims.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

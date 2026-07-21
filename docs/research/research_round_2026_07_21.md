@@ -76,3 +76,12 @@ numbers. Fixed/broad/random/replay/no-memory/no-repair tied it. No causal task
 completion or learned advantage was established. The replacement gate requires
 task-typed claims with sealed structural witnesses (offsets/row diagnostics),
 so a wrong analyzer cannot pass merely by emitting the same scalar.
+
+## LLM critic pilot
+
+An advisory LLM safe/full review classified ten prior claims. Safe mode consumed
+reports only; full mode checked source and fresh replays. It retained AS1/AS2,
+AT1–AT3, AU1, AV, and AW1 only at their narrow documented scope, while keeping
+AS3/AS4 retracted. The pilot is useful for generating reduction hypotheses but
+is not evaluator authority: the AW bare-number failure itself shows why only
+typed receipts and deterministic audits may decide a result.
