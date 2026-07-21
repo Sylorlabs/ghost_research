@@ -3,10 +3,10 @@
 **Verdict: OPERATIONAL BUT NOT A LEARNED-ADVANTAGE POSITIVE.**
 
 This is the first post-AU test using actual tracked repository source files,
-not generated numeric fixtures. The candidate writes Python analyzers into
-scratch and a Bubblewrap worker runs them against read-only copies of two real
-Zig sources. The evaluator keeps the expected public-function count outside the
-worker mount. The candidate starts with a raw-token counter, receives only a
+not generated numeric fixtures. The candidate writes **native Zag** analyzers
+into scratch and a Bubblewrap worker runs them against read-only copies of two
+real Zig sources. The evaluator keeps the expected public-function count outside
+the worker mount. The candidate starts with a raw-token counter, receives only a
 mismatch outcome on a training artifact, records the comment hypothesis, writes
 a repaired comment-stripping analyzer, then transfers it to a held-out source.
 
@@ -25,17 +25,15 @@ outperformed a strong fixed approach.
   source artifact.
 - The evaluator checks candidate source for the expected numeric answer literal.
 - Bubblewrap is a runtime boundary for this test, not a proof against every
-  hostile native-code escape. Candidate source is Python and the analyzer family
-  remains supplied, so this is not open-ended program invention.
+  hostile native-code escape. Candidate source is native Zag and the analyzer
+  family remains supplied, so this is not open-ended program invention.
 
 ## Reproduce
 
 ```bash
-python3 sparse_poly_discovery/real_local_inventor_trial_round_av.py \
-  results/real_local_inventor_trial_round_av.csv
-python3 sparse_poly_discovery/real_local_inventor_trial_round_av.py \
-  /tmp/round-av-replay.csv
-cmp results/real_local_inventor_trial_round_av.csv /tmp/round-av-replay.csv
+scripts/run_round_av_zag.sh results/real_local_inventor_trial_round_av_zag.csv
+scripts/run_round_av_zag.sh /tmp/round-av-zag-replay.csv
+cmp results/real_local_inventor_trial_round_av_zag.csv /tmp/round-av-zag-replay.csv
 ```
 
 ## What this changes

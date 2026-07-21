@@ -966,7 +966,7 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20c update (Round AU): integration plumbing complete** (see `docs/research/research_round_2026_07_20c.md`): AU1's separate role processes reject six hostile channels and post-hoc rewrite; AU2 records opaque fork → compile failure → repair mechanics but ties a fixed control; AU3 gives seven policies identical work and derives scores from receipts. **The plumbing is ready; no sealed real-artifact, learned-invention result has yet been run.**
 
-**2026-07-20d round (Round AV): first real local-code trial ran** (see `docs/research/research_round_2026_07_20d.md`): a Bubblewrap worker ran candidate-authored Python against frozen copies of real tracked Zig files; raw token counting failed at 26 vs hidden 10, then comment-stripping repaired to 10 and transferred at 3 held-out. **Operational real-source repair is proven, but the strong fixed scanner ties—no learned advantage or invention claim.**
+**2026-07-20d round (Round AV): first real local-code trial ran** (see `docs/research/research_round_2026_07_20d.md`): a Bubblewrap worker ran candidate-authored native Zag against frozen copies of real tracked Zig files; raw token counting failed at 26 vs hidden 10, then comment-stripping repaired to 10 and transferred at 3 held-out. **Operational real-source repair is proven, but the strong fixed scanner ties—no learned advantage or invention claim.**
 
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,

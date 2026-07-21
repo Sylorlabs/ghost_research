@@ -4,7 +4,7 @@
 
 ## Test
 
-The candidate wrote and executed actual Python analyzer source against frozen,
+The candidate wrote and executed actual native Zag analyzer source against frozen,
 read-only copies of two tracked Zig files. A Bubblewrap worker mounted only the
 candidate script and corpus copy; the evaluator's expected count was not
 mounted. The first raw-token analyzer failed on the training file because
@@ -31,8 +31,10 @@ the repair family was supplied and an equal-capability fixed scanner tied it.
 
 ## Artifacts
 
-- `sparse_poly_discovery/real_local_inventor_trial_round_av.py`
-- `results/real_local_inventor_trial_round_av.csv`
+- `sparse_poly_discovery/round_av_raw_scanner.zag`
+- `sparse_poly_discovery/round_av_comment_scanner.zag`
+- `scripts/run_round_av_zag.sh`
+- `results/real_local_inventor_trial_round_av_zag.csv`
 - `docs/research/real_local_inventor_trial_round_av.md`
 
 ## Next hard gate
