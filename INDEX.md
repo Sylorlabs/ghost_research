@@ -968,6 +968,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-20d round (Round AV): first real local-code trial ran** (see `docs/research/research_round_2026_07_20d.md`): a Bubblewrap worker ran candidate-authored native Zag against frozen copies of real tracked Zig files; raw token counting failed at 26 vs hidden 10, then comment-stripping repaired to 10 and transferred at 3 held-out. **Operational real-source repair is proven, but the strong fixed scanner ties—no learned advantage or invention claim.**
 
+**2026-07-21 round (Round AW): real multi-task milestone attempt launched** (see `docs/research/research_round_2026_07_21.md`): AW1 turns prior results into answer-free method memory, AW2 seals several distinct real local artifact tasks, and AW3 forges native Zag/Zagscript tools under literal equal budgets. **This is the first serious integrated test grounded in the full record; a tie, leak, or fixed-rule explanation is negative.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

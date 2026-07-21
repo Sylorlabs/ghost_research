@@ -2356,3 +2356,11 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Run a candidate-authored scratch analyzer against frozen copies of real tracked Zig source in a Bubblewrap worker, then transfer its repair to a held-out file.
 - **Result:** Raw token counting fails at 26 versus hidden 10 on training; comment-stripping repairs to 10 and transfers at 3. Fresh replay is byte-identical and no expected numeric answer appears in candidate source.
 - **Verdict:** Operational real-source repair only. A strong fixed comment scanner ties, so this is not learned advantage, general program invention, or autonomy.
+
+## 61. Research round 2026-07-21 (Round AW) — real multi-task milestone attempt
+
+### [docs/research/research_round_2026_07_21.md](docs/research/research_round_2026_07_21.md)
+
+- **Tried:** Turn accumulated results into answer-free method memory, seal several distinct real artifact tasks, and make a Zag/Zagscript tool-forging candidate compete under equal budgets.
+- **Boundary:** Historical experience is principles with provenance—not task answers. No LLM/network/Python, hidden evaluator state, unequal budget, or positive claim before independent reduction.
+- **Status:** Live — AW1 method firewall, AW2 real task corpus, and AW3 toolforge competitor are running. The final integrated trial must beat strong controls across held-out tasks and transfer an earned tool/lesson.
