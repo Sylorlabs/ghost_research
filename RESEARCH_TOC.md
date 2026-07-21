@@ -2363,4 +2363,4 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Turn accumulated results into answer-free method memory, seal several distinct real artifact tasks, and make a Zag/Zagscript tool-forging candidate compete under equal budgets.
 - **Boundary:** Historical experience is principles with provenance—not task answers. No LLM/network/Python, hidden evaluator state, unequal budget, or positive claim before independent reduction.
-- **Status:** Components complete — AW1 answer-free historical-method firewall, AW2 four-artifact sealed corpus, and AW3 native-Zag seven-policy runner all pass fresh replay. The combined scored milestone has not yet run; it must still beat strong controls and transfer an earned tool/lesson.
+- **Status:** Components complete, but first combined attempt invalidated: bare numeric claims let an unrelated source scanner coincide with all four task values, so every policy falsely appeared 4/4. No milestone result. Revised evaluation must require typed structural witnesses before another run.

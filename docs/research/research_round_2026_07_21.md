@@ -1,6 +1,6 @@
 # Research Round 2026-07-21 (Round AW) — real multi-task milestone attempt
 
-**Status:** COMPONENTS COMPLETE — AW1/AW2/AW3 landed; sealed combined milestone run remains pending.
+**Status:** COMPONENTS COMPLETE; first combined attempt INVALIDATED by non-discriminating bare-number claims. No milestone result.
 
 ## Premise
 
@@ -66,3 +66,13 @@ unscored and a missing evaluator manifest fails closed.
 yet. The next operation must wire the evaluator-owned AW2 manifest into AW3,
 feed only AW1 principles, execute all policies, and then let a separate audit
 try to reduce any apparent advantage.
+
+## First combined-attempt correction
+
+The components were connected and every policy initially appeared to score 4/4.
+This result is **invalid**: the evaluator accepted bare numeric claims, and the
+source scanner's unrelated output sequence coincidentally matched all four task
+numbers. Fixed/broad/random/replay/no-memory/no-repair tied it. No causal task
+completion or learned advantage was established. The replacement gate requires
+task-typed claims with sealed structural witnesses (offsets/row diagnostics),
+so a wrong analyzer cannot pass merely by emitting the same scalar.

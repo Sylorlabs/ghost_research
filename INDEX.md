@@ -972,6 +972,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-21 AW components update: history firewall, real corpus, and Zag toolforge ready** (see `docs/research/research_round_2026_07_21.md`): AW1 compiles nine general lessons while rejecting answer-shaped history and retracted claims; AW2 provides four real artifacts with 2 train/2 heldout runtime-owned tasks and six leak denials; AW3 runs seven equal-budget native-Zag tool policies and fails closed without a manifest. **No combined score or milestone claim yet—the next run is the decisive one.**
 
+**2026-07-21 AW integration correction: bare-number scoring invalidated** (see `docs/research/round_aw_integration_attempt.md`): the first combined run appeared 4/4 for every policy only because a source scanner's unrelated scalar outputs coincided with each task's answer. **Invalid measurement, no capability result. The replacement requires typed claims and sealed task-specific witnesses, not a naked integer.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

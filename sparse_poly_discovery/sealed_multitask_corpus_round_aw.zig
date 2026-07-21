@@ -117,7 +117,9 @@ fn evaluate(a: std.mem.Allocator, claims_path: []const u8, items: [specs.len]Ite
         // they never reveal expected values or incremental score/progress.
         try out.writer().print("final-{d},{x},{s},{s}\n", .{ i, item.token, if (ok) "accepted" else "rejected", if (v == null) "bad_claim_protocol" else "sealed_check" });
     }
-    if (lines.next() != null) return error.ExtraClaims;
+    // A normal text claim file ends in a newline.  Permit blank trailing
+    // segments while still rejecting a fifth nonblank claim.
+    while (lines.next()) |extra| if (std.mem.trim(u8, extra, " \t\r\n").len != 0) return error.ExtraClaims;
     try out.writer().print("final-summary,none,{d}/{d},released_only_after_all_claims\n", .{ complete, items.len });
 }
 fn ledger(items: [specs.len]Item, path: []const u8) !void {
@@ -144,6 +146,13 @@ fn selftest() !void {
     // original paths. Only opaque names, contracts, tokens, and payloads exist.
     const manifest = try std.fs.cwd().readFileAlloc(a, "/tmp/round-aw-sealed-a/instance-00/task.txt", 4096); defer a.free(manifest);
     if (std.mem.indexOf(u8, manifest, specs[0].original_path) != null or std.mem.indexOf(u8, manifest, "expected=") != null) return error.ManifestLeak;
+    // Protocol regression: complete claims normally end in a newline and must
+    // not be mistaken for a fifth claim.
+    var claims = try std.fs.cwd().createFile("/tmp/round-aw-complete-claims.txt", .{ .truncate = true }); defer claims.close();
+    for (items) |item| try claims.writer().print("CLAIM {x} {d}\n", .{ item.token, item.expected });
+    try evaluate(a, "/tmp/round-aw-complete-claims.txt", items, "/tmp/round-aw-complete-receipts.csv");
+    const final_receipts = try std.fs.cwd().readFileAlloc(a, "/tmp/round-aw-complete-receipts.csv", 4096); defer a.free(final_receipts);
+    if (std.mem.indexOf(u8, final_receipts, "4/4") == null) return error.TrailingNewlineRejected;
     std.debug.print("round_aw_aw2 selftest PASS real_tracked_artifacts=4 train=2 heldout=2 denials=6 byte_identical_ledger=true evaluator_answers_runtime_only=true\n", .{});
 }
 pub fn main() !void {
