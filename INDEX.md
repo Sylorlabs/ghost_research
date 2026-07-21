@@ -976,6 +976,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-21 LLM critic pilot: ten claims reviewed safely then fully** (see `docs/research/llm_judge_pilot_10_claims.md`): report-only review and source/replay review both retained AS1/AS2, AT1–AT3, AU1, AV, and AW1 only at narrow scope and kept AS3/AS4 retracted. **The LLM adds red-team hypotheses, not authority: deterministic evaluator receipts decide claims.**
 
+**2026-07-21 LLM trace audit: causal work separated from lucky scalars** (see `docs/research/llm_trace_audit_round_aw.md`): 14 traces retain only three narrow causal AV scanner traces; they confirm raw-scanner coincidence, AW3's insufficient unscored receipts, AW2's four scalar-risk tasks, and the invalid AW 4/4. **Next gate is typed task witnesses plus evaluator-derived summaries and counterfactual mutations—not an LLM score.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

@@ -86,10 +86,18 @@ AS3/AS4 retracted. The pilot is useful for generating reduction hypotheses but
 is not evaluator authority: the AW bare-number failure itself shows why only
 typed receipts and deterministic audits may decide a result.
 
-## LLM trace audit (live)
+## LLM trace audit
 
 An independent LLM subagent is auditing ten concrete tool/claim traces without
 access to a sealed answer key. Its only question is causal: does the generated
 tool and its precommitted witness actually measure the requested property, or
 could a correct scalar be a guess/coincidence? It has no authority to score or
 solve tasks; its findings must become deterministic trace/witness gates.
+
+The completed 14-trace review finds three narrow causal AV scanner traces, one
+fixed-scanner tie, a direct raw-scanner coincidence warning, two valid boundary
+only traces, two insufficient AW3 receipts, four AW2 scalar-coincidence risks,
+and the invalid AW 4/4 coincidence. It recommends a typed claim/witness
+envelope, evaluator-derived summaries, and sealed counterfactual mutation
+checks. The LLM supplied the reduction hypotheses; deterministic validation is
+still required.
