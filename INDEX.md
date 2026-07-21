@@ -980,6 +980,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-21b round (Round AX): diverse parallel invention grids launched** (see `docs/research/research_round_2026_07_21b.md`): AX1 builds typed witness scoring; AX2 defines genuinely different native-Zag/Zagscript invention flavors; AX3 compares 1×1, 2×2, and 3×3 populations at equal total work. **Variety counts only if it creates distinct work and survives typed evaluation—more workers alone is not a win.**
 
+**2026-07-21b AX components update: variety is real, correctness still untested** (see `docs/research/research_round_2026_07_21b.md`): AX1 binds task kind/tool/payload/witness and rejects scalars; AX2 emits 27 equal-budget configurations; AX3 finds canonical diversity 2→4→5 under equal 54-step population budgets. **The next scored run decides whether the varied population actually solves more real typed-witness tasks.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,

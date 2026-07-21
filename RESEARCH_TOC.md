@@ -2373,4 +2373,4 @@ chronology). Every Result sentence quotes the doc's own numbers.
 
 - **Tried:** Scale invention by variety: distinct 2D grid flavors and explicit interiors under one equal total compute budget.
 - **Boundary:** No score from a bare scalar. Every claimed result must carry a typed structural witness validated by AX1; renamed duplicate workers do not count as diversity.
-- **Status:** Live — AX1 typed evaluator, AX2 flavor-grid runner, and AX3 equal-budget scaling audit are running. Only the later sealed integration can test whether variety helps real task completion.
+- **Status:** Components complete — AX1 rejects scalar claims with typed witnesses; AX2 records 27 equal-budget distinct flavors; AX3 confirms canonical coverage grows 2→4→5 across 1×1/2×2/3×3 at equal population work. Only later sealed scoring can test whether variety helps completion.
