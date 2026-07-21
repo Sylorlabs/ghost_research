@@ -85,3 +85,11 @@ AT1–AT3, AU1, AV, and AW1 only at their narrow documented scope, while keeping
 AS3/AS4 retracted. The pilot is useful for generating reduction hypotheses but
 is not evaluator authority: the AW bare-number failure itself shows why only
 typed receipts and deterministic audits may decide a result.
+
+## LLM trace audit (live)
+
+An independent LLM subagent is auditing ten concrete tool/claim traces without
+access to a sealed answer key. Its only question is causal: does the generated
+tool and its precommitted witness actually measure the requested property, or
+could a correct scalar be a guess/coincidence? It has no authority to score or
+solve tasks; its findings must become deterministic trace/witness gates.
