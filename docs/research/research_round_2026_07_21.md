@@ -1,6 +1,6 @@
 # Research Round 2026-07-21 (Round AW) — real multi-task milestone attempt
 
-**Status:** LIVE — 0/3 complete.
+**Status:** COMPONENTS COMPLETE — AW1/AW2/AW3 landed; sealed combined milestone run remains pending.
 
 ## Premise
 
@@ -40,9 +40,9 @@ to transfer is negative—not a foundation win.
 
 | # | Role | Experiment | Question | Status | Required evidence | Planned artifacts |
 |---|---|---|---|---|---|---|
-| AW1 | Terra | Method-memory firewall | Can the historical record guide future method choice without carrying prior answers or retracted claims forward as cheats? | running | Provenance lessons, redaction/injection/retraction/scramble attacks, deterministic replay. | `docs/research/method_memory_firewall_round_aw.md`, `results/method_memory_firewall_round_aw.csv`, `sparse_poly_discovery/method_memory_firewall_round_aw.zig` |
-| AW2 | Terra | Sealed real multi-task corpus | Can four or more distinct existing local artifacts be partitioned into evaluator-owned tasks with no candidate answer/score/overlap path? | running | Real hashes, partitions, receipts, hostile overlap/path/answer tests, replay. | `docs/research/sealed_multitask_corpus_round_aw.md`, `results/sealed_multitask_corpus_round_aw.csv`, `sparse_poly_discovery/sealed_multitask_corpus_round_aw.zig` |
-| AW3 | Luna | Zag/Zagscript toolforge competitor | Can a candidate create/repair native-Zag/Zagscript tools from opaque receipts and compete against equal-budget fixed/broad/random/replay/no-memory/no-repair baselines? | running | Precommit/repair/tool receipts, exact budget ledger, isolated worker, replay; no corpus-independent win claim. | `docs/research/zag_toolforge_competitor_round_aw.md`, `results/zag_toolforge_competitor_round_aw.csv`, `sparse_poly_discovery/zag_toolforge_competitor_round_aw.zig` |
+| AW1 | Terra | Method-memory firewall | Can the historical record guide future method choice without carrying prior answers or retracted claims forward as cheats? | **INFRASTRUCTURE READY** | Nine general lessons; seven answer/task/path injection forms deny; scrambled IDs inert; false lessons test-first; retractions blocked; replay identical. | `docs/research/method_memory_firewall_round_aw.md`, `results/method_memory_firewall_round_aw.csv`, `sparse_poly_discovery/method_memory_firewall_round_aw.zig` |
+| AW2 | Terra | Sealed real multi-task corpus | Can four or more distinct existing local artifacts be partitioned into evaluator-owned tasks with no candidate answer/score/overlap path? | **CORPUS READY** | Four tracked artifacts, 2 train/2 heldout, runtime-only answers, six hostile denials, replay identical. Requires original repo/evaluator outside candidate mount. | `docs/research/sealed_multitask_corpus_round_aw.md`, `results/sealed_multitask_corpus_round_aw.csv`, `sparse_poly_discovery/sealed_multitask_corpus_round_aw.zig` |
+| AW3 | Luna | Zag/Zagscript toolforge competitor | Can a candidate create/repair native-Zag/Zagscript tools from opaque receipts and compete against equal-budget fixed/broad/random/replay/no-memory/no-repair baselines? | **UNSCORED INTEGRATION READY** | Native Zag tools/Bubblewrap worker, seven policies with 2 builds/3 actions each, precommits and opaque receipts. It rejects missing manifest rather than fabricating a run. | `docs/research/zag_toolforge_competitor_round_aw.md`, `results/zag_toolforge_competitor_round_aw.csv`, `sparse_poly_discovery/zag_toolforge_competitor_round_aw.zig` |
 
 ## Landing protocol
 
@@ -51,3 +51,18 @@ builds/replays, updates this ledger/TOC/index, commits scoped files, and then
 runs one integrated adversarial trial. AW closes positive only if the complete
 system beats strong equal-budget controls across multiple held-out real tasks,
 transfers an earned tool/lesson, and survives an independent reduction audit.
+
+## Component results
+
+Fresh coordinator replays pass for all three components. AW1 carries nine
+provenance-bound general principles only and blocks the AS3/AS4 retractions from
+becoming success instructions. AW2 stages four real tracked artifacts into two
+train/two heldout tasks with runtime evaluator answers and six leak denials.
+AW3 compiles/runs native Zag tools in Bubblewrap and gives all seven policies
+identical two-build/three-action budgets; its self-test is intentionally
+unscored and a missing evaluator manifest fails closed.
+
+**Current status:** the hard infrastructure is ready, but there is no AW result
+yet. The next operation must wire the evaluator-owned AW2 manifest into AW3,
+feed only AW1 principles, execute all policies, and then let a separate audit
+try to reduce any apparent advantage.
