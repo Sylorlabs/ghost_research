@@ -1,6 +1,7 @@
 # Research Round 2026-07-21b (Round AX) — diverse parallel invention grids
 
-**Status:** COMPONENTS COMPLETE — typed witness gate and diverse grids ready; real sealed scoring integration remains pending.
+**Status:** COMPLETE — real staged-artifact typed scoring now runs; result is
+protocol-valid coverage, not invention evidence.
 
 ## Premise
 
@@ -40,15 +41,17 @@ population sizes; renamed copies do not count as diversity.
 | AX1 | Terra | Typed witness evaluator | Can sealed real tasks reject naked scalars and verify precommitted task-specific evidence/witnesses? | **EVALUATOR READY** | Four task kinds; scalar/malformed claims reject; kind/tool/payload hashes bind; relevant mutations change evidence, unrelated bytes do not; deterministic replay. | `docs/research/typed_witness_evaluator_round_ax.md`, `results/typed_witness_evaluator_round_ax.csv`, `sparse_poly_discovery/typed_witness_evaluator_round_ax.zig` |
 | AX2 | Luna | Diverse invention grids | Can multiple genuinely different Zag/Zagscript invention flavors be assigned/recorded under equal compute without fake diversity? | **GRID READY** | 27 unique 3×3×3 configurations, 8 corners/19 interiors, 48 actions each/1,296 total; duplicate/unequal/shared-answer/post-hoc/fake-diversity attacks reject; replay identical. | `docs/research/diverse_invention_grids_round_ax.md`, `results/diverse_invention_grids_round_ax.csv`, `sparse_poly_discovery/diverse_invention_grids_round_ax.zig` |
 | AX3 | Terra | Grid scaling audit | Does 2D population variety increase actual distinct work/coverage over homogeneous population at equal total budget? | **AUDIT READY** | 1×1/2×2/3×3 equal 54-step populations; canonical unique tool forms 2/4/5, branches 2/4/5, duplicate aliases cannot inflate diversity; no correctness claim. | `docs/research/grid_scaling_audit_round_ax.md`, `results/grid_scaling_audit_round_ax.csv`, `sparse_poly_discovery/grid_scaling_audit_round_ax.zig` |
+| AX4 | Coordinator | Real typed-witness integration | Does the grid obtain credit only for task-specific evidence on AW's staged real artifacts? | **COMPLETE — NARROW POSITIVE** | **36/108 accepted, 9/27 per task**; byte-identical replay; relevant staged declaration mutation drops 36→27. These are three supplied tool forms covering compatible tasks, not 27 inventions, an advantage, or isolated security. | `docs/research/ax_real_integration_round_ax.md`, `results/ax_real_integration_round_ax.csv`, `sparse_poly_discovery/ax_real_integration_round_ax.zig`, `scripts/run_round_ax_integration.sh` |
 
 ## Landing protocol
 
 Workers may edit only assigned files. Fresh coordinator replay is mandatory.
-After components land, the coordinator runs one sealed AX integration over the
-AW real artifacts: every grid gets the same total budget and must emit typed
-witnesses. An independent reduction audit decides whether an apparent gain is
-coverage, genuine tool expansion, a duplicated policy, a hidden answer channel,
-or a lucky scalar.
+The coordinator ran that integration. Every grid identity received the same
+48-action ledger allocation and candidate mode emitted only typed witnesses.
+The independent reducer accepted 36 of 108 compatible task attempts (9 per
+task) and rejected all other no-witness attempts. This establishes coverage
+and fixes AW's lucky-scalar failure; it does not establish a gain over a fixed
+three-tool portfolio or independent grammar discovery.
 
 ## Component results
 
@@ -60,4 +63,9 @@ flavors across grammar, allocation, and method-memory trust axes under exactly
 canonical tool/branch coverage grows 2→4→5 from 1×1 to 3×3 and aliases do not
 inflate that count. This is evidence of real variety/coverage—not correctness,
 invention, or an advantage over a homogeneous population until typed scoring
-executes on the sealed corpus.
+executes on the staged corpus. AX4 did execute: each structural task obtains
+nine valid, payload-bound witnesses, and mutating a relevant payload invalidates
+all 27 claims for that task (36→27 total). The result is intentionally narrow:
+three human-supplied tool grammars cover four compatible task families. It is
+not a population-invention, tool-selection, security-isolation, or intelligence
+claim.

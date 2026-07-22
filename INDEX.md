@@ -982,6 +982,8 @@ explicit FD closure, followed by the same independent breakout audit.**
 
 **2026-07-21b AX components update: variety is real, correctness still untested** (see `docs/research/research_round_2026_07_21b.md`): AX1 binds task kind/tool/payload/witness and rejects scalars; AX2 emits 27 equal-budget configurations; AX3 finds canonical diversity 2→4→5 under equal 54-step population budgets. **The next scored run decides whether the varied population actually solves more real typed-witness tasks.**
 
+**2026-07-21b AX4 update: typed real-artifact scoring closes the scalar hole** (see `docs/research/ax_real_integration_round_ax.md`): 27 grid identities submit 108 task attempts against AW's staged real artifacts; the independent typed reducer accepts **36/108** (exactly 9 per task), replay is byte-identical, and a relevant declaration mutation drops acceptance to **27/108**. **This proves payload-bound structural coverage and rejects lucky scalars; it does not show 27 inventions, autonomous grammar choice, a fixed-portfolio advantage, or hostile isolation.**
+
 **Highest-priority open experiments (updated after Round Q):**
 1. **Live approved-world adapter** — permit material scouting from a real,
    read-only approved corpus/simulator with content capture, provenance hash,
