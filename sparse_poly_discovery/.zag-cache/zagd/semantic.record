@@ -1,0 +1,163 @@
+format=zag-semantic-manifest-v1
+advisory=true
+executable_authority=false
+complete=true
+module=round_av_comment_scanner.zag
+profile=strict
+source=873212901,253672416,814
+public=216613626,131542391,0
+effects=216613626,131542391,0
+layouts=216613626,131542391,0
+decl_fn=token_at	712431158,928946070,2577	line=2	effect=0
+fact_fn=token_at	effect_free=1	leaf=1	constant_return=0	alloc=0	io=0
+expr_fact=token_at	if.condition	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	return	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.left.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.left.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.left.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.left.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.right.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.right.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.right.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.right.left.index.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.right.left.index.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.left.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.right.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.right.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.right.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.right.left.index.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.right.left.index.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.left.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.right.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.right.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.right.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.right.left.index.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.right.left.index.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.left.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.right.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.right.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.right.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.right.left.index.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.right.left.index.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.left.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.right.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.right.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.right.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.right.left.index.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.right.left.index.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.left.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right.left.index.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right.left.index.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	if.condition.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	return	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=token_at	return	type=i32	type_basis=typed	effect=0	effect_basis=sema
+decl_fn=main	294041295,623880842,3678	line=8	effect=5
+fact_fn=main	effect_free=0	leaf=0	constant_return=0	alloc=1	io=1
+call_edge=main	_zag_argc
+call_edge=main	_zag_read_file
+call_edge=main	_zag_arg
+call_edge=main	token_at
+call_edge=main	_zag_println
+call_edge=main	_zag_i64_to_str
+expr_fact=main	if.condition	type=bool	type_basis=typed	effect=4	effect_basis=sema
+expr_fact=main	if.condition.left	type=unknown	type_basis=unknown	effect=4	effect_basis=sema
+expr_fact=main	if.condition.left.callee	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	return	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	let.b	type=unknown	type_basis=unknown	effect=5	effect_basis=sema
+expr_fact=main	let.b.callee	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	let.b.arg0	type=unknown	type_basis=unknown	effect=4	effect_basis=sema
+expr_fact=main	let.b.arg0.callee	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	let.b.arg0.arg0	type=i32	type_basis=typed	effect=0	effect_basis=sema
+value_type=main	b	[]u8	basis=explicit
+expr_fact=main	if.condition	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	return	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	let.i	type=i32	type_basis=typed	effect=0	effect_basis=sema
+value_type=main	i	i32	basis=explicit
+expr_fact=main	let.in_comment	type=i32	type_basis=typed	effect=0	effect_basis=sema
+value_type=main	in_comment	i32	basis=explicit
+expr_fact=main	let.count	type=i32	type_basis=typed	effect=0	effect_basis=sema
+value_type=main	count	i32	basis=explicit
+expr_fact=main	while.condition	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	while.condition.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	while.condition.right	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	while.condition.right.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.left.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.left.left.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.left.left.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.left.right	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.left.right.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.right.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.right.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.right.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left.index.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left.index.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.target	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.value	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left	type=u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.base	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.index	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.target	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.value	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.left.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right	type=bool	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left.callee	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left.arg0	type=[]u8	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.left.arg1	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	if.condition.right.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.target	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.value	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.value.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.value.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.target	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.value	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.value.left	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	assign.value.right	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	statement	type=unknown	type_basis=unknown	effect=5	effect_basis=sema
+expr_fact=main	statement.callee	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	statement.arg0	type=unknown	type_basis=unknown	effect=1	effect_basis=sema
+expr_fact=main	statement.arg0.callee	type=unknown	type_basis=unknown	effect=0	effect_basis=sema
+expr_fact=main	statement.arg0.arg0	type=i32	type_basis=typed	effect=0	effect_basis=sema
+expr_fact=main	return	type=i32	type_basis=typed	effect=0	effect_basis=sema
+module_node=round_av_comment_scanner.zag	873212901,253672416,814
+checksum=217149104,408170898,14343

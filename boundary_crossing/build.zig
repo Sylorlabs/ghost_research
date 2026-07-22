@@ -138,5 +138,8 @@ pub fn build(b: *std.Build) void {
         if (b.args) |args| rc.addArgs(args);
         const rs = b.step(spec[0], spec[2]);
         rs.dependOn(&rc.step);
+        if (std.mem.eql(u8, spec[0], "dial-three")) {
+            b.installArtifact(e);
+        }
     }
 }
