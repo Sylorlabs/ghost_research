@@ -2,7 +2,8 @@
 
 **Status:** built, measured — an uncharted-knob experiment with an answer not known
 in advance. Reproduce: `cd wcore && zig build -Doptimize=ReleaseFast &&
-./zig-out/bin/wcore-invent budgetscan <seed>`. New phase `budgetScan` in
+./zig-out/bin/wcore-invent budgetscan <seed> [dmax]`. Optional third arg sets
+exhaustive reduction depth (default 8). New phase `budgetScan` in
 `src/inv_main.zig`.
 
 ## The genuinely open question

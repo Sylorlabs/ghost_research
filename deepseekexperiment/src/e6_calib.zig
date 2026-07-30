@@ -98,8 +98,7 @@ pub fn main() !void {
 
     for ([3]u32{ 5, 30, 50 }) |layer| {
         const acts = (by_layer.get(layer) orelse continue).items;
-        var path_buf: [256]u8 = undefined;
-        const shard_path = try std.fmt.bufPrint(&path_buf, "{s}/model-{d:0>5}-of-00064.safetensors", .{ ss.WEIGHTS_DIR, layer + 2 });
+        const shard_path = ss.shardPath(layer + 2);
         const st = try safetensors.SafetensorsFile.load(alloc, shard_path);
         defer st.deinit();
         var nb: [128]u8 = undefined;

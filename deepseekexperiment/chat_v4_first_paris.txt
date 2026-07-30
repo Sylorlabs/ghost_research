@@ -1,0 +1,74 @@
+=== CHAT_V4: DeepSeek V4 Pro (XOR-quant) next-token prediction ===
+prompt (5 tokens): The capital of France is
+attention: MLA + window-128 + gated compressor (exact at this T)
+
+L00 r128 hash  cos=0.98290 route_ov=1.00 experts=31 t=70s
+L01 r128 hash  cos=0.97436 route_ov=1.00 experts=31 t=152s
+L02 r4   hash  cos=0.96731 route_ov=1.00 experts=31 t=244s
+L03 r128 score cos=0.96223 route_ov=0.90 experts=36 t=306s
+L04 r4   score cos=0.97087 route_ov=0.85 experts=32 t=390s
+L05 r128 score cos=0.96654 route_ov=0.85 experts=47 t=494s
+L06 r4   score cos=0.96084 route_ov=0.82 experts=49 t=536s
+L07 r128 score cos=0.95128 route_ov=0.78 experts=42 t=583s
+L08 r4   score cos=0.94492 route_ov=0.69 experts=72 t=654s
+L09 r128 score cos=0.93330 route_ov=0.78 experts=49 t=705s
+L10 r4   score cos=0.92446 route_ov=0.76 experts=53 t=751s
+L11 r128 score cos=0.90724 route_ov=0.68 experts=65 t=799s
+L12 r4   score cos=0.90409 route_ov=0.82 experts=48 t=840s
+L13 r128 score cos=0.89941 route_ov=0.71 experts=63 t=883s
+L14 r4   score cos=0.90233 route_ov=0.70 experts=72 t=932s
+L15 r128 score cos=0.90086 route_ov=0.71 experts=68 t=974s
+L16 r4   score cos=0.90030 route_ov=0.71 experts=49 t=1014s
+L17 r128 score cos=0.89351 route_ov=0.56 experts=83 t=1059s
+L18 r4   score cos=0.88425 route_ov=0.62 experts=64 t=1101s
+L19 r128 score cos=0.86027 route_ov=0.53 experts=76 t=1141s
+L20 r4   score cos=0.82592 route_ov=0.63 experts=72 t=1185s
+L21 r128 score cos=0.79465 route_ov=0.70 experts=68 t=1224s
+L22 r4   score cos=0.76131 route_ov=0.54 experts=78 t=1261s
+L23 r128 score cos=0.81435 route_ov=0.71 experts=81 t=1306s
+L24 r4   score cos=0.81874 route_ov=0.66 experts=73 t=1347s
+L25 r128 score cos=0.82973 route_ov=0.71 experts=83 t=1391s
+L26 r4   score cos=0.82327 route_ov=0.68 experts=80 t=1432s
+L27 r128 score cos=0.81629 route_ov=0.69 experts=80 t=1472s
+L28 r4   score cos=0.81580 route_ov=0.64 experts=93 t=1513s
+L29 r128 score cos=0.81864 route_ov=0.60 experts=102 t=1557s
+L30 r4   score cos=0.80609 route_ov=0.59 experts=100 t=1599s
+L31 r128 score cos=0.79729 route_ov=0.60 experts=102 t=1640s
+L32 r4   score cos=0.79740 route_ov=0.67 experts=92 t=1680s
+L33 r128 score cos=0.78531 route_ov=0.59 experts=102 t=1723s
+L34 r4   score cos=0.77461 route_ov=0.64 experts=88 t=1763s
+L35 r128 score cos=0.78325 route_ov=0.64 experts=98 t=1804s
+L36 r4   score cos=0.77836 route_ov=0.66 experts=93 t=1846s
+L37 r128 score cos=0.78270 route_ov=0.57 experts=109 t=1890s
+L38 r4   score cos=0.77930 route_ov=0.62 experts=101 t=1933s
+L39 r128 score cos=0.77702 route_ov=0.71 experts=93 t=1974s
+L40 r4   score cos=0.77528 route_ov=0.58 experts=134 t=2018s
+L41 r128 score cos=0.77631 route_ov=0.58 experts=101 t=2060s
+L42 r4   score cos=0.77186 route_ov=0.63 experts=98 t=2102s
+L43 r128 score cos=0.78401 route_ov=0.58 experts=101 t=2143s
+L44 r4   score cos=0.78024 route_ov=0.49 experts=105 t=2185s
+L45 r128 score cos=0.77875 route_ov=0.54 experts=123 t=2228s
+L46 r4   score cos=0.77174 route_ov=0.68 experts=92 t=2270s
+L47 r128 score cos=0.77643 route_ov=0.60 experts=112 t=2310s
+L48 r4   score cos=0.78314 route_ov=0.60 experts=111 t=2351s
+L49 r128 score cos=0.77721 route_ov=0.52 experts=123 t=2393s
+L50 r4   score cos=0.77071 route_ov=0.64 experts=95 t=2434s
+L51 r128 score cos=0.75980 route_ov=0.53 experts=102 t=2475s
+L52 r4   score cos=0.77607 route_ov=0.56 experts=86 t=2513s
+L53 r128 score cos=0.77445 route_ov=0.38 experts=142 t=2558s
+L54 r4   score cos=0.77961 route_ov=0.66 experts=74 t=2596s
+L55 r128 score cos=0.78213 route_ov=0.72 experts=76 t=2638s
+L56 r4   score cos=0.80927 route_ov=0.62 experts=88 t=2682s
+L57 r128 score cos=0.82907 route_ov=0.47 experts=71 t=2718s
+L58 r4   score cos=0.84677 route_ov=0.65 experts=43 t=2755s
+L59 r128 score cos=0.87017 route_ov=0.83 experts=40 t=2792s
+L60 r4   score cos=0.92225 route_ov=0.70 experts=44 t=2831s
+
+=== XOR-V4 predicts next token (top-5) ===
+  1. id=51119  logit=23.78  Paris
+  2. id=4      logit=20.42  "
+  3. id=8270   logit=20.01  Par
+  4. id=1760   logit=19.33  ",
+  5. id=27571  logit=19.30  London
+
+total time: 2832s (5 prompt tokens through 61 layers, XOR experts)

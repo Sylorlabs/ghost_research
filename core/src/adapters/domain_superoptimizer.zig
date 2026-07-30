@@ -53,9 +53,9 @@ pub const GraphProgram = struct {
             bvs[i + 1] = switch (n.op) {
                 .XOR => try v1.xorBv(aig, v1.shrBv(aig, n.imm)),
                 .SHR => v1.shrBv(aig, n.imm),
-                .AND => try v1.xorBv(aig, prover.BitVector.initConstant(aig, @as(u64, 1) << n.imm)),
+                .AND => try v1.andBv(aig, prover.BitVector.initConstant(aig, @as(u64, 1) << n.imm)),
                 .ROTL => v1.rotlBv(aig, n.imm),
-                .SHL => v1.shrBv(aig, 0), // Dummy
+                .SHL => v1.shlBv(aig, n.imm),
             };
         }
         return bvs[self.used].bits[0];

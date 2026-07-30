@@ -1,0 +1,14 @@
+round,arm,encoding,heldout_errors,heldout_events,proposal_cost,cells,state_width,mutation_stride,freeze_state,verdict,detail
+round_u_u1,grown_body,raw,587,1152,768,6,6,4,frozen_before_fresh_worlds,MEASURED,selected_on_development_only
+round_u_u1,grown_body,permuted_reencoded,523,1152,768,6,6,4,frozen_before_fresh_worlds,MEASURED,selected_on_development_only
+round_u_u1,random_growth,raw,618,1152,768,4,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,random_growth,permuted_reencoded,536,1152,768,4,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,fixed_topology,raw,596,1152,768,4,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,fixed_topology,permuted_reencoded,596,1152,768,4,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,equal_size_static,raw,542,1152,768,6,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,equal_size_static,permuted_reencoded,556,1152,768,6,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,replay_memory,raw,596,1152,768,0,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,replay_memory,permuted_reencoded,596,1152,768,0,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,task_aligned_supplied,raw,0,1152,768,0,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,task_aligned_supplied,permuted_reencoded,0,1152,768,0,0,0,frozen_before_fresh_worlds,MEASURED,equal_total_cost_accounted
+round_u_u1,VERDICT,both,1110,2304,768,6,6,4,snapshot,VALID_NEGATIVE,grown_total=1110;best_control=0;growth_is_capability_not_size;world_and_learner_generators_structurally_distinct

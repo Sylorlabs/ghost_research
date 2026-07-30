@@ -360,6 +360,29 @@ pub fn evolveComposed(
 /// scores (chance is 1/V = 0.25), so a true outsider is never matched by accident.
 pub const MATCH_THRESHOLD: f64 = 0.95;
 
+/// Fraction of symbols where `prog` agrees with the composed `genome` target on `n` random
+/// streams. Used by instrument stress-tests to distinguish near-miss from true equality.
+pub fn behaviorAgreement(prog: *const alien.Program, genome: []const Stage, n: usize, L: usize, seed: u64) f64 {
+    var prng = std.Random.DefaultPrng.init(seed);
+    const rng = prng.random();
+    var syms: [256]u8 = undefined;
+    var tgt: [256]u8 = undefined;
+    var got: [256]u8 = undefined;
+    const ll = @min(L, 256);
+    var agree: usize = 0;
+    var total: usize = 0;
+    for (0..n) |_| {
+        for (0..ll) |i| syms[i] = @intCast(rng.uintLessThan(usize, V));
+        composedTarget(genome, syms[0..ll], tgt[0..ll]);
+        alien.runStream(prog, syms[0..ll], got[0..ll]);
+        for (0..ll) |i| {
+            total += 1;
+            if (got[i] == tgt[i]) agree += 1;
+        }
+    }
+    return @as(f64, @floatFromInt(agree)) / @as(f64, @floatFromInt(total));
+}
+
 /// Does `prog`'s output agree with the composed `genome` target ≥ MATCH_THRESHOLD on `n`
 /// random streams?
 pub fn behaviorMatches(prog: *const alien.Program, genome: []const Stage, n: usize, L: usize, seed: u64) bool {
@@ -427,6 +450,12 @@ pub fn reducibleExact(prog: *const alien.Program, max_depth: usize, seed: u64, n
 /// behaviour. Returns the (shortest) matching genome (REDUCIBLE) or null (IRREDUCIBLE
 /// relative to the stage atom set). Exhaustive: 5 + 25 + … stage-strings.
 pub fn reducible(prog: *const alien.Program, max_depth: usize, seed: u64) ?Genome {
+    return reducibleWithBudget(prog, max_depth, seed, 12, 32);
+}
+
+/// Budget-parameterized twin of `reducible` — same exhaustive search, caller sets the
+/// behaviourMatches sample count (`n` streams × `L` symbols).
+pub fn reducibleWithBudget(prog: *const alien.Program, max_depth: usize, seed: u64, n: usize, L: usize) ?Genome {
     const nstage = @typeInfo(Stage).@"enum".fields.len;
     var d: usize = 1;
     while (d <= max_depth) : (d += 1) {
@@ -440,7 +469,7 @@ pub fn reducible(prog: *const alien.Program, max_depth: usize, seed: u64) ?Genom
                 g.appendAssumeCapacity(@enumFromInt(x % nstage));
                 x /= nstage;
             }
-            if (behaviorMatches(prog, g.slice(), 12, 32, seed)) return g;
+            if (behaviorMatches(prog, g.slice(), n, L, seed)) return g;
         }
     }
     return null;

@@ -1,0 +1,23 @@
+target_id,split,truth_audit_only,learned_prior,fixed_prior,random_prior,learned_acc,fixed_acc,random_acc,search_evals_each,routing_cost,valid
+0,train,thresh,thresh,thresh,mixr,1.0,1.0,0.0,20,0,pass
+1,train,thresh,thresh,thresh,mixr,1.0,1.0,0.0,20,0,pass
+2,train,thresh,thresh,thresh,mixr,1.0,1.0,0.0,20,0,pass
+3,val,thresh,ratio,thresh,run,0.0,1.0,0.0,20,6,pass
+4,heldout,thresh,mixr,thresh,run,0.0,1.0,0.0,20,6,pass
+5,train,mixr,mixr,thresh,mixr,1.0,0.0,1.0,20,0,pass
+6,train,mixr,mixr,thresh,mixr,1.0,0.0,1.0,20,0,pass
+7,train,mixr,mixr,thresh,mixr,1.0,0.0,1.0,20,0,pass
+8,val,mixr,mixr,thresh,ratio,1.0,0.0,0.0,20,6,pass
+9,heldout,mixr,ratio,thresh,ratio,0.0,0.0,0.0,20,6,pass
+10,train,ratio,ratio,thresh,mixr,1.0,0.0,0.0,20,0,pass
+11,train,ratio,ratio,thresh,mixr,1.0,0.0,0.0,20,0,pass
+12,train,ratio,ratio,thresh,mixr,1.0,0.0,0.0,20,0,pass
+13,val,ratio,run,thresh,thresh,0.0,0.0,0.0,20,6,pass
+14,heldout,ratio,run,thresh,thresh,0.0,0.0,0.0,20,6,pass
+15,train,run,run,thresh,mixr,1.0,0.0,0.0,20,0,pass
+16,train,run,run,thresh,mixr,1.0,0.0,0.0,20,0,pass
+17,train,run,run,thresh,mixr,1.0,0.0,0.0,20,0,pass
+18,val,run,run,thresh,mixr,1.0,0.0,0.0,20,6,pass
+19,heldout,run,mixr,thresh,mixr,0.0,0.0,0.0,20,6,pass
+__SUMMARY__,heldout,-,-,-,-,0/4,1/4,0/4,20,learned=6 descriptor measurements; fixed=0; random=1 draw,pass
+__LEAKAGE__,frozen_descriptor_min_distance=0.792634,-,-,-,-,-,-,-,-,pass

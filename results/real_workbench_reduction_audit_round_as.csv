@@ -1,0 +1,12 @@
+round,subject,attack,evidence,verdict
+round_as,"AS1","denial_surface","request enum and allowed() deny fixtures exist; no independently sandboxed hostile candidate is exercised",SURVIVES_ONLY_AS_PROTOCOL_GATE_NOT_CONTAINMENT_PROOF
+round_as,"AS2","capture_replay","fixed GET allowlist and cached replay are reproducible; candidate request surface is not separately hostile-tested",SURVIVES_ONLY_AS_PROTOCOL_GATE_NOT_WEB_CAPABILITY
+round_as,"AS3","real_artifact_reduction","relation() and target() generate the corpus inside one evaluator; no local artifact bytes are parsed",REDUCED_INVALID_AS_REAL_ARTIFACT_POSITIVE
+round_as,"AS3","candidate_evaluator_coupling","action(policy), target(), controls, scoring, and verdict live in the same executable",REDUCED_INVALID_AS_ISOLATED_DISCOVERY
+round_as,"AS3","equal_budget_reduction","only learned_provenance receives long=true; controls run one pass",REDUCED_INVALID_AS_EQUAL_WALL_TIME_COMPARISON
+round_as,"AS3","posthoc_curve_reduction","reported checkpoint curve literals 2304,4992,9648 are written as constants rather than derived measurements",REDUCED_INVALID_AS_MEASURED_LEARNING_CURVE
+round_as,"AS4","direct_answer_leak","candidateInput computes t=target(), writes sentinel into p[t], and child returns index whose frame value equals q",REDUCED_INVALID_AS_STRUCTURAL_DISCOVERY
+round_as,"AS4","changed_encoding_reduction","the same target-index sentinel is regenerated after changed=true, so replication repeats the leak",REDUCED_INVALID_AS_INDEPENDENT_REPLICATION
+round_as,"AS5","fixed_rule_reduction","source marks fixed/broad/replay/shuffled/scrubbed ties VALID_NEGATIVE",HONEST_VALID_NEGATIVE_CONFIRMED
+round_as,"AS6","scope_limit","source-local audit and cached replays only; no semantic task, bug discovery, unrestricted web, or general intelligence test",NO_GENERAL_INTELLIGENCE_CLAIM
+round_as,summary,independent_reduction_audit,AS3_and_AS4_do_not_survive_their_discovery_claims;AS1_AS2_remain_narrow_protocol_gates;AS5_negative_is_honest,AS6_COMPLETE

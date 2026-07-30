@@ -1,0 +1,13 @@
+protocol,component,claim,observed,verdict,detail
+round_l_l5,L1,atlas_generalization,controlled_corpus_only,LIMITED,No independent unknown-family claim
+round_l_l5,L2,blank_rule_input,four_trace_maxima_only,pass,Detector function is trace-only
+round_l_l5,L2,corpus_boundary,audit_columns_and_id_cycled_kinds,LIMITED,Published CSV is not policy-safe and corpus is controlled
+round_l_l5,L3,public_API_fields,aggregate_scores_counts_calls_only,pass,Replies contain no formula mask or audit fields
+round_l_l5,L3,protocol_sealing,same_user_source_access,NOT_OS_SEALED,Protocol boundary only
+round_l_l5,L3,evaluation_independence,transcript_and_query_share_12_seeded_examples,LIMITED,No fresh holdout evaluates an extension
+round_l_l5,L4,blank_eligibility,L3_00_and_L3_01_blank_L3_02_represented,pass,Eligibility follows diagnostics
+round_l_l5,L4,canonical_coverage,80_unique_candidates_per_blank,pass,Every canonical identity 0_through_79 occurs once per blank token
+round_l_l5,L4,outcomes,L3_00_10_of_12_vs_11_of_12_L3_01_12_of_12_vs_10_of_12,pass,One strict exact win only
+round_l_l5,L4,cost_accounting,source_pads_80_to_412_CSV_omits_332_padding_queries,LIMITED,Source replay supports total but raw ledger is not per-call complete
+round_l_l5,L4,verdict,one_of_two_required_wins,VALID_NEGATIVE,Defined trial; neither positive nor blocked
+round_l_l5,VERDICT,revised_API_and_expedition,L4_VALID_NEGATIVE_AUDITED,AUDIT_COMPLETE,Future positive requires fresh sealed split and complete call ledger

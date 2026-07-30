@@ -1,0 +1,14 @@
+artifact,generation,lifecycle,commit_digest,viable_lineages,genotype_diversity,strategy_diversity,mean_score,lifetime_delta,inherited_delta,energy_cost,world_depth,decision,verdict
+round_v_v3,0,commit,816057F1A96C0482,16,16,16,83.625,444,131,1584,3,commit_snapshot,measured
+round_v_v3,1,commit,A094D12B3CD7C68B,16,16,16,85.563,492,140,1584,3,commit_snapshot,measured
+round_v_v3,2,commit,92A4EC0D69B6448D,16,16,16,83.313,485,115,1584,3,commit_snapshot,measured
+round_v_v3,3,commit,C6BB7A755F2E8CE5,16,16,16,82.375,497,119,1584,3,commit_snapshot,measured
+round_v_v3,4,commit,C96B63140EEDDEF9,16,16,15,87.938,512,127,1632,4,commit_snapshot,measured
+round_v_v3,5,commit,E28258D9DC300AD6,16,16,15,86.625,496,120,1632,4,commit_snapshot,measured
+round_v_v3,6,commit,4BC46DF39670DA90,16,16,15,86.313,487,116,1632,4,commit_snapshot,measured
+round_v_v3,7,commit,4245457A6E7EFC44,16,16,16,87.188,495,146,1632,4,commit_snapshot,measured
+round_v_v3,8,commit,FF5B136D044E2829,16,16,16,92.813,472,127,1680,5,commit_snapshot,measured
+round_v_v3,9,commit,4356C402A6493CCA,16,16,16,91.125,495,145,1680,5,commit_snapshot,measured
+round_v_v3,10,commit,930DF19460D68879,16,16,16,91.625,488,143,1680,5,commit_snapshot,measured
+round_v_v3,11,snapshot,B4E3F76EEA7B80EE,16,16,16,93.813,474,136,1680,5,commit_snapshot,measured
+round_v_v3,12,closure,aggregate,16,16,16,0,249,154,0,5,strategy_effect_initial=249;strategy_effect_final=154,CONTROLLED_EVODEVO_ECOLOGY_FOUNDATION

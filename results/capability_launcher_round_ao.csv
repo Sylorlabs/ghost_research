@@ -1,0 +1,13 @@
+artifact,probe,observed,verdict,detail
+round_ao_ao1,raw_stdio_protocol,A:7:1:cwd=/work:env=1:fds=4:extra=0:private=DENY:write=DENY:net=isolated:limits=BOUNDED,PASS,candidate received opaque stdin and emitted one bounded action only
+round_ao_ao1,private_evaluator_read,absent_in_sandbox,PASS,private evaluator directory was not mounted
+round_ao_ao1,private_evaluator_write,denied_in_sandbox,PASS,no evaluator writable mount exists
+round_ao_ao1,cwd,tmpfs_/work,PASS,isolated temporary work directory
+round_ao_ao1,environment,clearenv_plus_PWD,PASS,Bubblewrap clearenv; PWD is launcher-created not inherited secret
+round_ao_ao1,inherited_file_descriptors,zero_beyond_stdio_and_probe_handle,PASS,candidate runtime descriptor audit found no extra evaluator handle
+round_ao_ao1,network,new_empty_namespace,PASS,--unshare-net succeeded; only fresh loopback namespace available
+round_ao_ao1,capabilities,dropped_ALL,PASS,Bubblewrap cap-drop ALL
+round_ao_ao1,resources,RLIMIT_AS_64MiB_and_CPU_1s,PASS,candidate /proc/self/limits confirms imposed prlimit bounds
+round_ao_ao1,forbidden_score_request,Q_SCORE_rejected,PASS,parent schema denies non-action request
+round_ao_ao1,oversized_action,over_128_bytes_rejected,PASS,parent bounded output parser fails closed
+round_ao_ao1,residual_risk,same_user_kernel_compiler_hardware_seccomp,PENDING,seccomp syscall filtering and distinct UID/MAC not demonstrated; this is not absolute containment

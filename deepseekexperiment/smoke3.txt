@@ -1,0 +1,13 @@
+=== E11: full V4 stack with MLA attention — standalone perplexity A/B ===
+T=128 real text tokens (stream offset 8000) | ref(f32) vs quant(H+P3refit weights, int8 acts)
+attention: MLA + window-128 + gated compressor (exact at this T)
+
+L00 r128 hash  cos=0.98319 route_ov=1.00 experts=302 t=279s
+L01 r128 hash  cos=0.97996 route_ov=1.00 experts=297 t=534s
+
+--- perplexity (eval positions: second half, step 1) ---
+
+REF   mean NLL = 15.9289 nats  ppl = 8275846.45
+QUANT mean NLL = 16.0512 nats  ppl = 9352761.31
+top1 agreement at eval positions: 37/63
+total time: 645s

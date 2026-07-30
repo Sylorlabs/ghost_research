@@ -1,0 +1,194 @@
+# The Invention Loop — generate → test → keep, with a SOUND verifier
+
+After concluding the knower is *lookup + transitive deduction* (memory, not a mind), the pivot: intelligence — if
+anywhere in this lineage — lives in the **generate → test → keep** loop, and the lesson from the failed text
+conjecture loop (~5%, correlated noise) is that the verifier must be **sound and outside the symbols**. Text isn't.
+**Computation is.**
+
+## `discover_laws.zig` — math-law discovery
+
+Build computable integer features (mechanism — arithmetic, not handed answers): perfect-square, divisor-count d(n),
+σ(n), ω(n), popcount, digit-sum, divisibility. Form predicates over them, then **generate every pairwise law
+(P ⟺ Q, P ⟹ Q) and verify each by exact computation over [2, 200000]**, refuting by counterexample.
+
+**Result:** 231 equivalence candidates generated · **224 refuted by counterexample** · 41 laws survived
+(7 equivalences + 34 implications), in 0.67 s on CPU, no LLM. Cross-domain discoveries (genuine — each connects two
+different feature families, so it could not be a restatement):
+
+- `n is a perfect square ⟺ d(n) is odd` — **Fermat's divisor-pairing theorem**
+- `n divisible by 3 ⟺ digit-sum divisible by 3` ; `… by 9 ⟺ … by 9` — the classic divisibility rules
+- `sigma(n) is odd ⟺ n is square or twice a square` — a non-obvious σ characterization
+- `n is prime ⟺ d(n) == 2`
+- implications: `square ⟹ σ odd`, `prime ⟹ d even`, `power-of-two ⟹ {prime power, square-or-2·square, …}`
+
+## Why this is invention, not lookup
+
+| | the knower | the invention loop |
+|---|---|---|
+| mechanism | retrieve a stored IS-A edge | *generate* a candidate law, *compute* both sides for every n |
+| `prime ⟺ d=2` | only if a text stated it | **discovered** by testing |
+| verifier | cross-source text — failed ~5% (correlated noise) | **computation — sound; one counterexample kills a law** |
+| output | facts it was told | true theorems **nobody handed it** |
+
+The 224 refutations are the point: a sound verifier *enforces* the certifier discipline text could never provide.
+The same generate→test→keep loop that scored ~5% on text is ~100%-clean here because the verifier touches ground
+truth, not other text.
+
+## Honest bound (what's still handed)
+
+The **feature vocabulary was handed** (square/divisors/σ/digit-sum) and the law-template is fixed (pairwise ⟺/⟹).
+It discovers which *relations* hold among given features — real discovery — but does not yet invent the features or
+the template. This is *machine discovery within a given vocabulary*, a genuine component of intelligence, not
+general intelligence.
+
+## Next (toward inventing the vocabulary too)
+1. **Invent the features** — search over short computable *programs* (the project's `autonomous_inventor` /
+   `primitive_synthesizer` direction), so the engine discovers the predicates, not just the relations.
+2. **Compound** — feed discovered laws back to reach laws unreachable in one step (the README's invention-engine
+   compounding).
+3. **Genuinely-unknown targets** — point the certified loop at open questions (shortest addition chains already
+   done in `dial_three`; an open combinatorial conjecture next), where there is no stored answer to retrieve —
+   the cleanest possible separation of invention from lookup.
+
+## `feature_invent.zig` — invent the vocabulary too
+
+The first loop discovered laws among a *handed* feature list. This one removes that: the only handed things are
+primitive ops. It **generates candidate feature-programs** over n from a tiny grammar (atoms `n, isqrt, d, σ, ω,
+digitsum, popcount`; ops `% · isqrt²· * + −`; tests `==n, ==0, ==1, even, odd`), runs each over [2,100000], and
+**dedups by behavior** — same behavior + different program = a *discovered identity*; the distinct behaviors are
+the *invented predicates*. Then law-discovery runs over the invented predicates, verified by computation.
+
+**Result:** 217 value-programs → 868 candidate predicates → **262 distinct invented features** (503 degenerate
+dropped, 320 program-pairs collapsed as identities); 34,191 law candidates generated, **34,191 refuted by
+counterexample**, 742 survived. The headline — **it rediscovered Fermat's theorem from primitives**, as a
+certified behavioral identity (neither side hand-written):
+```
+isqrt(n)^2 == n   ≡   d(n) is odd        (perfect square ⟺ odd number of divisors — Fermat)
+```
+plus `d(n) % 4 == 1 ⟹ isqrt(n)^2 == n`, `isqrt(n)^2 == n ⟹ sigma(n) is odd`, `digitsum(n) % 6 == 0 ⟹ n % 3 == 0`,
+and `isqrt(n)^2 is even ⟺ isqrt(n) is even` (x² even ⟺ x even). So **both the vocabulary and the laws are invented**
+from primitive ops; a lookup system returns only what it was told — this generated two never-written programs and
+proved they encode the same theorem.
+
+**Honest bound:** the primitive *sensors* (`d`, `σ`, `ω`, `digitsum` — loop-based) are still given as atoms; the
+*predicates over them* are invented, not the sensors themselves. The grammar is shallow (depth-bounded), and some
+survivors are shallow (`X==n ⟹ n even`). Genuine invention within a primitive basis — not unbounded creativity,
+but categorically past lookup.
+
+## `labs_search.zig` — generate→test→keep at a GENUINELY-UNKNOWN target (no lookup possible)
+
+The cleanest separation of invention from lookup: a target with no stored answer. Low-Autocorrelation Binary
+Sequences (LABS) — find a ±1 sequence of length L minimizing off-peak autocorrelation energy E(s), maximizing
+merit factor F = L²/(2E). The optimal F is an **open research problem for L > ~66**, so for those lengths nothing —
+no text, table, or knower — contains the answer; a good sequence must be *invented* by search and *certified* by
+exact computation. Stochastic local search (generate neighbours → test exact energy → keep best, multi-start).
+
+**Result** (seed-fixed, 0.6 s): found the **Barker-13 optimum F=14.08** where the answer is known (validates the
+loop); produced **certified sequences for L=73/91/101 (open) at F≈5**, each rechecked by recomputing E; beat the
+random baseline at every L (F 1.7–2.8 → 5–14). For L=73: a specific 73-char ±1 string with E=532, certified.
+
+**Honest scope:** simple local search reaches F≈5 at large L; state-of-the-art LABS solvers reach ~8–9 with heavy
+specialized search. These are *modest* certified lower bounds, not records — but they are genuine invention (no
+lookup possible) with a sound verifier, which is the whole point: the artifact could not have been retrieved.
+
+## `invent_sensors.zig` — invent the SENSORS too (remove the last handed thing)
+
+The feature-inventor still took `d(n)`, `σ(n)`, `isqrt(n)` as given atoms. This removes them: the only primitives
+are arithmetic (`+ × % <`) and one control construct — a bounded **loop-fold** `acc = ⊕_{i=1..n, cond(i,n)}
+term(i,n)`. Searching the template's (cond, term, ⊕) choices, the instantiations *are* the sensors:
+`sum_{i|n} 1 = d(n)`, `sum_{i|n} i = σ(n)`, `max{i : i²≤n} = isqrt(n)` — recognised by matching computed behavior,
+not handed. **Result:** 48 instantiations → 28 distinct invented sensors; d, σ, isqrt all recovered; then **Fermat
+re-certified using the invented sensors** (`(invented isqrt)² == n ⟺ (invented d) odd`, over [2,3000]). End to end:
+sensors, predicates, and laws all invented from arithmetic + iteration.
+
+## `invent_compound.zig` — COMPOUNDING (staged invention)
+
+Each round builds features from the previous round's, so later rounds reach laws earlier ones can't express. Set up
+so the demonstration is unambiguous: round 1 uses atoms only (`n, isqrt, d, σ, digitsum, popcount`) and cannot
+express "square" (which needs `isqrt·isqrt`); round 2 adds compound features `a∘b`. **Result:** round 1 = 13
+features / 2 laws → round 2 = 76 features / 170 laws (**+63 features, +168 laws from compounding**), and **Fermat
+(`isqrt(n)·isqrt(n) == n ⟺ d(n) odd`) is unlocked only in round 2** because "square" is a round-2 compound. Later
+inventions built on earlier ones.
+
+## The three-way answer to "lookup or invention"
+1. **Genuinely-unknown target** (`labs_search`): certified artifacts for open lengths — nothing to retrieve.
+2. **Invent the vocabulary** (`feature_invent`) and even the **sensors** (`invent_sensors`): only arithmetic +
+   a loop handed; predicates, sensors, and Fermat all invented.
+3. **Compounding** (`invent_compound`): staged invention reaching laws one round can't.
+Together: generate→test→keep with a sound (computational) verifier produces new, certified knowledge from
+primitives — categorically beyond the knower's retrieval. Honest bound: bounded grammars, sound verifier handed,
+small scale — genuine machine discovery, not general intelligence.
+
+## `discover_closedform.zig` — the RICHER generator (control flow) + closed-form discovery
+
+The step from rediscovering known theorems toward proposing new ones: a generator with **control flow** — loops
+*and* branches — which reaches functions an expression-only search can't even *pose*. Each program is an
+iteratively-defined sequence a(n) (sums, sum-of-odds, sums with conditionals, factorial, …). The certifier
+**recovers a polynomial closed form by finite differences** (exact, sound) and **certifies** it by reproducing
+a(n) over [1,200] from the recovered formula; where no polynomial of bounded degree exists it **abstains**.
+
+**Result (instant):** 7/11 closed with certified formulas —
+`Σi ≡ (n²+n)/2`, `Σ(2i−1) ≡ n²`, `Σi² ≡ (2n³+3n²+n)/6`, **`Σi³ ≡ (n⁴+2n³+n²)/4`** (Nicomachus's theorem),
+`max ≡ n`, `Σ(n−i) ≡ (n²−n)/2`, `Σ(4i³−3i) ≡ (2n⁴+4n³−n²−3n)/2` — and **4 honest abstentions** that are *correct*:
+factorial (super-polynomial) and the three parity-dependent sums (quasi-polynomial, no single polynomial). The
+abstention is the point: a sound verifier never fakes a proof.
+
+Two lessons from building it: (1) a commutativity-pruning optimization in the first (brute value-graph) synthesizer
+silently dropped `n*(n+1)` — with frontier-based generation the canonical `i<j` order never co-occurs in one round;
+(2) brute-force formula synthesis explodes to millions and buries the target — **finite differences is the right,
+exact tool** for polynomial closed forms. Honest bound: closed forms here are polynomial-only, and the sequence set
+is curated rather than auto-enumerated — but the method certifies *any* loop/branch sequence or abstains.
+
+## `auto_discover.zig` — point the generator at itself (rediscovery → proposal)
+
+Instead of curating sequences, **enumerate the whole loop/branch program space**: `a(n) = Σ_{i=1..n, cond(i)}
+term(i,n)` for every `term` (a small expression grammar over `i, n`, behavior-deduped) × every branch condition
+(parity, mod 3), and run the certifier over all of them. The certifier now also detects **quasi-polynomial** closed
+forms (period 2/3) so branch-conditioned programs can close, not just abstain.
+
+**Result (0.3 s, nothing hand-picked):** 520 distinct terms × 6 conditions = **3120 programs** → **497 plain
+polynomial closed forms certified** (correct Faulhaber up to degree 5, e.g. `Σi⁴ = (6n⁵+15n⁴+10n³−n)/30`), **2455
+quasi-polynomial**, **168 honest abstentions** (no closed form of degree ≤6). And it surfaces **discovered
+identities** — equalities between structurally different loops that it *proved* (both certified to the same closed
+form), e.g. (hand-verified):
+- `Σ(i+n) ≡ Σ(3i−1)` both `= (3n²+n)/2`
+- `Σ(i+i·n) ≡ Σ(3i²−i·n)` both `= n(n+1)²/2`
+- `Σ(i−n) ≡ Σ(1−i)` both `= (n−n²)/2`
+
+This is rediscovery turning into proposal: the machine poses thousands of programs and keeps only what it can
+certify, including equalities nobody handed it. Build lesson: an early identity pass used an `i128→i64`-truncated
+behavior hash and produced *false* identities (`Σ(i²−i⁵) ≡ Σ(i+i⁵)`); grouping by the *exact rendered closed form*
+instead is collision-free and sound.
+
+**Honest bound:** the discoveries are *elementary* — low-degree polynomial/quasi-polynomial sums of one variable;
+the identities are true and auto-proven but routine algebra, not deep theorems. The *machinery* (enumerate →
+certify → surface, with honest abstention) is the result; pointed at a richer space (several variables, recursion,
+number-theoretic predicates) the same loop would reach less-trivial statements.
+
+## Richer spaces — same enumerate→certify→surface loop, three new program spaces
+
+Pointing the loop at richer spaces is where elementary rediscovery reaches non-trivial territory.
+
+**#2 `divisor_discover.zig` — number-theoretic (Dirichlet convolutions).** Sums over the *divisors* of n,
+`f(n) = Σ_{d|n} term(d, n/d)` with terms from `{d, n/d, 1, φ(d), μ(d), d(d), σ(d)}`, matched to recognizable
+targets and certified over [1,3000]. Rediscovered **real theorems** (not algebra): `Σ_{d|n} φ(d) = n` (Gauss),
+`Σ_{d|n} μ(d) = [n==1]`, `Σ_{d|n} μ(d)·(n/d) = φ(n)` (Möbius inversion), `Σ_{d|n} d = σ(n)`. 12 certified, 44
+abstentions. **This is the strongest result of the arc** — genuine number theory, posed from primitives and proven.
+
+**#1 `double_discover.zig` — multiple variables (double sums).** `a(n) = Σ_{i,j=1..n, rel(i,j)} term(i,j)` over
+relations `{all, i<j, i≤j, i==j, i>j}`; recover polynomial closed form, certify. 752/800 certified. Two indices
+let it pose what one index can't: **reflection/symmetry identities** like `Σ_{i>j} i²j ≡ Σ_{i>j} i²(i−j)` (true by
+`j↔i−j`), `Σ i ≡ Σ j`, `Σ (i−j) ≡ 0` — all certified.
+
+**#3 `recur_discover.zig` — recursion.** Enumerate order-1/2 recurrences; recover a **polynomial or geometric**
+closed form, certify, else abstain. `f(n)=f(n−1)+n ≡ (n²+n)/2`, `f(n)=2f(n−1)+1 ≡ 2ⁿ−1`, `f(n)=3f(n−1)+2 ≡ 3ⁿ−1`,
+`f(n)=2f(n−1) ≡ 2ⁿ`. 100 recurrences → 18 polynomial + 11 geometric closed forms; **Fibonacci and factorial
+honestly left open** (no polynomial/geometric form). Honest bound: the certifier handles polynomial + single
+geometric; sums-of-geometrics and φⁿ-type forms are abstained, not faked.
+
+Across all three: the same generate→test→keep loop with a sound verifier, pointed at richer spaces, reaches from
+elementary sums up to classical number-theoretic theorems — and abstains wherever it cannot certify.
+
+## This connects to the project's Closure Principle / invention-engine arc (`world_injection`, `real_invention`,
+`autonomous_inventor`, `dial_three`): invention = inject an out-of-closure generator + a sound certifier. Here the
+certifier is computation and the generator is candidate-law search; it discovers real theorems, soundly.

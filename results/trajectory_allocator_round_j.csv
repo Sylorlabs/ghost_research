@@ -1,0 +1,53 @@
+arm,seed,split,target_audit_only,truth_audit_only,route_prediction_audit_only,route_correct,probe_calls,selection_calls,total_calls,exact_solve,enumeration_unique,permutation_integrity,leakage_guard,validity
+guided,0xA400000000000001,heldout,4,global,global,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000001,heldout,4,global,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000001,heldout,4,global,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000001,heldout,4,global,directed,0,216,384,600,NO,1270,pass,pass,pass
+guided,0xA400000000000001,heldout,9,singleton,singleton,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000001,heldout,9,singleton,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000001,heldout,9,singleton,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000001,heldout,9,singleton,directed,0,216,384,600,YES,1270,pass,pass,pass
+guided,0xA400000000000001,heldout,14,directed,directed,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000001,heldout,14,directed,directed,1,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000001,heldout,14,directed,directed,1,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000001,heldout,14,directed,directed,1,216,384,600,YES,1270,pass,pass,pass
+guided,0xA400000000000001,heldout,19,none,none,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000001,heldout,19,none,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000001,heldout,19,none,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000001,heldout,19,none,directed,0,216,384,600,NO,1270,pass,pass,pass
+guided,0xA400000000000002,heldout,4,global,global,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000002,heldout,4,global,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000002,heldout,4,global,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000002,heldout,4,global,directed,0,216,384,600,NO,1270,pass,pass,pass
+guided,0xA400000000000002,heldout,9,singleton,singleton,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000002,heldout,9,singleton,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000002,heldout,9,singleton,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000002,heldout,9,singleton,directed,0,216,384,600,YES,1270,pass,pass,pass
+guided,0xA400000000000002,heldout,14,directed,singleton,0,216,384,600,NO,1270,pass,pass,pass
+fixed,0xA400000000000002,heldout,14,directed,directed,1,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000002,heldout,14,directed,directed,1,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000002,heldout,14,directed,directed,1,216,384,600,YES,1270,pass,pass,pass
+guided,0xA400000000000002,heldout,19,none,none,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000002,heldout,19,none,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000002,heldout,19,none,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000002,heldout,19,none,directed,0,216,384,600,NO,1270,pass,pass,pass
+guided,0xA400000000000003,heldout,4,global,global,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000003,heldout,4,global,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000003,heldout,4,global,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000003,heldout,4,global,directed,0,216,384,600,NO,1270,pass,pass,pass
+guided,0xA400000000000003,heldout,9,singleton,singleton,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000003,heldout,9,singleton,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000003,heldout,9,singleton,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000003,heldout,9,singleton,directed,0,216,384,600,YES,1270,pass,pass,pass
+guided,0xA400000000000003,heldout,14,directed,singleton,0,216,384,600,NO,1270,pass,pass,pass
+fixed,0xA400000000000003,heldout,14,directed,directed,1,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000003,heldout,14,directed,directed,1,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000003,heldout,14,directed,directed,1,216,384,600,YES,1270,pass,pass,pass
+guided,0xA400000000000003,heldout,19,none,none,1,216,384,600,YES,1270,pass,pass,pass
+fixed,0xA400000000000003,heldout,19,none,directed,0,216,384,600,YES,1270,pass,pass,pass
+random_iid,0xA400000000000003,heldout,19,none,directed,0,216,384,600,NO,1270,pass,pass,pass
+blind_directed,0xA400000000000003,heldout,19,none,directed,0,216,384,600,NO,1270,pass,pass,pass
+SUMMARY,-,heldout,-,guided,- ,10/12,216,384,600,-,-,-,pass
+SUMMARY,-,heldout,-,fixed,- ,12/12,216,384,600,-,-,-,pass
+SUMMARY,-,heldout,-,random_iid,- ,0/12,216,384,600,-,-,-,pass
+SUMMARY,-,heldout,-,blind_directed,- ,6/12,216,384,600,-,-,-,pass

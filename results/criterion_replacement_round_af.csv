@@ -1,0 +1,19 @@
+artifact,policy,charged_raw_interactions,old_private_resource,new_private_resource,ablated_resource,commits,rollbacks,retired_old_criteria,verdict
+round_af_af3,organism_replacement,9664,220,1833,220,32,0,32,BOUNDED_CAPABILITY:earned_trace_tapes_replace_old_tape_after_private_probes
+round_af_af3,fixed_equal,9664,220,1833,220,32,0,32,CONTROL:equal_expressive_fixed_criterion
+round_af_af3,random,448,312,611,312,12,20,12,CONTROL
+round_af_af3,replay,448,258,545,258,13,19,13,CONTROL
+round_af_af3,static,448,388,550,388,10,22,10,CONTROL
+round_af_af3,shuffled_history,9664,278,541,278,13,19,13,CONTROL
+round_af_af3,false_evidence,9664,290,290,290,0,32,0,CONTROL
+round_af_af3,answer_memory,13824,220,1833,220,32,0,32,INVALID_CONTROL:evaluator_private_answer_memory_ceiling_not_available_to_organism
+round_af_af3,bootstrap_retained,9216,220,220,220,0,32,0,CONTROL
+round_af_af3,reencoded,9664,220,1833,220,32,0,32,CONTROL:combined_identity_destruction_reconstructed_by_same_host_builder
+round_af_af3,audit,0,0,0,0,0,0,0,CONTROL_PASS:two_trace_dependent_relations_are_created_and_successor_can_retire_old_relation
+round_af_af3,audit,0,0,0,0,0,0,0,CONTROL_PASS:fresh_private_resource_random_replay_static_shuffled_false_answer_memory_and_bootstrap_controls_recorded
+round_af_af3,audit,0,0,0,0,0,0,0,CONTROL_PASS:ablation_is_exact_old_resource_and_deterministic_csv_replay_is_required
+round_af_af3,audit,0,0,0,0,0,0,0,CONTROL_PASS:reencoded_policy_uses_combined_address_value_and_boundary_identity_reconstruction fixture
+round_af_af3,audit,0,0,0,0,0,0,0,CONTROL_FAIL:fixed_equal_criterion_ties_the_constructed_replacement_exactly
+round_af_af3,audit,0,0,0,0,0,0,0,CONTROL_FAIL:host_defines_byte_atoms_relation_builder_sign_cutoff_decoder_action_scan_probe_schedule_comparison_and_transaction
+round_af_af3,audit,0,0,0,0,0,0,0,CONTROL_FAIL:answer_memory_and_reencoding_are_host_test fixtures_not organism_owned transfer semantics
+round_af_af3,audit,0,0,0,0,0,0,0,VALID_NEGATIVE:bounded_evidence_dependent_criterion_replacement_exists_but_creation_choice_and_retirement_are_not_organism_owned

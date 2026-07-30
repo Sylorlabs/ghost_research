@@ -1,0 +1,14 @@
+protocol,target_token,split,bank_a_max,bank_b_max,residual_bins,near_misses,frozen_trace_router,family_prior_baseline,router_correct,baseline_correct,target_valid,nondegenerate,token_rename_control,permutation_control,duplicate_trace_control,private_field_scan,heldout_query_control
+round_n,N1-X00,train,8,9,3,4,threshold_parity,threshold_parity,no,no,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X01,train,7,8,4,2,threshold_parity,threshold_parity,yes,yes,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X02,train,7,8,4,4,threshold_parity,threshold_parity,no,no,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X03,train,8,9,3,3,threshold_parity,threshold_parity,yes,yes,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X04,train,8,8,4,4,threshold_parity,threshold_parity,yes,yes,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X05,train,9,9,4,4,threshold_parity,threshold_parity,no,no,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X06,train,8,8,4,4,threshold_parity,threshold_parity,yes,yes,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X07,train,7,7,4,2,threshold_parity,threshold_parity,no,no,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X08,heldout,9,8,4,2,threshold_parity,threshold_parity,yes,yes,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X09,heldout,7,8,4,3,threshold_parity,threshold_parity,no,no,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X10,heldout,9,8,4,4,threshold_parity,threshold_parity,no,no,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,N1-X11,heldout,7,7,5,2,threshold_parity,threshold_parity,yes,yes,yes,yes,pass,pass,pass,pass,not_applicable
+round_n,HELDOUT_SUMMARY,heldout,-,-,-,-,router=2/4,prior=2/4,near_chance,near_chance,valid=12/12,nondegenerate=12/12,pass,pass,pass,pass,pass

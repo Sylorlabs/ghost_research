@@ -1,0 +1,3 @@
+artifact,stage,receipt_state,condition,mechanism,prediction,failure_signature,candidate_material,provenance,contradiction_status,charged_cost,arm,detail
+round_s_s3,integration_gate,no_validated_s1_live_capture,not_applicable,not_applicable,not_applicable,missing_genuine_capture,not_applicable,none,not_applicable,0,structured_refinery,BLOCKED:no_validated_public_external_capture
+round_s_s3,VERDICT,aggregate,not_applicable,not_applicable,not_applicable,not_applicable,not_applicable,none,not_applicable,0,equal_cost,BLOCKED:real-source positive and equal-cost calibration are forbidden until S1 supplies validated live receipts

@@ -7,3 +7,24 @@ math_hypotheses
 math_hypotheses.o
 logs/
 state/
+# large downloaded/generated corpora (not source — regenerate via the probes)
+corpus/webster1913.txt
+corpus/wordnet31.tar.gz
+corpus/dict/
+corpus/code_corpus.zig.txt
+corpus/chinese.txt
+corpus/emoji_symbols.txt
+corpus/code_cpp.txt
+corpus/code_py.txt
+corpus/code_ts.txt
+corpus/mixed_poly.txt
+# streamed Wikipedia/Wiktionary definitions + grounded artifacts (regenerate via boundary_crossing probes)
+corpus/wiki_en_defs.txt
+corpus/wiki_simple_defs.txt
+corpus/wikt_defs.txt
+corpus/grounded_isa.tsv
+corpus/conjectured_isa.tsv
+corpus/grounded_clean.tsv
+corpus/clean_isa.tsv
+corpus/bigcorpus/
+corpus/biglit/

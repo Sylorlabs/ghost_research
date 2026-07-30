@@ -1,0 +1,15 @@
+=== E11: full V4 stack with MLA attention — standalone perplexity A/B ===
+T=128 real text tokens (stream offset 8000) | ref(f32) vs quant(H+P3refit weights, int8 acts)
+attention: MLA + window-128 + gated compressor (exact at this T)
+
+L00 r128 hash  cos=0.97934 route_ov=1.00 experts=302 t=68s
+L01 r128 hash  cos=0.97229 route_ov=1.00 experts=297 t=134s
+L02 r4   hash  cos=0.96902 route_ov=1.00 experts=309 t=203s
+L03 r128 score cos=0.96820 route_ov=0.82 experts=200 t=255s
+L04 r4   score cos=0.97673 route_ov=0.81 experts=197 t=306s
+L05 r128 score cos=0.97340 route_ov=0.81 experts=186 t=354s
+L06 r4   score cos=0.96868 route_ov=0.80 experts=182 t=402s
+L07 r128 score cos=0.95972 route_ov=0.81 experts=225 t=459s
+L08 r4   score cos=0.95484 route_ov=0.78 experts=221 t=512s
+L09 r128 score cos=0.93749 route_ov=0.77 experts=167 t=558s
+L10 r4   score cos=0.92244 route_ov=0.75 experts=201 t=608s

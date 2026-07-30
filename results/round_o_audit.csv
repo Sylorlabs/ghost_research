@@ -1,0 +1,12 @@
+audit,check,result,evidence,classification
+round_o_o6,fresh_cache_replay,PASS,O1-O5 each build and selftest under fresh caches,confirmed
+round_o_o6,base_trace_decoupling,PASS,O1 prior=4/8; O2 audit base=2/4; N2 capped trace classifiers at chance,confirmed
+round_o_o6,conditional_probe_evidence,PASS,O1 declared aggregate replies carry one charged diagnostic bit; no formula_or_target_id columns,confirmed
+round_o_o6,token_order_duplicate_attacks,PASS,O1-O5 report counterfactual pairs and reversal selftests; O5 tokens opaque,confirmed
+round_o_o6,frozen_policy_and_commitment,PASS,O5 source freezes probe by public trace and commits grammar before fresh_test,confirmed
+round_o_o6,fresh_cohort_separation,PASS,O5 uses distinct O5 tokens and three cohort partitions; policy has no post-score branch,confirmed
+round_o_o6,equal_persistent_budget,PASS,4 arms x 24 tokens x 4 charged calls plus 96 rejected fifth calls,confirmed
+round_o_o6,every_action_ledger,PASS,480 action rows plus verdict; each arm has 120 rows and 24 fresh scores,confirmed
+round_o_o6,control_fairness,PASS,active=24/24;fixed=12/24;blind=12/24;no_probe=12/24 at four calls each,confirmed
+round_o_o6,public_test_outcome_boundary,NARROWED,O5 published ledger exposes 96 per-token fresh 0_or_1 scores after commitment; frozen source cannot adapt but artifact is not score-private,protocol_level_only
+round_o_o6,verdict,CONFIRMED_NARROWED,controlled strict O5 advantage survives replay; supplied probe_history_grammar_and_evaluator with protocol not OS isolation,not_open_ended

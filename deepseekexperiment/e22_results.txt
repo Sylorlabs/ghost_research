@@ -1,0 +1,14 @@
+E22 early-exit probe: layers 0-30, 512 tokens
+
+consecutive-layer activation cosine (mean over tokens) — rising->convergence:
+  L0->L1: 0.521
+  L4->L5: 0.651
+  L8->L9: 0.814
+  L12->L13: 0.857
+  L16->L17: 0.818
+  L20->L21: 0.826
+  L24->L25: 0.793
+  L28->L29: 0.763
+
+mean consecutive cosine: early layers (<=10) 0.763 | late (>20) 0.793
+VERDICT: NOT converging in 0-30 (layers keep transforming -> early-exit weak here)

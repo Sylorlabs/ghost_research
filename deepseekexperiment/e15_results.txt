@@ -1,0 +1,17 @@
+E15 functional dedup: layer 30, 96 real inputs, 384 experts
+  expert 0  t=2s
+  expert 64  t=117s
+  expert 128  t=245s
+  expert 192  t=384s
+  expert 256  t=519s
+  expert 320  t=644s
+
+=== functional sibling cosine distribution (layer 30, 96 real inputs) ===
+  experts with a sibling at cos >= 0.99:   0.0%
+  experts with a sibling at cos >= 0.95:   0.0%
+  experts with a sibling at cos >= 0.90:   0.0%
+  experts with a sibling at cos >= 0.80:   0.0%
+  experts with a sibling at cos >= 0.70:   0.0%
+  mean nearest-sibling cos = 0.0177  median = 0.0113  max = 0.3422
+
+VERDICT: DEAD as predicted — experts functionally distinct; consolation = U3 neighbor table

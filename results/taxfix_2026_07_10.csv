@@ -1,0 +1,55 @@
+section,item,metric,pre_fix,post_fix,note
+fix,equivalence_tax.zig greedyFit,scale_frame,fit raw / eval z-scored,fit z-scored / eval z-scored (train stats both splits),final per-round fit/eval pair only; selection loop unchanged (internally consistent)
+gate_a,invention_engine --strict-tax,certified,11/11,11/11,line-identical output
+gate_a,invention_engine --strict-tax,battery_evals,372,372,
+gate_a,invention_engine --strict-tax,final_library,19,19,
+gate_a,invention_engine --strict-tax,tax_checked/novel/blocked,8/8/0,8/8/0,basis v4 + reality lane; no verdict flips on production battery
+classify,D01 sum%2,class,DECISIVE,DECISIVE,off cov 0.479 blocked=1 both
+classify,D02 sum%3,class,TOO_EASY,DECISIVE,off: SOLVE cov 1.000 -> stuck cov 0.672 blocked=1
+classify,D03 sum%5,class,TOO_EASY,DECISIVE,off: SOLVE cov 1.000 -> stuck cov 0.807 blocked=1
+classify,D04 sum%7,class,TOO_EASY,DECISIVE,off: SOLVE cov 1.000 -> stuck cov 0.859 blocked=1
+classify,D05 sum%11,class,TOO_EASY,TOO_EASY,library-baseline solve cov 0.904; k>8 negative control unchanged
+classify,D06 sum%13,class,TOO_EASY,TOO_EASY,library-baseline solve cov 0.927; unchanged
+classify,D07 count3%3,class,DECISIVE,DECISIVE,off cov 0.655 blocked=1 both
+classify,D08 count3%4,class,TOO_HARD,TOO_HARD,no escape certified either arm; ladder-reachability gap unchanged
+classify,D09 count3%5,class,TOO_EASY,DECISIVE,off: SOLVE cov 1.000 -> stuck cov 0.783 blocked=1
+classify,D10 count3%6,class,TOO_EASY,DECISIVE,off: SOLVE cov 1.000 -> stuck cov 0.879 blocked=1
+classify,D11 subset-parity{0-3},class,DECISIVE,DECISIVE,off cov 0.503 blocked=3 both
+classify,decisive_set,count,3/11,8/11,{D01 D07 D11} -> {D01 D02 D03 D04 D07 D09 D10 D11}
+ablation,seed 0xF0235A11CE0FF1CE OFF,B/D/checked/novel/blocked/evalsB,11-11 0-3 23 1 22 1354,10-11 0-8 31 0 31 1383,B3 newly blocked OFF
+ablation,seed 0xF0235A11CE0FF1CE ON,B/D/checked/novel/blocked/evalsB,11-11 3-3 16 9 7 693,11-11 8-8 21 14 7 693,revision@1 both
+ablation,seed 0x00C1B10D20260706 OFF,B/D/checked/novel/blocked/evalsB,10-11 1-3 23 2 21 1704,9-11 0-8 30 0 30 1733,B3+B10 blocked OFF; D07 no longer off-solves
+ablation,seed 0x00C1B10D20260706 ON,B/D/checked/novel/blocked/evalsB,11-11 3-3 16 9 7 693,11-11 7-8 20 13 7 693,D09 unsolved both arms this seed
+ablation,seed 0x00C2B10D20260707 OFF,B/D/checked/novel/blocked/evalsB,11-11 0-3 23 1 22 1354,10-11 0-8 30 0 30 1383,B3 newly blocked OFF
+ablation,seed 0x00C2B10D20260707 ON,B/D/checked/novel/blocked/evalsB,11-11 3-3 15 8 7 686,11-11 7-8 19 12 7 686,D09 unsolved both arms this seed
+ablation,aggregate ARM-OFF,B solves,32/33,29/33,B3 leak closed (3 seeds); B10 unchanged 1-seed marginal
+ablation,aggregate ARM-ON,B solves,33/33,33/33,
+ablation,aggregate ARM-OFF,D-decisive solves,1/9,0/24,denominator grew with decisive set
+ablation,aggregate ARM-ON,D-decisive solves,9/9,22/24,D09 fails both arms at 2/3 seeds
+ablation,aggregate,solved ON-only,9,26,existence proofs; 0 reverse separations both
+ablation,aggregate ARM-OFF,novel/blocked,4/65,0/91,OFF novel=0: every checked v3 promotion now correctly blocked
+ablation,aggregate ARM-ON,novel/blocked,26/21,39/21,blocked all pre-revision (7/seed) in both
+ablation,aggregate,evalsB OFF vs ON,4412 vs 2072,4499 vs 2072,ON trajectory identical; OFF re-escalates more
+replication,B3 sum%7,seeds OFF-blocked->ON-solved,0/3 (never separated),3/3,NEW battery-B decisive member; leak found by fix
+replication,B10 parity AND sum%5,seeds,1/3,1/3,unchanged known marginal (0xC1B1 only)
+replication,D01 sum%2,seeds,3/3,3/3,
+replication,D02 sum%3,seeds,n/a (too easy),3/3,
+replication,D03 sum%5,seeds,n/a (too easy),3/3,
+replication,D04 sum%7,seeds,n/a (too easy),3/3,
+replication,D07 count3%3,seeds,2/3,3/3,pre-fix borderline seed was itself the scale artifact
+replication,D09 count3%5,seeds,n/a (too easy),1/3,new borderline; at 0xC1B1/0xC2B1 neither arm certifies an escape (reachability gap not tax effect)
+replication,D10 count3%6,seeds,n/a (too easy),3/3,
+replication,D11 subset-parity{0-3},seeds,3/3,3/3,forge mechanism unchanged
+gate_v5,admission C08 v5-ladder,pass count / reconstructed cov,3/3 @ 1.000,3/3 @ 1.000,unchanged
+gate_v5,admission C08 full-basis variants,pass count / cov,0/3 @ 0.506 0.483 0.502,0/3 @ 0.506 0.483 0.502,digit-for-digit identical
+gate_v5,planted pool,size and partition,57 = 51 true remix + 6 C08 escapes,69 = 60 true remix + 9 escapes (6 C08 + 3 B3),pool grows: fixed v3 blocks B3 escapes + more re-checks
+gate_v5,v5-ladder discrimination,blocked true / admitted escapes,51/51 + 6/6,60/60 + 9/9,conclusion survives; generalizes to B3 unchanged
+gate_v5,v4 live gate on planted pool,admits,57/57,69/69,vacuous lane unchanged
+gate_v5,v5-full post-revision no-harm,would-block,18/22,22/22,full-basis gate worse under consistent fit
+gate_v5,v5-margin post-revision no-harm,would-block,18/22,21/22,worse
+gate_v5,v5-ladder post-revision no-harm,would-block / v4-verdict agreement,13/22 / 22-22,13/22 / 22-22,identical
+gate_v5,no-harm pre-revision,flips (v5-full e0 / v5-ladder),0/21 / 0/21,0/21 / 0/21,faithful v3 shadow both
+gate_v5,post-revision verdict split,novel/remix,9/13,9/13,identical
+gate_v5,live control ARM-OFF,B solves,32/33,29/33,B3 blocked all 3 seeds (matches battery-D harness)
+gate_v5,live control ARM-ON,B / C-ladder / evalsB,33-33 / 3-33 / 692 699 692,33-33 / 3-33 / 692 699 692,identical trajectory
+gate_v5,greedy non-monotonicity,rows with test_acc3 < test_acc1,1 (0.690 < 0.901),0,pre-fix instance was the scale artifact

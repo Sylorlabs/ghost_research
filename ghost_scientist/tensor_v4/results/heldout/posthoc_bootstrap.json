@@ -1,0 +1,1 @@
+{"artifact_count":3,"draws":100000,"fixed_minus_candidate_delta_us":{"median":13.009637000000001,"p2_5":7.765183000000004,"p97_5":18.268669000000003},"positive_fraction":0.99937,"random_seed_hex":"0x0b0057a9","scope":"posthoc_within_run_timing_block_bootstrap_not_frozen_gate_or_independent_process_replay"}

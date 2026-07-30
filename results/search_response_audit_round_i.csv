@@ -1,0 +1,16 @@
+claim,condition,kind,candidate_calls,semantic_bank,train_score,validation_score,test_score,verdict,status,detail
+I2_replay,replay_singleton,directed,2540,1270,1.0000,1.0000,1.0000,admit,correct,full_train_scan=1270;full_validation_scan=1270;test=300
+I1_probe,replay_singleton,directed,30,30,0.0000,,,no_answer_hit,audit,declared_partition=1524;semantic_unique=1270;exact_member_in_30=no
+I2_replay,replay_twocell,directed,2540,1270,1.0000,1.0000,1.0000,admit,correct,full_train_scan=1270;full_validation_scan=1270;test=300
+I1_probe,replay_twocell,directed,30,30,0.0000,,,no_answer_hit,audit,declared_partition=1524;semantic_unique=1270;exact_member_in_30=no
+I2_replay,unseen_fourcell,directed,2540,1270,1.0000,1.0000,1.0000,admit,correct,full_train_scan=1270;full_validation_scan=1270;test=300
+I1_probe,unseen_fourcell,directed,30,30,0.0000,,,no_answer_hit,audit,declared_partition=1524;semantic_unique=1270;exact_member_in_30=no
+I2_replay,threshold_negative,threshold,2540,1270,0.6167,0.6533,0.5333,reject,correct,full_train_scan=1270;full_validation_scan=1270;test=300
+I1_probe,threshold_negative,threshold,30,30,0.0000,,,no_answer_hit,audit,declared_partition=1524;semantic_unique=1270;exact_member_in_30=no
+I2_replay,adjacent_negative,adjacent,2540,1270,0.5783,0.5900,0.5400,reject,correct,full_train_scan=1270;full_validation_scan=1270;test=300
+I1_probe,adjacent_negative,adjacent,30,30,0.0000,,,no_answer_hit,audit,declared_partition=1524;semantic_unique=1270;exact_member_in_30=no
+I2_replay,random_negative,random,2540,1270,0.5750,0.5867,0.5500,reject,correct,full_train_scan=1270;full_validation_scan=1270;test=300
+I1_probe,random_negative,random,30,30,0.0000,,,no_answer_hit,audit,declared_partition=1524;semantic_unique=1270;exact_member_in_30=no
+I1_enumeration,all_partition_probes,audit,1524,1270,,,,,FAIL,overcounts grammar by 254 calls and duplicates exactly 254 candidates; r=2 is overweighted
+I2_cost,all_admitted,audit,2540,1270,,,,,PASS,admission is correctly described only as a full grammar scan: 1270 train plus 1270 validation calls before test
+I3_accounting,all_heldout,audit,420,420,,,,,PASS,source replay confirms all arms count 120 probes plus 300 selection calls; result remains valid negative because guided equals fixed

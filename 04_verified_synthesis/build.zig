@@ -58,6 +58,7 @@ const core_module_names = [_][]const u8{
     "lore",
     "manifold",
     "mul_free_challenge",
+    "native_prover",
     "null_core",
     "omni",
     "sandbox",
@@ -81,6 +82,7 @@ const exes = [_]Exe{
     .{ .name = "sorting_reachability_tester", .path = "src/sorting_reachability_tester.zig" },
     .{ .name = "verify_cli", .path = "src/verify_cli.zig", .z3 = true },
     .{ .name = "verify_qflia_smoke", .path = "src/verify_qflia_smoke.zig", .z3 = true },
+    .{ .name = "z3_cross_audit", .path = "src/z3_cross_audit.zig", .z3 = true },
 };
 
 pub fn build(b: *std.Build) void {

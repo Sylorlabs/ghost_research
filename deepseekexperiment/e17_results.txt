@@ -1,0 +1,18 @@
+E17 local dimensionality: ctxA=(7808, 7168) ctxB=(7808, 7168)
+
+per-layer effective rank (dims for 90% energy):
+layer  ctxA(128v)  ctxB(128v)  pooled(256v)
+    0          81          78           146
+    8          91          87           172
+   16          89          80           158
+   24          89          83           163
+   32          86          69           145
+   40          76          72           137
+   48          81          84           157
+   56          81          85           155
+
+mean single-context rank 84 vs pooled 154 (cap is #vectors: 128 / 256)
+
+if a local surrogate = rank-84 projection -> 1.04MB/expert (vs 27MB P3, target <=0.8MB)
+working set 250 exp/layer x 58 layers x 1.04MB = 15.0GB in RAM (target <=12GB)
+CAVEAT: 128 vectors cap measurable rank at 128; a real long session has more tokens, so true single-context rank may be higher. This is a lower-bound probe; the route-dump + more tokens refine it.

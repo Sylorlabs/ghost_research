@@ -1,0 +1,11 @@
+E19b warm-up curve (r=64, fixed 32 held-out), mean held-out cosine over 4 experts:
+ warmup  input-proj-only  full-surrogate
+     16            0.349           0.319
+     32            0.403           0.369
+     48            0.451           0.407
+     64            0.513           0.460
+     80            0.558           0.497
+     96            0.580           0.510
+
+If both columns CLIMB with warm-up, longer sessions => higher fidelity (capture more tokens to confirm).
+input-proj-only ceiling = best possible if output basis were perfect; gap to full = output-projection cost.

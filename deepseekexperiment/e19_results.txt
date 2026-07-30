@@ -1,0 +1,11 @@
+E19 structured surrogate (OUR expert): layer 30, 128 tokens, random 96 fit / 32 held-out
+
+held-out output cosine of OUR surrogate vs real expert, + true bytes/expert:
+   r e   0 e  50 e 150 e 300   B/exp(fp32)  B/exp(P3~)  WS_hot64  WS_full250
+  32 0.511 0.499 0.457 0.484   2.15MB     0.22MB    0.8GB    3.2GB
+  48 0.530 0.519 0.478 0.506   3.20MB     0.32MB    1.2GB    4.7GB
+  64 0.540 0.533 0.492 0.521   4.25MB     0.43MB    1.6GB    6.3GB
+  84 0.551 0.543 0.503 0.533   5.56MB     0.56MB    2.1GB    8.2GB
+
+P3 baseline (current per-matmul) ~0.98. >0.90 held-out at a RAM-fitting working set = OUR EXPERT beats streaming.
+WS_hot64 = surrogate working set if a coherent session has ~64 hot experts/layer (E16 measures this); WS_full250 = full diverse working set.
