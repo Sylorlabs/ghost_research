@@ -1,0 +1,11 @@
+record,arm,phase,accepted,builds,actions,probes,common_build_cap,common_action_cap,program_hash,tool_hash,payload_hash,schema_hash,source_or_note
+develop,candidate_constructor,develop,true,101,101,101,4096,4096,1bee4f5954df10e4,d09e1e124efc1a7d,375772d1edd79f6c,d53bd3a187721a8,exact_tracked_promotion_after_precommitted_generic_program_sequence_and_opaque_receipts
+precommit,candidate_constructor,develop,not_scored,0,0,0,4096,4096,fe0339d4c46780e9,0,375772d1edd79f6c,0,sequence_len=2331;complete_order_hashed_before_reduction
+holdout,candidate_causal_reuse,holdout,true,0,1,1,4096,4096,1bee4f5954df10e4,d09e1e124efc1a7d,ed07ac64ed394813,d53bd3a187721a8,scan_not_after_in_line
+holdout,no_causal_memory,holdout,true,884,884,884,4096,4096,1bee4f5954df10e4,d09e1e124efc1a7d,ed07ac64ed394813,d53bd3a187721a8,scan_not_after_in_line
+holdout,random_construction,holdout,false,101,101,101,4096,4096,0,0,ed07ac64ed394813,0,none
+holdout,fixed_ax_source,holdout,false,1,1,1,4096,4096,f5214010a1c523a9,1fc8c9211ffece19,ed07ac64ed394813,d53bd3a187721a8,scan_not_after_in_line
+holdout,broad_full_ax,holdout,false,4,4,4,4096,4096,f5214010a1c523a9,1fc8c9211ffece19,ed07ac64ed394813,d53bd3a187721a8,scan_not_after_in_line
+precommit,no_causal_memory,holdout,not_scored,0,0,0,4096,4096,90035c1efa1fba05,0,ed07ac64ed394813,0,sequence_len=2909;evaluator_side_first_reach_only
+precommit,random_construction,holdout,not_scored,0,0,0,4096,4096,abf5bb23b1cdf6b1,0,ed07ac64ed394813,0,sequence_len=101;evaluator_side_first_reach_only
+summary,candidate_vs_no_memory,holdout,both_correct_candidate_cheaper,0_vs_884,1_vs_884,1_vs_884,4096,4096,1bee4f5954df10e4,d09e1e124efc1a7d,ed07ac64ed394813,d53bd3a187721a8,reuse_build_saving=884;fixed_and_full_ax_accepted=false|false;random_accepted=false

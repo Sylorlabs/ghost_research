@@ -2374,3 +2374,40 @@ chronology). Every Result sentence quotes the doc's own numbers.
 - **Tried:** Scale invention by variety: distinct 2D grid flavors and explicit interiors under one equal total compute budget.
 - **Boundary:** No score from a bare scalar. Every claimed result must carry a typed structural witness validated by AX1; renamed duplicate workers do not count as diversity.
 - **Status:** AX4 completed staged real-artifact scoring: **36/108** attempts accept as canonical typed witnesses, exactly **9/27 per task**; replay is byte-identical and a relevant declaration mutation reduces acceptance to **27/108**. This closes AW's lucky-scalar path and proves only supplied-tool coverage. It does not show a variety advantage over a fixed three-tool portfolio, autonomous grammar choice, 27 inventions, or OS-isolated security. See [AX4 typed integration](docs/research/ax_real_integration_round_ax.md).
+
+## 63. Research round 2026-07-29 (Round AY) — Ghost Scientist vertical slice
+
+### [docs/research/ghost_scientist_vertical_slice.md](docs/research/ghost_scientist_vertical_slice.md)
+
+- **Tried:** Integrate the actual P/AJ/AK causal-memory lessons, AP boundary discipline, and AT–AX tool/witness components into one non-LLM constructor/evaluator protocol over nine exact tracked artifacts.
+- **Boundary:** Candidate input contains only opaque ID, phase, payload hash, literal counters, and payload bytes. No task/family/kind, prose contract, original path, answer, score, progress, evaluator state, or held-out feedback reaches construction. The supplied low-level interpreter and same-process typed boundary remain trusted.
+- **Result:** **BOUNDED POSITIVE.** A 2,331-program payload-derived sequence first earns `PROGRAM_V1 scan_not_after_in_line 747279 2f2f` at development proposal 101. The inherited-plus-earned portfolio reaches **9/9 overall and 6/6 held-out**, versus the complete AX portfolio's **4/9 and 2/6**, under identical 2,048 build/action/probe reservations per item. Matched random construction, no-memory, and no-probe all fall back to fixed held-out coverage.
+- **Audit:** The 671-row ledger contains 307 constructor attempts, four inherited canonical programs in three supplied tool forms plus exactly one learned form, ten hostile request denials, nine relevant and nine irrelevant mutations, withheld held-out feedback, and byte-identical fresh-cache replay. Protocol SHA-256: `71d39545dea0d789f5f2f4a520a6b69d7b333c21e19db1f8cd052fee37e6dbc0`.
+- **Aftermath:** This closes bounded program construction, causal promotion, fixed-portfolio expansion, and real-byte reuse for the designed battery. It does not establish autonomous exact-one-tool selection, primitive/semantic invention, a prospective external-battery win, a general scientist, or hostile OS isolation. Next gate: freeze the constructor before an independently authored battery and execute the pair through AP containment.
+
+### [docs/research/ghost_scientist_constructor_luna.md](docs/research/ghost_scientist_constructor_luna.md)
+
+- **Constructor result:** Generic byte/record/region programs are derived from payloads without an AX compatibility table. Exact development construction costs 101 builds/actions/probes; distinct held-out reuse costs zero builds and one action/probe, versus fresh first reach at 884.
+
+### [docs/research/ghost_scientist_evaluator_terra.md](docs/research/ghost_scientist_evaluator_terra.md)
+
+- **Evaluator result:** Nine tracked payloads, five evaluator-private byte-level properties, complete AX and matched controls, exact budget recount, typed witness/hash reduction, answer-channel denial, mutations, ablations, and deterministic replay run in one production-style local protocol.
+
+## 64. Research round 2026-07-29b (Round AZ) — outcome-learned mathematical programs
+
+### [docs/research/ghost_scientist_outcome_math.md](docs/research/ghost_scientist_outcome_math.md)
+
+- **Tried:** Freeze Ghost Scientist before prospective addition-chain targets, require exactly one reusable \(x^n\) multiplication program per target, preserve a failed first trial, revise the generic construction mechanism from outcomes, refreeze, and test on a second fresh 60-target `/dev/urandom` battery.
+- **V1 result:** **PROSPECTIVE NEGATIVE.** Eight exact-digit power-of-two radix programs produced 0 wins / 60 ties / 0 losses against the matched 4,000-build fixed portfolio; no learned radix was selected. Target, ledger, summary, and pre-target freezes remain hash-attested.
+- **V2 result:** **PROSPECTIVE BOUNDED POSITIVE.** Exact all-radix crossover produced **9 wins / 51 ties / 0 losses**, aggregate chain length **2364 versus 2373**, on a new post-freeze 60-target batch. The fixed portfolio received **96,000 constructions per target versus the hybrid's 48,000**. All fixed-simplification, bounded rewrite-saturation, bounded brute-force, random, replay, no-memory, and no-probe aggregate controls lost.
+- **Audit:** All 60 final tools pass independent addition-witness proof and 42 modular cross-checks; four planted mutations reject; both candidate stages replay byte-identically; 42 reuses save 378 multiplications. Two-stage Bubblewrap/seccomp runs and six denial probes pass, but the host blocks `--unshare-net` and the policy remains default-allow for unlisted syscalls.
+- **Aftermath:** ADOPTED as the first preserved failure → outcome-driven grammar revision → refreeze → fresh mathematical generalization loop. It demonstrates agent-mediated construction and cheaper reuse, not autonomous primitive-grammar invention, global minimality, a new-to-humanity chain, a general equality-saturation comparison, or absolute hostile containment.
+
+## 65. Research round 2026-07-29c (Round BA) — machine-inferred algebra tools
+
+### [ghost_scientist/docs/ghost_scientist_boundary_crossing_v3.md](ghost_scientist/docs/ghost_scientist_boundary_crossing_v3.md)
+
+- **Tried:** Replace supplied crossover forms with exact semantic-class rule inference, select the inferred grammar only from development outcomes, compose it with a genuine e-graph, and freeze the entire AP-contained proof protocol before a new 60-artifact draw.
+- **Result:** **PROSPECTIVE BOUNDED POSITIVE.** The machine inferred 4,403 sound candidates and selected 128. The frozen candidate reaches independently proven global minimum on **60/60**, with aggregate cost **106** versus strong fixed e-graph **137**, outcome-blind grammar **140**, random exact grammar **155**, and exhaustive proof **106**. It records **12 wins / 48 ties / 0 losses** against the 2×-node fixed control.
+- **Audit:** Candidate replay is byte-identical 60/60; four verifier mutations reject; exact held-out leakage is 0/60; 42-reuse cost is 4,452 versus 5,754. A distinct network namespace, Bubblewrap isolation, a 53-syscall outer default-deny filter, a 25-syscall final default-deny filter, and 11/11 hostile syscall denials pass.
+- **Scope:** This crosses local machine-generated grammar construction, globally minimal held-out optimization, compute-favored e-graph comparison, cheaper reuse, and integrated containment/evaluation. It does **not** establish autonomous operator/semantic invention, external production-artifact advantage, tensor/Transformer speedup, third-party e-graph replication, or new-to-humanity mathematics.
