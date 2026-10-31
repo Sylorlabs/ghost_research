@@ -1,0 +1,71 @@
+{
+  "version": "FOUNDRY_EGGMIND_PAPER_SPECIFICATION_AUDIT_V2",
+  "checked_utc_date": "2026-07-30",
+  "primary_source": {
+    "title": "LLM-Guided Strategy Synthesis for Scalable Equality Saturation",
+    "arxiv_id": "2604.17364v1",
+    "url": "https://arxiv.org/html/2604.17364",
+    "submitted_utc": "2026-04-19T10:21:26Z"
+  },
+  "availability_refresh": {
+    "arxiv_code_link_present": false,
+    "official_repository_discovered": false,
+    "github_exact_eqsatl_search_matches": 0,
+    "github_exact_paper_identifier_search_matches": 0,
+    "github_exact_proof_motif_phrase_search_matches": 0
+  },
+  "published_executable_identity": {
+    "default_model": "Doubao-Seed-2.0-pro",
+    "vectorization_model_requests": 53,
+    "vectorization_input_tokens": 4350000,
+    "vectorization_output_tokens": 36600,
+    "vectorization_eqsat_runs_in_comparison_table": 80,
+    "online_timeout_seconds": 600,
+    "online_memory_limit_gb": 25,
+    "extractor": "egglog default greedy extractor"
+  },
+  "specified_surfaces": [
+    "EqSatL grammar: named strategies, tagged rulesets, phase, sequence, repeat, and simplify nodes",
+    "best, promising, and pending strategy repository roles",
+    "Strategist, Generator, Evaluator, Partitioner, and Simplifier component roles",
+    "full, reduced, and minimal evaluator budget classes",
+    "proof-derived rewrite motifs represented as semantic-tag chains",
+    "motif relative gain g=1-cost_after/cost_before combined with successful-case frequency",
+    "four-term directed dependency-risk objective",
+    "hint-guided simplification score s(e)=c(e)+p_llm(e) with top-theta pruning",
+    "default base model and aggregate vectorization request/token counts",
+    "online timeout, memory limit, and extractor"
+  ],
+  "missing_reproduction_surfaces": [
+    "immutable upstream source revision and build instructions",
+    "exact Strategist prompt, context serialization, action schema, and action-selection policy",
+    "exact Generator prompt, decoding parameters, repair policy, and candidate schema",
+    "exact Partitioner and Simplifier prompts, decoding parameters, and retry policies",
+    "model service revision, inference parameters, random seeds, and nondeterminism policy",
+    "numerical full, reduced, and minimal evaluator budgets and promotion thresholds",
+    "best, promising, and pending repository admission, eviction, and tie-breaking rules",
+    "proof-tree local-region extraction algorithm and congruence-path traversal rules",
+    "stable concrete-rule-to-semantic-tag mapping and motif deduplication algorithm",
+    "motif utility combination formula, cache size, retention threshold, and tie-breaking",
+    "dependency-edge construction algorithm and direct, overlap, and subtree signal weights",
+    "domain coefficient grids and selected alpha, beta, gamma, and delta values",
+    "bounded p_llm construction and exact hint-to-penalty mapping",
+    "complete EqSatL-to-egglog lowering, execution, proof request, and error semantics",
+    "exact vectorization evolution/test case manifest, rewrites, costs, and expected outputs",
+    "exact synthesized strategy artifacts used for the reported held-out results"
+  ],
+  "reproduction_rule": {
+    "source_faithful_requires": "an immutable executable upstream implementation or a complete defining algorithm plus exact fixtures",
+    "paper_only_route_passes": false,
+    "llm_free_reimplementation_is_source_faithful": false,
+    "llm_free_reimplementation_required_label": "NEW_ADAPTED_CONTROL",
+    "reason": "The missing policy and execution choices are outcome-determining, not clerical build details."
+  },
+  "claim_boundary": {
+    "paper_claims_framework_open_source": true,
+    "audit_does_not_claim_source_will_never_be_released": true,
+    "audit_does_not_claim_eggmind_is_invalid": true,
+    "audit_only_decides_current_reproduction_sufficiency": true,
+    "validation_v6_accessed": false
+  }
+}

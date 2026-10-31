@@ -133,6 +133,7 @@ pub const Config = struct {
     ordinal_encoding: bool = false, // metric (thermometer) value fillers instead of random
     feature: FeatureKind = .sum, // which aggregate mb_mass regulates (discovery experiment)
     feature2: FeatureKind = .left_mass, // second feature for mb_mass2 (2D controller)
+    plan_horizon: u8 = 4, // H-step rollout depth for .mb_plan (enumerate 3^H sequences)
 };
 
 pub const StepResult = struct {
@@ -439,7 +440,7 @@ pub const Agent = struct {
                 const lo: f32 = @floatFromInt(self.safe_mass_min);
                 const hi: f32 = @floatFromInt(self.safe_mass_max);
                 const setpoint = (lo + hi) / 2.0;
-                const H: usize = 4;
+                const H: usize = @max(self.cfg.plan_horizon, 1);
                 var total: usize = 1;
                 for (0..H) |_| total *= 3;
                 var best: u8 = 0;

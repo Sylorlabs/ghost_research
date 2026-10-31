@@ -1,0 +1,9 @@
+artifact,case,status,observed,interpretation
+round_am_am6,static_matching_vector_last_trace_motif_graph_schedule_portfolio,ATTACK_RECONSTRUCTED,PASS,named controls and contrast rows independently found
+round_am_am6,hidden_candidate_equivalent_implementation,ATTACK_FOUND,YES,policy target and evaluator share compilation unit; AM2 reads degree helper directly
+round_am_am6,leakage_labels_ids_targets_answers_scores_feedback_recoding_overlap_supplied_router,MANIFEST_LIMIT,SOURCE_ONLY,source record surface is not an enforceable runtime boundary
+round_am_am6,causal_necessity_wrong_topology_provenance_wrong_route_no_value_no_arbitration,RECONSTRUCTED,PASS,ablations and explicit misroute are present
+round_am_am6,fairness_equal_charged_contacts,RECOMPUTED,PASS,AM2=96x16=1536 AM4=120x16=1920 AM5=96x3x15=4320
+round_am_am6,lineage_source_csv_claims,RECONSTRUCTED,PASS,source cohort arithmetic and ledger headline rows agree
+round_am_am6,security_process_evaluator_isolation,NOT_ESTABLISHED,NO,in-process deterministic fixture has no OS sandbox or separate protected evaluator
+round_am_am6,verdict,INCONCLUSIVE,NO_FOUNDATION_SURVIVAL,fixture contrasts reproduce but evaluator-policy coupling prevents autonomy or hostile-isolation conclusion

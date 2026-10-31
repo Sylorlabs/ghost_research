@@ -1,0 +1,30 @@
+kind,policy,task,action,tool_hash,opaque_receipt_hash,artifact_hash,precommit_hash,worker_output_hash,worker_output,scored,notes
+receipt,candidate,real_code,0,ff0de01cc1b8e220,e35fc77f09761bcc,7542b37e4a663f08,54a5592c0efd3973,6037e6182787a469,6037e6182787a469,false,precommitted_before_worker; evaluator_score_absent
+receipt,candidate,real_code,1,a719a94b5780e60e,e35fc77f09761bcc,7542b37e4a663f08,d2a0e5a51f0aed4c,4568d118181cbfaa,4568d118181cbfaa,false,precommitted_before_worker; evaluator_score_absent
+receipt,candidate,real_code,2,a719a94b5780e60e,e35fc77f09761bcc,f35ba2935a719024,a3b9be637e23d05c,7ff9407b4c02ab8,7ff9407b4c02ab8,false,precommitted_before_worker; evaluator_score_absent
+frontier,candidate,real_code,0,-,e35fc77f09761bcc,-,-,-,-,false,hypotheses=raw_token_match|comment_contamination|unreached_alternative; no answer or claim verdict supplied
+receipt,fixed,real_code,0,a719a94b5780e60e,e35fc77f09761bcc,7542b37e4a663f08,42ab3842416bfeec,4568d118181cbfaa,4568d118181cbfaa,false,precommitted_before_worker; evaluator_score_absent
+receipt,fixed,real_code,1,a719a94b5780e60e,e35fc77f09761bcc,7542b37e4a663f08,84c392e1f1bd972b,4568d118181cbfaa,4568d118181cbfaa,false,precommitted_before_worker; evaluator_score_absent
+receipt,fixed,real_code,2,a719a94b5780e60e,e35fc77f09761bcc,f35ba2935a719024,2c3cdadae21eb1f7,7ff9407b4c02ab8,7ff9407b4c02ab8,false,precommitted_before_worker; evaluator_score_absent
+frontier,fixed,real_code,0,-,e35fc77f09761bcc,-,-,-,-,false,hypotheses=raw_token_match|comment_contamination|unreached_alternative; no answer or claim verdict supplied
+receipt,broad,real_code,0,a719a94b5780e60e,e35fc77f09761bcc,7542b37e4a663f08,df81f0761a7972e2,4568d118181cbfaa,4568d118181cbfaa,false,precommitted_before_worker; evaluator_score_absent
+receipt,broad,real_code,1,a719a94b5780e60e,e35fc77f09761bcc,7542b37e4a663f08,36aa575a27d26f99,4568d118181cbfaa,4568d118181cbfaa,false,precommitted_before_worker; evaluator_score_absent
+receipt,broad,real_code,2,a719a94b5780e60e,e35fc77f09761bcc,f35ba2935a719024,c565f778e399319,7ff9407b4c02ab8,7ff9407b4c02ab8,false,precommitted_before_worker; evaluator_score_absent
+frontier,broad,real_code,0,-,e35fc77f09761bcc,-,-,-,-,false,hypotheses=raw_token_match|comment_contamination|unreached_alternative; no answer or claim verdict supplied
+receipt,random,real_code,0,ff0de01cc1b8e220,e35fc77f09761bcc,7542b37e4a663f08,9c16ea0aec87daeb,6037e6182787a469,6037e6182787a469,false,precommitted_before_worker; evaluator_score_absent
+receipt,random,real_code,1,a719a94b5780e60e,e35fc77f09761bcc,7542b37e4a663f08,a0d4424d4793b3a4,4568d118181cbfaa,4568d118181cbfaa,false,precommitted_before_worker; evaluator_score_absent
+receipt,random,real_code,2,ff0de01cc1b8e220,e35fc77f09761bcc,f35ba2935a719024,1068716ca3330458,7ff9407b4c02ab8,7ff9407b4c02ab8,false,precommitted_before_worker; evaluator_score_absent
+frontier,random,real_code,0,-,e35fc77f09761bcc,-,-,-,-,false,hypotheses=raw_token_match|comment_contamination|unreached_alternative; no answer or claim verdict supplied
+receipt,replay,real_code,0,ff0de01cc1b8e220,e35fc77f09761bcc,7542b37e4a663f08,870a81046837c73b,6037e6182787a469,6037e6182787a469,false,precommitted_before_worker; evaluator_score_absent
+receipt,replay,real_code,1,ff0de01cc1b8e220,e35fc77f09761bcc,7542b37e4a663f08,1d2c6b729313d3c4,6037e6182787a469,6037e6182787a469,false,precommitted_before_worker; evaluator_score_absent
+receipt,replay,real_code,2,a719a94b5780e60e,e35fc77f09761bcc,f35ba2935a719024,57fe2dbfbcba9e34,7ff9407b4c02ab8,7ff9407b4c02ab8,false,precommitted_before_worker; evaluator_score_absent
+frontier,replay,real_code,0,-,e35fc77f09761bcc,-,-,-,-,false,hypotheses=raw_token_match|comment_contamination|unreached_alternative; no answer or claim verdict supplied
+receipt,no_memory,real_code,0,ff0de01cc1b8e220,e35fc77f09761bcc,7542b37e4a663f08,6faff64fceca73e9,6037e6182787a469,6037e6182787a469,false,precommitted_before_worker; evaluator_score_absent
+receipt,no_memory,real_code,1,ff0de01cc1b8e220,e35fc77f09761bcc,7542b37e4a663f08,c3fa588752136642,6037e6182787a469,6037e6182787a469,false,precommitted_before_worker; evaluator_score_absent
+receipt,no_memory,real_code,2,a719a94b5780e60e,e35fc77f09761bcc,f35ba2935a719024,bd44865685eba72a,7ff9407b4c02ab8,7ff9407b4c02ab8,false,precommitted_before_worker; evaluator_score_absent
+frontier,no_memory,real_code,0,-,e35fc77f09761bcc,-,-,-,-,false,hypotheses=raw_token_match|comment_contamination|unreached_alternative; no answer or claim verdict supplied
+receipt,no_repair,real_code,0,ff0de01cc1b8e220,e35fc77f09761bcc,7542b37e4a663f08,c70b78bdd83948df,6037e6182787a469,6037e6182787a469,false,precommitted_before_worker; evaluator_score_absent
+receipt,no_repair,real_code,1,ff0de01cc1b8e220,e35fc77f09761bcc,7542b37e4a663f08,92aafaae54c07428,6037e6182787a469,6037e6182787a469,false,precommitted_before_worker; evaluator_score_absent
+receipt,no_repair,real_code,2,ff0de01cc1b8e220,e35fc77f09761bcc,f35ba2935a719024,ce163ce07c1462bc,7ff9407b4c02ab8,7ff9407b4c02ab8,false,precommitted_before_worker; evaluator_score_absent
+frontier,no_repair,real_code,0,-,e35fc77f09761bcc,-,-,-,-,false,hypotheses=raw_token_match|comment_contamination|unreached_alternative; no answer or claim verdict supplied
+summary,all,all,0,-,-,-,-,-,-,false,UNSCORED_INTEGRATION_READY; 7 policies x 2 builds x 3 worker actions per task; external sealed evaluator required

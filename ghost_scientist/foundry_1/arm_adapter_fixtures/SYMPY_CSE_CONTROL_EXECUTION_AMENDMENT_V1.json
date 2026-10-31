@@ -1,0 +1,58 @@
+{
+  "version": "FOUNDRY_SYMPY_CSE_CONTROL_EXECUTION_AMENDMENT_V1",
+  "chronology": {
+    "base_protocol_was_frozen_before_execution": true,
+    "initial_execution_reached_test_collection": false,
+    "initial_failure": "SymPy package-level conftest requires absent optional dependency hypothesis",
+    "isolated_diagnostic_observed": {
+      "ordinary_passes": 53,
+      "source_declared_xfails": 8,
+      "unexpected_failures": 0,
+      "errors": 0,
+      "xpasses": 0
+    },
+    "amendment_is_pristine_preregistration": false,
+    "amendment_classification": "POST_INFRASTRUCTURE_SOURCE_DOCUMENTED_EXECUTION_CLARIFICATION"
+  },
+  "base_protocol": {
+    "path": "arm_adapter_fixtures/SYMPY_CSE_CONTROL_PROTOCOL_V1.json",
+    "sha256": "c40f07ecae859ddfad499db392bef587f69b2677ee9a9472472fdc7384446f2b"
+  },
+  "base_freeze": {
+    "path": "results/sympy_cse_control_v1_freeze.json",
+    "sha256": "03bf7273cc35024c0287081d7df8c5d5a4d427e0308a2303db8faea1a45099a9"
+  },
+  "unchanged_gates": {
+    "minimum_collected": 60,
+    "minimum_accepted_expected_outcomes": 55,
+    "maximum_unexpected_failures": 0,
+    "maximum_errors": 0,
+    "unexpected_pass_allowed": false,
+    "official_test_source_sha256": "b1ab3afa34651da67a8dd897a064c2e7604d66fb94b5a629b484353fee493b4d"
+  },
+  "clarified_expected_outcome_accounting": {
+    "accepted_expected_outcomes": "ordinary_passes + pytest_classified_source_declared_xfails",
+    "source_declared_xfail_decorators_required": 8,
+    "pytest_classified_xfails_required": 8,
+    "ordinary_passes_required": 53,
+    "reason": "The base protocol explicitly allowed declared XFAILs; an expected failure is a matching official-suite outcome rather than an unexpected failure."
+  },
+  "isolated_runner": {
+    "sets_sys_running_pytest_before_test_import": true,
+    "confcutdir": "sympy/simplify/tests",
+    "loads_package_level_conftest": false,
+    "test_file_changed": false,
+    "algorithm_source_changed": false,
+    "expected_assertion_changed": false,
+    "hypothesis_stubbed_or_installed": false
+  },
+  "claim_boundary": {
+    "amendment_may_erase_initial_infrastructure_failure": false,
+    "amendment_may_be_called_pristine_preregistration": false,
+    "amendment_may_change_P1_identity_or_count": false,
+    "amendment_may_satisfy_A6_or_A8": false,
+    "amendment_may_increase_production_integrated_arms": false,
+    "validation_v6_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

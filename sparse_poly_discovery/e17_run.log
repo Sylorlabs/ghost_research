@@ -1,0 +1,86 @@
+=== EXPERIMENT E17: pipeline grammar invention (E5++) ===
+
+Grammar: 2-stage E5 (7×7) + 3-stage (7×6×7 with inner_mid≠relay).
+Split: train 4000 | val 2000 | test 2000.  Certify: escape test≥0.90 & stage-1<0.70.
+Pass bar: ≥35/50 held-out certified; ≥2 novel compositions (3-stage, mid≠relay).
+
+━━━ PHASE 1: meta-search grammar on composed_discovery A + B ━━━
+  F-A inversion-parity:
+    stage-1 test=0.493  best-2 val=1.000 test=1.000  inversion→half_p(S mod 2)
+    best-3 val=1.000 test=1.000  count≥thr→inversion→half_p(S mod 2)  novel=true
+    WINNER (2-stage): inversion→half_p(S mod 2)  test=1.000  CERTIFIED
+
+  F-B sum-then-bind:
+    stage-1 test=0.620  best-2 val=1.000 test=1.000  sum(c0,c1)→bind_xy(c0·c1)
+    best-3 val=0.896 test=0.894  count≥thr→pair_prod(c0·c1)→bind_abs|Δ01|  novel=true
+    WINNER (2-stage): sum(c0,c1)→bind_xy(c0·c1)  test=1.000  CERTIFIED
+
+  Training certified: 2/2  |  training novel winners: 0/2
+
+━━━ PHASE 2: freeze extended grammar (E5 + inner_mid, no minting) ━━━
+  inner₁∈E5; inner_mid∈{relay,inversion,pair_prod,spread,delta01,bind_T·sum01,parity_sum}
+  inner₂/₃∈E5; per-target argmax val over 2-stage ∪ 3-stage(mid≠relay).
+
+━━━ PHASE 3: certify 50 held-out specs (seed 0xE17C0110BA5E50) ━━━
+  # 1 sum_all → |c0−c1| > 2.0                    ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  # 2 sum(c0,c1) → S mod 2                       ch=0.50 s1=0.511 pipe=1.000 sum(c0,c1)→half_p(S mod 2)  PASS
+  # 3 sum(c0,c1) → |c0−c1| > 1.5                 ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  # 4 sum_all → |c0−c1| > 1.0                    ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  # 5 min(c0,c1) → |c0−c1| > 2.0                 ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  # 6 sum_all → |c0−c1| > 1.5                    ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  # 7 count≥thr → |c0−c1| > 1.0                  ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  # 8 sum_all → S mod 11 > 11/2                  ch=0.52 s1=0.718 pipe=0.942 sum_all→scan_p(cos ω·S) ω=0.49  fail
+  # 9 mean(c0,c1) → |c0−c1| > 2.0                ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #10 sum(c0,c1) → S mod 3 > 3/2                 ch=0.67 s1=0.669 pipe=1.000 sum(c0,c1)→scan_p(cos ω·S) ω=1.87  PASS
+  #11 min(c0,c1) → |c0−c1| > 1.0                 ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #12 inversion → S mod 7 > 7/2                  ch=0.57 s1=0.549 pipe=0.918 count≥thr→inversion→scan_p(cos ω·S) ω=0.79  PASS *novel*
+  #13 sum_all → |c0−c1| > 2.5                    ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #14 mean(c0,c1) → |c0−c1| > 2.5                ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #15 count≥thr → S mod 2                        ch=0.51 s1=0.498 pipe=1.000 count≥thr→half_p(S mod 2)  PASS
+  #16 inversion → |c0−c1| > 2.5                  ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #17 mean(c0,c1) → sign((c0−mid)(c1−mid))>0     ch=0.53 s1=0.620 pipe=1.000 sum(c0,c1)→bind_xy(c0·c1)  PASS
+  #18 max_cell → |c0−c1| > 1.5                   ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #19 sum(c0,c1) → |c0−c1| > 2.0                 ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #20 count≥thr → S mod 5 > 5/2                  ch=0.50 s1=0.851 pipe=0.996 count≥thr→lift_q[S,S²]  fail
+  #21 mean(c0,c1) → S mod 2                      ch=0.51 s1=0.499 pipe=1.000 sum(c0,c1)→scan_p(cos ω·S) ω=1.62  PASS
+  #22 sum_all → S mod 7 > 7/2                    ch=0.57 s1=0.625 pipe=0.951 sum_all→scan_p(cos ω·S) ω=0.83  PASS
+  #23 inversion → S mod 3 > 3/2                  ch=0.67 s1=0.667 pipe=1.000 count≥thr→inversion→scan_p(cos ω·S) ω=2.01  PASS *novel*
+  #24 count≥thr → |c0−c1| > 2.5                  ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #25 min(c0,c1) → sign((c0−mid)(c1−mid))>0      ch=0.53 s1=0.620 pipe=1.000 sum(c0,c1)→bind_xy(c0·c1)  PASS
+  #26 min(c0,c1) → |c0−c1| > 1.5                 ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #27 sum_all → S mod 9 > 9/2                    ch=0.56 s1=0.620 pipe=0.959 sum_all→scan_p(cos ω·S) ω=0.64  PASS
+  #28 sum_all → S mod 3 > 3/2                    ch=0.66 s1=0.660 pipe=1.000 sum_all→scan_p(cos ω·S) ω=2.06  PASS
+  #29 sum_all → S mod 5 > 5/2                    ch=0.59 s1=0.593 pipe=0.917 sum_all→scan_p(cos ω·S) ω=1.18  PASS
+  #30 inversion → S mod 5 > 5/2                  ch=0.60 s1=0.595 pipe=0.913 count≥thr→inversion→scan_p(cos ω·S) ω=1.18  PASS *novel*
+  #31 sum(c0,c1) → |c0−c1| > 1.0                 ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #32 sum_all → S mod 2                          ch=0.50 s1=0.537 pipe=1.000 sum_all→parity_sum→scan_p(cos ω·S) ω=0.25  PASS *novel*
+  #33 count≥thr → |c0−c1| > 2.0                  ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #34 inversion → S mod 11 > 11/2                ch=0.56 s1=0.559 pipe=0.997 count≥thr→inversion→scan_p(cos ω·S) ω=0.44  PASS *novel*
+  #35 min(c0,c1) → |c0−c1| > 0.5                 ch=0.83 s1=0.834 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #36 count≥thr → |c0−c1| > 1.5                  ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #37 max_cell → sign((c0−mid)(c1−mid))>0        ch=0.53 s1=0.620 pipe=1.000 sum(c0,c1)→bind_xy(c0·c1)  PASS
+  #38 count≥thr → sign((c0−mid)(c1−mid))>0       ch=0.53 s1=0.620 pipe=1.000 sum(c0,c1)→bind_xy(c0·c1)  PASS
+  #39 mean(c0,c1) → |c0−c1| > 1.5                ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #40 min(c0,c1) → |c0−c1| > 2.5                 ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #41 inversion → |c0−c1| > 1.0                  ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #42 sum_all → sign((c0−mid)(c1−mid))>0         ch=0.53 s1=0.620 pipe=1.000 sum(c0,c1)→bind_xy(c0·c1)  PASS
+  #43 max_cell → |c0−c1| > 1.0                   ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #44 sum(c0,c1) → |c0−c1| > 2.5                 ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #45 max_cell → |c0−c1| > 2.5                   ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #46 mean(c0,c1) → |c0−c1| > 1.0                ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #47 inversion → |c0−c1| > 1.5                  ch=0.57 s1=0.666 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  PASS *novel*
+  #48 inversion → |c0−c1| > 2.0                  ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #49 max_cell → |c0−c1| > 2.0                   ch=0.65 s1=0.704 pipe=1.000 mean(c0,c1)→delta01|Δ01|→bind_abs|Δ01|  fail *novel*
+  #50 inversion → sign((c0−mid)(c1−mid))>0       ch=0.53 s1=0.620 pipe=1.000 sum(c0,c1)→bind_xy(c0·c1)  PASS
+
+════════════════════ VERDICT ════════════════════
+Training (A+B) certified:       2/2
+Held-out certified:             33/50 = 66.0%
+Novel 3-stage compositions:     3 distinct (bar ≥2)
+Certify bar (≥35/50):           MISSED
+Novel bar (≥2):                 MET
+
+E17 FAIL — held-out certify rate below 35/50.
+
+E17_RESULT certified=33/50 novel=3 train=2/2 pass=false doc=docs/research/open_invention_e17.md
+See: open_invention_e5.md, open_invention_rq5.md, open_invention_e17.md.

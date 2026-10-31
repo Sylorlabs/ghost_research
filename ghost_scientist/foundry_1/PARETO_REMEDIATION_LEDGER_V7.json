@@ -1,0 +1,54 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V7",
+  "parent_freeze": "results/pareto_remediation_v6_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 89,
+      "objective": "Mount and independently conformance-test real framework execution for A3 and A9 across the complete 23-graph calibration surface.",
+      "result": "results/phase89_framework_runtime_mount_conformance.json",
+      "outcome": "FRAMEWORK_RUNTIME_MOUNT_COMPONENT_PASS",
+      "scientific_effect": "Both arms execute all 41 observed operator targets and 337 call-function sites through the framework, three times per graph, with zero output error, alias checks, independent framework assertions, independent motif matching, empty per-artifact state, and distinct arm behavior. This is calibration conformance, not prospective integration."
+    },
+    {
+      "phase": 90,
+      "objective": "Meter each complete A3/A9 23-graph mount process tree under identical ceilings.",
+      "result": "results/phase90_framework_runtime_mount_resource_audit.json",
+      "outcome": "FRAMEWORK_RUNTIME_MOUNT_RESOURCE_COMPONENT_PASS",
+      "scientific_effect": "Each arm's complete mount terminates naturally under matched CPU, wall, and RSS ceilings with the full surface intact. Per-artifact contract resource assembly remains deferred because the frozen contract has no shared receipt identity and copying one arm-level receipt 23 times would overcount."
+    }
+  ],
+  "route_progress": {
+    "calibration_graphs": 23,
+    "unique_operators_executed": 41,
+    "call_function_invocations_executed": 337,
+    "framework_executions_per_arm": 69,
+    "A3_tools_selected": 76,
+    "A9_tools_selected": 83,
+    "A3_unique_nodes_covered": 126,
+    "A9_unique_nodes_covered": 226,
+    "maximum_output_error": 0.0,
+    "framework_runtime_mount_component_ready": true,
+    "per_artifact_contract_resource_assembly_ready": false,
+    "production_integrated_arms": 2,
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "add a hash-bound shared process-tree resource receipt identity without changing the frozen v1 arm contract",
+      "assemble complete A3 and A9 contract outputs against that shared receipt without double counting",
+      "adapt A1, A4, A5, and A7 to the framework mount",
+      "keep A6 and A8 fail-closed unless their declared dependencies become executable",
+      "continue acquisition of the fourth independent source-faithful control for P1"
+    ]
+  }
+}

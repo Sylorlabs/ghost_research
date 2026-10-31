@@ -46,7 +46,12 @@ pub fn main() !void {
     try out.print("  ref: thermostat      |   83.33  (from main eval)\n", .{});
     try out.print("  ref: mb_mass(sum)    |   83.31\n", .{});
     try out.print("  ref: mb_mass(left)   |   39.02  <- best single feature\n", .{});
+    try out.print("  ref: mb_mass(max)    |  115.92  <- nonlinear (order-stat) decoy\n", .{});
     try out.print("  ---------------------+---------\n", .{});
+
+    // C21 focal: obvious 2-feature (sum + nonlinear max) — sum alone is insufficient.
+    const r_sum_max = try mean(alloc, dual, .{ .action_mode = .mb_mass2, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = .sum, .feature2 = .max_cell }, n, s);
+    try out.print("  mb_mass2(sum,max)    | {d:7.2}  <- (sum,max) variant (sum+nonlinear)\n", .{r_sum_max});
 
     const r1 = try mean(alloc, dual, .{ .action_mode = .mb_mass2, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .feature = .sum, .feature2 = .left_mass }, n, s);
     try out.print("  mb_mass2(sum,left)   | {d:7.2}  <- predicted fix\n", .{r1});

@@ -1,0 +1,30 @@
+artifact,partition,policy,charged_trials,changed_bytes,old_resource,new_resource,ablated_resource,committed,rolled_back,verdict
+round_ab_ab3,transfer,evidence,204800,1147,91736,148616,91736,20,0,LIMITED_POSITIVE:opaque_raw_tape_challenge_build_freeze_test_commit_or_rollback
+round_ab_ab3,transfer,evidence_recoded,204800,1141,91736,148886,91736,20,0,CONTROL_FAIL:value_recode_changes_replacement_search
+round_ab_ab3,transfer,random,204800,1273,91736,93194,91736,10,10,CONTROL:random_replacement_equal_candidate_generator
+round_ab_ab3,transfer,frequency,204800,1274,91736,94670,91736,12,8,CONTROL:frequency_without_effect_identity
+round_ab_ab3,transfer,cost,0,0,91736,91736,91736,0,20,CONTROL:cheapest_is_no_replacement
+round_ab_ab3,transfer,name,204800,1278,91736,93986,91736,12,8,CONTROL:opaque_byte_digest_surrogate
+round_ab_ab3,transfer,address,204800,147,91736,99116,91736,20,0,CONTROL:low_address_partial_replacement
+round_ab_ab3,transfer,human_origin,0,0,91736,91736,91736,0,20,CONTROL:human_origin_receives_no_privilege
+round_ab_ab3,transfer,fixed,0,0,91736,91736,91736,0,20,CONTROL:fixed_scaffold
+round_ab_ab3,transfer,no_replacement,0,0,91736,91736,91736,0,20,CONTROL:no_replacement
+round_ab_ab3,transfer,request_free,204800,1275,91736,93518,91736,7,13,CONTROL:request_free_unguided_synthesis
+round_ab_ab3,transfer,shuffled,204800,1148,91736,148220,91736,20,0,CONTROL_PASS:shuffled_evidence_misdirects
+round_ab_ab3,transfer,false_evidence,204800,1130,91736,91736,91736,0,20,CONTROL_PASS:false_evidence_misdirects
+round_ab_ab3,transfer,oracle,0,1277,91736,184346,91736,20,0,INVALID_ORACLE:evaluator_private_ceiling
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:no_declared_scaffold_component_or_room_table
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:no_external_builder_request_or_implementation_channel
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:evaluator_private_target_absent_from_organism_state
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:all_calibration_trials_and_candidate_mutations_charged
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:old_and_new_freeze_before_disjoint_hidden_contexts
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:replacement_ablation_returns_exact_old_resource
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:unfavorable_candidate_rolls_back_to_old_snapshot
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:human_origin_has_no_selection_weight_or_veto
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:whole_tape_hash_and mutation_lineage_preserved
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:no_post_hidden_test_edit_or selection
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:byte_growth_forbidden_equal_width_and_cost
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:no_llm_text_token_embedding_neural_neurosymbolic_path
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_PASS:fresh_execution_is_byte_identical
+round_ab_ab3,attack,hostile,0,0,0,0,0,0,0,CONTROL_FAIL:raw_byte_boundary_and_proposal_generator_are_human_bootstrap_scaffold
+round_ab_ab3,closure,aggregate,204800,1147,91736,148616,91736,20,0,VALID_NEGATIVE:replacement_pipeline_works_but_human_byte_partition_and_proposal_dynamics_remain_no_architecture_owning_self_improvement_claim

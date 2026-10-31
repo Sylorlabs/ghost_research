@@ -1,0 +1,63 @@
+{
+  "version": "FOUNDRY_A5_STITCH_TYPED_GRAPH_PROTOCOL_V1",
+  "status": "PREFROZEN_CALIBRATION_TYPED_GRAPH_ENCODING",
+  "frozen_before_encoding_or_execution": true,
+  "arm_id": "A5",
+  "defining_behavior": "Byte-exact upstream Stitch compression over an evaluator-owned, type-preserving S-expression encoding of complete framework call-function DAGs.",
+  "encoding": {
+    "program_unit": "one complete exported calibration graph",
+    "call_node_order": "framework topological order",
+    "node_form": "(call operator_atom output_type args kwargs)",
+    "graph_form": "right-associated (seq node rest) ending in (outputs references)",
+    "internal_reference": "topological backward distance, never source node name",
+    "external_reference": "node operation class plus typed metadata, never parameter value or source name",
+    "tensor_type": "rank, dtype, and layout",
+    "non_tensor_type": "closed structural kind and arity",
+    "literal": "type-tagged canonical SHA-256 prefix",
+    "operator_atom": "full target sanitized to lowercase ASCII atom",
+    "required_independent_encoders": 2,
+    "encoding_equality": "byte-identical"
+  },
+  "stitch_call": {
+    "iterations": 1,
+    "max_arity": 3,
+    "threads": 1,
+    "silent": true
+  },
+  "acceptance_rules": {
+    "provider_hashes_must_match": true,
+    "binary_hash_must_match_source_conformance": true,
+    "graphs": 23,
+    "unique_operator_targets": 41,
+    "call_function_invocations": 337,
+    "unsupported_or_failed_graphs": 1,
+    "all_call_nodes_encoded_once": true,
+    "primary_and_independent_encodings_byte_identical": true,
+    "all_programs_parse_and_source_algorithm_terminates": true,
+    "rewritten_program_count_must_equal_input_count": true,
+    "costs_must_be_nonnegative": true,
+    "empty_abstraction_result_is_valid_control_outcome": true,
+    "abstractions_if_any_must_have_positive_uses_and_nonnegative_utility": true
+  },
+  "provider_records": [
+    {"path": "results/stitch_source_result_v1_freeze.json", "sha256": "00574f7843b69453a89d990d0ca11efd551326fd82f1d7612da35ecf58a59396"},
+    {"path": "results/stitch_metamorphic_result_v1_freeze.json", "sha256": "e3d813b67474b5fe33d71dd6a5cd309ce87e8e525201a5fbe45b52dee36baf15"},
+    {"path": "results/phase35_stitch_source_control.json", "sha256": "68c252c2316c689ca07b670f621d36f64c07c763a0b89b6dfddacfa53a546e3a"},
+    {"path": "results/phase36_stitch_source_resource_audit.json", "sha256": "5f768db4b2aca6e2316795e22fa72cb5d106bce0d0eb4daf5394b0ceebdedb61"},
+    {"path": "results/phase37_stitch_metamorphic_control.json", "sha256": "4360abe6898193a3592c89939dc7fbd9f99d693e8e0e78888fa7587ef4648798"},
+    {"path": "external_controls/stitch/source/control_main.rs", "sha256": "07c942ed6afbeafc5785c4831c00c12fc0b6ebf79eebff4399cee17b7ecd967e"},
+    {"path": "phase63_pareto_motif_calibration.py", "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"},
+    {"path": "results/pareto_remediation_v10_freeze.json", "sha256": "a888733f7afa6524b532390259befeefbea6b8ae5cbc202a22cbbceb54bedc27"},
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"}
+  ],
+  "claim_boundary": {
+    "source_faithful_with_build_shims": true,
+    "official_wheel_or_binding_executed": false,
+    "typed_encoding_is_evaluator_owned_not_upstream": true,
+    "A5_production_integrated_before_contract_batch": false,
+    "production_integrated_arms_after_encoding_phase": 5,
+    "P3_complete_after_encoding_phase": false,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

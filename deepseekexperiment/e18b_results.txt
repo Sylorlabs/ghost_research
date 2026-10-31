@@ -1,0 +1,12 @@
+E18b input-projection fidelity: layer 30, 128 context tokens
+
+per-token output cosine: expert(proj_r(x)) vs expert(x)  [real expert, no fitting]
+ rank e   0 e  50 e 150 e 300
+   16 0.647 0.638 0.600 0.623
+   32 0.762 0.760 0.737 0.750
+   48 0.835 0.834 0.819 0.827
+   64 0.887 0.886 0.876 0.882
+   84 0.935 0.935 0.929 0.933
+  110 0.980 0.981 0.978 0.979
+
+INTERPRETATION: high cosine (>0.95) at small r => expert IS locally low-dim, surrogates viable (my E18 linear fit was just too weak). Low cosine => experts use full input dim even locally => input-subspace surrogates dead.

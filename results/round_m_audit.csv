@@ -1,0 +1,10 @@
+component,check,result,evidence
+M1,train-query-test and restart ledger,PASS,12 charged rows plus exhausted thirteenth-call test
+M2,trace-only controlled split,PASS,heldout 12/12 versus unsplit 6/12
+M3,fresh within-region transfer,PASS,48/48 within and 24/48 cross/control
+M4,fresh trace-derived grammar,PASS,48/48 versus 24/48 equal-cost menu
+M5,complete charged-call ledger,PASS,522 action rows; 6 targets x 3 arms x calls 1..29
+M5,stage accounting,PASS,closed train=96 freeze=6 test=72; each control pretest=102 test=72
+M5,CSV schema,PASS,eleven-field header matches every action row
+M5,token/prior-cell/private-field scan,PASS,only six M5 opaque tokens; no M4 tokens or private strings in public ledger
+M5,classification,NARROWED_CONTROLLED_STRICT_POSITIVE,72/72 versus 36/72 and 54/72 survives; target generator intentionally aligns public trace with two fixed bit predicates and evaluator is protocol not OS isolated

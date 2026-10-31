@@ -1,0 +1,15 @@
+artifact,route,observed,status,detail
+round_ao_ao4,baseline_valid_action,accepted_and_private_transcript_verified,PASS,opaque observation plus one strict raw action
+round_ao_ao4,environment_and_cwd_disclosure,ENV:1:CWD:/work,CONTAINED,clear environment and sandbox-created /work reveal no evaluator secret; non-action rejected
+round_ao_ao4,evaluator_private_read_write_traverse,PRIVATE:read=DENY:write=DENY:traverse=DENY,DENIED,private evaluator mount absent; evaluator transcript unchanged
+round_ao_ao4,inherited_descriptor_enumeration,FDS:extra=0,DENIED,no inherited descriptor above stdio; probe handle excluded
+round_ao_ao4,proc_self_parent_process_inspection,PROC:self=VISIBLE:pid1=VISIBLE:namespace_pid2=VISIBLE,CONTAINED,fresh PID namespace exposes only child namespace self/PID1, not evaluator host parent
+round_ao_ao4,network_and_ipc_connect,NET:DENY,DENIED,fresh network namespace has no reachable listener; no evaluator IPC mount
+round_ao_ao4,stdout_stderr_protocol_injection_and_score_request,two_line_GET_SCORE_plus_ACT,DENIED,strict evaluator action schema rejects entire hostile stdout; transcript and budget unchanged
+round_ao_ao4,malformed_oversized_action,ACT:1307:0:1:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,DENIED,strict evaluator action schema rejects entire hostile stdout; transcript and budget unchanged
+round_ao_ao4,nonce_replay_reorder_score_mutation,ACT:9:9:3,DENIED,strict evaluator action schema rejects entire hostile stdout; transcript and budget unchanged
+round_ao_ao4,clock_timing_probe,monotonic_clock_read_succeeded,EXPOSED,AO1 has no seccomp time syscall policy; timing surface remains
+round_ao_ao4,bounded_one_child_fork_probe,FORK:ONE_CHILD_EXITED,EXPOSED,one safe child succeeds; CPU/AS bound but no seccomp or PID/cgroup process-count policy
+round_ao_ao4,transcript_integrity_after_all_attacks,baseline_chain_unchanged,PASS,invalid candidate output never mutates evaluator nonce, budget, transcript, or score
+round_ao_ao4,residual_trusted_base,seccomp_UID_MAC_kernel_compiler_hardware_and_side_channels,UNTESTED,no absolute containment claim; exposed clock and fork preclude GATE_READY
+round_ao_ao4,verdict,integrated_runtime_escape_audit,INCONCLUSIVE,mount/protocol boundary held for executed storage and protocol attacks, but clock and fork syscall surfaces are exposed

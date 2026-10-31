@@ -1,0 +1,723 @@
+[
+  {
+    "name": "walsh_S1",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 1
+    }
+  },
+  {
+    "name": "walsh_S2",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 2
+    }
+  },
+  {
+    "name": "walsh_S4",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 4
+    }
+  },
+  {
+    "name": "walsh_S8",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 8
+    }
+  },
+  {
+    "name": "walsh_S16",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 16
+    }
+  },
+  {
+    "name": "walsh_S32",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 32
+    }
+  },
+  {
+    "name": "walsh_S64",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 64
+    }
+  },
+  {
+    "name": "walsh_S128",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 128
+    }
+  },
+  {
+    "name": "walsh_S255",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 255
+    }
+  },
+  {
+    "name": "walsh_S170",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 170
+    }
+  },
+  {
+    "name": "walsh_S85",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 85
+    }
+  },
+  {
+    "name": "walsh_S51",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 51
+    }
+  },
+  {
+    "name": "spectral_omega_0",
+    "formula_kind": "spectral_count",
+    "params": {
+      "omega": 0.5
+    }
+  },
+  {
+    "name": "spectral_omega_1",
+    "formula_kind": "spectral_count",
+    "params": {
+      "omega": 1.0
+    }
+  },
+  {
+    "name": "spectral_omega_2",
+    "formula_kind": "spectral_count",
+    "params": {
+      "omega": 1.57
+    }
+  },
+  {
+    "name": "spectral_omega_3",
+    "formula_kind": "spectral_count",
+    "params": {
+      "omega": 2.0
+    }
+  },
+  {
+    "name": "spectral_omega_4",
+    "formula_kind": "spectral_count",
+    "params": {
+      "omega": 3.14
+    }
+  },
+  {
+    "name": "spectral_omega_5",
+    "formula_kind": "spectral_count",
+    "params": {
+      "omega": 4.71
+    }
+  },
+  {
+    "name": "spectral_omega_6",
+    "formula_kind": "spectral_count",
+    "params": {
+      "omega": 6.28
+    }
+  },
+  {
+    "name": "count_parity_direct",
+    "formula_kind": "count_parity",
+    "params": {}
+  },
+  {
+    "name": "xor_popcount_sign",
+    "formula_kind": "xor_popcount",
+    "params": {}
+  },
+  {
+    "name": "cell_values_xor_parity",
+    "formula_kind": "cell_values_xor_parity",
+    "params": {}
+  },
+  {
+    "name": "sum_values_parity_bit",
+    "formula_kind": "sum_values_parity",
+    "params": {}
+  },
+  {
+    "name": "thresh_count_mod2",
+    "formula_kind": "thresh_count_mod",
+    "params": {
+      "modulus": 2
+    }
+  },
+  {
+    "name": "walsh_hidden_pair_36",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 36
+    }
+  },
+  {
+    "name": "walsh_pair_68",
+    "formula_kind": "walsh",
+    "params": {
+      "subset": 68
+    }
+  },
+  {
+    "name": "threshold_xor_2_5",
+    "formula_kind": "hidden_xor",
+    "params": {
+      "i": 2,
+      "j": 5
+    }
+  },
+  {
+    "name": "threshold_xor_5_2",
+    "formula_kind": "hidden_xor",
+    "params": {
+      "i": 5,
+      "j": 2
+    }
+  },
+  {
+    "name": "monomial_phi_2_5",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 36
+    }
+  },
+  {
+    "name": "monomial_phi_0_7",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 129
+    }
+  },
+  {
+    "name": "hidden_xor_0_1",
+    "formula_kind": "hidden_xor",
+    "params": {
+      "i": 0,
+      "j": 1
+    }
+  },
+  {
+    "name": "hidden_xor_3_6",
+    "formula_kind": "hidden_xor",
+    "params": {
+      "i": 3,
+      "j": 6
+    }
+  },
+  {
+    "name": "abs_gap_cells_2_5",
+    "formula_kind": "abs_diff_pair",
+    "params": {
+      "i": 2,
+      "j": 5
+    }
+  },
+  {
+    "name": "raw_diff_2_5",
+    "formula_kind": "cell_diff_raw",
+    "params": {
+      "i": 2,
+      "j": 5
+    }
+  },
+  {
+    "name": "sum_mod2_indicator",
+    "formula_kind": "sum_mod_indicator",
+    "params": {
+      "modulus": 2
+    }
+  },
+  {
+    "name": "sum_mod3_indicator",
+    "formula_kind": "sum_mod_indicator",
+    "params": {
+      "modulus": 3
+    }
+  },
+  {
+    "name": "sum_mod5_indicator",
+    "formula_kind": "sum_mod_indicator",
+    "params": {
+      "modulus": 5
+    }
+  },
+  {
+    "name": "sum_mod7_indicator",
+    "formula_kind": "sum_mod_indicator",
+    "params": {
+      "modulus": 7
+    }
+  },
+  {
+    "name": "sum_mod11_indicator",
+    "formula_kind": "sum_mod_indicator",
+    "params": {
+      "modulus": 11
+    }
+  },
+  {
+    "name": "sum_mod13_indicator",
+    "formula_kind": "sum_mod_indicator",
+    "params": {
+      "modulus": 13
+    }
+  },
+  {
+    "name": "sign_mod2_indicator",
+    "formula_kind": "sign_mod_indicator",
+    "params": {
+      "modulus": 2
+    }
+  },
+  {
+    "name": "sign_mod3_indicator",
+    "formula_kind": "sign_mod_indicator",
+    "params": {
+      "modulus": 3
+    }
+  },
+  {
+    "name": "sign_mod5_indicator",
+    "formula_kind": "sign_mod_indicator",
+    "params": {
+      "modulus": 5
+    }
+  },
+  {
+    "name": "sign_mod7_indicator",
+    "formula_kind": "sign_mod_indicator",
+    "params": {
+      "modulus": 7
+    }
+  },
+  {
+    "name": "sum_sq_mod7",
+    "formula_kind": "sum_sq_mod",
+    "params": {
+      "modulus": 7
+    }
+  },
+  {
+    "name": "sum_sq_mod5",
+    "formula_kind": "sum_sq_mod",
+    "params": {
+      "modulus": 5
+    }
+  },
+  {
+    "name": "product_all_mod7",
+    "formula_kind": "product_mod",
+    "params": {
+      "mask": 255,
+      "modulus": 7
+    }
+  },
+  {
+    "name": "product_pair_mod7",
+    "formula_kind": "product_mod",
+    "params": {
+      "mask": 36,
+      "modulus": 7
+    }
+  },
+  {
+    "name": "sign_bitmap_mod7",
+    "formula_kind": "sign_pattern_int_mod",
+    "params": {
+      "modulus": 7
+    }
+  },
+  {
+    "name": "lcm_all_mod7",
+    "formula_kind": "lcm_masked_mod",
+    "params": {
+      "mask": 255,
+      "modulus": 7
+    }
+  },
+  {
+    "name": "orient_diff_1_0",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 1,
+      "j": 0
+    }
+  },
+  {
+    "name": "orient_ind_1_0",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 1,
+      "j": 0
+    }
+  },
+  {
+    "name": "raw_diff_1_0",
+    "formula_kind": "cell_diff_raw",
+    "params": {
+      "i": 1,
+      "j": 0
+    }
+  },
+  {
+    "name": "orient_diff_0_1",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 0,
+      "j": 1
+    }
+  },
+  {
+    "name": "orient_ind_0_1",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 0,
+      "j": 1
+    }
+  },
+  {
+    "name": "orient_diff_2_0",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 2,
+      "j": 0
+    }
+  },
+  {
+    "name": "orient_ind_2_0",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 2,
+      "j": 0
+    }
+  },
+  {
+    "name": "orient_diff_3_1",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 3,
+      "j": 1
+    }
+  },
+  {
+    "name": "orient_ind_3_1",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 3,
+      "j": 1
+    }
+  },
+  {
+    "name": "orient_diff_4_2",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 4,
+      "j": 2
+    }
+  },
+  {
+    "name": "orient_ind_4_2",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 4,
+      "j": 2
+    }
+  },
+  {
+    "name": "orient_diff_5_3",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 5,
+      "j": 3
+    }
+  },
+  {
+    "name": "orient_ind_5_3",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 5,
+      "j": 3
+    }
+  },
+  {
+    "name": "orient_diff_6_4",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 6,
+      "j": 4
+    }
+  },
+  {
+    "name": "orient_ind_6_4",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 6,
+      "j": 4
+    }
+  },
+  {
+    "name": "orient_diff_7_5",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 7,
+      "j": 5
+    }
+  },
+  {
+    "name": "orient_ind_7_5",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 7,
+      "j": 5
+    }
+  },
+  {
+    "name": "orient_diff_1_2",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 1,
+      "j": 2
+    }
+  },
+  {
+    "name": "orient_ind_1_2",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 1,
+      "j": 2
+    }
+  },
+  {
+    "name": "orient_diff_2_3",
+    "formula_kind": "cell_diff_oriented",
+    "params": {
+      "i": 2,
+      "j": 3
+    }
+  },
+  {
+    "name": "orient_ind_2_3",
+    "formula_kind": "oriented_indicator",
+    "params": {
+      "i": 2,
+      "j": 3
+    }
+  },
+  {
+    "name": "clifford_sin_v1_v0",
+    "formula_kind": "clifford_g2",
+    "params": {}
+  },
+  {
+    "name": "rank_v1_gt_v0",
+    "formula_kind": "rank_compare",
+    "params": {
+      "i": 1,
+      "j": 0
+    }
+  },
+  {
+    "name": "pairwise_prod_01",
+    "formula_kind": "pairwise_product_raw",
+    "params": {
+      "i": 0,
+      "j": 1
+    }
+  },
+  {
+    "name": "pairwise_prod_10",
+    "formula_kind": "pairwise_product_raw",
+    "params": {
+      "i": 1,
+      "j": 0
+    }
+  },
+  {
+    "name": "monomial_mask_36",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 36
+    }
+  },
+  {
+    "name": "monomial_mask_4",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 4
+    }
+  },
+  {
+    "name": "monomial_mask_8",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 8
+    }
+  },
+  {
+    "name": "monomial_mask_16",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 16
+    }
+  },
+  {
+    "name": "monomial_mask_32",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 32
+    }
+  },
+  {
+    "name": "monomial_mask_9",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 9
+    }
+  },
+  {
+    "name": "monomial_mask_18",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 18
+    }
+  },
+  {
+    "name": "monomial_mask_72",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 72
+    }
+  },
+  {
+    "name": "monomial_mask_132",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 132
+    }
+  },
+  {
+    "name": "monomial_mask_3",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 3
+    }
+  },
+  {
+    "name": "monomial_mask_5",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 5
+    }
+  },
+  {
+    "name": "monomial_mask_6",
+    "formula_kind": "monomial",
+    "params": {
+      "mask": 6
+    }
+  },
+  {
+    "name": "antisym_cells_2_5",
+    "formula_kind": "antisymmetric_pair",
+    "params": {
+      "i": 2,
+      "j": 5
+    }
+  },
+  {
+    "name": "antisym_cells_5_2",
+    "formula_kind": "antisymmetric_pair",
+    "params": {
+      "i": 5,
+      "j": 2
+    }
+  },
+  {
+    "name": "antisym_cells_0_3",
+    "formula_kind": "antisymmetric_pair",
+    "params": {
+      "i": 0,
+      "j": 3
+    }
+  },
+  {
+    "name": "median_centered",
+    "formula_kind": "median_centered",
+    "params": {}
+  },
+  {
+    "name": "sin_of_variance",
+    "formula_kind": "variance_sin",
+    "params": {
+      "scale": 0.4
+    }
+  },
+  {
+    "name": "sin_of_variance_hi",
+    "formula_kind": "variance_sin",
+    "params": {
+      "scale": 1.2
+    }
+  },
+  {
+    "name": "gcd_all_cells",
+    "formula_kind": "gcd_masked",
+    "params": {
+      "mask": 255
+    }
+  },
+  {
+    "name": "gcd_half_cells",
+    "formula_kind": "gcd_masked",
+    "params": {
+      "mask": 170
+    }
+  },
+  {
+    "name": "max_minus_min",
+    "formula_kind": "max_min_diff",
+    "params": {}
+  },
+  {
+    "name": "harmonic_mean_cells",
+    "formula_kind": "harmonic_mean",
+    "params": {}
+  },
+  {
+    "name": "cell3_gt_mid",
+    "formula_kind": "cell_gt_mid",
+    "params": {
+      "i": 3
+    }
+  },
+  {
+    "name": "cell5_gt_mid",
+    "formula_kind": "cell_gt_mid",
+    "params": {
+      "i": 5
+    }
+  },
+  {
+    "name": "lcm_masked_mod2",
+    "formula_kind": "lcm_masked_mod",
+    "params": {
+      "mask": 255,
+      "modulus": 2
+    }
+  }
+]

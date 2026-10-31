@@ -1,0 +1,64 @@
+{
+  "version": "FOUNDRY_A1_SUBGRAPH_CONSTRUCTOR_REACHABILITY_PROTOCOL_V1",
+  "status": "PREFROZEN_CALIBRATION_REACHABILITY_AUDIT",
+  "frozen_before_runner_implementation_or_execution": true,
+  "arm_id": "A1",
+  "question": "Before implementing a complete 41-target lowering bridge, does the real calibration graph surface contain at least one connected mapped subgraph with an exact frozen v5.1 constructor histogram and the constructor-specific dataflow adjacency needed for a nonreference alternative?",
+  "enumeration": {
+    "surface": "all 23 successfully exported calibration graphs",
+    "nodes": "call_function nodes whose frozen A1 mapping has a non-null Operator-v5 runtime operation",
+    "edges": "undirected data dependencies between eligible call_function nodes",
+    "connected_subset_sizes": [2, 3, 4, 5, 6],
+    "deduplication": "artifact id plus sorted FX node names",
+    "outcome_based_filtering": false,
+    "two_independent_enumerators_required": true
+  },
+  "frozen_constructor_histograms": {
+    "dense_matrix_chain": {"matmul": 2},
+    "fold_conv_batch_norm": {"batch_norm_eval": 1, "conv2d": 1},
+    "graph_reassociation": {"add": 1, "matmul": 2, "sparse_mm": 1},
+    "mamba_composition": {"cat": 1, "linear": 2, "split_get": 3},
+    "primitive_layer_norm": {"reduce_mean": 2, "rsqrt": 1},
+    "stencil_convolution": {"mul": 2, "roll": 4}
+  },
+  "semantic_adjacency": {
+    "dense_matrix_chain": "one mapped matmul result is a direct argument of the second mapped matmul",
+    "fold_conv_batch_norm": "the mapped conv2d result is the first tensor argument of the mapped inference batch-normalization call",
+    "graph_reassociation": "mapped sparse_mm feeds one mapped matmul; mapped sparse_mm and the other mapped matmul reach the mapped add according to the frozen graph-reassociation shape",
+    "mamba_composition": "one mapped linear feeds three mapped split_get nodes; one split result feeds the second mapped linear; that linear plus two other split results feed mapped cat",
+    "primitive_layer_norm": "the two mapped reductions and mapped rsqrt form the frozen mean, centered-square-mean, rsqrt dependency chain",
+    "stencil_convolution": "four mapped rolls of one source feed the two mapped multiplications in the frozen stencil dependency shape"
+  },
+  "acceptance": {
+    "all_provider_hashes_exact": true,
+    "complete_surface": {"graphs": 23, "unique_targets": 41, "calls": 337, "unsupported_or_failed": 1},
+    "two_enumerators_exactly_agree": true,
+    "every_histogram_candidate_reported": true,
+    "every_semantic_candidate_reported": true,
+    "positive_semantic_candidate_required_to_justify_full_lowering": true,
+    "process_tree_cpu_rss_wall_and_reaping_required": true
+  },
+  "decision_rule": {
+    "on_positive_semantic_candidate": "Freeze a pattern-first A1 typed lowering implementation for the reachable constructor family; keep all other unsupported operations fail-closed or reference-only until separately lowered.",
+    "on_zero_semantic_candidates": "Reject implementation of the current A1 bridge as unjustified busywork and redesign the A1 control before expanding the runtime vocabulary.",
+    "this_audit_may_integrate_A1": false
+  },
+  "provider_records": [
+    {"path": "results/readiness_iteration_5_25.json", "sha256": "04c1a95ea24662a68c435c3ba30fbc746bca9dfc0e5029eb37250e85cb553d9a"},
+    {"path": "results/phase139_missing_arm_closure_audit.json", "sha256": "a09dcffea259a7d2ce9c7464863b38117060c31dbd365b6e72a08fda6323cc7b"},
+    {"path": "results/phase93_a1_ir_compatibility_audit.json", "sha256": "deb2a4e68d57954a7ff50095b7fc6d24e7c96585deeecf3f1f7a6caadea49a26"},
+    {"path": "results/phase131_a1_reference_fallback_no_go_audit.json", "sha256": "3be4fa246df9649b63a1c9a9103e8d553120c8261757f9a1cd43d07ddeaab4ca"},
+    {"path": "arm_adapter_fixtures/A1_IR_COMPATIBILITY_PROTOCOL_V1.json", "sha256": "c30d8718064ccb2c6c48bf45eacfb75517f61e4466ed5d857109f213f49abde8"},
+    {"path": "../operator_v5/ghost_operator_candidate_v5.py", "sha256": "2709d905aa6c84cd96abb2b94640cb24a6c11c29c694d015c2a7b765bb967313"},
+    {"path": "phase63_pareto_motif_calibration.py", "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"}
+  ],
+  "claim_boundary": {
+    "calibration_reachability_only": true,
+    "not_a_typed_lowering_implementation": true,
+    "not_constructor_execution": true,
+    "not_A1_conformance": true,
+    "production_integrated_arms_after_audit": 7,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

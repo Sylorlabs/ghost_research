@@ -1,0 +1,9 @@
+E19c extended warm-up: acts_long_off8000.bin, layer 30, 512 ctx tokens, r=64
+ warmup  input-proj  full-surr
+     32       0.363      0.332
+     64       0.442      0.395
+    128       0.495      0.435
+    256       0.547      0.477
+    384       0.573      0.499
+
+>=0.90 at achievable warm-up => OUR EXPERT is deployable; the surrogate working set fits RAM (E19: 0.43MB/expert), so decode becomes RAM-bound.

@@ -1,0 +1,7 @@
+round,kind,id,parent,state,hypothesis,falsifier,tool,cost,receipt,retry_reason,chain
+round_at3,fork,1,root,dead_end,regularity_A,no_delta_after_probe,bounded_probe,2,0a11,different_sampling_window_required,76910e9913076cb7
+round_at3,fork,2,root,split,regularity_B,delta_absent_under_probe,bounded_probe,3,91ce,,76910e9913076cb7
+round_at3,fork,3,2,inconclusive,B_subcase_local,trace_lacks_transition,trace_probe,3,91ce,,76910e9913076cb7
+round_at3,fork,4,2,unexplored,B_subcase_global,cross_sample_mismatch,cross_probe,5,,,76910e9913076cb7
+round_at3,fork,5,root,unexplored,alternate_mechanism,transform_is_stable,transform_probe,6,,,76910e9913076cb7
+round_at3,summary,-,-,finite_exhaustion,reachable_budget=4; explored=3; unreached=4|5; reality_not_claimed_exhausted,-,-,4,-,-,76910e9913076cb7

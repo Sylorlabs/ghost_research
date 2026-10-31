@@ -290,6 +290,8 @@ pub const Aig = struct {
         i = 1;
         while (i < self.nodes.items.len) : (i += 1) {
             const node = self.nodes.items[i];
+            // Primary inputs are {0,0} nodes (distinct from the constant-false node at index 0).
+            if (node.left == 0 and node.right == 0) continue;
             const x: u32 = @intCast(i + 1);
             const a_idx = node.left >> 1;
             const a_inv = (node.left & 1) != 0;
@@ -345,6 +347,12 @@ pub const BitVector = struct {
         return res;
     }
 
+    pub fn andBv(self: BitVector, aig: *Aig, other: BitVector) !BitVector {
+        var res: BitVector = undefined;
+        for (0..64) |i| res.bits[i] = try aig.andNodes(self.bits[i], other.bits[i]);
+        return res;
+    }
+
     pub fn addBv(self: BitVector, aig: *Aig, other: BitVector) !BitVector {
         var res: BitVector = undefined;
         var carry = @as(NodeId, 0);
@@ -359,6 +367,19 @@ pub const BitVector = struct {
         for (0..64) |i| {
             if (i + imm < 64) {
                 res.bits[i] = self.bits[i + imm];
+            } else {
+                res.bits[i] = 0;
+            }
+        }
+        _ = aig;
+        return res;
+    }
+
+    pub fn shlBv(self: BitVector, aig: *Aig, imm: u6) BitVector {
+        var res: BitVector = undefined;
+        for (0..64) |i| {
+            if (i >= imm) {
+                res.bits[i] = self.bits[i - imm];
             } else {
                 res.bits[i] = 0;
             }

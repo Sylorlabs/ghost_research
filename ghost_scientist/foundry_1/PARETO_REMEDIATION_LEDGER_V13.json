@@ -1,0 +1,49 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V13",
+  "parent_freeze": "results/pareto_remediation_v12_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phases": [107, 108],
+      "objective": "Authenticate and process-tree meter explicit fail-closed outcomes for A1, A6, A7, and A8 across the common 23-graph surface.",
+      "outcome": "REQUIRED_UNSUPPORTED_MATRIX_RESOURCE_PASS",
+      "scientific_effect": "Ninety-two arm-artifact outcomes preserve four distinct evidence-backed failure reasons. No arm becomes conformant or integrated, and no unsupported artifact is silently omitted."
+    },
+    {
+      "phases": [109, 110],
+      "objective": "Bind all 92 outcomes to strict common-contract pairs, reconcile complete measured CPU to one shared receipt, falsification-test the batch twice, and meter the full path.",
+      "outcome": "REQUIRED_UNSUPPORTED_CONTRACT_RESOURCE_PASS",
+      "scientific_effect": "Primary and independent verifiers accept all 92 pairs and reject 25 hostile batches twice. One receipt is charged once; all measured CPU is allocated exactly across one leading artifact per arm. P3 resource accounting closes while conformance and integration remain unchanged."
+    }
+  ],
+  "resource_progress": {
+    "explicit_required_unsupported_arms": ["A1", "A6", "A7", "A8"],
+    "artifacts_per_arm": 23,
+    "required_unsupported_contract_pairs": 92,
+    "shared_resource_receipts_charged": 1,
+    "cpu_charged_bindings": 4,
+    "hostile_batches_rejected_twice": 25,
+    "newly_conformant_arms": 0,
+    "newly_production_integrated_arms": 0,
+    "production_integrated_arms": 6,
+    "required_arms": 10,
+    "P3_complete": true
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 5,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "close P1 with a fourth independently implemented source-faithful control or preserve the unavailable route without substitution",
+      "do not treat resource-complete unsupported outcomes as control conformance or production integration",
+      "resolve the native-dedup stop only through a surviving invention or the already frozen measured-search distinction gate",
+      "rerun authorization only after P1 and every independent validity condition are proven"
+    ]
+  }
+}

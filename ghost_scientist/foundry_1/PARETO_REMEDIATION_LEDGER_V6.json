@@ -1,0 +1,49 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V6",
+  "parent_freeze": "results/pareto_remediation_v5_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 87,
+      "objective": "Audit the bounded handwritten interpreter against the complete real calibration operator vocabulary.",
+      "result": "results/phase87_calibration_operator_vocabulary_audit.json",
+      "outcome": "MANUAL_INTERPRETER_ROUTE_REJECTED",
+      "scientific_effect": "The three-op interpreter covers 3/41 unique operators and 53/337 call-function invocations. A partial manual proxy cannot establish production correctness; the required route is an evaluator-side framework runtime mount."
+    },
+    {
+      "phase": 88,
+      "objective": "Process-tree meter the full 23-graph vocabulary route audit.",
+      "result": "results/phase88_calibration_operator_vocabulary_resource_audit.json",
+      "outcome": "OPERATOR_ROUTE_RESOURCE_PASS",
+      "scientific_effect": "The route decision includes all 23 graphs and 41 operators under complete process-tree accounting; it does not implement the runtime mount or close P3."
+    }
+  ],
+  "route_progress": {
+    "calibration_graphs": 23,
+    "unique_operators": 41,
+    "call_function_invocations": 337,
+    "bounded_unique_operators": 3,
+    "bounded_invocations": 53,
+    "manual_interpreter_production_ready": false,
+    "required_runtime_route": "EVALUATOR_SIDE_FRAMEWORK_RUNTIME_MOUNT",
+    "production_integrated_arms": 2,
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "define a hash-bound evaluator runtime-mount interface that supplies real framework graph modules and inputs only after authorization",
+      "conformance-test the mount on calibration graphs across the observed 41-operator vocabulary",
+      "run A3/A9 search through the independent evaluator while framework execution supplies numerical correctness",
+      "retain empty state and matched resource ceilings"
+    ]
+  }
+}

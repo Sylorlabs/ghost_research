@@ -1,0 +1,192 @@
+{
+  "version": "FOUNDRY_PARETO_PROSPECTIVE_PROTOCOL_V1",
+  "status": "PREFLIGHT_ONLY_UNTIL_AUTHORIZED",
+  "research_claim": "Test whether a persistent LLM-free library of machine-selected verified typed tensor tools has causal and total-cost value on a post-freeze heterogeneous real-compiler workload stream.",
+  "chronology": [
+    "freeze upstream source identities, adapters, shapes, candidate state, fixed baseline, gates, budgets, containment, and evaluator sources",
+    "independently recompute Foundry-0 prerequisites and required-arm readiness",
+    "stop before importing validation-v6 unless every prerequisite and required arm passes",
+    "commit a post-freeze seed only after authorization",
+    "select and execute held-out graphs and shapes using only the committed procedure",
+    "seal every arm output before evaluator-private outcomes are mounted",
+    "emit raw resource, compiler, numerical, provenance, tool-use, and removal ledgers",
+    "run evaluator verdict and stdlib-only independent recomputation"
+  ],
+  "candidate": {
+    "arm": "A2",
+    "library": "results/forged_pareto_tools.json",
+    "llm_calls": 0,
+    "tools": 4,
+    "native_runtime_inventions_admitted": 0,
+    "search_level_candidates_retained": 4
+  },
+  "heldout": {
+    "source_freeze": "results/external_validation_v6_intake_freeze.json",
+    "runtime": "external_validation_v6_runtime.py",
+    "families": 4,
+    "repositories": 4,
+    "semantic_domains": 4,
+    "transformer_or_attention_count": 0,
+    "execution_observed": false
+  },
+  "arms": [
+    {
+      "id": "A0",
+      "name": "stock compiler",
+      "required_for_validity": true,
+      "evidence": ["ATEN_FIXED_PORTFOLIO_V2.json"],
+      "conformance_ready": true,
+      "production_integrated": true
+    },
+    {
+      "id": "A1",
+      "name": "v5.1 frozen conditional constructor",
+      "required_for_validity": true,
+      "evidence": ["../operator_v5_1"],
+      "conformance_ready": true,
+      "production_integrated": false
+    },
+    {
+      "id": "A2",
+      "name": "Foundry Pareto candidate",
+      "required_for_validity": true,
+      "evidence": [
+        "results/forged_pareto_tools.json",
+        "results/phase65_independent_pareto_conformance.json",
+        "results/phase66_pareto_native_dedup.json",
+        "results/phase67_pareto_resource_audit.json"
+      ],
+      "conformance_ready": true,
+      "production_integrated": true
+    },
+    {
+      "id": "A3",
+      "name": "no-library rediscovery",
+      "required_for_validity": true,
+      "evidence": [],
+      "conformance_ready": false,
+      "production_integrated": false
+    },
+    {
+      "id": "A4",
+      "name": "replay",
+      "required_for_validity": true,
+      "evidence": ["results/phase59_prospective_diversity_trial.json"],
+      "conformance_ready": false,
+      "production_integrated": false
+    },
+    {
+      "id": "A5",
+      "name": "typed Stitch-style MDL",
+      "required_for_validity": true,
+      "label": "ADAPTED",
+      "evidence": [
+        "results/phase35_stitch_source_control.json",
+        "results/phase36_stitch_source_resource_audit.json"
+      ],
+      "conformance_ready": true,
+      "production_integrated": false
+    },
+    {
+      "id": "A6",
+      "name": "Babble/ISAMORE-style anti-unification",
+      "required_for_validity": true,
+      "label": "ADAPTED_PARTIAL",
+      "evidence": [
+        "results/phase41_babble_source_control.json",
+        "results/phase42_babble_source_resource_audit.json",
+        "results/phase51_control_four_route_audit.json"
+      ],
+      "conformance_ready": false,
+      "production_integrated": false
+    },
+    {
+      "id": "A7",
+      "name": "Ruler/Enumo-style rule inference",
+      "required_for_validity": true,
+      "label": "ADAPTED",
+      "evidence": [
+        "results/phase45_enumo_source_control.json",
+        "results/phase46_enumo_source_resource_audit.json",
+        "results/phase47_enumo_metamorphic_control.json"
+      ],
+      "conformance_ready": true,
+      "production_integrated": false
+    },
+    {
+      "id": "A8",
+      "name": "EggMind-style strategy synthesis",
+      "required_for_validity": true,
+      "evidence": [],
+      "conformance_ready": false,
+      "production_integrated": false
+    },
+    {
+      "id": "A9",
+      "name": "compute-matched per-instance search",
+      "required_for_validity": true,
+      "evidence": [],
+      "conformance_ready": false,
+      "production_integrated": false
+    },
+    {
+      "id": "A10",
+      "name": "exhaustive bounded oracle",
+      "required_for_validity": false,
+      "evidence": ["../operator_v5_1"],
+      "conformance_ready": true,
+      "production_integrated": false
+    }
+  ],
+  "foundry_0_prerequisites": {
+    "P1_external_control_conformance": "four critical source-faithful or upstream controls must pass",
+    "P2_independent_corpus_and_invocation_trace": "heldout source corpus and independently justified invocation horizon must be frozen",
+    "P3_complete_resource_meter": "candidate and every required control arm must be process-tree metered",
+    "P4_independent_typed_tool_verifier": "strict parser, interpreter, hostile tests, and replay must pass",
+    "P5_native_compiler_deduplication": "every candidate must be classified and at least one nonduplicate or measured search distinction must survive",
+    "P6_unchanged_prospective_freeze": "all code, state, gates, budgets, and sampling machinery must be hash-frozen before heldout selection"
+  },
+  "hard_validity_gates": [
+    "V01 complete freeze authentication",
+    "V02 post-freeze committed seed selection",
+    "V03 no candidate-visible provenance or gate leakage",
+    "V04 every arm sealed before outcomes",
+    "V05 complete eager and compiled type-shape-layout-alias-storage checks",
+    "V06 maximum absolute error at most 1e-5",
+    "V07 complete evaluator-independent typed construction",
+    "V08 native dedup or disclosed measured search distinction",
+    "V09 complete resource ledgers",
+    "V10 A5-A9 conformance and budget equivalence",
+    "V11 containment and hostile probes",
+    "V12 stdlib-only independent recomputation"
+  ],
+  "scientific_gates": [
+    "R01 four tools survive verification and native dedup",
+    "R02 three surviving tools receive heldout reuse receipts",
+    "R03 two exact digests transfer across families",
+    "R04 four non-transformer heldout families",
+    "R05 causal tool-removal loss or cost increase",
+    "R06 primary endpoint beats strongest A3-A9 control",
+    "R07 candidate beats stock at independently justified N*",
+    "R08 bounded-oracle regret at most 3%",
+    "R09 no exact calibration-shape-only use",
+    "R10 at least one non-predeclared useful tool",
+    "R11 zero compiler-verifier-containment-evaluator failures",
+    "R12 leave-one-family-out PASS"
+  ],
+  "stop_conditions": [
+    "no candidate tool survives native-compiler deduplication",
+    "development gains disappear under total compute matching",
+    "no cross-family transfer",
+    "EggMind-style or no-library control dominates",
+    "Babble/ISAMORE-style control dominates",
+    "invocation trace cannot justify N*",
+    "tool verification is not independent"
+  ],
+  "execution_policy": {
+    "authorization_required": true,
+    "authorization_result": "results/phase68_pareto_authorization_audit.json",
+    "on_failed_prerequisite": "execute documented remediation without importing validation-v6",
+    "on_all_prerequisites_pass": "freeze post-freeze seed and execute exactly once without outcome-driven intervention"
+  }
+}

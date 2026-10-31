@@ -1,0 +1,904 @@
+row,seed,arm,target,true_family,family_used,mechanism,solved,evals,test_acc,router_top1
+router_loo,0xF0235A11CE0FF1CE,,,,63,0.6508,,,,
+target,0xF0235A11CE0FF1CE,hand,"B1 random monomial deg2",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B2 random monomial deg3",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B3 sum(g) % 7",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B4 sign%mod 11",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B5 Walsh χ{S=0x11}",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B6 Walsh χ{S=0xA4}",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B7 Walsh χ{S=0x0A}",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B8 parity-of-count",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B9 oriented v1>v0",gf2,gf2,hand,0,45,0.5000,base
+target,0xF0235A11CE0FF1CE,hand,"B10 parity AND sum%5",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"B11 inversion parity",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C01 XOR 0x0F",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C02 parity XOR 0x33",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C03 XOR 0x55",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C04 XOR 0xAA",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C05 XOR 0x3C",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C06 XOR 0x66",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C07 XOR 0x99",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C08 parity count",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C09 inv parity",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C10 parity XOR 0x0F",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"C11 XOR 0x37",gf2,gf2,hand,1,45,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D01 sum%2",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D02 sum%3",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D03 sum%5",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D04 sum%7",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D05 sum%11",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D06 sum%13",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D07 count3%3",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D08 count3%4",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D09 count3%5",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D10 count3%6",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"D11 subset-parity{0-3}",base,base,hand,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"TE1 count(>=1)%4==0",thresh,thresh,hand,1,25,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"TE2 count(>=2)%3==0",thresh,thresh,hand,1,25,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"TE3 count(>=5)%2==0",thresh,thresh,hand,1,25,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"TE4 count(>=1)%3==1",thresh,thresh,hand,1,25,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"TE5 count(>=4)%5==0",thresh,thresh,hand,1,25,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"ME1 sum%2==c1%2",mixr,mixr,hand,0,37,0.5143,base
+target,0xF0235A11CE0FF1CE,hand,"ME2 c2%3==inv%3",mixr,mixr,hand,0,37,0.6560,base
+target,0xF0235A11CE0FF1CE,hand,"ME3 sum%4==inv%4",mixr,mixr,hand,0,37,0.7383,base
+target,0xF0235A11CE0FF1CE,hand,"ME4 c1%3==c5%3",mixr,mixr,hand,0,37,0.6469,base
+target,0xF0235A11CE0FF1CE,hand,"ME5 sum%5==c4%5",mixr,mixr,hand,0,37,0.7880,base
+target,0xF0235A11CE0FF1CE,hand,"RE1 c2*c5%4==0",ratio,ratio,hand,0,37,0.7583,base
+target,0xF0235A11CE0FF1CE,hand,"RE2 c1*c4%5==0",ratio,ratio,hand,1,37,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RE3 c3*c1%3==0",ratio,ratio,hand,0,37,0.7137,base
+target,0xF0235A11CE0FF1CE,hand,"RE4 c2*c4%3==0",ratio,ratio,hand,0,37,0.7189,base
+target,0xF0235A11CE0FF1CE,hand,"RE5 c1*c5%2==0",ratio,ratio,hand,0,37,0.7594,base
+target,0xF0235A11CE0FF1CE,hand,"RN1 run(>=2)>=4",run,run,hand,0,31,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RN2 run(>=4)>=2",run,run,hand,0,31,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RN3 numLocalMax>=2",run,run,hand,1,31,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RN4 firstDescent<3",run,run,hand,1,31,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RN5 run(>=2)%3==0",run,run,hand,1,31,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RK1 star(1)%3==0",rank,rank,hand,1,49,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RK2 star(5)%4==0",rank,rank,hand,1,49,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RK3 star(7)%3==1",rank,rank,hand,1,49,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RK4 star(2)%3==0",rank,rank,hand,1,49,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"RK5 star(6)%4==1",rank,rank,hand,1,49,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"DS1 nd(evens)==2",distinct,distinct,hand,1,217,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"DS2 nd(odds)==3",distinct,distinct,hand,1,217,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"DS3 nd(mid4)==2",distinct,distinct,hand,1,217,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"DS4 nd(all8)==3",distinct,distinct,hand,1,217,1.0000,base
+target,0xF0235A11CE0FF1CE,hand,"DS5 nd(first6)>=4",distinct,distinct,hand,1,217,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"MIXMOD1 sum%3==c3%3",mixr,mixr,hand,1,37,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"MIXMOD2 sum%4==c2%4",mixr,mixr,hand,0,37,0.7663,base
+frontier,0xF0235A11CE0FF1CE,hand,"RATIO1 c4*c1%3==0",ratio,ratio,hand,1,37,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"RUN1 maxRunGE3>=3",run,run,hand,0,31,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"ORDER2 star(0)%2",gf2,gf2,hand,1,45,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"ORDER2_MOD3 star(0)%3==0",rank,rank,hand,1,49,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"RANK2_MOD3 star(3)%3==0",rank,rank,hand,1,49,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"WALL_EASY nd(all8)>=4",distinct,distinct,hand,1,217,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,hand,1,217,1.0000,base
+frontier,0xF0235A11CE0FF1CE,hand,"WALL_HARD nd(lo4)=2&hi4=2",distinct,distinct,hand,1,217,0.9789,base
+arm_totals,0xF0235A11CE0FF1CE,hand,,,,,12738,0.0000,,
+arm_summary,0xF0235A11CE0FF1CE,hand,B=10/11;C=11/11;D=11/11;extra=19/30;frontier=8/10;evals=12738,,,,,,,,
+target,0xF0235A11CE0FF1CE,autonomous,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B9 oriented v1>v0",gf2,base,none,0,927,0.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"B11 inversion parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C01 XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C02 parity XOR 0x33",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C03 XOR 0x55",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C04 XOR 0xAA",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C05 XOR 0x3C",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C06 XOR 0x66",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C07 XOR 0x99",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"C09 inv parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C10 parity XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"C11 XOR 0x37",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,autonomous,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,autonomous,"TE1 count(>=1)%4==0",thresh,thresh,smartgen,1,512,1.0000,thresh
+target,0xF0235A11CE0FF1CE,autonomous,"TE2 count(>=2)%3==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0xF0235A11CE0FF1CE,autonomous,"TE3 count(>=5)%2==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0xF0235A11CE0FF1CE,autonomous,"TE4 count(>=1)%3==1",thresh,thresh,known,1,25,1.0000,thresh
+target,0xF0235A11CE0FF1CE,autonomous,"TE5 count(>=4)%5==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0xF0235A11CE0FF1CE,autonomous,"ME1 sum%2==c1%2",mixr,base,none,0,517,0.0000,mixr
+target,0xF0235A11CE0FF1CE,autonomous,"ME2 c2%3==inv%3",mixr,base,none,0,1179,0.0000,mixr
+target,0xF0235A11CE0FF1CE,autonomous,"ME3 sum%4==inv%4",mixr,base,none,0,1179,0.0000,mixr
+target,0xF0235A11CE0FF1CE,autonomous,"ME4 c1%3==c5%3",mixr,base,none,0,1147,0.0000,mixr
+target,0xF0235A11CE0FF1CE,autonomous,"ME5 sum%5==c4%5",mixr,base,none,0,1179,0.0000,mixr
+target,0xF0235A11CE0FF1CE,autonomous,"RE1 c2*c5%4==0",ratio,base,none,0,793,0.0000,ratio
+target,0xF0235A11CE0FF1CE,autonomous,"RE2 c1*c4%5==0",ratio,thresh,known,1,25,0.9143,ratio
+target,0xF0235A11CE0FF1CE,autonomous,"RE3 c3*c1%3==0",ratio,base,none,0,637,0.0000,ratio
+target,0xF0235A11CE0FF1CE,autonomous,"RE4 c2*c4%3==0",ratio,base,none,0,601,0.0000,ratio
+target,0xF0235A11CE0FF1CE,autonomous,"RE5 c1*c5%2==0",ratio,base,none,0,1147,0.0000,ratio
+target,0xF0235A11CE0FF1CE,autonomous,"RN1 run(>=2)>=4",run,base,none,0,583,0.0000,run
+target,0xF0235A11CE0FF1CE,autonomous,"RN2 run(>=4)>=2",run,base,none,0,547,0.0000,run
+target,0xF0235A11CE0FF1CE,autonomous,"RN3 numLocalMax>=2",run,run,smartgen,1,543,1.0000,run
+target,0xF0235A11CE0FF1CE,autonomous,"RN4 firstDescent<3",run,run,known,1,31,1.0000,run
+target,0xF0235A11CE0FF1CE,autonomous,"RN5 run(>=2)%3==0",run,run,known,1,31,1.0000,run
+target,0xF0235A11CE0FF1CE,autonomous,"RK1 star(1)%3==0",rank,base,none,0,835,0.0000,rank
+target,0xF0235A11CE0FF1CE,autonomous,"RK2 star(5)%4==0",rank,rank,smartgen,1,592,1.0000,rank
+target,0xF0235A11CE0FF1CE,autonomous,"RK3 star(7)%3==1",rank,rank,known,1,49,1.0000,rank
+target,0xF0235A11CE0FF1CE,autonomous,"RK4 star(2)%3==0",rank,rank,known,1,49,1.0000,rank
+target,0xF0235A11CE0FF1CE,autonomous,"RK5 star(6)%4==1",rank,rank,known,1,49,1.0000,rank
+target,0xF0235A11CE0FF1CE,autonomous,"DS1 nd(evens)==2",distinct,distinct,smartgen,1,809,1.0000,distinct
+target,0xF0235A11CE0FF1CE,autonomous,"DS2 nd(odds)==3",distinct,distinct,known,1,217,1.0000,distinct
+target,0xF0235A11CE0FF1CE,autonomous,"DS3 nd(mid4)==2",distinct,distinct,known,1,217,1.0000,distinct
+target,0xF0235A11CE0FF1CE,autonomous,"DS4 nd(all8)==3",distinct,distinct,known,1,217,1.0000,distinct
+target,0xF0235A11CE0FF1CE,autonomous,"DS5 nd(first6)>=4",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0xF0235A11CE0FF1CE,autonomous,"MIXMOD1 sum%3==c3%3",mixr,mixr,smartgen,1,1080,1.0000,mixr
+frontier,0xF0235A11CE0FF1CE,autonomous,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,1179,0.0000,mixr
+frontier,0xF0235A11CE0FF1CE,autonomous,"RATIO1 c4*c1%3==0",ratio,ratio,smartgen,1,907,1.0000,ratio
+frontier,0xF0235A11CE0FF1CE,autonomous,"RUN1 maxRunGE3>=3",run,base,none,0,997,0.0000,run
+frontier,0xF0235A11CE0FF1CE,autonomous,"ORDER2 star(0)%2",gf2,rank,known,1,363,1.0000,run
+frontier,0xF0235A11CE0FF1CE,autonomous,"ORDER2_MOD3 star(0)%3==0",rank,rank,known,1,49,1.0000,rank
+frontier,0xF0235A11CE0FF1CE,autonomous,"RANK2_MOD3 star(3)%3==0",rank,rank,known,1,49,1.0000,rank
+frontier,0xF0235A11CE0FF1CE,autonomous,"WALL_EASY nd(all8)>=4",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0xF0235A11CE0FF1CE,autonomous,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0xF0235A11CE0FF1CE,autonomous,"WALL_HARD nd(lo4)=2&hi4=2",distinct,base,known,1,442,0.9754,base
+arm_totals,0xF0235A11CE0FF1CE,autonomous,,,,,30206,0.0000,,
+arm_summary,0xF0235A11CE0FF1CE,autonomous,B=10/11;C=11/11;D=11/11;extra=18/30;frontier=8/10;evals=30206,,,,,,,,
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B9 oriented v1>v0",gf2,base,none,0,487,0.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"B11 inversion parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C01 XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C02 parity XOR 0x33",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C03 XOR 0x55",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C04 XOR 0xAA",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C05 XOR 0x3C",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C06 XOR 0x66",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C07 XOR 0x99",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C09 inv parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C10 parity XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"C11 XOR 0x37",gf2,gf2,known,1,45,1.0000,gf2
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"TE1 count(>=1)%4==0",thresh,base,none,0,487,0.0000,thresh
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"TE2 count(>=2)%3==0",thresh,base,none,0,487,0.0000,thresh
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"TE3 count(>=5)%2==0",thresh,base,none,0,487,0.0000,thresh
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"TE4 count(>=1)%3==1",thresh,base,none,0,487,0.0000,thresh
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"TE5 count(>=4)%5==0",thresh,base,none,0,487,0.0000,thresh
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"ME1 sum%2==c1%2",mixr,base,none,0,487,0.0000,mixr
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"ME2 c2%3==inv%3",mixr,base,none,0,487,0.0000,mixr
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"ME3 sum%4==inv%4",mixr,base,none,0,487,0.0000,mixr
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"ME4 c1%3==c5%3",mixr,base,none,0,487,0.0000,mixr
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"ME5 sum%5==c4%5",mixr,base,none,0,487,0.0000,mixr
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RE1 c2*c5%4==0",ratio,base,none,0,487,0.0000,ratio
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RE2 c1*c4%5==0",ratio,base,none,0,487,0.0000,ratio
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RE3 c3*c1%3==0",ratio,base,none,0,487,0.0000,ratio
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RE4 c2*c4%3==0",ratio,base,none,0,487,0.0000,ratio
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RE5 c1*c5%2==0",ratio,base,none,0,487,0.0000,ratio
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RN1 run(>=2)>=4",run,base,none,0,487,0.0000,run
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RN2 run(>=4)>=2",run,base,none,0,487,0.0000,run
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RN3 numLocalMax>=2",run,base,none,0,487,0.0000,run
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RN4 firstDescent<3",run,base,known,1,442,0.9023,run
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RN5 run(>=2)%3==0",run,base,none,0,487,0.0000,run
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RK1 star(1)%3==0",rank,base,none,0,487,0.0000,rank
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RK2 star(5)%4==0",rank,base,none,0,487,0.0000,rank
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RK3 star(7)%3==1",rank,base,none,0,487,0.0000,rank
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RK4 star(2)%3==0",rank,base,none,0,487,0.0000,rank
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"RK5 star(6)%4==1",rank,base,none,0,487,0.0000,rank
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"DS1 nd(evens)==2",distinct,base,none,0,487,0.0000,distinct
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"DS2 nd(odds)==3",distinct,base,none,0,487,0.0000,distinct
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"DS3 nd(mid4)==2",distinct,base,none,0,487,0.0000,distinct
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"DS4 nd(all8)==3",distinct,base,known,1,442,0.9400,distinct
+target,0xF0235A11CE0FF1CE,auto_nosmartgen,"DS5 nd(first6)>=4",distinct,base,none,0,487,0.0000,distinct
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"MIXMOD1 sum%3==c3%3",mixr,base,none,0,487,0.0000,mixr
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,487,0.0000,mixr
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"RATIO1 c4*c1%3==0",ratio,base,none,0,487,0.0000,ratio
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"RUN1 maxRunGE3>=3",run,base,none,0,487,0.0000,run
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"ORDER2 star(0)%2",gf2,gf2,known,1,45,1.0000,run
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"ORDER2_MOD3 star(0)%3==0",rank,base,none,0,487,0.0000,rank
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"RANK2_MOD3 star(3)%3==0",rank,base,none,0,487,0.0000,rank
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"WALL_EASY nd(all8)>=4",distinct,base,known,1,442,0.9383,distinct
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"WALL_MED nd(lo4)==nd(hi4)",distinct,base,none,0,487,0.0000,distinct
+frontier,0xF0235A11CE0FF1CE,auto_nosmartgen,"WALL_HARD nd(lo4)=2&hi4=2",distinct,base,known,1,442,0.9754,base
+arm_totals,0xF0235A11CE0FF1CE,auto_nosmartgen,,,,,29122,0.0000,,
+arm_summary,0xF0235A11CE0FF1CE,auto_nosmartgen,B=10/11;C=11/11;D=11/11;extra=2/30;frontier=3/10;evals=29122,,,,,,,,
+target,0xF0235A11CE0FF1CE,auto_norouter,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B9 oriented v1>v0",gf2,base,none,0,927,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"B11 inversion parity",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C01 XOR 0x0F",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C02 parity XOR 0x33",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C03 XOR 0x55",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C04 XOR 0xAA",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C05 XOR 0x3C",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C06 XOR 0x66",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C07 XOR 0x99",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C09 inv parity",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C10 parity XOR 0x0F",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"C11 XOR 0x37",gf2,gf2,known,1,487,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"TE1 count(>=1)%4==0",thresh,thresh,smartgen,1,512,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"TE2 count(>=2)%3==0",thresh,thresh,known,1,512,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"TE3 count(>=5)%2==0",thresh,thresh,known,1,512,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"TE4 count(>=1)%3==1",thresh,thresh,known,1,512,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"TE5 count(>=4)%5==0",thresh,thresh,known,1,512,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"ME1 sum%2==c1%2",mixr,base,none,0,517,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"ME2 c2%3==inv%3",mixr,base,none,0,1179,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"ME3 sum%4==inv%4",mixr,base,none,0,1179,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"ME4 c1%3==c5%3",mixr,base,none,0,1147,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"ME5 sum%5==c4%5",mixr,base,none,0,1179,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RE1 c2*c5%4==0",ratio,base,none,0,793,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RE2 c1*c4%5==0",ratio,thresh,known,1,512,0.9143,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RE3 c3*c1%3==0",ratio,base,none,0,637,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RE4 c2*c4%3==0",ratio,base,none,0,601,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RE5 c1*c5%2==0",ratio,base,none,0,1147,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RN1 run(>=2)>=4",run,base,none,0,583,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RN2 run(>=4)>=2",run,base,none,0,547,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RN3 numLocalMax>=2",run,run,smartgen,1,545,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RN4 firstDescent<3",run,base,known,1,442,0.9023,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RN5 run(>=2)%3==0",run,run,known,1,543,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RK1 star(1)%3==0",rank,base,none,0,835,0.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RK2 star(5)%4==0",rank,rank,smartgen,1,666,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RK3 star(7)%3==1",rank,rank,known,1,592,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RK4 star(2)%3==0",rank,rank,known,1,592,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"RK5 star(6)%4==1",rank,rank,known,1,592,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"DS1 nd(evens)==2",distinct,distinct,smartgen,1,883,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"DS2 nd(odds)==3",distinct,distinct,known,1,809,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"DS3 nd(mid4)==2",distinct,distinct,known,1,809,1.0000,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"DS4 nd(all8)==3",distinct,base,known,1,442,0.9400,base
+target,0xF0235A11CE0FF1CE,auto_norouter,"DS5 nd(first6)>=4",distinct,distinct,known,1,809,1.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"MIXMOD1 sum%3==c3%3",mixr,mixr,smartgen,1,1080,1.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,1179,0.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"RATIO1 c4*c1%3==0",ratio,ratio,smartgen,1,907,1.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"RUN1 maxRunGE3>=3",run,base,none,0,997,0.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"ORDER2 star(0)%2",gf2,gf2,known,1,487,1.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"ORDER2_MOD3 star(0)%3==0",rank,rank,known,1,666,1.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"RANK2_MOD3 star(3)%3==0",rank,rank,known,1,666,1.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"WALL_EASY nd(all8)>=4",distinct,base,known,1,442,0.9383,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,known,1,883,1.0000,base
+frontier,0xF0235A11CE0FF1CE,auto_norouter,"WALL_HARD nd(lo4)=2&hi4=2",distinct,base,known,1,442,0.9754,base
+arm_totals,0xF0235A11CE0FF1CE,auto_norouter,,,,,44455,0.0000,,
+arm_summary,0xF0235A11CE0FF1CE,auto_norouter,B=10/11;C=11/11;D=11/11;extra=18/30;frontier=8/10;evals=44455,,,,,,,,
+router_loo,0x00C1B10D20260706,,,,63,0.6825,,,,
+target,0x00C1B10D20260706,hand,"B1 random monomial deg2",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B2 random monomial deg3",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B3 sum(g) % 7",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B4 sign%mod 11",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B5 Walsh χ{S=0x11}",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B6 Walsh χ{S=0xA4}",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B7 Walsh χ{S=0x0A}",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B8 parity-of-count",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B9 oriented v1>v0",gf2,gf2,hand,0,45,0.5000,base
+target,0x00C1B10D20260706,hand,"B10 parity AND sum%5",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"B11 inversion parity",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C01 XOR 0x0F",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C02 parity XOR 0x33",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C03 XOR 0x55",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C04 XOR 0xAA",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C05 XOR 0x3C",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C06 XOR 0x66",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C07 XOR 0x99",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C08 parity count",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"C09 inv parity",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C10 parity XOR 0x0F",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"C11 XOR 0x37",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C1B10D20260706,hand,"D01 sum%2",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D02 sum%3",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D03 sum%5",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D04 sum%7",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D05 sum%11",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D06 sum%13",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D07 count3%3",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D08 count3%4",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D09 count3%5",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D10 count3%6",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"D11 subset-parity{0-3}",base,base,hand,1,442,1.0000,base
+target,0x00C1B10D20260706,hand,"TE1 count(>=1)%4==0",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C1B10D20260706,hand,"TE2 count(>=2)%3==0",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C1B10D20260706,hand,"TE3 count(>=5)%2==0",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C1B10D20260706,hand,"TE4 count(>=1)%3==1",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C1B10D20260706,hand,"TE5 count(>=4)%5==0",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C1B10D20260706,hand,"ME1 sum%2==c1%2",mixr,mixr,hand,0,37,0.5280,base
+target,0x00C1B10D20260706,hand,"ME2 c2%3==inv%3",mixr,mixr,hand,0,37,0.6566,base
+target,0x00C1B10D20260706,hand,"ME3 sum%4==inv%4",mixr,mixr,hand,0,37,0.7469,base
+target,0x00C1B10D20260706,hand,"ME4 c1%3==c5%3",mixr,mixr,hand,0,37,0.6577,base
+target,0x00C1B10D20260706,hand,"ME5 sum%5==c4%5",mixr,mixr,hand,0,37,0.8006,base
+target,0x00C1B10D20260706,hand,"RE1 c2*c5%4==0",ratio,ratio,hand,0,37,0.7411,base
+target,0x00C1B10D20260706,hand,"RE2 c1*c4%5==0",ratio,ratio,hand,1,37,1.0000,base
+target,0x00C1B10D20260706,hand,"RE3 c3*c1%3==0",ratio,ratio,hand,0,37,0.7183,base
+target,0x00C1B10D20260706,hand,"RE4 c2*c4%3==0",ratio,ratio,hand,0,37,0.7183,base
+target,0x00C1B10D20260706,hand,"RE5 c1*c5%2==0",ratio,ratio,hand,0,37,0.7783,base
+target,0x00C1B10D20260706,hand,"RN1 run(>=2)>=4",run,run,hand,0,31,1.0000,base
+target,0x00C1B10D20260706,hand,"RN2 run(>=4)>=2",run,run,hand,0,31,1.0000,base
+target,0x00C1B10D20260706,hand,"RN3 numLocalMax>=2",run,run,hand,1,31,1.0000,base
+target,0x00C1B10D20260706,hand,"RN4 firstDescent<3",run,run,hand,1,31,1.0000,base
+target,0x00C1B10D20260706,hand,"RN5 run(>=2)%3==0",run,run,hand,1,31,1.0000,base
+target,0x00C1B10D20260706,hand,"RK1 star(1)%3==0",rank,rank,hand,1,49,1.0000,base
+target,0x00C1B10D20260706,hand,"RK2 star(5)%4==0",rank,rank,hand,1,49,1.0000,base
+target,0x00C1B10D20260706,hand,"RK3 star(7)%3==1",rank,rank,hand,1,49,1.0000,base
+target,0x00C1B10D20260706,hand,"RK4 star(2)%3==0",rank,rank,hand,1,49,1.0000,base
+target,0x00C1B10D20260706,hand,"RK5 star(6)%4==1",rank,rank,hand,1,49,1.0000,base
+target,0x00C1B10D20260706,hand,"DS1 nd(evens)==2",distinct,distinct,hand,1,217,1.0000,base
+target,0x00C1B10D20260706,hand,"DS2 nd(odds)==3",distinct,distinct,hand,1,217,1.0000,base
+target,0x00C1B10D20260706,hand,"DS3 nd(mid4)==2",distinct,distinct,hand,1,217,1.0000,base
+target,0x00C1B10D20260706,hand,"DS4 nd(all8)==3",distinct,distinct,hand,1,217,1.0000,base
+target,0x00C1B10D20260706,hand,"DS5 nd(first6)>=4",distinct,distinct,hand,1,217,1.0000,base
+frontier,0x00C1B10D20260706,hand,"MIXMOD1 sum%3==c3%3",mixr,mixr,hand,1,37,1.0000,base
+frontier,0x00C1B10D20260706,hand,"MIXMOD2 sum%4==c2%4",mixr,mixr,hand,0,37,0.7549,base
+frontier,0x00C1B10D20260706,hand,"RATIO1 c4*c1%3==0",ratio,ratio,hand,1,37,1.0000,base
+frontier,0x00C1B10D20260706,hand,"RUN1 maxRunGE3>=3",run,run,hand,0,31,1.0000,base
+frontier,0x00C1B10D20260706,hand,"ORDER2 star(0)%2",gf2,gf2,hand,1,45,1.0000,base
+frontier,0x00C1B10D20260706,hand,"ORDER2_MOD3 star(0)%3==0",rank,rank,hand,1,49,1.0000,base
+frontier,0x00C1B10D20260706,hand,"RANK2_MOD3 star(3)%3==0",rank,rank,hand,1,49,1.0000,base
+frontier,0x00C1B10D20260706,hand,"WALL_EASY nd(all8)>=4",distinct,distinct,hand,1,217,1.0000,base
+frontier,0x00C1B10D20260706,hand,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,hand,1,217,1.0000,base
+frontier,0x00C1B10D20260706,hand,"WALL_HARD nd(lo4)=2&hi4=2",distinct,distinct,hand,1,217,0.9726,base
+arm_totals,0x00C1B10D20260706,hand,,,,,12738,0.0000,,
+arm_summary,0x00C1B10D20260706,hand,B=10/11;C=11/11;D=11/11;extra=19/30;frontier=8/10;evals=12738,,,,,,,,
+target,0x00C1B10D20260706,autonomous,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B9 oriented v1>v0",gf2,base,none,0,927,0.0000,gf2
+target,0x00C1B10D20260706,autonomous,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"B11 inversion parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C01 XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C02 parity XOR 0x33",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C03 XOR 0x55",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C04 XOR 0xAA",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C05 XOR 0x3C",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C06 XOR 0x66",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C07 XOR 0x99",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"C09 inv parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C10 parity XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"C11 XOR 0x37",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,autonomous,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,autonomous,"TE1 count(>=1)%4==0",thresh,thresh,smartgen,1,512,1.0000,thresh
+target,0x00C1B10D20260706,autonomous,"TE2 count(>=2)%3==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0x00C1B10D20260706,autonomous,"TE3 count(>=5)%2==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0x00C1B10D20260706,autonomous,"TE4 count(>=1)%3==1",thresh,thresh,known,1,25,1.0000,thresh
+target,0x00C1B10D20260706,autonomous,"TE5 count(>=4)%5==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0x00C1B10D20260706,autonomous,"ME1 sum%2==c1%2",mixr,base,none,0,517,0.0000,mixr
+target,0x00C1B10D20260706,autonomous,"ME2 c2%3==inv%3",mixr,base,none,0,1179,0.0000,mixr
+target,0x00C1B10D20260706,autonomous,"ME3 sum%4==inv%4",mixr,base,none,0,1179,0.0000,mixr
+target,0x00C1B10D20260706,autonomous,"ME4 c1%3==c5%3",mixr,base,none,0,1117,0.0000,mixr
+target,0x00C1B10D20260706,autonomous,"ME5 sum%5==c4%5",mixr,base,none,0,1179,0.0000,mixr
+target,0x00C1B10D20260706,autonomous,"RE1 c2*c5%4==0",ratio,base,none,0,793,0.0000,ratio
+target,0x00C1B10D20260706,autonomous,"RE2 c1*c4%5==0",ratio,ratio,smartgen,1,549,1.0000,ratio
+target,0x00C1B10D20260706,autonomous,"RE3 c3*c1%3==0",ratio,base,none,0,637,0.0000,ratio
+target,0x00C1B10D20260706,autonomous,"RE4 c2*c4%3==0",ratio,base,none,0,927,0.0000,ratio
+target,0x00C1B10D20260706,autonomous,"RE5 c1*c5%2==0",ratio,base,none,0,1213,0.0000,ratio
+target,0x00C1B10D20260706,autonomous,"RN1 run(>=2)>=4",run,base,none,0,583,0.0000,run
+target,0x00C1B10D20260706,autonomous,"RN2 run(>=4)>=2",run,base,none,0,583,0.0000,run
+target,0x00C1B10D20260706,autonomous,"RN3 numLocalMax>=2",run,run,smartgen,1,580,1.0000,run
+target,0x00C1B10D20260706,autonomous,"RN4 firstDescent<3",run,run,known,1,31,1.0000,run
+target,0x00C1B10D20260706,autonomous,"RN5 run(>=2)%3==0",run,run,known,1,31,1.0000,run
+target,0x00C1B10D20260706,autonomous,"RK1 star(1)%3==0",rank,base,none,0,879,0.0000,rank
+target,0x00C1B10D20260706,autonomous,"RK2 star(5)%4==0",rank,rank,smartgen,1,629,1.0000,rank
+target,0x00C1B10D20260706,autonomous,"RK3 star(7)%3==1",rank,rank,known,1,49,1.0000,rank
+target,0x00C1B10D20260706,autonomous,"RK4 star(2)%3==0",rank,rank,known,1,49,1.0000,rank
+target,0x00C1B10D20260706,autonomous,"RK5 star(6)%4==1",rank,rank,known,1,49,1.0000,rank
+target,0x00C1B10D20260706,autonomous,"DS1 nd(evens)==2",distinct,distinct,smartgen,1,846,1.0000,distinct
+target,0x00C1B10D20260706,autonomous,"DS2 nd(odds)==3",distinct,distinct,known,1,217,1.0000,distinct
+target,0x00C1B10D20260706,autonomous,"DS3 nd(mid4)==2",distinct,distinct,known,1,217,1.0000,distinct
+target,0x00C1B10D20260706,autonomous,"DS4 nd(all8)==3",distinct,distinct,known,1,217,1.0000,distinct
+target,0x00C1B10D20260706,autonomous,"DS5 nd(first6)>=4",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0x00C1B10D20260706,autonomous,"MIXMOD1 sum%3==c3%3",mixr,mixr,smartgen,1,1147,1.0000,mixr
+frontier,0x00C1B10D20260706,autonomous,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,1179,0.0000,mixr
+frontier,0x00C1B10D20260706,autonomous,"RATIO1 c4*c1%3==0",ratio,ratio,known,1,37,1.0000,ratio
+frontier,0x00C1B10D20260706,autonomous,"RUN1 maxRunGE3>=3",run,base,none,0,997,0.0000,run
+frontier,0x00C1B10D20260706,autonomous,"ORDER2 star(0)%2",gf2,rank,known,1,80,1.0000,run
+frontier,0x00C1B10D20260706,autonomous,"ORDER2_MOD3 star(0)%3==0",rank,rank,known,1,49,1.0000,rank
+frontier,0x00C1B10D20260706,autonomous,"RANK2_MOD3 star(3)%3==0",rank,rank,known,1,49,1.0000,rank
+frontier,0x00C1B10D20260706,autonomous,"WALL_EASY nd(all8)>=4",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0x00C1B10D20260706,autonomous,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0x00C1B10D20260706,autonomous,"WALL_HARD nd(lo4)=2&hi4=2",distinct,base,known,1,442,0.9714,base
+arm_totals,0x00C1B10D20260706,autonomous,,,,,30197,0.0000,,
+arm_summary,0x00C1B10D20260706,autonomous,B=10/11;C=11/11;D=11/11;extra=18/30;frontier=8/10;evals=30197,,,,,,,,
+target,0x00C1B10D20260706,auto_nosmartgen,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B9 oriented v1>v0",gf2,base,none,0,487,0.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"B11 inversion parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C01 XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C02 parity XOR 0x33",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C03 XOR 0x55",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C04 XOR 0xAA",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C05 XOR 0x3C",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C06 XOR 0x66",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C07 XOR 0x99",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"C09 inv parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C10 parity XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"C11 XOR 0x37",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C1B10D20260706,auto_nosmartgen,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_nosmartgen,"TE1 count(>=1)%4==0",thresh,base,none,0,487,0.0000,thresh
+target,0x00C1B10D20260706,auto_nosmartgen,"TE2 count(>=2)%3==0",thresh,base,none,0,487,0.0000,thresh
+target,0x00C1B10D20260706,auto_nosmartgen,"TE3 count(>=5)%2==0",thresh,base,none,0,487,0.0000,thresh
+target,0x00C1B10D20260706,auto_nosmartgen,"TE4 count(>=1)%3==1",thresh,base,none,0,487,0.0000,thresh
+target,0x00C1B10D20260706,auto_nosmartgen,"TE5 count(>=4)%5==0",thresh,base,none,0,487,0.0000,thresh
+target,0x00C1B10D20260706,auto_nosmartgen,"ME1 sum%2==c1%2",mixr,base,none,0,487,0.0000,mixr
+target,0x00C1B10D20260706,auto_nosmartgen,"ME2 c2%3==inv%3",mixr,base,none,0,487,0.0000,mixr
+target,0x00C1B10D20260706,auto_nosmartgen,"ME3 sum%4==inv%4",mixr,base,none,0,487,0.0000,mixr
+target,0x00C1B10D20260706,auto_nosmartgen,"ME4 c1%3==c5%3",mixr,base,none,0,487,0.0000,mixr
+target,0x00C1B10D20260706,auto_nosmartgen,"ME5 sum%5==c4%5",mixr,base,none,0,487,0.0000,mixr
+target,0x00C1B10D20260706,auto_nosmartgen,"RE1 c2*c5%4==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C1B10D20260706,auto_nosmartgen,"RE2 c1*c4%5==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C1B10D20260706,auto_nosmartgen,"RE3 c3*c1%3==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C1B10D20260706,auto_nosmartgen,"RE4 c2*c4%3==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C1B10D20260706,auto_nosmartgen,"RE5 c1*c5%2==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C1B10D20260706,auto_nosmartgen,"RN1 run(>=2)>=4",run,base,none,0,487,0.0000,run
+target,0x00C1B10D20260706,auto_nosmartgen,"RN2 run(>=4)>=2",run,base,none,0,487,0.0000,run
+target,0x00C1B10D20260706,auto_nosmartgen,"RN3 numLocalMax>=2",run,base,none,0,487,0.0000,run
+target,0x00C1B10D20260706,auto_nosmartgen,"RN4 firstDescent<3",run,base,known,1,442,0.9017,run
+target,0x00C1B10D20260706,auto_nosmartgen,"RN5 run(>=2)%3==0",run,base,none,0,487,0.0000,run
+target,0x00C1B10D20260706,auto_nosmartgen,"RK1 star(1)%3==0",rank,base,none,0,487,0.0000,rank
+target,0x00C1B10D20260706,auto_nosmartgen,"RK2 star(5)%4==0",rank,base,none,0,487,0.0000,rank
+target,0x00C1B10D20260706,auto_nosmartgen,"RK3 star(7)%3==1",rank,base,none,0,487,0.0000,rank
+target,0x00C1B10D20260706,auto_nosmartgen,"RK4 star(2)%3==0",rank,base,none,0,487,0.0000,rank
+target,0x00C1B10D20260706,auto_nosmartgen,"RK5 star(6)%4==1",rank,base,none,0,487,0.0000,rank
+target,0x00C1B10D20260706,auto_nosmartgen,"DS1 nd(evens)==2",distinct,base,none,0,487,0.0000,distinct
+target,0x00C1B10D20260706,auto_nosmartgen,"DS2 nd(odds)==3",distinct,base,none,0,487,0.0000,distinct
+target,0x00C1B10D20260706,auto_nosmartgen,"DS3 nd(mid4)==2",distinct,base,none,0,487,0.0000,distinct
+target,0x00C1B10D20260706,auto_nosmartgen,"DS4 nd(all8)==3",distinct,base,known,1,442,0.9360,distinct
+target,0x00C1B10D20260706,auto_nosmartgen,"DS5 nd(first6)>=4",distinct,base,none,0,487,0.0000,distinct
+frontier,0x00C1B10D20260706,auto_nosmartgen,"MIXMOD1 sum%3==c3%3",mixr,base,none,0,487,0.0000,mixr
+frontier,0x00C1B10D20260706,auto_nosmartgen,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,487,0.0000,mixr
+frontier,0x00C1B10D20260706,auto_nosmartgen,"RATIO1 c4*c1%3==0",ratio,base,none,0,487,0.0000,ratio
+frontier,0x00C1B10D20260706,auto_nosmartgen,"RUN1 maxRunGE3>=3",run,base,none,0,487,0.0000,run
+frontier,0x00C1B10D20260706,auto_nosmartgen,"ORDER2 star(0)%2",gf2,gf2,known,1,45,1.0000,run
+frontier,0x00C1B10D20260706,auto_nosmartgen,"ORDER2_MOD3 star(0)%3==0",rank,base,none,0,487,0.0000,rank
+frontier,0x00C1B10D20260706,auto_nosmartgen,"RANK2_MOD3 star(3)%3==0",rank,base,none,0,487,0.0000,rank
+frontier,0x00C1B10D20260706,auto_nosmartgen,"WALL_EASY nd(all8)>=4",distinct,base,known,1,442,0.9349,distinct
+frontier,0x00C1B10D20260706,auto_nosmartgen,"WALL_MED nd(lo4)==nd(hi4)",distinct,base,none,0,487,0.0000,distinct
+frontier,0x00C1B10D20260706,auto_nosmartgen,"WALL_HARD nd(lo4)=2&hi4=2",distinct,base,known,1,442,0.9714,base
+arm_totals,0x00C1B10D20260706,auto_nosmartgen,,,,,29122,0.0000,,
+arm_summary,0x00C1B10D20260706,auto_nosmartgen,B=10/11;C=11/11;D=11/11;extra=2/30;frontier=3/10;evals=29122,,,,,,,,
+target,0x00C1B10D20260706,auto_norouter,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B9 oriented v1>v0",gf2,base,none,0,927,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"B11 inversion parity",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C01 XOR 0x0F",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C02 parity XOR 0x33",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C03 XOR 0x55",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C04 XOR 0xAA",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C05 XOR 0x3C",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C06 XOR 0x66",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C07 XOR 0x99",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C09 inv parity",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C10 parity XOR 0x0F",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"C11 XOR 0x37",gf2,gf2,known,1,487,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"TE1 count(>=1)%4==0",thresh,thresh,smartgen,1,512,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"TE2 count(>=2)%3==0",thresh,thresh,known,1,512,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"TE3 count(>=5)%2==0",thresh,thresh,known,1,512,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"TE4 count(>=1)%3==1",thresh,thresh,known,1,512,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"TE5 count(>=4)%5==0",thresh,thresh,known,1,512,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"ME1 sum%2==c1%2",mixr,base,none,0,517,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"ME2 c2%3==inv%3",mixr,base,none,0,1179,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"ME3 sum%4==inv%4",mixr,base,none,0,1179,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"ME4 c1%3==c5%3",mixr,base,none,0,1117,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"ME5 sum%5==c4%5",mixr,base,none,0,1179,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RE1 c2*c5%4==0",ratio,base,none,0,793,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RE2 c1*c4%5==0",ratio,ratio,smartgen,1,586,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RE3 c3*c1%3==0",ratio,base,none,0,637,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RE4 c2*c4%3==0",ratio,base,none,0,927,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RE5 c1*c5%2==0",ratio,base,none,0,1213,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RN1 run(>=2)>=4",run,base,none,0,583,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RN2 run(>=4)>=2",run,base,none,0,583,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RN3 numLocalMax>=2",run,run,smartgen,1,581,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RN4 firstDescent<3",run,base,known,1,442,0.9017,base
+target,0x00C1B10D20260706,auto_norouter,"RN5 run(>=2)%3==0",run,run,known,1,580,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RK1 star(1)%3==0",rank,base,none,0,879,0.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RK2 star(5)%4==0",rank,rank,smartgen,1,666,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RK3 star(7)%3==1",rank,rank,known,1,629,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RK4 star(2)%3==0",rank,rank,known,1,629,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"RK5 star(6)%4==1",rank,rank,known,1,629,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"DS1 nd(evens)==2",distinct,distinct,smartgen,1,883,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"DS2 nd(odds)==3",distinct,distinct,known,1,846,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"DS3 nd(mid4)==2",distinct,distinct,known,1,846,1.0000,base
+target,0x00C1B10D20260706,auto_norouter,"DS4 nd(all8)==3",distinct,base,known,1,442,0.9360,base
+target,0x00C1B10D20260706,auto_norouter,"DS5 nd(first6)>=4",distinct,distinct,known,1,846,1.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"MIXMOD1 sum%3==c3%3",mixr,mixr,smartgen,1,1147,1.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,1179,0.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"RATIO1 c4*c1%3==0",ratio,ratio,known,1,586,1.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"RUN1 maxRunGE3>=3",run,base,none,0,997,0.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"ORDER2 star(0)%2",gf2,gf2,known,1,487,1.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"ORDER2_MOD3 star(0)%3==0",rank,rank,known,1,666,1.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"RANK2_MOD3 star(3)%3==0",rank,rank,known,1,666,1.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"WALL_EASY nd(all8)>=4",distinct,base,known,1,442,0.9349,base
+frontier,0x00C1B10D20260706,auto_norouter,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,known,1,883,1.0000,base
+frontier,0x00C1B10D20260706,auto_norouter,"WALL_HARD nd(lo4)=2&hi4=2",distinct,base,known,1,442,0.9714,base
+arm_totals,0x00C1B10D20260706,auto_norouter,,,,,45012,0.0000,,
+arm_summary,0x00C1B10D20260706,auto_norouter,B=10/11;C=11/11;D=11/11;extra=18/30;frontier=8/10;evals=45012,,,,,,,,
+router_loo,0x00C2B10D20260707,,,,63,0.6190,,,,
+target,0x00C2B10D20260707,hand,"B1 random monomial deg2",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B2 random monomial deg3",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B3 sum(g) % 7",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B4 sign%mod 11",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B5 Walsh χ{S=0x11}",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B6 Walsh χ{S=0xA4}",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B7 Walsh χ{S=0x0A}",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B8 parity-of-count",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B9 oriented v1>v0",gf2,gf2,hand,0,45,0.5000,base
+target,0x00C2B10D20260707,hand,"B10 parity AND sum%5",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"B11 inversion parity",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C01 XOR 0x0F",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C02 parity XOR 0x33",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C03 XOR 0x55",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C04 XOR 0xAA",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C05 XOR 0x3C",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C06 XOR 0x66",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C07 XOR 0x99",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C08 parity count",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"C09 inv parity",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C10 parity XOR 0x0F",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"C11 XOR 0x37",gf2,gf2,hand,1,45,1.0000,base
+target,0x00C2B10D20260707,hand,"D01 sum%2",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D02 sum%3",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D03 sum%5",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D04 sum%7",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D05 sum%11",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D06 sum%13",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D07 count3%3",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D08 count3%4",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D09 count3%5",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D10 count3%6",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"D11 subset-parity{0-3}",base,base,hand,1,442,1.0000,base
+target,0x00C2B10D20260707,hand,"TE1 count(>=1)%4==0",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C2B10D20260707,hand,"TE2 count(>=2)%3==0",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C2B10D20260707,hand,"TE3 count(>=5)%2==0",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C2B10D20260707,hand,"TE4 count(>=1)%3==1",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C2B10D20260707,hand,"TE5 count(>=4)%5==0",thresh,thresh,hand,1,25,1.0000,base
+target,0x00C2B10D20260707,hand,"ME1 sum%2==c1%2",mixr,mixr,hand,0,37,0.5297,base
+target,0x00C2B10D20260707,hand,"ME2 c2%3==inv%3",mixr,mixr,hand,0,37,0.6743,base
+target,0x00C2B10D20260707,hand,"ME3 sum%4==inv%4",mixr,mixr,hand,0,37,0.7429,base
+target,0x00C2B10D20260707,hand,"ME4 c1%3==c5%3",mixr,mixr,hand,0,37,0.6571,base
+target,0x00C2B10D20260707,hand,"ME5 sum%5==c4%5",mixr,mixr,hand,0,37,0.7863,base
+target,0x00C2B10D20260707,hand,"RE1 c2*c5%4==0",ratio,ratio,hand,0,37,0.7303,base
+target,0x00C2B10D20260707,hand,"RE2 c1*c4%5==0",ratio,ratio,hand,1,37,1.0000,base
+target,0x00C2B10D20260707,hand,"RE3 c3*c1%3==0",ratio,ratio,hand,0,37,0.7166,base
+target,0x00C2B10D20260707,hand,"RE4 c2*c4%3==0",ratio,ratio,hand,0,37,0.7120,base
+target,0x00C2B10D20260707,hand,"RE5 c1*c5%2==0",ratio,ratio,hand,0,37,0.7669,base
+target,0x00C2B10D20260707,hand,"RN1 run(>=2)>=4",run,run,hand,0,31,1.0000,base
+target,0x00C2B10D20260707,hand,"RN2 run(>=4)>=2",run,run,hand,0,31,1.0000,base
+target,0x00C2B10D20260707,hand,"RN3 numLocalMax>=2",run,run,hand,1,31,1.0000,base
+target,0x00C2B10D20260707,hand,"RN4 firstDescent<3",run,run,hand,1,31,1.0000,base
+target,0x00C2B10D20260707,hand,"RN5 run(>=2)%3==0",run,run,hand,1,31,1.0000,base
+target,0x00C2B10D20260707,hand,"RK1 star(1)%3==0",rank,rank,hand,1,49,1.0000,base
+target,0x00C2B10D20260707,hand,"RK2 star(5)%4==0",rank,rank,hand,1,49,1.0000,base
+target,0x00C2B10D20260707,hand,"RK3 star(7)%3==1",rank,rank,hand,1,49,1.0000,base
+target,0x00C2B10D20260707,hand,"RK4 star(2)%3==0",rank,rank,hand,1,49,1.0000,base
+target,0x00C2B10D20260707,hand,"RK5 star(6)%4==1",rank,rank,hand,1,49,1.0000,base
+target,0x00C2B10D20260707,hand,"DS1 nd(evens)==2",distinct,distinct,hand,1,217,1.0000,base
+target,0x00C2B10D20260707,hand,"DS2 nd(odds)==3",distinct,distinct,hand,1,217,1.0000,base
+target,0x00C2B10D20260707,hand,"DS3 nd(mid4)==2",distinct,distinct,hand,1,217,1.0000,base
+target,0x00C2B10D20260707,hand,"DS4 nd(all8)==3",distinct,distinct,hand,1,217,1.0000,base
+target,0x00C2B10D20260707,hand,"DS5 nd(first6)>=4",distinct,distinct,hand,1,217,1.0000,base
+frontier,0x00C2B10D20260707,hand,"MIXMOD1 sum%3==c3%3",mixr,mixr,hand,1,37,1.0000,base
+frontier,0x00C2B10D20260707,hand,"MIXMOD2 sum%4==c2%4",mixr,mixr,hand,0,37,0.7606,base
+frontier,0x00C2B10D20260707,hand,"RATIO1 c4*c1%3==0",ratio,ratio,hand,1,37,1.0000,base
+frontier,0x00C2B10D20260707,hand,"RUN1 maxRunGE3>=3",run,run,hand,0,31,1.0000,base
+frontier,0x00C2B10D20260707,hand,"ORDER2 star(0)%2",gf2,gf2,hand,1,45,1.0000,base
+frontier,0x00C2B10D20260707,hand,"ORDER2_MOD3 star(0)%3==0",rank,rank,hand,1,49,1.0000,base
+frontier,0x00C2B10D20260707,hand,"RANK2_MOD3 star(3)%3==0",rank,rank,hand,1,49,1.0000,base
+frontier,0x00C2B10D20260707,hand,"WALL_EASY nd(all8)>=4",distinct,distinct,hand,1,217,1.0000,base
+frontier,0x00C2B10D20260707,hand,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,hand,1,217,1.0000,base
+frontier,0x00C2B10D20260707,hand,"WALL_HARD nd(lo4)=2&hi4=2",distinct,distinct,hand,1,217,0.9714,base
+arm_totals,0x00C2B10D20260707,hand,,,,,12738,0.0000,,
+arm_summary,0x00C2B10D20260707,hand,B=10/11;C=11/11;D=11/11;extra=19/30;frontier=8/10;evals=12738,,,,,,,,
+target,0x00C2B10D20260707,autonomous,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B9 oriented v1>v0",gf2,base,none,0,997,0.0000,gf2
+target,0x00C2B10D20260707,autonomous,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"B11 inversion parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C01 XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C02 parity XOR 0x33",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C03 XOR 0x55",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C04 XOR 0xAA",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C05 XOR 0x3C",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C06 XOR 0x66",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C07 XOR 0x99",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"C09 inv parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C10 parity XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"C11 XOR 0x37",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,autonomous,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,autonomous,"TE1 count(>=1)%4==0",thresh,thresh,smartgen,1,512,1.0000,thresh
+target,0x00C2B10D20260707,autonomous,"TE2 count(>=2)%3==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0x00C2B10D20260707,autonomous,"TE3 count(>=5)%2==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0x00C2B10D20260707,autonomous,"TE4 count(>=1)%3==1",thresh,thresh,known,1,25,1.0000,thresh
+target,0x00C2B10D20260707,autonomous,"TE5 count(>=4)%5==0",thresh,thresh,known,1,25,1.0000,thresh
+target,0x00C2B10D20260707,autonomous,"ME1 sum%2==c1%2",mixr,base,none,0,757,0.0000,mixr
+target,0x00C2B10D20260707,autonomous,"ME2 c2%3==inv%3",mixr,base,none,0,1147,0.0000,mixr
+target,0x00C2B10D20260707,autonomous,"ME3 sum%4==inv%4",mixr,base,none,0,1179,0.0000,mixr
+target,0x00C2B10D20260707,autonomous,"ME4 c1%3==c5%3",mixr,base,none,0,1147,0.0000,mixr
+target,0x00C2B10D20260707,autonomous,"ME5 sum%5==c4%5",mixr,base,none,0,1179,0.0000,mixr
+target,0x00C2B10D20260707,autonomous,"RE1 c2*c5%4==0",ratio,base,none,0,807,0.0000,ratio
+target,0x00C2B10D20260707,autonomous,"RE2 c1*c4%5==0",ratio,thresh,known,1,25,0.9040,ratio
+target,0x00C2B10D20260707,autonomous,"RE3 c3*c1%3==0",ratio,base,none,0,877,0.0000,ratio
+target,0x00C2B10D20260707,autonomous,"RE4 c2*c4%3==0",ratio,base,none,0,913,0.0000,ratio
+target,0x00C2B10D20260707,autonomous,"RE5 c1*c5%2==0",ratio,base,none,0,1249,0.0000,ratio
+target,0x00C2B10D20260707,autonomous,"RN1 run(>=2)>=4",run,base,none,0,583,0.0000,run
+target,0x00C2B10D20260707,autonomous,"RN2 run(>=4)>=2",run,base,none,0,595,0.0000,run
+target,0x00C2B10D20260707,autonomous,"RN3 numLocalMax>=2",run,run,smartgen,1,543,1.0000,run
+target,0x00C2B10D20260707,autonomous,"RN4 firstDescent<3",run,run,known,1,31,1.0000,run
+target,0x00C2B10D20260707,autonomous,"RN5 run(>=2)%3==0",run,run,known,1,31,1.0000,run
+target,0x00C2B10D20260707,autonomous,"RK1 star(1)%3==0",rank,base,none,0,843,0.0000,rank
+target,0x00C2B10D20260707,autonomous,"RK2 star(5)%4==0",rank,rank,smartgen,1,592,1.0000,rank
+target,0x00C2B10D20260707,autonomous,"RK3 star(7)%3==1",rank,rank,known,1,49,1.0000,rank
+target,0x00C2B10D20260707,autonomous,"RK4 star(2)%3==0",rank,rank,known,1,49,1.0000,rank
+target,0x00C2B10D20260707,autonomous,"RK5 star(6)%4==1",rank,rank,known,1,49,1.0000,rank
+target,0x00C2B10D20260707,autonomous,"DS1 nd(evens)==2",distinct,distinct,smartgen,1,809,1.0000,distinct
+target,0x00C2B10D20260707,autonomous,"DS2 nd(odds)==3",distinct,distinct,known,1,217,1.0000,distinct
+target,0x00C2B10D20260707,autonomous,"DS3 nd(mid4)==2",distinct,distinct,known,1,217,1.0000,distinct
+target,0x00C2B10D20260707,autonomous,"DS4 nd(all8)==3",distinct,distinct,known,1,217,1.0000,distinct
+target,0x00C2B10D20260707,autonomous,"DS5 nd(first6)>=4",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0x00C2B10D20260707,autonomous,"MIXMOD1 sum%3==c3%3",mixr,mixr,smartgen,1,1142,1.0000,mixr
+frontier,0x00C2B10D20260707,autonomous,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,1179,0.0000,mixr
+frontier,0x00C2B10D20260707,autonomous,"RATIO1 c4*c1%3==0",ratio,ratio,smartgen,1,907,1.0000,ratio
+frontier,0x00C2B10D20260707,autonomous,"RUN1 maxRunGE3>=3",run,base,none,0,997,0.0000,run
+frontier,0x00C2B10D20260707,autonomous,"ORDER2 star(0)%2",gf2,rank,known,1,552,1.0000,mixr
+frontier,0x00C2B10D20260707,autonomous,"ORDER2_MOD3 star(0)%3==0",rank,rank,known,1,49,1.0000,rank
+frontier,0x00C2B10D20260707,autonomous,"RANK2_MOD3 star(3)%3==0",rank,rank,known,1,49,1.0000,rank
+frontier,0x00C2B10D20260707,autonomous,"WALL_EASY nd(all8)>=4",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0x00C2B10D20260707,autonomous,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,known,1,217,1.0000,distinct
+frontier,0x00C2B10D20260707,autonomous,"WALL_HARD nd(lo4)=2&hi4=2",distinct,distinct,known,1,217,0.9714,distinct
+arm_totals,0x00C2B10D20260707,autonomous,,,,,31234,0.0000,,
+arm_summary,0x00C2B10D20260707,autonomous,B=10/11;C=11/11;D=11/11;extra=18/30;frontier=8/10;evals=31234,,,,,,,,
+target,0x00C2B10D20260707,auto_nosmartgen,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B9 oriented v1>v0",gf2,base,none,0,487,0.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"B11 inversion parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C01 XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C02 parity XOR 0x33",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C03 XOR 0x55",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C04 XOR 0xAA",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C05 XOR 0x3C",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C06 XOR 0x66",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C07 XOR 0x99",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"C09 inv parity",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C10 parity XOR 0x0F",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"C11 XOR 0x37",gf2,gf2,known,1,45,1.0000,gf2
+target,0x00C2B10D20260707,auto_nosmartgen,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_nosmartgen,"TE1 count(>=1)%4==0",thresh,base,none,0,487,0.0000,thresh
+target,0x00C2B10D20260707,auto_nosmartgen,"TE2 count(>=2)%3==0",thresh,base,none,0,487,0.0000,thresh
+target,0x00C2B10D20260707,auto_nosmartgen,"TE3 count(>=5)%2==0",thresh,base,none,0,487,0.0000,thresh
+target,0x00C2B10D20260707,auto_nosmartgen,"TE4 count(>=1)%3==1",thresh,base,none,0,487,0.0000,thresh
+target,0x00C2B10D20260707,auto_nosmartgen,"TE5 count(>=4)%5==0",thresh,base,none,0,487,0.0000,thresh
+target,0x00C2B10D20260707,auto_nosmartgen,"ME1 sum%2==c1%2",mixr,base,none,0,487,0.0000,mixr
+target,0x00C2B10D20260707,auto_nosmartgen,"ME2 c2%3==inv%3",mixr,base,none,0,487,0.0000,mixr
+target,0x00C2B10D20260707,auto_nosmartgen,"ME3 sum%4==inv%4",mixr,base,none,0,487,0.0000,mixr
+target,0x00C2B10D20260707,auto_nosmartgen,"ME4 c1%3==c5%3",mixr,base,none,0,487,0.0000,mixr
+target,0x00C2B10D20260707,auto_nosmartgen,"ME5 sum%5==c4%5",mixr,base,none,0,487,0.0000,mixr
+target,0x00C2B10D20260707,auto_nosmartgen,"RE1 c2*c5%4==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C2B10D20260707,auto_nosmartgen,"RE2 c1*c4%5==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C2B10D20260707,auto_nosmartgen,"RE3 c3*c1%3==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C2B10D20260707,auto_nosmartgen,"RE4 c2*c4%3==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C2B10D20260707,auto_nosmartgen,"RE5 c1*c5%2==0",ratio,base,none,0,487,0.0000,ratio
+target,0x00C2B10D20260707,auto_nosmartgen,"RN1 run(>=2)>=4",run,base,none,0,487,0.0000,run
+target,0x00C2B10D20260707,auto_nosmartgen,"RN2 run(>=4)>=2",run,base,none,0,487,0.0000,run
+target,0x00C2B10D20260707,auto_nosmartgen,"RN3 numLocalMax>=2",run,base,none,0,487,0.0000,run
+target,0x00C2B10D20260707,auto_nosmartgen,"RN4 firstDescent<3",run,base,none,0,487,0.0000,run
+target,0x00C2B10D20260707,auto_nosmartgen,"RN5 run(>=2)%3==0",run,base,none,0,487,0.0000,run
+target,0x00C2B10D20260707,auto_nosmartgen,"RK1 star(1)%3==0",rank,base,none,0,487,0.0000,rank
+target,0x00C2B10D20260707,auto_nosmartgen,"RK2 star(5)%4==0",rank,base,none,0,487,0.0000,rank
+target,0x00C2B10D20260707,auto_nosmartgen,"RK3 star(7)%3==1",rank,base,none,0,487,0.0000,rank
+target,0x00C2B10D20260707,auto_nosmartgen,"RK4 star(2)%3==0",rank,base,none,0,487,0.0000,rank
+target,0x00C2B10D20260707,auto_nosmartgen,"RK5 star(6)%4==1",rank,base,none,0,487,0.0000,rank
+target,0x00C2B10D20260707,auto_nosmartgen,"DS1 nd(evens)==2",distinct,base,none,0,487,0.0000,distinct
+target,0x00C2B10D20260707,auto_nosmartgen,"DS2 nd(odds)==3",distinct,base,none,0,487,0.0000,distinct
+target,0x00C2B10D20260707,auto_nosmartgen,"DS3 nd(mid4)==2",distinct,base,none,0,487,0.0000,distinct
+target,0x00C2B10D20260707,auto_nosmartgen,"DS4 nd(all8)==3",distinct,base,known,1,442,0.9251,distinct
+target,0x00C2B10D20260707,auto_nosmartgen,"DS5 nd(first6)>=4",distinct,base,none,0,487,0.0000,distinct
+frontier,0x00C2B10D20260707,auto_nosmartgen,"MIXMOD1 sum%3==c3%3",mixr,base,none,0,487,0.0000,mixr
+frontier,0x00C2B10D20260707,auto_nosmartgen,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,487,0.0000,mixr
+frontier,0x00C2B10D20260707,auto_nosmartgen,"RATIO1 c4*c1%3==0",ratio,base,none,0,487,0.0000,ratio
+frontier,0x00C2B10D20260707,auto_nosmartgen,"RUN1 maxRunGE3>=3",run,base,none,0,487,0.0000,run
+frontier,0x00C2B10D20260707,auto_nosmartgen,"ORDER2 star(0)%2",gf2,gf2,known,1,45,1.0000,mixr
+frontier,0x00C2B10D20260707,auto_nosmartgen,"ORDER2_MOD3 star(0)%3==0",rank,base,none,0,487,0.0000,rank
+frontier,0x00C2B10D20260707,auto_nosmartgen,"RANK2_MOD3 star(3)%3==0",rank,base,none,0,487,0.0000,rank
+frontier,0x00C2B10D20260707,auto_nosmartgen,"WALL_EASY nd(all8)>=4",distinct,base,known,1,442,0.9240,distinct
+frontier,0x00C2B10D20260707,auto_nosmartgen,"WALL_MED nd(lo4)==nd(hi4)",distinct,base,none,0,487,0.0000,distinct
+frontier,0x00C2B10D20260707,auto_nosmartgen,"WALL_HARD nd(lo4)=2&hi4=2",distinct,base,known,1,442,0.9651,distinct
+arm_totals,0x00C2B10D20260707,auto_nosmartgen,,,,,29167,0.0000,,
+arm_summary,0x00C2B10D20260707,auto_nosmartgen,B=10/11;C=11/11;D=11/11;extra=1/30;frontier=3/10;evals=29167,,,,,,,,
+target,0x00C2B10D20260707,auto_norouter,"B1 random monomial deg2",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B2 random monomial deg3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B3 sum(g) % 7",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B4 sign%mod 11",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B5 Walsh χ{S=0x11}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B6 Walsh χ{S=0xA4}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B7 Walsh χ{S=0x0A}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B8 parity-of-count",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B9 oriented v1>v0",gf2,base,none,0,997,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B10 parity AND sum%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"B11 inversion parity",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C01 XOR 0x0F",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C02 parity XOR 0x33",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C03 XOR 0x55",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C04 XOR 0xAA",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C05 XOR 0x3C",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C06 XOR 0x66",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C07 XOR 0x99",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C08 parity count",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C09 inv parity",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C10 parity XOR 0x0F",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"C11 XOR 0x37",gf2,gf2,known,1,487,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D01 sum%2",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D02 sum%3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D03 sum%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D04 sum%7",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D05 sum%11",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D06 sum%13",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D07 count3%3",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D08 count3%4",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D09 count3%5",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D10 count3%6",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"D11 subset-parity{0-3}",base,base,known,1,442,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"TE1 count(>=1)%4==0",thresh,thresh,smartgen,1,512,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"TE2 count(>=2)%3==0",thresh,thresh,known,1,512,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"TE3 count(>=5)%2==0",thresh,thresh,known,1,512,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"TE4 count(>=1)%3==1",thresh,thresh,known,1,512,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"TE5 count(>=4)%5==0",thresh,thresh,known,1,512,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"ME1 sum%2==c1%2",mixr,base,none,0,757,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"ME2 c2%3==inv%3",mixr,base,none,0,1147,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"ME3 sum%4==inv%4",mixr,base,none,0,1179,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"ME4 c1%3==c5%3",mixr,base,none,0,1147,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"ME5 sum%5==c4%5",mixr,base,none,0,1179,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RE1 c2*c5%4==0",ratio,base,none,0,807,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RE2 c1*c4%5==0",ratio,thresh,known,1,512,0.9040,base
+target,0x00C2B10D20260707,auto_norouter,"RE3 c3*c1%3==0",ratio,base,none,0,877,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RE4 c2*c4%3==0",ratio,base,none,0,913,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RE5 c1*c5%2==0",ratio,base,none,0,1249,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RN1 run(>=2)>=4",run,base,none,0,583,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RN2 run(>=4)>=2",run,base,none,0,595,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RN3 numLocalMax>=2",run,run,smartgen,1,545,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RN4 firstDescent<3",run,run,known,1,543,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RN5 run(>=2)%3==0",run,run,known,1,543,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RK1 star(1)%3==0",rank,base,none,0,843,0.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RK2 star(5)%4==0",rank,rank,smartgen,1,666,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RK3 star(7)%3==1",rank,rank,known,1,592,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RK4 star(2)%3==0",rank,rank,known,1,592,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"RK5 star(6)%4==1",rank,rank,known,1,592,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"DS1 nd(evens)==2",distinct,distinct,smartgen,1,883,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"DS2 nd(odds)==3",distinct,distinct,known,1,809,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"DS3 nd(mid4)==2",distinct,distinct,known,1,809,1.0000,base
+target,0x00C2B10D20260707,auto_norouter,"DS4 nd(all8)==3",distinct,base,known,1,442,0.9251,base
+target,0x00C2B10D20260707,auto_norouter,"DS5 nd(first6)>=4",distinct,distinct,known,1,809,1.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"MIXMOD1 sum%3==c3%3",mixr,mixr,smartgen,1,1142,1.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"MIXMOD2 sum%4==c2%4",mixr,base,none,0,1179,0.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"RATIO1 c4*c1%3==0",ratio,ratio,smartgen,1,907,1.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"RUN1 maxRunGE3>=3",run,base,none,0,997,0.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"ORDER2 star(0)%2",gf2,gf2,known,1,487,1.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"ORDER2_MOD3 star(0)%3==0",rank,rank,known,1,666,1.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"RANK2_MOD3 star(3)%3==0",rank,rank,known,1,666,1.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"WALL_EASY nd(all8)>=4",distinct,base,known,1,442,0.9240,base
+frontier,0x00C2B10D20260707,auto_norouter,"WALL_MED nd(lo4)==nd(hi4)",distinct,distinct,known,1,883,1.0000,base
+frontier,0x00C2B10D20260707,auto_norouter,"WALL_HARD nd(lo4)=2&hi4=2",distinct,base,known,1,442,0.9651,base
+arm_totals,0x00C2B10D20260707,auto_norouter,,,,,45620,0.0000,,
+arm_summary,0x00C2B10D20260707,auto_norouter,B=10/11;C=11/11;D=11/11;extra=18/30;frontier=8/10;evals=45620,,,,,,,,

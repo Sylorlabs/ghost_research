@@ -1,0 +1,53 @@
+{
+  "version": "FOUNDRY_A4_REPLAY_RUNTIME_PROTOCOL_V1",
+  "status": "PREFROZEN_CALIBRATION_REPLAY_MOUNT",
+  "frozen_before_mount_execution": true,
+  "arm_id": "A4",
+  "mount_id": "CALIBRATION_23_A4_HISTORICAL_REPLAY_V1",
+  "defining_behavior": "Replay the immutable three-tool diversity library with its independent typed parser, semantic matcher, and interpreter; perform no new search or tool construction.",
+  "execution_rules": [
+    "Authenticate every provider before loading the library or constructing workloads.",
+    "Parse the immutable historical library through the independent strict parser.",
+    "Mount all 23 available calibration graphs through the evaluator framework runtime.",
+    "For every semantic match, execute the frozen tool from captured external inputs and compare it to the framework node output at absolute error at most 1e-6.",
+    "Execute eager and exported whole graphs three times from cloned inputs under identical deterministic seeds and two independent output comparators.",
+    "Retain the immutable replay library across artifacts; its state digest must remain byte-identical.",
+    "Charge parsing, matching, replay verification, framework export, and whole-graph execution CPU separately.",
+    "Keep the one historically unsupported calibration artifact explicit.",
+    "No new tool, grammar, candidate body, or validation-v6 outcome may be constructed or mounted."
+  ],
+  "acceptance_rules": {
+    "graphs": 23,
+    "unique_operator_targets": 41,
+    "call_function_invocations": 337,
+    "whole_graph_executions": 69,
+    "unsupported_or_failed": 1,
+    "immutable_tools": 3,
+    "every_tool_must_replay_at_least_once": true,
+    "all_tool_replays_exact": true,
+    "all_whole_graph_outputs_exact": true,
+    "library_state_unchanged": true
+  },
+  "provider_records": [
+    {"path": "results/diversity_candidate_v1_freeze.json", "sha256": "2189604c8afc8429acca234a01e082c8886cda97418a73e9eaec38ff2fcbe236"},
+    {"path": "results/diversity_result_v1_freeze.json", "sha256": "6c9beb6dad3c0cefde88a4b1e64de5231b7243b5a787a08401e0aba3aa8e1f6a"},
+    {"path": "results/forged_diversity_tools.json", "sha256": "64abcef88f8c4f152e39db684e8bd1a7f24fdf25928a24d411d15d8499d46f5b"},
+    {"path": "results/phase56_independent_diversity_conformance.json", "sha256": "9d681c64b4d59b3064cbca1d7b877dd508ab1a6e638034a79a05ea4e72dad48e"},
+    {"path": "results/phase57_diversity_native_dedup.json", "sha256": "b90568b4b58c4f31e5dfd9d2acd72c31249309e978c557c1d277eded18f3416c"},
+    {"path": "results/phase58_diversity_resource_audit.json", "sha256": "474a0bdb3e306f83407ff6994e585ca8ee6846de4b7d5a4f745b673abca4765f"},
+    {"path": "independent_diversity_tool_evaluator.py", "sha256": "5538838a8e62871545a7c3679143376dc484e2577d95cd77c482413a16734479"},
+    {"path": "phase63_pareto_motif_calibration.py", "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"},
+    {"path": "independent_framework_runtime.py", "sha256": "d7ceddb6046105eb93c27b5bd8480ac08b3f5acdca2cad1538c89352f6dcb53f"},
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"},
+    {"path": "results/pareto_remediation_v9_freeze.json", "sha256": "b6be0061e3a6779f3194951399a9e5bbffed924fdc77c4e089bf4505c00eb081"}
+  ],
+  "claim_boundary": {
+    "calibration_conformance_only": true,
+    "A4_may_become_production_integrated_calibration_arm_after_mount_and_contract_batch_pass": true,
+    "production_integrated_arms_before_pass": 4,
+    "production_integrated_arms_after_mount_only": 4,
+    "P3_complete_after_mount": false,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "version": "FOUNDRY_ATEN_PROSPECTIVE_PROTOCOL_V2_2",
+  "base_protocol": "ATEN_PROSPECTIVE_PROTOCOL_V2.json",
+  "base_freeze": "results/aten_prospective_v2_freeze.json",
+  "v2_1_resource_receipt": "results/phase22_1_prospective_resource_audit.json",
+  "candidate_outcomes_observed_before_v2_2": false,
+  "failure": {
+    "stage": "construct workload list",
+    "exception_type": "ModuleNotFoundError",
+    "missing_dependency": "torchvision",
+    "models_constructed": 0,
+    "graphs_exported": 0,
+    "candidate_matches_observed": 0
+  },
+  "permitted_deltas": [
+    "construct each otherwise unchanged workload inside its own exception boundary",
+    "emit the predeclared REQUIRED_UNSUPPORTED receipt for construction failures",
+    "use the corrected process-tree meter API"
+  ],
+  "unchanged": [
+    "candidate library and digest",
+    "source snapshots and provenance",
+    "workload order",
+    "model constructors",
+    "input shapes and dtypes",
+    "seed",
+    "fixed portfolio",
+    "search ledger",
+    "pass gates",
+    "resource limits"
+  ],
+  "classification": "OUTCOME_BLIND_DEPENDENCY_ISOLATION_REMEDIATION"
+}

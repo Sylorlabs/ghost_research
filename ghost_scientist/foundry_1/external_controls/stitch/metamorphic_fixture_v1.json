@@ -1,0 +1,35 @@
+{
+  "schema": "foundry-stitch-metamorphic-fixture-v1",
+  "classification": "PRE_EXECUTION_ALPHA_RENAME_AND_REORDER",
+  "derived_from": "external_controls/stitch/conformance_fixture_v1.json",
+  "transformation": {
+    "program_order_reversed": true,
+    "outer_symbols_renamed": true,
+    "repeated_leaf_symbols_renamed": true,
+    "tree_shape_preserved": true
+  },
+  "call": {
+    "programs": [
+      "(right (z z z))",
+      "(left (q q q))"
+    ],
+    "iterations": 1,
+    "max_arity": 3,
+    "threads": 1,
+    "silent": true
+  },
+  "expected": {
+    "abstractions": 1,
+    "name": "fn_0",
+    "body": "(#0 #0 #0)",
+    "arity": 1,
+    "rewritten": [
+      "(right (fn_0 z))",
+      "(left (fn_0 q))"
+    ],
+    "original_cost": 806,
+    "rewritten_cost": 604,
+    "utility": 200,
+    "uses": 2
+  }
+}

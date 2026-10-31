@@ -13,7 +13,6 @@ const std = @import("std");
 const CoreModule = struct { name: []const u8, path: []const u8 };
 
 const core_modules = [_]CoreModule{
-    .{ .name = "absolute_final", .path = "src/absolute_final.zig" },
     .{ .name = "anchor_readout", .path = "src/adapters/anchor_readout.zig" },
     .{ .name = "domain_bittape", .path = "src/adapters/domain_bittape.zig" },
     .{ .name = "domain_boolean", .path = "src/adapters/domain_boolean.zig" },
@@ -111,6 +110,8 @@ const core_modules = [_]CoreModule{
     .{ .name = "sovereign", .path = "src/sovereign.zig" },
     .{ .name = "state", .path = "src/state_node.zig" },
     .{ .name = "vsa", .path = "src/vsa.zig" },
+    .{ .name = "absolute_core", .path = "src/absolute_core.zig" },
+    .{ .name = "absolute_final", .path = "src/absolute_core.zig" },
 };
 
 // Files that are both a core library module AND an executable entry point.

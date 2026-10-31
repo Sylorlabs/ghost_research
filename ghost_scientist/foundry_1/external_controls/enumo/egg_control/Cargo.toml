@@ -1,0 +1,28 @@
+[package]
+name = "egg"
+version = "0.9.5"
+edition = "2018"
+publish = false
+
+[lib]
+path = "generated/lib.rs"
+
+[dependencies]
+fxhash = "0.2"
+hashbrown = { version = "0.12", default-features = false, features = ["inline-more"] }
+indexmap = "1"
+instant = { path = "../../babble/instant" }
+log = "0.4"
+smallvec = { version = "1", features = ["union", "const_generics"] }
+symbol_table = { path = "../symbol_table_control", features = ["global"] }
+symbolic_expressions = { path = "../../babble/symbolic_expressions" }
+thiserror = "1"
+
+[features]
+default = []
+deterministic = []
+lp = []
+reports = []
+serde-1 = []
+wasm-bindgen = []
+test-explanations = []

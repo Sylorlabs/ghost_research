@@ -1,0 +1,259 @@
+# Research Round 2026-07-10d — does MORE go further? (breadth, diversity, non-human grammars)
+
+**Status:** COMPLETE — all 6 experiments landed 2026-07-10 → 2026-07-11.
+**Origin:** A user hypothesis, made falsifiable: *"maybe it thinks the same way as
+humans — maybe if we pump more out at once it will go further."* This round tests
+it rigorously rather than arguing from the H50 prior.
+
+**The hypothesis has a refuted half and an untested half.**
+- **Refuted (H50, round 1):** more *depth* on one closure buys nothing — a hard
+  372-eval plateau, closure exhaustion. "Pump more of the same" is answered: no.
+- **Untested (this round):** two sharper readings H50 never touched —
+  1. *"pump more out at once"* = **breadth** of many *diverse* proposers in
+     parallel, not depth on one. A pool spanning more closures may reach
+     out-of-closure targets a single proposer cannot.
+  2. *"thinks like humans"* = the ceiling may be that every primitive **family**
+     is human-conceived (XOR/mod/Walsh/comparison). **Machine-invented, non-human
+     atom grammars** might escape where human families can't.
+
+The spine (D1, D2, D6) answers "will pumping more go further" as a *curve and a
+predictor*, not a vibe. D3 and D5 test the "thinks like humans" reading. D4 pumps
+it at a real open target (the only place new-to-humanity can happen).
+
+Constraints unchanged: new files only, standalone `zig build-exe`, ≤2 threads /
+≤15 min runs, independent verification per claim, "more doesn't help" is a valid
+and important finding, equal-TOTAL-budget comparisons (the crux), main session
+commits centrally, doc + commit + TOC per landing.
+
+---
+
+## Verdict table
+
+| # | Experiment | Question | Status | Headline | Doc |
+|---|-----------|----------|--------|----------|-----|
+| 1 | Breadth vs depth | At equal total budget, does breadth of N diverse proposers reach targets one deep proposer (H50 plateau) can't? | **DONE** | **NO — re-confirms the ceiling.** At equal total budget (breadth held to depth's exact consumed evals, ≤0.23% dev), breadth's total never exceeds depth (12/12/12 vs 13/12/13, 3 seeds); the proven out-of-closure target C09 falls to no arm (0/0/0); breadth *loses* the concentration-dependent target B11 at every N≥8. Its only edge is a variance/portfolio hit on the ~17%-probabilistic XOR layer (a target depth's single pass missed), dominated by the B11 loss. Dominant-proposer share 83–100%: one proposer does ~all the work. | `docs/research/breadth_vs_depth.md` |
+| 2 | Breadth scaling law | The H50 counterpart: does out-of-closure reach grow with N diverse proposers, or plateau? Diverse-vs-identical control. | **DONE** | **Breadth plateaus like depth — diversity is NOT the lever.** Diverse reach flat at 1 across N=1→32; identical copies reached 2 at N=32. The wall is *representability* (brute-verified: only 4/15 cells representable; C09 provably at chance), not budget. Breadth beats single-shot depth in the needle regime, but neither crosses the closure boundary. | `docs/research/breadth_scaling.md` |
+| 3 | Non-human grammar | Do bulk machine-invented (non-human) atoms escape a proven family-level wall that human families can't? | **DONE** | **Refuted both ways:** the engine ALREADY thinks non-human (92.4% of forged atoms genuinely non-human) — so "thinks like humans" is false — but that buys NO reach: bulk machine grammar scores ~chance (0.519), *worse* than raw search (0.713) and human-op search (0.691) at equal budget. **The ceiling is AIM, not grammar.** | `wcore/docs/research/nonhuman_grammar.md` |
+| 4 | Parallel swarm on LABS | Does a massively-parallel diverse strategy pool crack an open LABS even-N gap a single method can't? (round-b rematch) | **DONE** | **Diversity beats concentration 9/12 at equal budget** (reverses round-b's blanket claim) — but the edge is *restart-diversification of one arm* (the best arm led all 48/48 pool runs), not diverse strategies each winning; vs best prior number only 2/12 improved, 7/12 regressed. **No record.** Verifier clean (12/12, 2/2 lies caught). | `boundary_crossing/docs/research/labs_swarm.md` |
+| 5 | Auto-discover curriculum | Can bulk parallel proposal DISCOVER the conjunction-wall decomposition autonomously (no hand-designed stones)? | **DONE** | **No — 0 stones across 54,432 candidates.** Reach 0/9 both seeds at every bulk {0→1000} vs the hand-curriculum's 6/9; 20× more bulk changed cost not outcome. Detection works (positive control recognizes S1/S2); the failure is in GENERATION. **Quantity does NOT substitute for insight** when the insight isn't cheap to stumble into. | `wcore/docs/research/auto_curriculum.md` |
+| 6 | Diversity predictor | Is out-of-closure reach predicted by generator DIVERSITY (spans-of-closures), not eval count or raw N? (with R²) | **DONE** | **Yes, conditionally:** diversity D predicts reach (R²≈0.4, partial 0.607) — dominant over count (partial −0.058) and budget (0.092); every D=1 row = 0 reach. BUT only when D spans the target's closure (falsification: wrong-direction diversity buys nothing). Resolves with #2 (see synthesis). | `docs/research/diversity_predictor.md` |
+
+---
+
+## Design notes
+
+- **The crux is equal-TOTAL-budget.** "Pump more at once" only means something if
+  breadth is compared to depth at the *same* total compute — otherwise it is
+  trivially "more compute helps." D1/D2/D6 all hold total budget fixed and vary
+  how it is *distributed* (depth vs breadth) and how *diverse* the pool is.
+- **The N-identical control is what makes it science.** If N *identical*
+  proposers plateau like H50 but N *diverse* proposers keep paying, the escape
+  resource is diversity-of-generators, not quantity — the precise validation of
+  "pump more DIFFERENT" and refutation of "pump more of the same." D2 and D6 both
+  run it.
+- **"Parallel" means N independent proposers sharing a budget, not N OS
+  threads** — the ≤2-thread rule stands; parallelism is simulated in-process.
+- D3 and D5 test whether quantity can *substitute* for the two things the prior
+  rounds found to be the real levers: a genuinely new primitive family (D3) and
+  an auto-discovered decomposition (D5). If bulk parallel proposal finds them,
+  the user is right in a deep way; if not, we've sharply bounded what "more" buys.
+
+---
+
+## Completed-experiment detail
+
+### 1. Breadth vs depth (headline) — breadth does NOT beat depth at equal budget
+- Direct equal-total-budget head-to-head (breadth held to depth's *actual
+  consumed* evals, enforced to ≤0.23%), 3 seeds. Total solves /16:
+
+  | seed | DEPTH | BR(4) | BR(8) | BR(16) | BR(32) |
+  |------|-------|-------|-------|--------|--------|
+  | 0 | **13** | 11 | 12 | 11 | 11 |
+  | 1 | **12** | 11 | 9 | 10 | 12 |
+  | 2 | **13** | 12 | 10 | 12 | 11 |
+
+- **Breadth's total never exceeds depth at any N, any seed.** The proven
+  out-of-closure target **C09 falls to no arm on any seed (0/0/0)** — diversity
+  manufactured no missing primitive. The only targets breadth reached that
+  depth missed (C02 on seeds 1–2) are *in-closure* XOR members on the
+  ~17%-per-attempt probabilistic layer — a variance/portfolio effect within the
+  already-reachable set, paid for by losing **B11** (the ~330-eval
+  concentration-dependent target, forfeited to budget fragmentation at every
+  N≥8).
+- **Dominant-proposer share 83–100%** (5/12 runs at 100%): one proposer does
+  ~all the work — the "diversity" is mostly illusory; the pool spanned many
+  configurations of the *same two closures*, not more closures.
+- **Verdict:** "pump more diverse at once" re-confirms the H50 ceiling, does not
+  escape it. Honest asterisk: on a genuinely probabilistic reach layer, more
+  independent draws is a real variance play — but it samples the same reachable
+  set, never enlarges it, and is dominated by the cost of splitting.
+
+### 2. Breadth scaling law — breadth plateaus like depth
+- Breadth curve (union reach over 15 out-of-closure cells, diverse pool):
+  **flat at 1 across N = 1 → 32**. The N-identical control reached **2** at
+  N=32 vs the diverse pool's 1 — on this target set diversity did *not* help.
+- The plateau is a **representability** boundary, brute-verified over 255
+  masks × 6 lenses: only 4/15 cells are exactly representable; C09
+  (inversion-parity) tops out at 0.5343 ≈ chance and returns exactly 0 in
+  every arm including the exhaustive attempt. No budget on either axis crosses
+  it.
+- Breadth *does* beat single-shot depth in the needle regime (N=8–16 reach 1
+  where a 475-eval exhaustive single-selection reaches 0 — independent
+  re-selection beats one chance-level draw), but ~3 orders worse than
+  in-closure escalation. **Caveat:** total reach is tiny (1–3 instances), so
+  read as "diversity didn't help here," not a strong "quantity wins" law.
+- *Why identical won here:* the reachable targets are all pure XOR/parity —
+  one lens wins, so N identical copies of that lens get more draws at it than
+  a pool that wastes slots on wrong mechanisms. **This is the key to
+  reconciling with D6 (below).**
+
+### 3. Non-human grammar — the engine already thinks non-human, but it doesn't help
+- 92.4% (1109/1200) of forged atoms are **genuinely non-human** (joint
+  criterion: behaviorally outside every depth-≤3 human-family composition AND
+  using load-bearing opcodes outside the 6-of-19 human vocabulary). "It only
+  re-derives human families under new names" is empirically false.
+- But on a solvable out-of-family target (descent-parity; hand-written alien
+  control = 1.000), the machine-atom pool reaches only **0.519 ≈ chance** at
+  equal budget — *worse* than raw search (0.713) and human-op search (0.691).
+  No arm crosses 0.95.
+- **Verdict: the ceiling is AIM, not grammar.** Unaimed non-human novelty
+  scatters in random directions; bulk composition doesn't converge. Grammar
+  is not the human-imposed limit the hypothesis supposed.
+
+### 4. LABS swarm — diversity beats concentration, but as restart-diversification
+- At equal total budget (50M evals), diverse pools won **9/12** lengths vs a
+  single concentrated arm — reversing round b's blanket "concentrate beats
+  split." But the best single arm led **all 48/48** pool runs (avg 3.25–3.5/9
+  arms contributed): the edge is *restart-diversification of one good
+  strategy*, not diverse strategies each winning.
+- Vs the best number either prior round already had: 2/12 improved, 3/12 tied,
+  7/12 regressed. **No record.** N=44 stays closed (122 = best-known).
+  Verifier clean (12/12, 2/2 planted lies caught).
+
+### 6. Diversity predictor — diversity IS the resource, when it spans the target
+- Diversity **D** predicts out-of-closure reach: `corr(reach,D)=0.636`
+  (R²=0.405), partial (controlling N and evals) **0.607** — dominant over
+  count (partial −0.058, collapses to zero) and budget (0.092). Every
+  D=1 ("N identical") row across the 285-config sweep is **exactly 0 reach**,
+  the count-axis analogue of H50's compute plateau.
+- **Conditional, and falsified where it should be:** (1) a target outside
+  every family span is never solved at max D/budget — wrong-direction
+  diversity buys nothing; (2) a narrow-margin conjunction solved 13.5% vs
+  93.4% for a stronger margin — right-direction diversity still needs adequate
+  per-family selection signal.
+- Rigor: two bugs found and fixed en route — test-split leakage (initially
+  made D look *negatively* correlated) and an unequal solo-baseline combo
+  budget.
+
+## Synthesis — reconciling #2 and #6 (the round's real finding)
+
+**D2 and D6 look opposite — "diversity is not the lever" vs "diversity predicts
+reach R²≈0.4" — but they are the same law measured on two target sets, and
+together they are sharper than either alone:**
+
+> **Diversity is the escape resource exactly when — and only when — the pool's
+> diversity spans the target's closure. Diversity in the wrong directions is
+> wasted, and worse than concentrating on the right mechanism.**
+
+- In **D2**, every reachable target lived in *one* closure (pure XOR/parity).
+  The "right" proposer is a single mechanism, so N *identical* copies of it get
+  more independent draws than a diverse pool that spends slots on wrong
+  mechanisms → identical won, diversity looked useless.
+- In **D6**, targets were constructed to span *multiple* families. A pool must
+  be diverse to span them; a D=1 pool can never represent a target its one
+  mechanism can't → every D=1 row is 0, and D dominates the regression.
+- D6's falsification case 1 (wrong-direction diversity buys nothing) *is* D2's
+  situation stated from the other side. No contradiction — one law.
+
+This is the precise, measured form of your hypothesis, and it splits the verdict:
+- **"Pump more of the same"** (N identical): refuted — flat plateau, both axes
+  (H50 depth, D2/D6 count).
+- **"Pump more DIFFERENT"** (diverse pool): validated **conditionally** — it
+  pays iff the diversity spans the target's closure, and even then needs enough
+  per-family selection margin. It is not a free "more goes further"; it is
+  "diversity aimed across the right closures goes further."
+- **Non-human grammar (D3)** and the LABS swarm (D4) sharpen the boundary: the
+  engine is *already* non-human (92.4%) and diversity *does* help modestly on
+  open targets — but neither crosses a **representability** boundary, and
+  unaimed richness underperforms aimed search. The ceiling is **aim ×
+  representability**, not quantity and not human-vs-non-human grammar.
+
+### 5. Auto-discover curriculum — quantity does NOT substitute for insight
+- Replaced round c's hand-given membership→noveltyflag ladder with a
+  mechanism-blind generate-and-filter loop (bulk random programs + archive
+  prefixes; filtered by the standard depth-3&4 certifier AND a payoff test:
+  does adding the candidate make a wall target composable at depth ≤3).
+- **Zero stones discovered across the entire sweep.** Frontier reach **0/9**
+  on both seeds at every bulk size {0, 50, 300, 1000} vs the hand-curriculum's
+  6/9. **54,432 total candidate-behaviours**; `n_payoff_pos` = `n_certified`
+  = 0 in literally every round; 20× more bulk changed cost, not outcome.
+- **The detection apparatus works** — a positive control run directly on the
+  real S1/S2 stones correctly recognizes membership as
+  necessary-but-insufficient (payoff 0/7) and noveltyflag as sufficient
+  (payoff 6/7), reproducing round c from scratch. **The failure is entirely in
+  GENERATION**, not detection.
+- **Verdict:** bulk parallel proposal cannot find the decomposition; the human
+  insight is still required. Quantity substitutes for insight only when the
+  insight is cheap to stumble into by construction — here it is not, and three
+  orders of magnitude of candidates never surfaced it. This is the sharpest
+  bound in the round on "pump more out at once."
+
+## Synthesis (addendum) — the fifth result completes the picture
+
+D5 is the capstone negative: even the one place where a genuinely new
+capability (auto-discovering a decomposition) could have made "more" pay,
+**more did not pay** — 54k candidates, zero finds, while a human found it
+immediately. Combined with D2 (breadth plateaus), D3 (grammar already
+non-human but unaimed), D6 (diversity pays only when it spans the target):
+
+> **"More" — more compute, more breadth, more diversity, more non-human
+> supply, more bulk proposal — moves you *within* what your generator can
+> already represent and aim at. It does not manufacture the missing generator
+> or the missing aim. Those require an insight (a new family, a decomposition,
+> a spanning direction), and insight is exactly what quantity cannot buy when
+> it isn't cheap to stumble into.**
+
+This is not a dead end — it is a *direction*. It says the next capability is
+not a bigger machine but a smarter *generator of generators*: the auto-family
+and learned-aim work of Round E. D5's positive control (detection works,
+generation fails) localizes the problem precisely — Round E's E2/E3 attack
+generation directly.
+
+---
+
+## Round verdict (final) — the hypothesis, answered
+
+Six experiments, six completions. **Your hypothesis — "it thinks like humans;
+pump more out at once and it'll go further" — is now answered with
+measurements, and it splits cleanly:**
+
+- **"Pump more of the same" — REFUTED** on every axis: compute (H50 depth
+  plateau), breadth/quantity (D1 breadth never beats depth; D2 breadth curve
+  flat), bulk proposal (D5: 54k candidates, zero auto-discoveries).
+- **"Thinks like humans" — REFUTED**: the engine is *already* 92.4% non-human
+  (D3); the human primitive families were never the ceiling. But that
+  non-humanness, unaimed, is *worse* than aimed search.
+- **"Pump more DIFFERENT" — VALIDATED, but only conditionally** (D6: R²≈0.4):
+  diversity is the escape resource **exactly when it spans the target's
+  closure**, and even then needs adequate per-family selection margin.
+  Wrong-direction diversity buys nothing (D1/D2 measured it losing to
+  concentration when targets share one closure).
+
+**The unifying law of the whole four-round arc:**
+
+> **The ceiling is AIM × REPRESENTABILITY. "More" — of anything — moves you
+> within what your generator can already represent and aim at. It cannot
+> manufacture the missing generator (a new family) or the missing aim (a
+> spanning direction). Those require an insight, and insight is exactly what
+> quantity cannot buy when it is not cheap to stumble into (D5).**
+
+This is a *direction*, not a dead end. D5's positive control (detection works,
+generation fails) localizes the missing capability precisely: the next step is
+not a bigger machine but a **smarter generator-of-generators** — auto-family
+discovery and learned aim. That is Round E (`research_round_2026_07_11_PLAN.md`).
+
+**One honest bright spot for the open-target push:** D4's LABS swarm showed
+diversity *does* help modestly at equal budget on a real open problem (9/12
+lengths) — as restart-diversification, not structural diversity, and with no
+record — which says the assembled aimed engine on an open target (Round E's E4)
+is worth running, but with aim as the lever, not raw breadth.

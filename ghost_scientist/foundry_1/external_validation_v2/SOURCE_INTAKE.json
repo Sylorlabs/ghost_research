@@ -1,0 +1,38 @@
+{
+  "version": "FOUNDRY_EXTERNAL_VALIDATION_V2_SOURCE_INTAKE",
+  "repository": "pytorch/examples",
+  "commit": "acc295dc7b90714f1bf47f06004fc19a7fe235c4",
+  "license_path": "../external_workloads/LICENSE.pytorch-examples",
+  "sources": [
+    {
+      "family": "recurrent_image_classification",
+      "upstream_path": "mnist_rnn/main.py",
+      "upstream_blob_sha": "550bd4948ff869a7815a1f1fac57c01a3591a3e8",
+      "local_model_snapshot": "mnist_rnn_model.py"
+    },
+    {
+      "family": "policy_gradient_control",
+      "upstream_path": "reinforcement_learning/reinforce.py",
+      "upstream_blob_sha": "048ea99f3782eac3984b2897794ebe7625a2def8",
+      "local_model_snapshot": "reinforce_model.py"
+    },
+    {
+      "family": "graph_node_classification",
+      "upstream_path": "gcn/main.py",
+      "upstream_blob_sha": "fe19248eb60861b024608fc0db02fc7ae7a849d4",
+      "local_model_snapshot": "gcn_model.py"
+    },
+    {
+      "family": "siamese_image_comparison",
+      "upstream_path": "siamese_network/main.py",
+      "upstream_blob_sha": "d2e8e09207bd99af794005631e9993a15f2fb963",
+      "local_model_snapshot": "siamese_model.py"
+    }
+  ],
+  "selection_boundary": {
+    "selected_before_v2_execution": true,
+    "candidate_library_already_exists": true,
+    "no_transformer_architecture": true,
+    "no_attention_operation": true
+  }
+}

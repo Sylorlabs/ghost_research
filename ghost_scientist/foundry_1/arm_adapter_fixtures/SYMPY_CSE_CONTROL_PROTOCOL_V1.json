@@ -1,0 +1,163 @@
+{
+  "version": "FOUNDRY_SYMPY_CSE_CONTROL_PROTOCOL_V1",
+  "frozen_before_control_execution": true,
+  "control_identity": {
+    "system": "SymPy common subexpression elimination",
+    "distribution": "sympy",
+    "version": "1.13.1",
+    "official_repository": "sympy/sympy",
+    "official_tag": "sympy-1.13.1",
+    "implementation_class": "independent deterministic reusable-subexpression discovery",
+    "llm_calls": 0
+  },
+  "selection_boundary": {
+    "P1_text": "four critical source-faithful or upstream controls must pass",
+    "P1_fixes_control_identity": false,
+    "prior_isamore_selection_reason": "ISAMORE was the only remaining pinned public implementation in the prior intake",
+    "substitution_selected_from_validation_outcomes": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "distinct_from_existing_controls": [
+      "does not import or execute Stitch",
+      "does not import or execute Babble",
+      "does not import or execute Enumo",
+      "uses SymPy expression DAG traversal and replacement construction",
+      "official workload includes scalar, matrix, indexed, piecewise, and unevaluated-expression cases"
+    ],
+    "may_replace_isamore_as_A6": false,
+    "may_increase_production_integrated_arm_count": false,
+    "may_satisfy_fourth_P1_control_only_after_all_gates_pass": true
+  },
+  "repository_provider_records": [
+    {
+      "path": "sympy/simplify/cse_main.py",
+      "git_blob_sha1": "e03789b48f770761eb0130c8469275a47e31a702",
+      "installed_sha256": "8434d94f07a3c6ca4af33c3ed8b5d91c5f6b2ff14cacaddbc98a08b00fd8ae82"
+    },
+    {
+      "path": "sympy/simplify/cse_opts.py",
+      "git_blob_sha1": "36a59857411de740ae47423442af88b118a3395d",
+      "installed_sha256": "65309a39d3ab82d89f5b1426173ca782b2eaf6ec3307205d8924b9984f830e81"
+    },
+    {
+      "path": "sympy/simplify/tests/test_cse.py",
+      "git_blob_sha1": "4e3955252ee65b1f7d949c23822508b7ef0a0dd9",
+      "installed_sha256": "b1ab3afa34651da67a8dd897a064c2e7604d66fb94b5a629b484353fee493b4d"
+    }
+  ],
+  "distribution_provider_records": [
+    {
+      "path": "sympy-1.13.1.dist-info/METADATA",
+      "sha256": "d1dbbf156ee3ac2102086ee84196d252330153dc5ba5b290d49918c6ae5b8b1c"
+    },
+    {
+      "path": "sympy-1.13.1.dist-info/RECORD",
+      "sha256": "7d91c5fcc7f1809f944bba8532229c110d81270a640c611c4b08046b3c38c547"
+    }
+  ],
+  "local_provider_records": [
+    {
+      "path": "PARETO_PROSPECTIVE_PROTOCOL_V1.json",
+      "sha256": "b6ca7f41151dc415c49cfb292ab6d4b5ec76b0e7b97b9e3cc75d00f8af557f50"
+    },
+    {
+      "path": "results/phase51_control_four_route_audit.json",
+      "sha256": "14d721dec1268c212d8a85b412555632f3f92d1f8c76bb00553714d724e50ebe"
+    },
+    {
+      "path": "results/phase135_eggmind_full_reproduction_sufficiency_audit.json",
+      "sha256": "7895c50267961f409346ab0559812199c39480e53c75cfe36ced5b26bc2f469b"
+    }
+  ],
+  "official_suite_gate": {
+    "path": "sympy/simplify/tests/test_cse.py",
+    "runner": "python -m pytest -q --disable-warnings",
+    "minimum_collected": 60,
+    "minimum_passed": 55,
+    "maximum_failed": 0,
+    "maximum_errors": 0,
+    "declared_xfail_allowed": true,
+    "unexpected_pass_allowed": false
+  },
+  "independent_semantic_fixture": {
+    "symbols": [
+      "w",
+      "x",
+      "y",
+      "z"
+    ],
+    "expressions": [
+      "(x + y)**2 + sqrt(x + y)",
+      "(x + y)*z",
+      "(x + y)*w",
+      "(w*x + y)**2 + sqrt(w*x + y)",
+      "sin(x + y) + cos(x + y)"
+    ],
+    "sample_points": [
+      {
+        "w": 1.25,
+        "x": 2.0,
+        "y": 3.0,
+        "z": -0.5
+      },
+      {
+        "w": -2.0,
+        "x": 4.0,
+        "y": 5.0,
+        "z": 0.25
+      },
+      {
+        "w": 0.75,
+        "x": -1.0,
+        "y": 4.0,
+        "z": 3.0
+      }
+    ],
+    "absolute_tolerance": 1e-12,
+    "minimum_replacements": 2,
+    "renamed_reordered_variant": {
+      "renaming": {
+        "w": "d",
+        "x": "a",
+        "y": "b",
+        "z": "c"
+      },
+      "order": [
+        4,
+        2,
+        0,
+        3,
+        1
+      ],
+      "required_same_replacement_count": true,
+      "required_numeric_equivalence": true
+    }
+  },
+  "resource_limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 90,
+    "rss_kib": 1500000,
+    "natural_termination_required": true,
+    "process_group_reaped_required": true
+  },
+  "hostile_checks": [
+    "wrong distribution version",
+    "algorithm source hash mismatch",
+    "official test source hash mismatch",
+    "distribution RECORD hash mismatch",
+    "fixture result with deleted replacement",
+    "fixture result with changed reduced expression",
+    "fixture result with unknown output key",
+    "fixture result claiming validation access",
+    "fixture result claiming A6 substitution",
+    "fixture result claiming production-arm promotion"
+  ],
+  "claim_boundary": {
+    "this_is_not_a_new_forge_tool": true,
+    "this_is_not_ISAMORE": true,
+    "this_does_not_satisfy_A6_or_A8": true,
+    "this_does_not_increase_production_integrated_arms": true,
+    "this_may_only_close_P1_independent_control_count": true,
+    "validation_v6_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

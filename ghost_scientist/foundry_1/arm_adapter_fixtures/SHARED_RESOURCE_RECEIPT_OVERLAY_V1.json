@@ -1,0 +1,60 @@
+{
+  "version": "FOUNDRY_SHARED_RESOURCE_RECEIPT_OVERLAY_PROTOCOL_V1",
+  "status": "PREFROZEN_CALIBRATION_BATCH_ASSEMBLY",
+  "frozen_before_batch_assembly": true,
+  "base_contract_version": "FOUNDRY_ARM_ADAPTER_CONTRACT_V1",
+  "overlay_version": "FOUNDRY_ARM_ADAPTER_BATCH_OVERLAY_V1",
+  "required_arms": [
+    "A3",
+    "A9"
+  ],
+  "expected_artifacts_per_arm": 23,
+  "shared_receipt_rules": [
+    "Each batch contains exactly one complete process-tree resource receipt.",
+    "The receipt ID is the SHA-256 of its canonical receipt body.",
+    "Every artifact binding names the one receipt ID and the SHA-256 of one strict v1 input and output pair.",
+    "Every embedded v1 output retains its required resource object, but all 23 copies must equal the shared receipt resource projection byte-for-byte.",
+    "Aggregate resource accounting charges the unique receipt ID once, never once per artifact binding.",
+    "Cost ledgers remain artifact-local and are not replaced by the process-tree receipt.",
+    "Primary and independent base-contract verifiers must accept all 46 input-output pairs.",
+    "Unknown fields, duplicate artifact IDs, duplicate output digests, changed receipt IDs, missing bindings, and inflated integration claims fail closed."
+  ],
+  "provider_records": [
+    {
+      "path": "ARM_ADAPTER_CONTRACT_V1.json",
+      "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"
+    },
+    {
+      "path": "arm_adapter_contract.py",
+      "sha256": "ac7eb5e7a00813cd2ee722059bf5265b0e270f3e56efae0325e337136eca1a5e"
+    },
+    {
+      "path": "independent_arm_adapter_contract.py",
+      "sha256": "cc2ccece0b76d33b9fb933eb8547d66b46be788f9f1146cc2d6fb3180e6b2173"
+    },
+    {
+      "path": "results/pareto_remediation_v7_freeze.json",
+      "sha256": "e89fd210b054f891e71ba14d88d67a2272b30fd0c2324395cbcd3df1e8dbf0eb"
+    },
+    {
+      "path": "results/phase89_framework_runtime_mount_conformance.json",
+      "sha256": "f54b610298232e5cc74b4b7f23d1d2d2bc3171de9d1f4cc9c89df6f2bd19d1f8"
+    },
+    {
+      "path": "results/phase90_framework_runtime_mount_resource_audit.json",
+      "sha256": "ae239604fc471ad524466402adc8e0ed17437fc9aab9b53789540d3b634bea80"
+    },
+    {
+      "path": "framework_runtime_mount.py",
+      "sha256": "6742373e273c3046071e27d5bf317298b9bbe61c7cb09f589435d8445986e30b"
+    }
+  ],
+  "claim_boundary": {
+    "production_integrated_arms_before_pass": 2,
+    "production_integrated_arms_after_pass": 4,
+    "A3_A9_may_become_production_integrated_calibration_arms": true,
+    "P3_complete_after_pass": false,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

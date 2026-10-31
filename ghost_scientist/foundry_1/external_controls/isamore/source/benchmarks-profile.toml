@@ -1,0 +1,19 @@
+[cdios]
+path = "./benchmarks"
+target_path = "./profiled"
+compile_rvsdg = true
+instrument = true
+profile = true
+cflags = "-O2 -fno-vectorize -fno-slp-vectorize -ffp-contract=off"
+
+[cdios.instrument_options]
+temp-path = "__temp"
+keep-temps = true
+
+[cdios.profile_options]
+temp-path = "__temp"
+cpu-type = "O3"
+
+[comment]
+example = "python3 scripts/preprocess.py --config tests/cdios/benchmarks-profile.toml --instrument-path $INSTRUMENT_PATH --llvm $JLM_LLVM --clang=$JLM_LLVM/bin/clang-18 --jlm-opt=$JLM_BUILD/jlm-opt"
+note = "Set environment variables JLM_BUILD (path to jlm build directory) and JLM_LLVM (path to llvm directory) or use --llvm, --clang, --jlm-opt arguments"

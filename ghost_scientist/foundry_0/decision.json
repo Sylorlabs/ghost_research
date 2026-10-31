@@ -1,0 +1,39 @@
+{
+  "schema": "ghost-foundry-0-decision-v1",
+  "audit_date": "2026-07-30",
+  "verdict": "FOUNDRY_0_GO_NARROWED",
+  "broad_claims_rejected": [
+    "first autonomous library learning",
+    "first automatic rewrite inference",
+    "first reusable equality-saturation strategy synthesis",
+    "first tensor compiler superoptimization",
+    "first LLM-free derived-tool construction",
+    "first semantic reusable instruction discovery",
+    "autonomous primitive invention",
+    "escape from a fixed semantic substrate"
+  ],
+  "surviving_question": "Can an LLM-free system induce verified typed tensor tools whose complete charged discovery cost is repaid by behaviorally demonstrated reuse on post-freeze heterogeneous real-compiler workloads against compute-matched controls?",
+  "primary_candidate_llm_free": true,
+  "critical_controls": [
+    "stock",
+    "v5.1",
+    "no-library",
+    "replay",
+    "typed-stitch-adaptation",
+    "babble-isamore-adaptation",
+    "ruler-enumo-adaptation",
+    "eggmind-adaptation",
+    "compute-matched-per-instance",
+    "bounded-exhaustive-oracle"
+  ],
+  "prerequisites": [
+    "P1 external-control conformance",
+    "P2 independent corpus and invocation trace",
+    "P3 complete resource meter",
+    "P4 independently verified typed tool schema",
+    "P5 native compiler deduplication",
+    "P6 unchanged prospective freeze machinery"
+  ],
+  "prospective_trial_authorized": false,
+  "authorization_condition": "All prerequisites must have evidence and the protocol must be hash-frozen before held-out selection."
+}

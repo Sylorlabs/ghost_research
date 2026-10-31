@@ -1,0 +1,33 @@
+[package]
+name = "estimator"
+version = "0.1.0"
+edition = "2024"
+authors = ["XLS Authors"]
+description = "Rust implementation of XLS area and delay estimators"
+
+[dependencies]
+prost = "0.11"
+prost-types = "0.11"
+bytes = "1.4"
+thiserror = "1.0"
+log = "0.4"
+anyhow = "1.0"
+once_cell = "1.17"
+regex = "1.8"
+env_logger = "0.11.6"
+argmin = "0.10"
+argmin-math = { version = "0.4", features = [
+    "ndarray_latest",
+    "nalgebra_latest",
+] }
+
+[build-dependencies]
+prost-build = "0.11"
+
+[[bin]]
+name = "estimator"
+path = "src/main.rs"
+
+[lib]
+name = "estimator"
+path = "src/lib.rs"

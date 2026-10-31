@@ -56,6 +56,19 @@ pub fn build(b: *std.Build) void {
     const run_eval_step = b.step("eval", "Run the control-benchmark evaluation harness");
     run_eval_step.dependOn(&run_eval_cmd.step);
 
+    // EXP-8: planning depth sweep vs greedy mb_mass on the homeostatic band.
+    const plan_exe = b.addExecutable(.{
+        .name = "ghost_planning_probe",
+        .root_source_file = b.path("planning_probe.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(plan_exe);
+    const run_plan_cmd = b.addRunArtifact(plan_exe);
+    run_plan_cmd.step.dependOn(b.getInstallStep());
+    const run_plan_step = b.step("planning-probe", "EXP-8: rollout depth 1/3/5 vs greedy mb_mass");
+    run_plan_step.dependOn(&run_plan_cmd.step);
+
     // Generalization harness: train on one regime, test cold on held-out regimes.
     const gen_exe = b.addExecutable(.{
         .name = "ghost_gen_eval",
@@ -126,6 +139,85 @@ pub fn build(b: *std.Build) void {
     run_dual_cmd.step.dependOn(b.getInstallStep());
     const run_dual_step = b.step("dual-band-test", "Run 2D controller test on dual-band");
     run_dual_step.dependOn(&run_dual_cmd.step);
+
+    // Swarm EXP-11 (C27): multi-objective band — safety vs delivered work Pareto.
+    const mo_exe = b.addExecutable(.{
+        .name = "ghost_multi_objective",
+        .root_source_file = b.path("multi_objective.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(mo_exe);
+    const run_mo_cmd = b.addRunArtifact(mo_exe);
+    run_mo_cmd.step.dependOn(b.getInstallStep());
+    const run_mo_step = b.step("multi-objective", "EXP-11 (C27): Pareto safety vs delivered work");
+    run_mo_step.dependOn(&run_mo_cmd.step);
+
+    // Swarm EXP-10 (I56): hard thermostat grid-tune vs mb_mass strawman check.
+    const exp10_exe = b.addExecutable(.{
+        .name = "ghost_swarm_exp10",
+        .root_source_file = b.path("swarm_exp10_thermostat.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(exp10_exe);
+    const run_exp10_cmd = b.addRunArtifact(exp10_exe);
+    run_exp10_cmd.step.dependOn(b.getInstallStep());
+    const run_exp10_step = b.step("swarm-exp10", "EXP-10: hysteresis thermostat grid-tune vs mb_mass");
+    run_exp10_step.dependOn(&run_exp10_cmd.step);
+
+    // Swarm EXP-23 (F43): hidden non-salient feature sample-complexity curve.
+    const exp23_exe = b.addExecutable(.{
+        .name = "ghost_swarm_exp23",
+        .root_source_file = b.path("swarm_exp23_sample_curve.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(exp23_exe);
+    const run_exp23_cmd = b.addRunArtifact(exp23_exe);
+    run_exp23_cmd.step.dependOn(b.getInstallStep());
+    const run_exp23_step = b.step("swarm-exp23", "EXP-23 (F43): failure-label sample-complexity curve");
+    run_exp23_step.dependOn(&run_exp23_cmd.step);
+
+    // Fork 2: hardness router → DUAL_BAND Q38 compound pair discovery.
+    const hr_exe = b.addExecutable(.{
+        .name = "ghost_hardness_router",
+        .root_source_file = b.path("hardness_router_test.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(hr_exe);
+    const run_hr_cmd = b.addRunArtifact(hr_exe);
+    const run_hr_step = b.step("hardness-router-test", "Hardness router vs brute pair search on dual-band");
+    run_hr_step.dependOn(&run_hr_cmd.step);
+
+    // EXP-2: pair-selection hardness router → menu-growth cell pairs (28 pairs, guided vs brute).
+    const phr_exe = b.addExecutable(.{
+        .name = "ghost_pair_hardness_router",
+        .root_source_file = b.path("pair_hardness_router_test.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(phr_exe);
+    const run_phr_cmd = b.addRunArtifact(phr_exe);
+    const run_phr_step = b.step("pair-hardness-router-test", "EXP-2: guided pair routing vs brute on hidden-pair + 5 deg2 targets");
+    run_phr_step.dependOn(&run_phr_cmd.step);
+
+    // EXP-6: learned candidate policy — perceptron guide vs baseline unified invention.
+    const lg_mod = b.addModule("unified_invention", .{
+        .root_source_file = b.path("unified_invention.zig"),
+    });
+    const lg_exe = b.addExecutable(.{
+        .name = "ghost_learned_guide",
+        .root_source_file = b.path("learned_guide_test.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    lg_exe.root_module.addImport("unified_invention", lg_mod);
+    b.installArtifact(lg_exe);
+    const run_lg_cmd = b.addRunArtifact(lg_exe);
+    const run_lg_step = b.step("learned-guide-test", "EXP-6: learned candidate policy vs baseline on 7-target benchmark");
+    run_lg_step.dependOn(&run_lg_cmd.step);
 
     // Adaptive feature discovery: self-directed model repair via disagreement detection.
     const adapt_exe = b.addExecutable(.{
@@ -321,6 +413,33 @@ pub fn build(b: *std.Build) void {
     if (b.args) |args| run_anti_cmd.addArgs(args);
     const run_anti_step = b.step("antisymmetric-relational", "Clifford grade-2 vs real pairwise on oriented predicate");
     run_anti_step.dependOn(&run_anti_cmd.step);
+
+    // Direction 3: oriented Clifford readout vs mb_mass sum on real grid control.
+    const oriented_exe = b.addExecutable(.{
+        .name = "ghost_oriented_control",
+        .root_source_file = b.path("oriented_control.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(oriented_exe);
+    const run_oriented_cmd = b.addRunArtifact(oriented_exe);
+    run_oriented_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_oriented_cmd.addArgs(args);
+    const run_oriented_step = b.step("oriented-control", "Grade-2 bivector readout vs mb_mass sum on grid control");
+    run_oriented_step.dependOn(&run_oriented_cmd.step);
+
+    const relbat_exe = b.addExecutable(.{
+        .name = "ghost_relational_binding_battery",
+        .root_source_file = b.path("relational_binding_battery.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(relbat_exe);
+    const run_relbat_cmd = b.addRunArtifact(relbat_exe);
+    run_relbat_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_relbat_cmd.addArgs(args);
+    const run_relbat_step = b.step("relational-binding-battery", "EXP-3: blind substrate selector on relational predicates");
+    run_relbat_step.dependOn(&run_relbat_cmd.step);
 
     // FRONTIER 4: k-parity interaction-order ladder — ceiling at each degree d < k.
     const hoc_exe = b.addExecutable(.{
@@ -601,6 +720,815 @@ pub fn build(b: *std.Build) void {
     if (b.args) |args| run_bs_cmd.addArgs(args);
     const run_bs_step = b.step("bit-state", "Bit-state mechanism: XOR parity + bit-indexed recall as the third corner");
     run_bs_step.dependOn(&run_bs_cmd.step);
+
+    // FRONTIER 24: autonomous structure discovery — argmax over (inner-transform ⊗ outer-operator);
+    // assembles the scattered discovery pieces into one blind selector + tests the menu's own closure.
+    const sd_exe = b.addExecutable(.{
+        .name = "ghost_structure_discovery",
+        .root_source_file = b.path("structure_discovery.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(sd_exe);
+    const run_sd_cmd = b.addRunArtifact(sd_exe);
+    run_sd_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_sd_cmd.addArgs(args);
+    const run_sd_step = b.step("structure-discovery", "Autonomous (inner ⊗ outer) structure discovery + the menu-is-a-closure ceiling");
+    run_sd_step.dependOn(&run_sd_cmd.step);
+
+    // #3 Phase B: certified menu-growth — discover the pair, certify irreducible, break the F24 ceiling.
+    const mg_exe = b.addExecutable(.{
+        .name = "ghost_menu_growth",
+        .root_source_file = b.path("menu_growth.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(mg_exe);
+    const run_mg_cmd = b.addRunArtifact(mg_exe);
+    run_mg_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_mg_cmd.addArgs(args);
+    const run_mg_step = b.step("menu-growth", "Phase B: certified menu-growth that breaks the Frontier-24 hidden-pair ceiling");
+    run_mg_step.dependOn(&run_mg_cmd.step);
+
+    // #3 Phase C: the open inner-transform forge — does certified promotion saturate or grow?
+    const if_exe = b.addExecutable(.{
+        .name = "ghost_inner_forge",
+        .root_source_file = b.path("inner_forge.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(if_exe);
+    const run_if_cmd = b.addRunArtifact(if_exe);
+    run_if_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_if_cmd.addArgs(args);
+    const run_if_step = b.step("inner-forge", "Phase C: open inner-transform forge — saturation vs growth + algebraic-irreducibility objective");
+    run_if_step.dependOn(&run_if_cmd.step);
+
+    // E10: novelty-only forge vs usefulness — wcore novelty↔usefulness tension.
+    const e10_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e10",
+        .root_source_file = b.path("open_invention_e10.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e10_exe);
+    const run_e10_cmd = b.addRunArtifact(e10_exe);
+    if (b.args) |args| run_e10_cmd.addArgs(args);
+    const run_e10_step = b.step("open-invention-e10", "E10: novelty-only forge vs random-target usefulness battery (wcore tension)");
+    run_e10_step.dependOn(&run_e10_cmd.step);
+
+    // E25: novelty-usefulness Pareto — sweep R²×escape on E10 substrate.
+    const e25_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e25",
+        .root_source_file = b.path("open_invention_e25.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e25_exe);
+    const run_e25_cmd = b.addRunArtifact(e25_exe);
+    if (b.args) |args| run_e25_cmd.addArgs(args);
+    const run_e25_step = b.step("open-invention-e25", "E25: novelty-usefulness Pareto (E10++) — R²×escape sweep, useful/random≥5×");
+    run_e25_step.dependOn(&run_e25_cmd.step);
+
+    // Direction 1: unified operator menu — spectral vs Walsh vs Clifford grade-2.
+    const om_exe = b.addExecutable(.{
+        .name = "ghost_operator_menu",
+        .root_source_file = b.path("operator_menu.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(om_exe);
+    const run_om_cmd = b.addRunArtifact(om_exe);
+    run_om_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_om_cmd.addArgs(args);
+    const run_om_step = b.step("operator-menu", "Direction 1: unified operator menu — spectral vs Walsh vs Clifford");
+    run_om_step.dependOn(&run_om_cmd.step);
+
+    // Fork 5: unified invention loop — forge → menu → world pool.
+    const ui_exe = b.addExecutable(.{
+        .name = "ghost_unified_invention",
+        .root_source_file = b.path("unified_invention.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(ui_exe);
+    const run_ui_cmd = b.addRunArtifact(ui_exe);
+    run_ui_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_ui_cmd.addArgs(args);
+    const run_ui_step = b.step("unified-invention", "Fork 5: monomial forge → operator menu → world pool (mod_p)");
+    run_ui_step.dependOn(&run_ui_cmd.step);
+
+    // EXPERIMENT E1: frozen-forge blind zoo — train on T1–T4, freeze, evaluate battery B.
+    const oie1_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e1",
+        .root_source_file = b.path("open_invention_e1.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(oie1_exe);
+    const run_oie1_cmd = b.addRunArtifact(oie1_exe);
+    if (b.args) |args| run_oie1_cmd.addArgs(args);
+    const run_oie1_step = b.step("open-invention-e1", "E1: frozen monomial forge → blind battery B (open invention)");
+    run_oie1_step.dependOn(&run_oie1_cmd.step);
+
+    // EXPERIMENT E2: POET-lite adversarial target generator — forge vs evaluation-only oracle.
+    const oie2_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e2",
+        .root_source_file = b.path("open_invention_e2.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(oie2_exe);
+    const run_oie2_cmd = b.addRunArtifact(oie2_exe);
+    run_oie2_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_oie2_cmd.addArgs(args);
+    const run_oie2_step = b.step("open-invention-e2", "E2: POET-lite adversarial targets — forge vs evaluation-only oracle");
+    run_oie2_step.dependOn(&run_oie2_cmd.step);
+
+    // RQ2: E2 XOR gap closure — inject minimal xor_popcount(mask) readout.
+    const rq2_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_rq2",
+        .root_source_file = b.path("open_invention_rq2.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_rq2_cmd = b.addRunArtifact(rq2_exe);
+    if (b.args) |args| run_rq2_cmd.addArgs(args);
+    const run_rq2_step = b.step("open-invention-rq2", "RQ2: E2 XOR gap closure — xor_popcount(mask) readout vs oracle-only targets");
+    run_rq2_step.dependOn(&run_rq2_cmd.step);
+
+    // Math frontier 1: Boolean Fourier (Walsh–Hadamard) — the universal discovery operator.
+    const bf_exe = b.addExecutable(.{
+        .name = "ghost_boolean_fourier",
+        .root_source_file = b.path("boolean_fourier.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(bf_exe);
+    const run_bf_cmd = b.addRunArtifact(bf_exe);
+    run_bf_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_bf_cmd.addArgs(args);
+    const run_bf_step = b.step("boolean-fourier", "Math frontier 1: Walsh–Hadamard transform recovers every predicate's structure in one pass");
+    run_bf_step.dependOn(&run_bf_cmd.step);
+
+    // Math frontier 2: Post's lattice — the complete classification of Boolean closures.
+    const cl_exe = b.addExecutable(.{
+        .name = "ghost_clone_lattice",
+        .root_source_file = b.path("clone_lattice.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(cl_exe);
+    const run_cl_cmd = b.addRunArtifact(cl_exe);
+    run_cl_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_cl_cmd.addArgs(args);
+    const run_cl_step = b.step("clone-lattice", "Math frontier 2: Post's lattice places every closure ceiling at exact coordinates");
+    run_cl_step.dependOn(&run_cl_cmd.step);
+
+    // Math frontier 3: the k≥3 cliff — where the classification of closures ceases to exist.
+    const kf_exe = b.addExecutable(.{
+        .name = "ghost_kary_frontier",
+        .root_source_file = b.path("kary_frontier.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(kf_exe);
+    const run_kf_cmd = b.addRunArtifact(kf_exe);
+    run_kf_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_kf_cmd.addArgs(args);
+    const run_kf_step = b.step("kary-frontier", "Math frontier 3: k=2 is fully mapped; k≥3 has uncountably many clones (no map)");
+    run_kf_step.dependOn(&run_kf_cmd.step);
+
+    // Direction 4: minimal k=3 substrate — does promotion saturation change outside Boolean k=2?
+    const k3_exe = b.addExecutable(.{
+        .name = "ghost_k3_substrate",
+        .root_source_file = b.path("k3_substrate.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(k3_exe);
+    const run_k3_cmd = b.addRunArtifact(k3_exe);
+    run_k3_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_k3_cmd.addArgs(args);
+    const run_k3_step = b.step("k3-substrate", "Direction 4: k=3 substrate forge — saturation vs inner-forge baseline");
+    run_k3_step.dependOn(&run_k3_cmd.step);
+
+    // E7: corpus-invented rune primitives vs frozen symbolic menu.
+    const oi7_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e7",
+        .root_source_file = b.path("open_invention_e7.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(oi7_exe);
+    const run_oi7_cmd = b.addRunArtifact(oi7_exe);
+    run_oi7_cmd.step.dependOn(&oi7_exe.step);
+    if (b.args) |args| run_oi7_cmd.addArgs(args);
+    const run_oi7_step = b.step("open-invention-e7", "E7: corpus-invented rune primitives vs frozen symbolic menu");
+    run_oi7_step.dependOn(&run_oi7_cmd.step);
+
+    // E22: corpus runes v2 — terminal execution traces → rune forge → Boolean/zoo.
+    const oi22_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e22",
+        .root_source_file = b.path("open_invention_e22.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(oi22_exe);
+    const run_oi22_cmd = b.addRunArtifact(oi22_exe);
+    run_oi22_cmd.step.dependOn(&oi22_exe.step);
+    if (b.args) |args| run_oi22_cmd.addArgs(args);
+    const run_oi22_step = b.step("open-invention-e22", "E22: terminal trace runes vs frozen menu on T5/T7 zoo");
+    run_oi22_step.dependOn(&run_oi22_cmd.step);
+
+    // Fork 6: k≥3 + order-statistic escape — T6 median wall with rank indicators.
+    const k3oe_exe = b.addExecutable(.{
+        .name = "ghost_k3_order_escape",
+        .root_source_file = b.path("k3_order_escape.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(k3oe_exe);
+    const run_k3oe_cmd = b.addRunArtifact(k3oe_exe);
+    run_k3oe_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_k3oe_cmd.addArgs(args);
+    const run_k3oe_step = b.step("k3-order-escape", "Fork 6: k≥3 + order-statistic escape on T6 median wall");
+    run_k3oe_step.dependOn(&run_k3oe_cmd.step);
+
+    // E3: no spectral/Walsh ablation — open invention test (parity + random Boolean).
+    const e3_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e3",
+        .root_source_file = b.path("open_invention_e3.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_e3_cmd = b.addRunArtifact(e3_exe);
+    if (b.args) |args| run_e3_cmd.addArgs(args);
+    const run_e3_step = b.step("open-invention-e3", "E3: no spectral/Walsh ablation — parity + 10 random Boolean targets");
+    run_e3_step.dependOn(&run_e3_cmd.step);
+
+    // RQ3: E3 extended — 20 non-parity periodic/composed targets, synthesis only.
+    const rq3_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_rq3",
+        .root_source_file = b.path("open_invention_rq3.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_rq3_cmd = b.addRunArtifact(rq3_exe);
+    if (b.args) |args| run_rq3_cmd.addArgs(args);
+    const run_rq3_step = b.step("open-invention-rq3", "RQ3: E3 extended — 20 non-parity periodic/composed targets (synthesis only)");
+    run_rq3_step.dependOn(&run_rq3_cmd.step);
+
+    // E16: mod synthesis beyond parity (E3++) — mod(sum,3), mod(popcount,4), composed mod(f,k).
+    const e16_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e16",
+        .root_source_file = b.path("open_invention_e16.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_e16_cmd = b.addRunArtifact(e16_exe);
+    if (b.args) |args| run_e16_cmd.addArgs(args);
+    const run_e16_step = b.step("open-invention-e16", "E16: mod synthesis beyond parity — 20 mod targets, synthesis only, 0 Walsh");
+    run_e16_step.dependOn(&run_e16_cmd.step);
+
+    // E6: k≥3 substrate open forge — random alien targets, no Boolean Fourier menu.
+    const e6_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e6",
+        .root_source_file = b.path("open_invention_e6.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e6_exe);
+    const run_e6_cmd = b.addRunArtifact(e6_exe);
+    run_e6_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_e6_cmd.addArgs(args);
+    const run_e6_step = b.step("open-invention-e6", "E6: k≥3 open forge — random alien targets (k=3,4), no Fourier menu");
+    run_e6_step.dependOn(&run_e6_cmd.step);
+
+    // E24: k3_order_escape full substrate on E6 alien distribution — no Walsh.
+    const e24_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e24",
+        .root_source_file = b.path("open_invention_e24.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e24_exe);
+    const run_e24_cmd = b.addRunArtifact(e24_exe);
+    run_e24_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_e24_cmd.addArgs(args);
+    const run_e24_step = b.step("open-invention-e24", "E24: k3_order_escape on E6 aliens — ≥4/16 certified promotions, no Walsh");
+    run_e24_step.dependOn(&run_e24_cmd.step);
+
+    // Math frontier 4: tropical & the family map — incomparable algebraic closures.
+    const fc_exe = b.addExecutable(.{
+        .name = "ghost_family_closures",
+        .root_source_file = b.path("family_closures.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(fc_exe);
+    const run_fc_cmd = b.addRunArtifact(fc_exe);
+    run_fc_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_fc_cmd.addArgs(args);
+    const run_fc_step = b.step("family-closures", "Math frontier 4: tropical/affine/GF(2)/monomial are incomparable closures (diagonal matrix)");
+    run_fc_step.dependOn(&run_fc_cmd.step);
+
+    // EXPERIMENT E5: meta-menu of composed pipelines — blind inner₁→inner₂ discovery.
+    const e5_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e5",
+        .root_source_file = b.path("open_invention_e5.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e5_exe);
+    const run_e5_cmd = b.addRunArtifact(e5_exe);
+    if (b.args) |args| run_e5_cmd.addArgs(args);
+    const run_e5_step = b.step("open-invention-e5", "E5: meta-menu discovers composed pipelines without product/spectral hints");
+    run_e5_step.dependOn(&run_e5_cmd.step);
+
+    // RQ5: E5 pipeline transfer — freeze grammar after A+B, test 30 held-out composed targets.
+    const rq5_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_rq5",
+        .root_source_file = b.path("open_invention_rq5.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(rq5_exe);
+    const run_rq5_cmd = b.addRunArtifact(rq5_exe);
+    if (b.args) |args| run_rq5_cmd.addArgs(args);
+    const run_rq5_step = b.step("open-invention-rq5", "RQ5: E5 pipeline transfer — freeze grammar, 30 held-out composed targets");
+    run_rq5_step.dependOn(&run_rq5_cmd.step);
+
+    // E17: pipeline grammar invention (E5++) — meta-search 2-3 stage grammars, 50 composed targets.
+    const e17_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e17",
+        .root_source_file = b.path("open_invention_e17.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e17_exe);
+    const run_e17_cmd = b.addRunArtifact(e17_exe);
+    if (b.args) |args| run_e17_cmd.addArgs(args);
+    const run_e17_step = b.step("open-invention-e17", "E17: meta-search 2-3 stage pipeline grammars, certify 50 composed targets");
+    run_e17_step.dependOn(&run_e17_cmd.step);
+
+    // E11: LLM as proposer, engine as sole judge — JSON feature proposals on grid targets.
+    const e11_exe = b.addExecutable(.{
+        .name = "open_invention_e11",
+        .root_source_file = b.path("open_invention_e11.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_e11_cmd = b.addRunArtifact(e11_exe);
+    run_e11_cmd.setCwd(b.path("."));
+    if (b.args) |args| run_e11_cmd.addArgs(args);
+    const run_e11_step = b.step("open-invention-e11", "E11: LLM proposer JSON features, engine certifies held-out ≥0.90 on grid targets");
+    run_e11_step.dependOn(&run_e11_cmd.step);
+
+    // RQ7: E11 scale — 100 LLM proposals, 5 target families, world novelty gate.
+    const rq7_exe = b.addExecutable(.{
+        .name = "open_invention_rq7",
+        .root_source_file = b.path("open_invention_rq7.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_rq7_cmd = b.addRunArtifact(rq7_exe);
+    run_rq7_cmd.setCwd(b.path("."));
+    if (b.args) |args| run_rq7_cmd.addArgs(args);
+    const run_rq7_step = b.step("open-invention-rq7", "RQ7: 100 LLM proposals, engine certifies ≥0.90 on 5 families (parity/hidden_pair/sum_mod/oriented/monomial_sign)");
+    run_rq7_step.dependOn(&run_rq7_cmd.step);
+
+    // E12: POET propose-solve-verify self-play — typed TargetSpec curriculum.
+    const e12_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e12",
+        .root_source_file = b.path("open_invention_e12.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e12_exe);
+    const run_e12_cmd = b.addRunArtifact(e12_exe);
+    if (b.args) |args| run_e12_cmd.addArgs(args);
+    const run_e12_step = b.step("open-invention-e12", "E12: POET propose-solve-verify self-play (TargetSpec curriculum)");
+    run_e12_step.dependOn(&run_e12_cmd.step);
+
+    // EXPERIMENT E14: hardness-routed open invention — Q38 router picks xor vs synth vs pipeline.
+    const e14_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e14",
+        .root_source_file = b.path("open_invention_e14.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e14_exe);
+    const run_e14_cmd = b.addRunArtifact(e14_exe);
+    if (b.args) |args| run_e14_cmd.addArgs(args);
+    const run_e14_step = b.step("open-invention-e14", "E14: hardness-routed open invention — Q38 picks xor_popcount vs mod synthesis vs pipeline");
+    run_e14_step.dependOn(&run_e14_cmd.step);
+
+    // RQ8: E12 hard mutators — noisy labels, Walsh deg 3–5, 2-feature composition.
+    const rq8_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_rq8",
+        .root_source_file = b.path("open_invention_rq8.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(rq8_exe);
+    const run_rq8_cmd = b.addRunArtifact(rq8_exe);
+    if (b.args) |args| run_rq8_cmd.addArgs(args);
+    const run_rq8_step = b.step("open-invention-rq8", "RQ8: E12 hard mutators — noisy labels, Walsh deg 3–5, composed AND");
+    run_rq8_step.dependOn(&run_rq8_cmd.step);
+
+    // E20: POET curriculum stress test — 200 rounds, E12/RQ8 hardened pass bar.
+    const e20_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e20",
+        .root_source_file = b.path("open_invention_e20.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e20_exe);
+    const run_e20_cmd = b.addRunArtifact(e20_exe);
+    if (b.args) |args| run_e20_cmd.addArgs(args);
+    const run_e20_step = b.step("open-invention-e20", "E20: POET curriculum stress test — 200 rounds, curriculum≥20 for 50 consecutive");
+    run_e20_step.dependOn(&run_e20_cmd.step);
+
+    // E27: certified stack vs transformer on verifiable tasks (parity/compress/chain/terminal).
+    const e27_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e27",
+        .root_source_file = b.path("open_invention_e27.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e27_exe);
+    const run_e27_cmd = b.addRunArtifact(e27_exe);
+    if (b.args) |args| run_e27_cmd.addArgs(args);
+    const run_e27_step = b.step("open-invention-e27", "E27: certified stack vs transformer — 100 verifiable tasks, 50 holdout");
+    run_e27_step.dependOn(&run_e27_cmd.step);
+
+    // E28: DeepSeek expert route invention — hardness router + unified loop on captured L30 activations.
+    const e28_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e28",
+        .root_source_file = b.path("open_invention_e28.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e28_exe);
+    const run_e28_cmd = b.addRunArtifact(e28_exe);
+    if (b.args) |args| run_e28_cmd.addArgs(args);
+    const run_e28_step = b.step("open-invention-e28", "E28: DeepSeek expert route invention — gate scores from acts+gate_L30, held-out e11 positions");
+    run_e28_step.dependOn(&run_e28_cmd.step);
+
+    // E19: wake-sleep LLM proposer — 500 proposals, library-conditioned, RQ9 novelty gate.
+    const e19_exe = b.addExecutable(.{
+        .name = "open_invention_e19",
+        .root_source_file = b.path("open_invention_e19.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const run_e19_cmd = b.addRunArtifact(e19_exe);
+    run_e19_cmd.setCwd(b.path("."));
+    if (b.args) |args| run_e19_cmd.addArgs(args);
+    const run_e19_step = b.step("open-invention-e19", "E19: wake-sleep LLM proposer — 500 proposals, library growth, RQ9 novelty");
+    run_e19_step.dependOn(&run_e19_cmd.step);
+
+    // RQ9: cross-cutting equivalence tax — can rich basis reproduce certified escapes?
+    const rq9_exe = b.addExecutable(.{
+        .name = "open_invention_rq9",
+        .root_source_file = b.path("open_invention_rq9.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(rq9_exe);
+    const run_rq9_cmd = b.addRunArtifact(rq9_exe);
+    if (b.args) |args| run_rq9_cmd.addArgs(args);
+    const run_rq9_step = b.step("open-invention-rq9", "RQ9: equivalence tax — monomial+Walsh+world+VM basis vs E3/E4/E5/E11 escapes");
+    run_rq9_step.dependOn(&run_rq9_cmd.step);
+
+    // E26: equivalence tax v2 (RQ9++) — expanded basis + all E1–E12 grid escapes.
+    const e26_exe = b.addExecutable(.{
+        .name = "open_invention_e26",
+        .root_source_file = b.path("open_invention_e26.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e26_exe);
+    const run_e26_cmd = b.addRunArtifact(e26_exe);
+    if (b.args) |args| run_e26_cmd.addArgs(args);
+    const run_e26_step = b.step("open-invention-e26", "E26: equivalence tax v2 — +mod synth+xor_popcount+pipelines vs E1–E12 escapes");
+    run_e26_step.dependOn(&run_e26_cmd.step);
+
+    // RQ10: certifier soundness — false-promote rate on random-label targets.
+    const rq10_exe = b.addExecutable(.{
+        .name = "open_invention_rq10",
+        .root_source_file = b.path("open_invention_rq10.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(rq10_exe);
+    const run_rq10_cmd = b.addRunArtifact(rq10_exe);
+    if (b.args) |args| run_rq10_cmd.addArgs(args);
+    const run_rq10_step = b.step("open-invention-rq10", "RQ10: certifier soundness on random/shuffled labels");
+    run_rq10_step.dependOn(&run_rq10_cmd.step);
+
+    // E4: certified menu minting — program synthesizer mints grid→scalar transforms.
+    const e4_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e4",
+        .root_source_file = b.path("open_invention_e4.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e4_exe);
+    const run_e4_cmd = b.addRunArtifact(e4_exe);
+    if (b.args) |args| run_e4_cmd.addArgs(args);
+    const run_e4_step = b.step("open-invention-e4", "E4: certified menu minting — synthesizer mints grid→scalar programs");
+    run_e4_step.dependOn(&run_e4_cmd.step);
+
+    // FORK E4-G00: hard-mint generalization across seeds + downstream library lift.
+    const fork_e4_g00_exe = b.addExecutable(.{
+        .name = "swarm_fork_e4_g00",
+        .root_source_file = b.path("swarm_fork_e4_g00.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(fork_e4_g00_exe);
+    const run_fork_e4_g00_cmd = b.addRunArtifact(fork_e4_g00_exe);
+    if (b.args) |args| run_fork_e4_g00_cmd.addArgs(args);
+    const run_fork_e4_g00_step = b.step("swarm-fork-e4-g00", "FORK E4-G00: hard-mint generalization + downstream promotion test");
+    run_fork_e4_g00_step.dependOn(&run_fork_e4_g00_cmd.step);
+
+    // RQ4: E4 equivalence oracle — are minted programs distinct from VM depth≤6?
+    const rq4_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_rq4",
+        .root_source_file = b.path("open_invention_rq4.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(rq4_exe);
+    const run_rq4_cmd = b.addRunArtifact(rq4_exe);
+    if (b.args) |args| run_rq4_cmd.addArgs(args);
+    const run_rq4_step = b.step("open-invention-rq4", "RQ4: E4 equivalence oracle — minted programs vs VM depth≤6 on 10k grids");
+    run_rq4_step.dependOn(&run_rq4_cmd.step);
+
+    // E21: E4 escape VM post-RQ4 — expand generators (mod/xor/pipeline), depth≤8 oracle.
+    const e21_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_e21",
+        .root_source_file = b.path("open_invention_e21.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(e21_exe);
+    const run_e21_cmd = b.addRunArtifact(e21_exe);
+    if (b.args) |args| run_e21_cmd.addArgs(args);
+    const run_e21_step = b.step("open-invention-e21", "E21: E4 escape VM post-RQ4 — mod/xor/pipeline minting vs depth≤8 oracle");
+    run_e21_step.dependOn(&run_e21_cmd.step);
+
+    // RQ1: E1 blind battery without handed menu (E3 synthesis + E5 pipelines only).
+    const rq1_exe = b.addExecutable(.{
+        .name = "ghost_open_invention_rq1",
+        .root_source_file = b.path("open_invention_rq1.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(rq1_exe);
+    const run_rq1_cmd = b.addRunArtifact(rq1_exe);
+    if (b.args) |args| run_rq1_cmd.addArgs(args);
+    const run_rq1_step = b.step("open-invention-rq1", "RQ1++: blind battery staged escalation (mono→mod→pair→Walsh q38)");
+    run_rq1_step.dependOn(&run_rq1_cmd.step);
+
+    const baseline_cmp_exe = b.addExecutable(.{
+        .name = "invention_baseline_compare",
+        .root_source_file = b.path("invention_baseline_compare.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(baseline_cmp_exe);
+    const run_baseline_cmp_cmd = b.addRunArtifact(baseline_cmp_exe);
+    if (b.args) |args| run_baseline_cmp_cmd.addArgs(args);
+    const run_baseline_cmp_step = b.step("invention-baseline-compare", "Blind battery: invention vs 4 baselines (TSV)");
+    run_baseline_cmp_step.dependOn(&run_baseline_cmp_cmd.step);
+
+    const invent_engine_exe = b.addExecutable(.{
+        .name = "invention_engine",
+        .root_source_file = b.path("invention_engine.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(invent_engine_exe);
+    const run_invent_engine_cmd = b.addRunArtifact(invent_engine_exe);
+    if (b.args) |args| run_invent_engine_cmd.addArgs(args);
+    const run_invent_engine_step = b.step("invention-engine", "Production invention engine: blind battery B with growable menu");
+    run_invent_engine_step.dependOn(&run_invent_engine_cmd.step);
+
+    const run_invent_strict_cmd = b.addRunArtifact(invent_engine_exe);
+    run_invent_strict_cmd.addArg("--strict-tax");
+    const run_invent_strict_step = b.step("invention-engine-strict-tax", "Invention engine with E26 tax promotion gate");
+    run_invent_strict_step.dependOn(&run_invent_strict_cmd.step);
+
+    const tier8_loop_exe = b.addExecutable(.{
+        .name = "tier8_loop",
+        .root_source_file = b.path("tier8_loop.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_loop_exe);
+    const run_tier8_loop_cmd = b.addRunArtifact(tier8_loop_exe);
+    const run_tier8_loop_step = b.step("tier8-loop", "Tier 8 Wave 0+1: baseline + strict tax gate");
+    run_tier8_loop_step.dependOn(&run_tier8_loop_cmd.step);
+
+    const dispatch_exe = b.addExecutable(.{
+        .name = "swarm_fork_dispatch",
+        .root_source_file = b.path("swarm_fork_dispatch.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(dispatch_exe);
+    const run_dispatch_cmd = b.addRunArtifact(dispatch_exe);
+    const run_dispatch_step = b.step("tier8-dispatch", "Tier 8 fork dispatch registry");
+    run_dispatch_step.dependOn(&run_dispatch_cmd.step);
+
+    const tier8_battery_c_exe = b.addExecutable(.{
+        .name = "open_invention_tier8_battery_c",
+        .root_source_file = b.path("open_invention_tier8_battery_c.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_battery_c_exe);
+    const run_tier8_battery_c_cmd = b.addRunArtifact(tier8_battery_c_exe);
+    const run_tier8_battery_c_step = b.step("tier8-battery-c", "T8-AG-11: Battery C hardness harness");
+    run_tier8_battery_c_step.dependOn(&run_tier8_battery_c_cmd.step);
+
+    const tier8_bc_engine_exe = b.addExecutable(.{
+        .name = "tier8_battery_c_engine",
+        .root_source_file = b.path("tier8_battery_c_engine.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_bc_engine_exe);
+    const run_tier8_bc_engine_cmd = b.addRunArtifact(tier8_bc_engine_exe);
+    const run_tier8_bc_engine_step = b.step("tier8-battery-c-engine", "T8-AG-15: invention engine on Battery C");
+    run_tier8_bc_engine_step.dependOn(&run_tier8_bc_engine_cmd.step);
+
+    const run_tier8_bc_engine_strict_cmd = b.addRunArtifact(tier8_bc_engine_exe);
+    run_tier8_bc_engine_strict_cmd.addArg("--strict-tax");
+    const run_tier8_bc_engine_strict_step = b.step("tier8-battery-c-engine-strict", "T8-AG-15: Battery C + strict tax");
+    run_tier8_bc_engine_strict_step.dependOn(&run_tier8_bc_engine_strict_cmd.step);
+
+    const tier8_tax_tax_exe = b.addExecutable(.{
+        .name = "tier8_tax_taxonomy",
+        .root_source_file = b.path("tier8_tax_taxonomy.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_tax_tax_exe);
+    const run_tier8_tax_tax_cmd = b.addRunArtifact(tier8_tax_tax_exe);
+    const run_tier8_tax_tax_step = b.step("tier8-tax-taxonomy", "T8-AG-02f: remix taxonomy JSON");
+    run_tier8_tax_tax_step.dependOn(&run_tier8_tax_tax_cmd.step);
+
+    const run_tier8_bc_repl_cmd = b.addRunArtifact(tier8_battery_c_exe);
+    run_tier8_bc_repl_cmd.addArg("--replicate");
+    const run_tier8_bc_repl_step = b.step("tier8-battery-c-replicate", "T8-AG-11f: Battery C held-out ×2");
+    run_tier8_bc_repl_step.dependOn(&run_tier8_bc_repl_cmd.step);
+
+    const tier8_ledger_exe = b.addExecutable(.{
+        .name = "tier8_ledger_smoke",
+        .root_source_file = b.path("tier8_ledger_smoke.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_ledger_exe);
+    const run_tier8_ledger_cmd = b.addRunArtifact(tier8_ledger_exe);
+    const run_tier8_ledger_step = b.step("tier8-ledger-smoke", "T8-AG-18: promotion ledger smoke");
+    run_tier8_ledger_step.dependOn(&run_tier8_ledger_cmd.step);
+
+    const tier8_cross_audit_exe = b.addExecutable(.{
+        .name = "tier8_cert_cross_audit",
+        .root_source_file = b.path("tier8_cert_cross_audit.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_cross_audit_exe);
+    const run_tier8_cross_cmd = b.addRunArtifact(tier8_cross_audit_exe);
+    const run_tier8_cross_step = b.step("tier8-cert-cross-audit", "T8-AG-16: coverage/certify cross-audit");
+    run_tier8_cross_step.dependOn(&run_tier8_cross_cmd.step);
+
+    const tier8_ledger_drift_exe = b.addExecutable(.{
+        .name = "tier8_ledger_drift",
+        .root_source_file = b.path("tier8_ledger_drift.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_ledger_drift_exe);
+    const run_tier8_ledger_drift_cmd = b.addRunArtifact(tier8_ledger_drift_exe);
+    const run_tier8_ledger_drift_step = b.step("tier8-ledger-drift", "T8-AG-19: promotion ledger basis drift replay");
+    run_tier8_ledger_drift_step.dependOn(&run_tier8_ledger_drift_cmd.step);
+
+    const tier8_rq7_tax_exe = b.addExecutable(.{
+        .name = "open_invention_tier8_rq7",
+        .root_source_file = b.path("open_invention_tier8_rq7.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_rq7_tax_exe);
+    const run_tier8_rq7_tax_cmd = b.addRunArtifact(tier8_rq7_tax_exe);
+    run_tier8_rq7_tax_cmd.setCwd(b.path("."));
+    const run_tier8_rq7_tax_step = b.step("tier8-rq7-tax", "T8-AG-07: RQ7 proposals + strict tax gate");
+    run_tier8_rq7_tax_step.dependOn(&run_tier8_rq7_tax_cmd.step);
+
+    const tier8_e11_tax_exe = b.addExecutable(.{
+        .name = "open_invention_tier8_e11",
+        .root_source_file = b.path("open_invention_tier8_e11.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_e11_tax_exe);
+    const run_tier8_e11_tax_cmd = b.addRunArtifact(tier8_e11_tax_exe);
+    run_tier8_e11_tax_cmd.setCwd(b.path("."));
+    const run_tier8_e11_tax_step = b.step("tier8-e11-tax", "T8-AG-08: E11 proposals + strict tax gate");
+    run_tier8_e11_tax_step.dependOn(&run_tier8_e11_tax_cmd.step);
+
+    const tier8_basis_version_exe = b.addExecutable(.{
+        .name = "tier8_tax_basis_version",
+        .root_source_file = b.path("tier8_tax_basis_version.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(tier8_basis_version_exe);
+    const run_tier8_basis_version_cmd = b.addRunArtifact(tier8_basis_version_exe);
+    const run_tier8_basis_version_step = b.step("tier8-basis-version", "T8-AG-17: tax basis version registry + monotonic audit");
+    run_tier8_basis_version_step.dependOn(&run_tier8_basis_version_cmd.step);
+
+    const tier8_remix_mon_exe = b.addExecutable(.{ .name = "tier8_remix_monitor", .root_source_file = b.path("tier8_remix_monitor.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_remix_mon_exe);
+    const run_tier8_remix_mon = b.step("tier8-remix-monitor", "T8-AG-21: remix rate monitor");
+    run_tier8_remix_mon.dependOn(&b.addRunArtifact(tier8_remix_mon_exe).step);
+
+    const tier8_remix_mon_f_exe = b.addExecutable(.{ .name = "tier8_remix_monitor_f", .root_source_file = b.path("tier8_remix_monitor_f.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_remix_mon_f_exe);
+    const run_tier8_remix_mon_f = b.step("tier8-remix-monitor-f", "T8-AG-21f: proposer remix alert");
+    run_tier8_remix_mon_f.dependOn(&b.addRunArtifact(tier8_remix_mon_f_exe).step);
+
+    const tier8_closure_prop_exe = b.addExecutable(.{ .name = "tier8_closure_proposal", .root_source_file = b.path("tier8_closure_proposal.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_closure_prop_exe);
+    const run_tier8_closure_prop = b.step("tier8-closure-proposal", "T8-AG-22: closure revision proposal");
+    run_tier8_closure_prop.dependOn(&b.addRunArtifact(tier8_closure_prop_exe).step);
+
+    const tier8_closure_apply_exe = b.addExecutable(.{ .name = "tier8_closure_apply", .root_source_file = b.path("tier8_closure_apply.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_closure_apply_exe);
+    const run_tier8_closure_apply = b.step("tier8-closure-apply", "T8-AG-22f: witnessed closure apply");
+    run_tier8_closure_apply.dependOn(&b.addRunArtifact(tier8_closure_apply_exe).step);
+
+    const tier8_fw_vote_exe = b.addExecutable(.{ .name = "tier8_framework_vote", .root_source_file = b.path("tier8_framework_vote.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_fw_vote_exe);
+    const run_tier8_fw_vote = b.step("tier8-framework-vote", "T8-AG-25: framework vote harness");
+    run_tier8_fw_vote.dependOn(&b.addRunArtifact(tier8_fw_vote_exe).step);
+
+    const tier8_real_anchor_exe = b.addExecutable(.{ .name = "tier8_reality_anchor", .root_source_file = b.path("tier8_reality_anchor.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_real_anchor_exe);
+    const run_tier8_real_anchor = b.step("tier8-reality-anchor", "T8-AG-26: reality anchor trait");
+    run_tier8_real_anchor.dependOn(&b.addRunArtifact(tier8_real_anchor_exe).step);
+
+    const tier8_deploy_fb_exe = b.addExecutable(.{ .name = "tier8_deploy_feedback", .root_source_file = b.path("tier8_deploy_feedback.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_deploy_fb_exe);
+    const run_tier8_deploy_fb = b.step("tier8-deploy-feedback", "T8-AG-27: deploy feedback stub");
+    run_tier8_deploy_fb.dependOn(&b.addRunArtifact(tier8_deploy_fb_exe).step);
+
+    const tier8_wcore_lift_exe = b.addExecutable(.{ .name = "tier8_wcore_lift", .root_source_file = b.path("tier8_wcore_lift.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_wcore_lift_exe);
+    const run_tier8_wcore_lift = b.step("tier8-wcore-lift", "T8-AG-28: wcore promote lift");
+    run_tier8_wcore_lift.dependOn(&b.addRunArtifact(tier8_wcore_lift_exe).step);
+
+    const tier8_wcore_lift_f_exe = b.addExecutable(.{ .name = "tier8_wcore_lift_f", .root_source_file = b.path("tier8_wcore_lift_f.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_wcore_lift_f_exe);
+    const run_tier8_wcore_lift_f = b.step("tier8-wcore-lift-f", "T8-AG-28f: minimal promote lift");
+    run_tier8_wcore_lift_f.dependOn(&b.addRunArtifact(tier8_wcore_lift_f_exe).step);
+
+    const tier8_peer_rep_exe = b.addExecutable(.{ .name = "tier8_peer_replicate", .root_source_file = b.path("tier8_peer_replicate.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_peer_rep_exe);
+    const run_tier8_peer_rep = b.step("tier8-peer-replicate", "T8-AG-30: peer replication");
+    run_tier8_peer_rep.dependOn(&b.addRunArtifact(tier8_peer_rep_exe).step);
+
+    const tier8_basis_v4_exe = b.addExecutable(.{ .name = "tier8_basis_v4_smoke", .root_source_file = b.path("tier8_basis_v4_smoke.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_basis_v4_exe);
+    const run_tier8_basis_v4 = b.step("tier8-basis-v4", "T8-AG-22f-v4: tax basis v4 Phase 1 gate");
+    run_tier8_basis_v4.dependOn(&b.addRunArtifact(tier8_basis_v4_exe).step);
+
+    const tier8_witness_exe = b.addExecutable(.{ .name = "tier8_witness_hunt", .root_source_file = b.path("tier8_witness_hunt.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_witness_exe);
+    const run_tier8_witness = b.step("tier8-witness-hunt", "T8-AG-23: witness #6 hunt");
+    run_tier8_witness.dependOn(&b.addRunArtifact(tier8_witness_exe).step);
+
+    const tier8_anti_h_exe = b.addExecutable(.{ .name = "tier8_anti_hallucination", .root_source_file = b.path("tier8_anti_hallucination.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_anti_h_exe);
+    const run_tier8_anti_h = b.step("tier8-anti-hallucination", "T8-AG-09: anti-hallucination noise suite");
+    run_tier8_anti_h.dependOn(&b.addRunArtifact(tier8_anti_h_exe).step);
+
+    const tier8_combined_exe = b.addExecutable(.{ .name = "tier8_combined_battery", .root_source_file = b.path("tier8_combined_battery.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_combined_exe);
+    const run_tier8_combined = b.step("tier8-combined-battery", "T8-AG-32b: combined B+C tax v4");
+    run_tier8_combined.dependOn(&b.addRunArtifact(tier8_combined_exe).step);
+
+    const tier8_orch_exe = b.addExecutable(.{ .name = "tier8_orchestrator", .root_source_file = b.path("tier8_orchestrator.zig"), .target = target, .optimize = optimize });
+    b.installArtifact(tier8_orch_exe);
+    const run_tier8_orch = b.step("tier8-orchestrator", "T8-AG-31: Tier 8 orchestrator registry");
+    run_tier8_orch.dependOn(&b.addRunArtifact(tier8_orch_exe).step);
 
     // Unit tests over the VSA primitives and the agent's readout channel.
     const tests = b.addTest(.{

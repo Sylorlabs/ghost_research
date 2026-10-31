@@ -1,0 +1,54 @@
+{
+  "version": "FOUNDRY_SEMANTIC_TOOL_CONTRACT_V1",
+  "purpose": "machine-constructed executable typed DAG tools with inferred boundary grammar",
+  "tool": {
+    "version": "FOUNDRY_SEMANTIC_TOOL_V1",
+    "identity": "sha256 of canonical version, inputs, nodes, and outputs",
+    "inputs": {
+      "construction": "ordered by first external FX-node reference during DAG traversal",
+      "type": ["rank", "dtype", "layout"]
+    },
+    "nodes": {
+      "target": "observed aten overload string; no supplied tool-form menu",
+      "arguments": [
+        "input reference",
+        "prior-node reference",
+        "literal",
+        "list",
+        "tuple",
+        "dictionary"
+      ],
+      "output_type": ["rank", "dtype", "layout"]
+    },
+    "outputs": "one or more prior-node references"
+  },
+  "construction": {
+    "llm_calls": 0,
+    "calibration_source": "supported Foundry prospective-v2.2 graphs",
+    "minimum_nodes": 2,
+    "maximum_nodes": 4,
+    "minimum_occurrences": 2,
+    "require_all_nodes_uncovered_by_prior_library": true,
+    "require_positive_description_length_gain": true,
+    "overlap_resolution": "retain every positive-gain grammar candidate and charge every definition in the prospective search ledger",
+    "validation_graph_access": false
+  },
+  "validation": {
+    "strict_independent_parser": true,
+    "independent_structural_matcher": true,
+    "independent_interpreter": true,
+    "numerical_tolerance": 1e-6,
+    "hostile_mutations": [
+      "extra field",
+      "bad identity",
+      "forward node reference",
+      "untyped input",
+      "non-aten target"
+    ]
+  },
+  "admission": {
+    "semantic_execution_is_not_runtime_novelty": true,
+    "native_graph_and_compiler_dedup_required": true,
+    "search_only_composites_remain_quarantined": true
+  }
+}

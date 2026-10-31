@@ -1,0 +1,226 @@
+syntax = "proto3";
+
+package xls.estimator_model;
+
+// Enum describing the metric that the estimator is estimating. Every estimator
+// is specific to one metric.
+enum Metric {
+  UNSPECIFIED_METRIC = 0;
+  DELAY_METRIC = 1;
+  AREA_METRIC = 2;
+}
+
+// Enum describing a specialization of the estimator model of an operation.
+enum SpecializationKind {
+  NO_SPECIALIZATION = 0;
+  OPERANDS_IDENTICAL = 1;
+  HAS_LITERAL_OPERAND = 2;
+}
+
+// Describes more specifics of the condition under which the delay/area of the
+// operation differs.
+message LiteralOperandDetails {
+  repeated int64 allowed_nonliteral_operand = 1;
+  repeated int64 required_literal_operand = 2;
+}
+
+// Describes an XLS operation (xls::Node) for the purposes of delay/area
+// modeling.
+message Operation {
+  // XLS Op (e.g., kAdd).
+  string op = 1;
+
+  // Number of bits of the result of the operation. For array-types this is the
+  // number of bits in each element.
+  int64 bit_count = 2;
+
+  // Operands.
+  message Operand {
+    // Number of bits of the operand. For array types this is the number of bits
+    // in each element.
+    int64 bit_count = 1;
+
+    // If the operand is array-typed, this is the number of elements in the
+    // array.
+    int64 element_count = 2;
+  }
+  repeated Operand operands = 3;
+
+  // The category of specialization of this operation, if any.
+  SpecializationKind specialization = 4;
+
+  message LiteralOperandInstanceDetails {
+    repeated int64 literal_operand = 1;
+    repeated int64 nonliteral_operand = 2;
+  }
+  LiteralOperandInstanceDetails literal_operand_details = 5;
+}
+
+// Describes a measured data point of the delay and area of an operation.
+message DataPoint {
+  Operation operation = 1;
+
+  // The measured delay in ps.
+  int64 delay = 2;
+
+  // An optional offset which should be subtracted from the 'delay' value.
+  int64 delay_offset = 3;
+
+  // Total area includes both sequential area and combinational area.
+  double total_area = 4;
+
+  double sequential_area = 5;
+}
+
+// Describes an aspect of an XLS operation which may be used as input in the estimator.
+message EstimatorFactor {
+  enum Source {
+    INVALID_VARIABLE_SOURCE = 0;
+    RESULT_BIT_COUNT = 1;
+    OPERAND_BIT_COUNT = 2;
+    OPERAND_COUNT = 3;
+    OPERAND_ELEMENT_COUNT = 4;
+    OPERAND_ELEMENT_BIT_COUNT = 5;
+  }
+  Source source = 1;
+
+  // If 'source' is one of the OPERAND_* values then this indicates the operand
+  // number to use
+  int64 operand_number = 2;
+}
+
+// Describes a nested mathematical expression combining estimator factors.
+message EstimatorExpression {
+  // The expression is a binary op combining two subexpressions.
+  enum BinaryOperation {
+    INVALID = 0;
+    ADD = 1;
+    DIVIDE = 2;
+    MAX = 3;
+    MIN = 4;
+    MULTIPLY = 5;
+    POWER = 6;
+    SUB = 7;
+  }
+
+  // An expression can be either a BinaryOperation,
+  // a EstimatorFactor, or an int.
+  oneof expression_type {
+    BinaryOperation bin_op = 1;
+    EstimatorFactor factor = 2;
+    int64 constant = 3;
+  }
+
+  // Left and right hand side expressions combined by the BinaryOperation.
+  EstimatorExpression lhs_expression = 4;
+  EstimatorExpression rhs_expression = 5;
+}
+
+// Settings used for K-fold cross-validation of a regression estimor.
+message KFoldValidator {
+  oneof optional_num_cross_validation_folds {
+    int64 num_cross_validation_folds = 1;
+  }
+
+  oneof optional_max_data_point_error {
+    float max_data_point_error = 2;
+  }
+  oneof optional_max_fold_geomean_error {
+    float max_fold_geomean_error = 3;
+  }
+}
+
+// Describes a estimator estimation model which fits a curve to the measured data.
+message RegressionEstimator {
+  repeated EstimatorExpression expressions = 1;
+  oneof optional_kfold_validator {
+    KFoldValidator kfold_validator = 2;
+  }
+}
+
+// Similar to RegressionEstimator but includes more terms.
+message AreaRegressionEstimator {
+  repeated EstimatorExpression expressions = 1;
+  oneof optional_kfold_validator {
+    KFoldValidator kfold_validator = 2;
+  }
+}
+
+// Describes a estimation model in which the measured data points define
+// bounding boxes in the space of expressions.
+message BoundingBoxEstimator {
+  repeated EstimatorFactor factors = 1;
+}
+
+// Estimator which uses logical effort computation to approximate delay.
+message LogicalEffortEstimator {
+  // The delay of a single inverter in ps.
+  int64 tau_in_ps = 1;
+}
+
+// Message describing a delay estimation model.
+message Estimator {
+  oneof estimator {
+    // An estimator which returns a fixed value given by 'fixed'.
+    int64 fixed = 1;
+
+    // An estimator which aliases the model of a different op given by alias_op.
+    string alias_op = 2;
+
+    // A curve-fitting model.
+    RegressionEstimator regression = 3;
+
+    // A bounding box model.
+    BoundingBoxEstimator bounding_box = 4;
+
+    // A logical effort estimator.
+    LogicalEffortEstimator logical_effort = 5;
+
+    // A curve-fitting model for area.
+    AreaRegressionEstimator area_regression = 6;
+  }
+}
+
+// Describes a model for computing the delay/area of a single operation.
+message OpModel {
+  // The xls::Op for this model (e.g., kAdd).
+  string op = 1;
+
+  // The estimator to use to compute the metric.
+  Estimator estimator = 2;
+
+  // Zero or more estimators to use under specialized conditions.
+  message Specialization {
+    SpecializationKind kind = 1;
+    Estimator estimator = 2;
+    message Details {
+      oneof specialization_details {
+        LiteralOperandDetails literal_operand_details = 1;
+      }
+    }
+    Details details = 3;
+  }
+  repeated Specialization specializations = 3;
+}
+
+// Describes an estimator model used for estimating a specific characteristic.
+message EstimatorModel {
+  // The models for each op.
+  repeated OpModel op_models = 1;
+
+  // Measured delays of XLS operations used as input data.
+  repeated DataPoint data_points = 2;
+
+  // The metric this estimator model is estimating.
+  Metric metric = 3;
+}
+
+// The op model describes the estimator for each XLS op type supported by this model.
+message OpModels {
+  repeated OpModel op_models = 1;
+}
+
+// Data points gathered from timing characterization or area characterization.
+message DataPoints {
+  repeated DataPoint data_points = 1;
+} 

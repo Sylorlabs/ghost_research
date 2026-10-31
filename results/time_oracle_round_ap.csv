@@ -1,0 +1,11 @@
+artifact,probe,observed,verdict,detail
+round_ap_ap3,direct_clock_gettime,DENY,PASS,actual SYS_clock_gettime after enabled libseccomp
+round_ap_ap3,direct_gettimeofday_time_nanosleep,DENY,PASS,actual direct syscall probes after enabled libseccomp
+round_ap_ap3,libc_vdso_clock_and_gettimeofday,ALLOW,EXPOSED,libc APIs can resolve through vDSO without a kernel syscall; seccomp is not a physical timing cure
+round_ap_ap3,libc_nanosleep,DENY,PASS,sleep requires a blocked kernel syscall in this executed profile
+round_ap_ap3,logical_turn_observation,opaque_fixed_4_turns,PASS,no elapsed progress score target or response-pacing field supplied
+round_ap_ap3,timing_coded_output,not_accepted_as_action,PASS,strict raw action grammar accepts only deterministic ACT turn value frames
+round_ap_ap3,logical_turn_replay,byte_identical_4_actions,PASS,two fresh restricted runs produced same raw action transcript
+round_ap_ap3,physical_side_channels,CPU_cache_scheduler_and_vDSO,RESIDUAL,direct syscall denial does not eliminate non-syscall clocks or physical scheduling observations
+round_ap_ap3,launcher_enforcement,candidate_installs_filter,INCONCLUSIVE,filter is enabled and measured but this source-level candidate installation is not yet parent-enforced against a hostile replacement
+round_ap_ap3,verdict,time_oracle_reduction,INCONCLUSIVE,direct syscall and sleep APIs denied plus logical protocol deterministic; vDSO and physical timing residuals prevent a GATE_READY containment claim

@@ -1,0 +1,436 @@
+row_type,label,seed_idx,arm,n_proposers,proposer_idx,budget_cap,per_proposer_cap,target_group,target_idx,target_name,solved,solved_by_count,first_solver_idx,evals_used,lens_subset,esc_order,grow_op,b_first,targets_solved_by_proposer
+run,full,0,depth,1,,3000,3000,,,,,,,2587,full(6),mod_first,flip1,true,
+target,full,0,depth,1,,3000,3000,B,0,"B1 random monomial deg2",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,1,"B2 random monomial deg3",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,2,"B3 sum(g) % 7",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,3,"B4 sign%mod 11",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,4,"B5 Walsh χ{S=0x11}",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,5,"B6 Walsh χ{S=0xA4}",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,6,"B7 Walsh χ{S=0x0A}",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,7,"B8 parity-of-count",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,8,"B9 oriented v1>v0",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,9,"B10 parity AND sum%5",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,B,10,"B11 inversion parity",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,C,0,"C02 parity XOR 0x33",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,C,1,"C04 XOR 0xAA",0,,,,,,,,,
+target,full,0,depth,1,,3000,3000,C,2,"C05 XOR 0x3C",0,,,,,,,,,
+target,full,0,depth,1,,3000,3000,C,3,"C06 XOR 0x66",1,,,,,,,,,
+target,full,0,depth,1,,3000,3000,C,4,"C09 inv parity",0,,,,,,,,,
+proposer,full,0,breadth_4,4,0,2587,646,,,,ran,,,646,th3,mod_first,flip1,false,0
+proposer,full,0,breadth_4,4,1,2587,646,,,,ran,,,646,mod2,pair_first,flip1,true,10
+proposer,full,0,breadth_4,4,2,2587,646,,,,ran,,,648,th1+th2,mod_first,flip2,true,11
+proposer,full,0,breadth_4,4,3,2587,646,,,,ran,,,652,th4+th5,pair_first,flip2,true,10
+run,full,0,breadth_4,4,,2587,646,proposers_run=4,,,distinct_lens=3,,,2592,,,,,1.0000
+target,full,0,breadth_4,4,,2587,646,B,0,"B1 random monomial deg2",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,1,"B2 random monomial deg3",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,2,"B3 sum(g) % 7",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,3,"B4 sign%mod 11",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,4,"B5 Walsh χ{S=0x11}",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,5,"B6 Walsh χ{S=0xA4}",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,6,"B7 Walsh χ{S=0x0A}",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,7,"B8 parity-of-count",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,8,"B9 oriented v1>v0",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,9,"B10 parity AND sum%5",1,3,1,,,,,,
+target,full,0,breadth_4,4,,2587,646,B,10,"B11 inversion parity",1,1,2,,,,,,
+target,full,0,breadth_4,4,,2587,646,C,0,"C02 parity XOR 0x33",0,0,-1,,,,,,
+target,full,0,breadth_4,4,,2587,646,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,0,breadth_4,4,,2587,646,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,0,breadth_4,4,,2587,646,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,0,breadth_4,4,,2587,646,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,0,breadth_8,8,0,2587,323,,,,ran,,,326,th3,mod_first,flip1,true,10
+proposer,full,0,breadth_8,8,1,2587,323,,,,ran,,,328,mod2,pair_first,flip1,false,1
+proposer,full,0,breadth_8,8,2,2587,323,,,,ran,,,323,th1+th2,mod_first,flip2,false,0
+proposer,full,0,breadth_8,8,3,2587,323,,,,ran,,,326,th4+th5,pair_first,flip2,false,0
+proposer,full,0,breadth_8,8,4,2587,323,,,,ran,,,323,th3+mod2,mod_first,flip1,true,5
+proposer,full,0,breadth_8,8,5,2587,323,,,,ran,,,327,th1+mod2,pair_first,flip1,true,11
+proposer,full,0,breadth_8,8,6,2587,323,,,,ran,,,324,th2+th4,mod_first,flip2,true,5
+proposer,full,0,breadth_8,8,7,2587,323,,,,ran,,,310,th5+mod2,pair_first,flip2,false,1
+run,full,0,breadth_8,8,,2587,323,proposers_run=8,,,distinct_lens=6,,,2587,,,,,0.9167
+target,full,0,breadth_8,8,,2587,323,B,0,"B1 random monomial deg2",1,3,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,1,"B2 random monomial deg3",1,2,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,2,"B3 sum(g) % 7",1,3,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,3,"B4 sign%mod 11",1,2,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,4,"B5 Walsh χ{S=0x11}",1,4,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,5,"B6 Walsh χ{S=0xA4}",1,3,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,6,"B7 Walsh χ{S=0x0A}",1,4,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,7,"B8 parity-of-count",1,3,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,8,"B9 oriented v1>v0",1,3,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,9,"B10 parity AND sum%5",1,3,0,,,,,,
+target,full,0,breadth_8,8,,2587,323,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,0,breadth_8,8,,2587,323,C,0,"C02 parity XOR 0x33",1,2,1,,,,,,
+target,full,0,breadth_8,8,,2587,323,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,0,breadth_8,8,,2587,323,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,0,breadth_8,8,,2587,323,C,3,"C06 XOR 0x66",1,1,7,,,,,,
+target,full,0,breadth_8,8,,2587,323,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,0,breadth_16,16,0,2587,161,,,,ran,,,165,th3,mod_first,flip1,false,0
+proposer,full,0,breadth_16,16,1,2587,161,,,,ran,,,161,mod2,pair_first,flip1,true,10
+proposer,full,0,breadth_16,16,2,2587,161,,,,ran,,,166,th1+th2,mod_first,flip2,false,0
+proposer,full,0,breadth_16,16,3,2587,161,,,,ran,,,161,th4+th5,pair_first,flip2,true,10
+proposer,full,0,breadth_16,16,4,2587,161,,,,ran,,,163,th3+mod2,mod_first,flip1,true,10
+proposer,full,0,breadth_16,16,5,2587,161,,,,ran,,,166,th1+mod2,pair_first,flip1,false,0
+proposer,full,0,breadth_16,16,6,2587,161,,,,ran,,,166,th2+th4,mod_first,flip2,true,10
+proposer,full,0,breadth_16,16,7,2587,161,,,,ran,,,166,th5+mod2,pair_first,flip2,false,1
+proposer,full,0,breadth_16,16,8,2587,161,,,,ran,,,161,th3,mod_first,flip1,true,10
+proposer,full,0,breadth_16,16,9,2587,161,,,,ran,,,164,mod2,pair_first,flip1,true,10
+proposer,full,0,breadth_16,16,10,2587,161,,,,ran,,,166,th1+th2,mod_first,flip2,false,0
+proposer,full,0,breadth_16,16,11,2587,161,,,,ran,,,166,th4+th5,pair_first,flip2,false,0
+proposer,full,0,breadth_16,16,12,2587,161,,,,ran,,,166,th3+mod2,mod_first,flip1,false,0
+proposer,full,0,breadth_16,16,13,2587,161,,,,ran,,,166,th1+mod2,pair_first,flip1,true,11
+proposer,full,0,breadth_16,16,14,2587,161,,,,ran,,,163,th2+th4,mod_first,flip2,true,10
+proposer,full,0,breadth_16,16,15,2587,161,,,,ran,,,121,th5+mod2,pair_first,flip2,true,10
+run,full,0,breadth_16,16,,2587,161,proposers_run=16,,,distinct_lens=7,,,2587,,,,,1.0000
+target,full,0,breadth_16,16,,2587,161,B,0,"B1 random monomial deg2",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,1,"B2 random monomial deg3",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,2,"B3 sum(g) % 7",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,3,"B4 sign%mod 11",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,4,"B5 Walsh χ{S=0x11}",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,5,"B6 Walsh χ{S=0xA4}",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,6,"B7 Walsh χ{S=0x0A}",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,7,"B8 parity-of-count",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,8,"B9 oriented v1>v0",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,9,"B10 parity AND sum%5",1,9,1,,,,,,
+target,full,0,breadth_16,16,,2587,161,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,0,breadth_16,16,,2587,161,C,0,"C02 parity XOR 0x33",1,2,7,,,,,,
+target,full,0,breadth_16,16,,2587,161,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,0,breadth_16,16,,2587,161,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,0,breadth_16,16,,2587,161,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,0,breadth_16,16,,2587,161,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,0,breadth_32,32,0,2587,80,,,,ran,,,86,th3,mod_first,flip1,false,0
+proposer,full,0,breadth_32,32,1,2587,80,,,,ran,,,80,mod2,pair_first,flip1,true,10
+proposer,full,0,breadth_32,32,2,2587,80,,,,ran,,,80,th1+th2,mod_first,flip2,true,10
+proposer,full,0,breadth_32,32,3,2587,80,,,,ran,,,80,th4+th5,pair_first,flip2,true,10
+proposer,full,0,breadth_32,32,4,2587,80,,,,ran,,,85,th3+mod2,mod_first,flip1,true,10
+proposer,full,0,breadth_32,32,5,2587,80,,,,ran,,,80,th1+mod2,pair_first,flip1,false,0
+proposer,full,0,breadth_32,32,6,2587,80,,,,ran,,,85,th2+th4,mod_first,flip2,true,10
+proposer,full,0,breadth_32,32,7,2587,80,,,,ran,,,80,th5+mod2,pair_first,flip2,false,0
+proposer,full,0,breadth_32,32,8,2587,80,,,,ran,,,86,th3,mod_first,flip1,false,0
+proposer,full,0,breadth_32,32,9,2587,80,,,,ran,,,80,mod2,pair_first,flip1,true,10
+proposer,full,0,breadth_32,32,10,2587,80,,,,ran,,,80,th1+th2,mod_first,flip2,false,0
+proposer,full,0,breadth_32,32,11,2587,80,,,,ran,,,85,th4+th5,pair_first,flip2,true,10
+proposer,full,0,breadth_32,32,12,2587,80,,,,ran,,,85,th3+mod2,mod_first,flip1,true,10
+proposer,full,0,breadth_32,32,13,2587,80,,,,ran,,,80,th1+mod2,pair_first,flip1,false,0
+proposer,full,0,breadth_32,32,14,2587,80,,,,ran,,,80,th2+th4,mod_first,flip2,true,10
+proposer,full,0,breadth_32,32,15,2587,80,,,,ran,,,80,th5+mod2,pair_first,flip2,true,10
+proposer,full,0,breadth_32,32,16,2587,80,,,,ran,,,80,th3,mod_first,flip1,true,10
+proposer,full,0,breadth_32,32,17,2587,80,,,,ran,,,80,mod2,pair_first,flip1,false,0
+proposer,full,0,breadth_32,32,18,2587,80,,,,ran,,,80,th1+th2,mod_first,flip2,false,0
+proposer,full,0,breadth_32,32,19,2587,80,,,,ran,,,80,th4+th5,pair_first,flip2,true,10
+proposer,full,0,breadth_32,32,20,2587,80,,,,ran,,,80,th3+mod2,mod_first,flip1,false,0
+proposer,full,0,breadth_32,32,21,2587,80,,,,ran,,,80,th1+mod2,pair_first,flip1,false,0
+proposer,full,0,breadth_32,32,22,2587,80,,,,ran,,,80,th2+th4,mod_first,flip2,false,0
+proposer,full,0,breadth_32,32,23,2587,80,,,,ran,,,80,th5+mod2,pair_first,flip2,true,10
+proposer,full,0,breadth_32,32,24,2587,80,,,,ran,,,86,th3,mod_first,flip1,false,0
+proposer,full,0,breadth_32,32,25,2587,80,,,,ran,,,86,mod2,pair_first,flip1,false,0
+proposer,full,0,breadth_32,32,26,2587,80,,,,ran,,,80,th1+th2,mod_first,flip2,false,0
+proposer,full,0,breadth_32,32,27,2587,80,,,,ran,,,85,th4+th5,pair_first,flip2,true,10
+proposer,full,0,breadth_32,32,28,2587,80,,,,ran,,,80,th3+mod2,mod_first,flip1,false,1
+proposer,full,0,breadth_32,32,29,2587,80,,,,ran,,,80,th1+mod2,pair_first,flip1,false,0
+proposer,full,0,breadth_32,32,30,2587,80,,,,ran,,,80,th2+th4,mod_first,flip2,false,0
+proposer,full,0,breadth_32,32,31,2587,80,,,,ran,,,64,th5+mod2,pair_first,flip2,false,0
+run,full,0,breadth_32,32,,2587,80,proposers_run=32,,,distinct_lens=7,,,2593,,,,,0.9091
+target,full,0,breadth_32,32,,2587,80,B,0,"B1 random monomial deg2",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,1,"B2 random monomial deg3",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,2,"B3 sum(g) % 7",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,3,"B4 sign%mod 11",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,4,"B5 Walsh χ{S=0x11}",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,5,"B6 Walsh χ{S=0xA4}",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,6,"B7 Walsh χ{S=0x0A}",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,7,"B8 parity-of-count",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,8,"B9 oriented v1>v0",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,9,"B10 parity AND sum%5",1,14,1,,,,,,
+target,full,0,breadth_32,32,,2587,80,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,0,breadth_32,32,,2587,80,C,0,"C02 parity XOR 0x33",0,0,-1,,,,,,
+target,full,0,breadth_32,32,,2587,80,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,0,breadth_32,32,,2587,80,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,0,breadth_32,32,,2587,80,C,3,"C06 XOR 0x66",1,1,28,,,,,,
+target,full,0,breadth_32,32,,2587,80,C,4,"C09 inv parity",0,0,-1,,,,,,
+run,full,1,depth,1,,3000,3000,,,,,,,2635,full(6),mod_first,flip1,true,
+target,full,1,depth,1,,3000,3000,B,0,"B1 random monomial deg2",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,1,"B2 random monomial deg3",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,2,"B3 sum(g) % 7",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,3,"B4 sign%mod 11",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,4,"B5 Walsh χ{S=0x11}",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,5,"B6 Walsh χ{S=0xA4}",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,6,"B7 Walsh χ{S=0x0A}",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,7,"B8 parity-of-count",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,8,"B9 oriented v1>v0",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,9,"B10 parity AND sum%5",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,B,10,"B11 inversion parity",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,C,0,"C02 parity XOR 0x33",0,,,,,,,,,
+target,full,1,depth,1,,3000,3000,C,1,"C04 XOR 0xAA",0,,,,,,,,,
+target,full,1,depth,1,,3000,3000,C,2,"C05 XOR 0x3C",1,,,,,,,,,
+target,full,1,depth,1,,3000,3000,C,3,"C06 XOR 0x66",0,,,,,,,,,
+target,full,1,depth,1,,3000,3000,C,4,"C09 inv parity",0,,,,,,,,,
+proposer,full,1,breadth_4,4,0,2635,658,,,,ran,,,658,th3,mod_first,flip1,true,11
+proposer,full,1,breadth_4,4,1,2635,658,,,,ran,,,658,mod2,pair_first,flip1,false,0
+proposer,full,1,breadth_4,4,2,2635,658,,,,ran,,,660,th1+th2,mod_first,flip2,false,0
+proposer,full,1,breadth_4,4,3,2635,658,,,,ran,,,658,th4+th5,pair_first,flip2,false,0
+run,full,1,breadth_4,4,,2635,658,proposers_run=4,,,distinct_lens=1,,,2634,,,,,1.0000
+target,full,1,breadth_4,4,,2635,658,B,0,"B1 random monomial deg2",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,1,"B2 random monomial deg3",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,2,"B3 sum(g) % 7",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,3,"B4 sign%mod 11",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,4,"B5 Walsh χ{S=0x11}",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,5,"B6 Walsh χ{S=0xA4}",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,6,"B7 Walsh χ{S=0x0A}",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,7,"B8 parity-of-count",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,8,"B9 oriented v1>v0",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,9,"B10 parity AND sum%5",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,B,10,"B11 inversion parity",1,1,0,,,,,,
+target,full,1,breadth_4,4,,2635,658,C,0,"C02 parity XOR 0x33",0,0,-1,,,,,,
+target,full,1,breadth_4,4,,2635,658,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,1,breadth_4,4,,2635,658,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,1,breadth_4,4,,2635,658,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,1,breadth_4,4,,2635,658,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,1,breadth_8,8,0,2635,329,,,,ran,,,329,th3,mod_first,flip1,false,0
+proposer,full,1,breadth_8,8,1,2635,329,,,,ran,,,329,mod2,pair_first,flip1,false,0
+proposer,full,1,breadth_8,8,2,2635,329,,,,ran,,,329,th1+th2,mod_first,flip2,true,9
+proposer,full,1,breadth_8,8,3,2635,329,,,,ran,,,335,th4+th5,pair_first,flip2,false,0
+proposer,full,1,breadth_8,8,4,2635,329,,,,ran,,,335,th3+mod2,mod_first,flip1,true,9
+proposer,full,1,breadth_8,8,5,2635,329,,,,ran,,,332,th1+mod2,pair_first,flip1,false,0
+proposer,full,1,breadth_8,8,6,2635,329,,,,ran,,,329,th2+th4,mod_first,flip2,false,0
+proposer,full,1,breadth_8,8,7,2635,329,,,,ran,,,317,th5+mod2,pair_first,flip2,false,0
+run,full,1,breadth_8,8,,2635,329,proposers_run=8,,,distinct_lens=2,,,2635,,,,,1.0000
+target,full,1,breadth_8,8,,2635,329,B,0,"B1 random monomial deg2",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,1,"B2 random monomial deg3",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,2,"B3 sum(g) % 7",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,3,"B4 sign%mod 11",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,4,"B5 Walsh χ{S=0x11}",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,5,"B6 Walsh χ{S=0xA4}",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,6,"B7 Walsh χ{S=0x0A}",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,7,"B8 parity-of-count",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,8,"B9 oriented v1>v0",1,2,2,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,9,"B10 parity AND sum%5",0,0,-1,,,,,,
+target,full,1,breadth_8,8,,2635,329,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,1,breadth_8,8,,2635,329,C,0,"C02 parity XOR 0x33",0,0,-1,,,,,,
+target,full,1,breadth_8,8,,2635,329,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,1,breadth_8,8,,2635,329,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,1,breadth_8,8,,2635,329,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,1,breadth_8,8,,2635,329,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,1,breadth_16,16,0,2635,164,,,,ran,,,164,th3,mod_first,flip1,true,9
+proposer,full,1,breadth_16,16,1,2635,164,,,,ran,,,164,mod2,pair_first,flip1,false,0
+proposer,full,1,breadth_16,16,2,2635,164,,,,ran,,,169,th1+th2,mod_first,flip2,false,0
+proposer,full,1,breadth_16,16,3,2635,164,,,,ran,,,169,th4+th5,pair_first,flip2,true,9
+proposer,full,1,breadth_16,16,4,2635,164,,,,ran,,,169,th3+mod2,mod_first,flip1,false,0
+proposer,full,1,breadth_16,16,5,2635,164,,,,ran,,,169,th1+mod2,pair_first,flip1,false,0
+proposer,full,1,breadth_16,16,6,2635,164,,,,ran,,,165,th2+th4,mod_first,flip2,true,10
+proposer,full,1,breadth_16,16,7,2635,164,,,,ran,,,169,th5+mod2,pair_first,flip2,true,10
+proposer,full,1,breadth_16,16,8,2635,164,,,,ran,,,167,th3,mod_first,flip1,false,0
+proposer,full,1,breadth_16,16,9,2635,164,,,,ran,,,164,mod2,pair_first,flip1,true,10
+proposer,full,1,breadth_16,16,10,2635,164,,,,ran,,,169,th1+th2,mod_first,flip2,false,0
+proposer,full,1,breadth_16,16,11,2635,164,,,,ran,,,165,th4+th5,pair_first,flip2,true,9
+proposer,full,1,breadth_16,16,12,2635,164,,,,ran,,,164,th3+mod2,mod_first,flip1,false,0
+proposer,full,1,breadth_16,16,13,2635,164,,,,ran,,,164,th1+mod2,pair_first,flip1,true,9
+proposer,full,1,breadth_16,16,14,2635,164,,,,ran,,,169,th2+th4,mod_first,flip2,false,0
+proposer,full,1,breadth_16,16,15,2635,164,,,,ran,,,135,th5+mod2,pair_first,flip2,false,0
+run,full,1,breadth_16,16,,2635,164,proposers_run=16,,,distinct_lens=6,,,2635,,,,,1.0000
+target,full,1,breadth_16,16,,2635,164,B,0,"B1 random monomial deg2",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,1,"B2 random monomial deg3",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,2,"B3 sum(g) % 7",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,3,"B4 sign%mod 11",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,4,"B5 Walsh χ{S=0x11}",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,5,"B6 Walsh χ{S=0xA4}",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,6,"B7 Walsh χ{S=0x0A}",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,7,"B8 parity-of-count",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,8,"B9 oriented v1>v0",1,7,0,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,9,"B10 parity AND sum%5",1,3,6,,,,,,
+target,full,1,breadth_16,16,,2635,164,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,1,breadth_16,16,,2635,164,C,0,"C02 parity XOR 0x33",0,0,-1,,,,,,
+target,full,1,breadth_16,16,,2635,164,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,1,breadth_16,16,,2635,164,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,1,breadth_16,16,,2635,164,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,1,breadth_16,16,,2635,164,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,1,breadth_32,32,0,2635,82,,,,ran,,,82,th3,mod_first,flip1,true,10
+proposer,full,1,breadth_32,32,1,2635,82,,,,ran,,,82,mod2,pair_first,flip1,true,9
+proposer,full,1,breadth_32,32,2,2635,82,,,,ran,,,88,th1+th2,mod_first,flip2,false,0
+proposer,full,1,breadth_32,32,3,2635,82,,,,ran,,,88,th4+th5,pair_first,flip2,false,0
+proposer,full,1,breadth_32,32,4,2635,82,,,,ran,,,82,th3+mod2,mod_first,flip1,false,0
+proposer,full,1,breadth_32,32,5,2635,82,,,,ran,,,82,th1+mod2,pair_first,flip1,true,9
+proposer,full,1,breadth_32,32,6,2635,82,,,,ran,,,87,th2+th4,mod_first,flip2,true,9
+proposer,full,1,breadth_32,32,7,2635,82,,,,ran,,,82,th5+mod2,pair_first,flip2,false,1
+proposer,full,1,breadth_32,32,8,2635,82,,,,ran,,,87,th3,mod_first,flip1,false,0
+proposer,full,1,breadth_32,32,9,2635,82,,,,ran,,,82,mod2,pair_first,flip1,true,9
+proposer,full,1,breadth_32,32,10,2635,82,,,,ran,,,87,th1+th2,mod_first,flip2,true,9
+proposer,full,1,breadth_32,32,11,2635,82,,,,ran,,,87,th4+th5,pair_first,flip2,true,10
+proposer,full,1,breadth_32,32,12,2635,82,,,,ran,,,87,th3+mod2,mod_first,flip1,true,10
+proposer,full,1,breadth_32,32,13,2635,82,,,,ran,,,82,th1+mod2,pair_first,flip1,false,1
+proposer,full,1,breadth_32,32,14,2635,82,,,,ran,,,82,th2+th4,mod_first,flip2,true,10
+proposer,full,1,breadth_32,32,15,2635,82,,,,ran,,,82,th5+mod2,pair_first,flip2,true,10
+proposer,full,1,breadth_32,32,16,2635,82,,,,ran,,,82,th3,mod_first,flip1,false,0
+proposer,full,1,breadth_32,32,17,2635,82,,,,ran,,,82,mod2,pair_first,flip1,true,10
+proposer,full,1,breadth_32,32,18,2635,82,,,,ran,,,82,th1+th2,mod_first,flip2,false,0
+proposer,full,1,breadth_32,32,19,2635,82,,,,ran,,,82,th4+th5,pair_first,flip2,false,0
+proposer,full,1,breadth_32,32,20,2635,82,,,,ran,,,82,th3+mod2,mod_first,flip1,false,1
+proposer,full,1,breadth_32,32,21,2635,82,,,,ran,,,82,th1+mod2,pair_first,flip1,true,9
+proposer,full,1,breadth_32,32,22,2635,82,,,,ran,,,87,th2+th4,mod_first,flip2,true,9
+proposer,full,1,breadth_32,32,23,2635,82,,,,ran,,,88,th5+mod2,pair_first,flip2,false,0
+proposer,full,1,breadth_32,32,24,2635,82,,,,ran,,,82,th3,mod_first,flip1,false,0
+proposer,full,1,breadth_32,32,25,2635,82,,,,ran,,,87,mod2,pair_first,flip1,false,0
+proposer,full,1,breadth_32,32,26,2635,82,,,,ran,,,88,th1+th2,mod_first,flip2,false,0
+proposer,full,1,breadth_32,32,27,2635,82,,,,ran,,,87,th4+th5,pair_first,flip2,true,10
+proposer,full,1,breadth_32,32,28,2635,82,,,,ran,,,87,th3+mod2,mod_first,flip1,true,9
+proposer,full,1,breadth_32,32,29,2635,82,,,,ran,,,88,th1+mod2,pair_first,flip1,false,0
+proposer,full,1,breadth_32,32,30,2635,82,,,,ran,,,82,th2+th4,mod_first,flip2,false,0
+proposer,full,1,breadth_32,32,31,2635,82,,,,ran,,,21,th5+mod2,pair_first,flip2,true,3
+run,full,1,breadth_32,32,,2635,82,proposers_run=32,,,distinct_lens=8,,,2638,,,,,0.8333
+target,full,1,breadth_32,32,,2635,82,B,0,"B1 random monomial deg2",1,16,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,1,"B2 random monomial deg3",1,15,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,2,"B3 sum(g) % 7",1,16,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,3,"B4 sign%mod 11",1,15,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,4,"B5 Walsh χ{S=0x11}",1,15,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,5,"B6 Walsh χ{S=0xA4}",1,15,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,6,"B7 Walsh χ{S=0x0A}",1,15,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,7,"B8 parity-of-count",1,15,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,8,"B9 oriented v1>v0",1,15,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,9,"B10 parity AND sum%5",1,8,0,,,,,,
+target,full,1,breadth_32,32,,2635,82,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,1,breadth_32,32,,2635,82,C,0,"C02 parity XOR 0x33",1,1,7,,,,,,
+target,full,1,breadth_32,32,,2635,82,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,1,breadth_32,32,,2635,82,C,2,"C05 XOR 0x3C",1,2,13,,,,,,
+target,full,1,breadth_32,32,,2635,82,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,1,breadth_32,32,,2635,82,C,4,"C09 inv parity",0,0,-1,,,,,,
+run,full,2,depth,1,,3000,3000,,,,,,,2588,full(6),mod_first,flip1,true,
+target,full,2,depth,1,,3000,3000,B,0,"B1 random monomial deg2",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,1,"B2 random monomial deg3",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,2,"B3 sum(g) % 7",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,3,"B4 sign%mod 11",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,4,"B5 Walsh χ{S=0x11}",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,5,"B6 Walsh χ{S=0xA4}",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,6,"B7 Walsh χ{S=0x0A}",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,7,"B8 parity-of-count",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,8,"B9 oriented v1>v0",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,9,"B10 parity AND sum%5",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,B,10,"B11 inversion parity",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,C,0,"C02 parity XOR 0x33",0,,,,,,,,,
+target,full,2,depth,1,,3000,3000,C,1,"C04 XOR 0xAA",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,C,2,"C05 XOR 0x3C",0,,,,,,,,,
+target,full,2,depth,1,,3000,3000,C,3,"C06 XOR 0x66",1,,,,,,,,,
+target,full,2,depth,1,,3000,3000,C,4,"C09 inv parity",0,,,,,,,,,
+proposer,full,2,breadth_4,4,0,2588,647,,,,ran,,,651,th3,mod_first,flip1,true,11
+proposer,full,2,breadth_4,4,1,2588,647,,,,ran,,,653,mod2,pair_first,flip1,false,1
+proposer,full,2,breadth_4,4,2,2588,647,,,,ran,,,650,th1+th2,mod_first,flip2,false,0
+proposer,full,2,breadth_4,4,3,2588,647,,,,ran,,,640,th4+th5,pair_first,flip2,true,10
+run,full,2,breadth_4,4,,2588,647,proposers_run=4,,,distinct_lens=3,,,2594,,,,,0.9167
+target,full,2,breadth_4,4,,2588,647,B,0,"B1 random monomial deg2",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,1,"B2 random monomial deg3",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,2,"B3 sum(g) % 7",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,3,"B4 sign%mod 11",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,4,"B5 Walsh χ{S=0x11}",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,5,"B6 Walsh χ{S=0xA4}",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,6,"B7 Walsh χ{S=0x0A}",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,7,"B8 parity-of-count",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,8,"B9 oriented v1>v0",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,9,"B10 parity AND sum%5",1,2,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,B,10,"B11 inversion parity",1,1,0,,,,,,
+target,full,2,breadth_4,4,,2588,647,C,0,"C02 parity XOR 0x33",0,0,-1,,,,,,
+target,full,2,breadth_4,4,,2588,647,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,2,breadth_4,4,,2588,647,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,2,breadth_4,4,,2588,647,C,3,"C06 XOR 0x66",1,1,1,,,,,,
+target,full,2,breadth_4,4,,2588,647,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,2,breadth_8,8,0,2588,323,,,,ran,,,328,th3,mod_first,flip1,true,10
+proposer,full,2,breadth_8,8,1,2588,323,,,,ran,,,325,mod2,pair_first,flip1,true,10
+proposer,full,2,breadth_8,8,2,2588,323,,,,ran,,,324,th1+th2,mod_first,flip2,true,6
+proposer,full,2,breadth_8,8,3,2588,323,,,,ran,,,326,th4+th5,pair_first,flip2,true,10
+proposer,full,2,breadth_8,8,4,2588,323,,,,ran,,,324,th3+mod2,mod_first,flip1,false,0
+proposer,full,2,breadth_8,8,5,2588,323,,,,ran,,,328,th1+mod2,pair_first,flip1,true,8
+proposer,full,2,breadth_8,8,6,2588,323,,,,ran,,,329,th2+th4,mod_first,flip2,true,10
+proposer,full,2,breadth_8,8,7,2588,323,,,,ran,,,309,th5+mod2,pair_first,flip2,true,10
+run,full,2,breadth_8,8,,2588,323,proposers_run=8,,,distinct_lens=7,,,2593,,,,,1.0000
+target,full,2,breadth_8,8,,2588,323,B,0,"B1 random monomial deg2",1,6,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,1,"B2 random monomial deg3",1,5,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,2,"B3 sum(g) % 7",1,6,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,3,"B4 sign%mod 11",1,6,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,4,"B5 Walsh χ{S=0x11}",1,7,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,5,"B6 Walsh χ{S=0xA4}",1,7,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,6,"B7 Walsh χ{S=0x0A}",1,7,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,7,"B8 parity-of-count",1,7,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,8,"B9 oriented v1>v0",1,7,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,9,"B10 parity AND sum%5",1,6,0,,,,,,
+target,full,2,breadth_8,8,,2588,323,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,2,breadth_8,8,,2588,323,C,0,"C02 parity XOR 0x33",0,0,-1,,,,,,
+target,full,2,breadth_8,8,,2588,323,C,1,"C04 XOR 0xAA",0,0,-1,,,,,,
+target,full,2,breadth_8,8,,2588,323,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,2,breadth_8,8,,2588,323,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,2,breadth_8,8,,2588,323,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,2,breadth_16,16,0,2588,161,,,,ran,,,165,th3,mod_first,flip1,false,0
+proposer,full,2,breadth_16,16,1,2588,161,,,,ran,,,167,mod2,pair_first,flip1,true,11
+proposer,full,2,breadth_16,16,2,2588,161,,,,ran,,,161,th1+th2,mod_first,flip2,true,10
+proposer,full,2,breadth_16,16,3,2588,161,,,,ran,,,167,th4+th5,pair_first,flip2,true,10
+proposer,full,2,breadth_16,16,4,2588,161,,,,ran,,,167,th3+mod2,mod_first,flip1,true,10
+proposer,full,2,breadth_16,16,5,2588,161,,,,ran,,,166,th1+mod2,pair_first,flip1,false,1
+proposer,full,2,breadth_16,16,6,2588,161,,,,ran,,,166,th2+th4,mod_first,flip2,true,9
+proposer,full,2,breadth_16,16,7,2588,161,,,,ran,,,161,th5+mod2,pair_first,flip2,true,10
+proposer,full,2,breadth_16,16,8,2588,161,,,,ran,,,161,th3,mod_first,flip1,false,0
+proposer,full,2,breadth_16,16,9,2588,161,,,,ran,,,167,mod2,pair_first,flip1,true,11
+proposer,full,2,breadth_16,16,10,2588,161,,,,ran,,,166,th1+th2,mod_first,flip2,false,0
+proposer,full,2,breadth_16,16,11,2588,161,,,,ran,,,161,th4+th5,pair_first,flip2,false,0
+proposer,full,2,breadth_16,16,12,2588,161,,,,ran,,,161,th3+mod2,mod_first,flip1,false,1
+proposer,full,2,breadth_16,16,13,2588,161,,,,ran,,,166,th1+mod2,pair_first,flip1,false,0
+proposer,full,2,breadth_16,16,14,2588,161,,,,ran,,,166,th2+th4,mod_first,flip2,false,0
+proposer,full,2,breadth_16,16,15,2588,161,,,,ran,,,123,th5+mod2,pair_first,flip2,false,0
+run,full,2,breadth_16,16,,2588,161,proposers_run=16,,,distinct_lens=7,,,2591,,,,,0.9167
+target,full,2,breadth_16,16,,2588,161,B,0,"B1 random monomial deg2",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,1,"B2 random monomial deg3",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,2,"B3 sum(g) % 7",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,3,"B4 sign%mod 11",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,4,"B5 Walsh χ{S=0x11}",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,5,"B6 Walsh χ{S=0xA4}",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,6,"B7 Walsh χ{S=0x0A}",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,7,"B8 parity-of-count",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,8,"B9 oriented v1>v0",1,6,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,9,"B10 parity AND sum%5",1,7,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,2,breadth_16,16,,2588,161,C,0,"C02 parity XOR 0x33",1,3,1,,,,,,
+target,full,2,breadth_16,16,,2588,161,C,1,"C04 XOR 0xAA",1,1,5,,,,,,
+target,full,2,breadth_16,16,,2588,161,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,2,breadth_16,16,,2588,161,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,2,breadth_16,16,,2588,161,C,4,"C09 inv parity",0,0,-1,,,,,,
+proposer,full,2,breadth_32,32,0,2588,80,,,,ran,,,80,th3,mod_first,flip1,true,10
+proposer,full,2,breadth_32,32,1,2588,80,,,,ran,,,80,mod2,pair_first,flip1,false,0
+proposer,full,2,breadth_32,32,2,2588,80,,,,ran,,,80,th1+th2,mod_first,flip2,false,0
+proposer,full,2,breadth_32,32,3,2588,80,,,,ran,,,80,th4+th5,pair_first,flip2,true,10
+proposer,full,2,breadth_32,32,4,2588,80,,,,ran,,,80,th3+mod2,mod_first,flip1,false,0
+proposer,full,2,breadth_32,32,5,2588,80,,,,ran,,,80,th1+mod2,pair_first,flip1,false,0
+proposer,full,2,breadth_32,32,6,2588,80,,,,ran,,,80,th2+th4,mod_first,flip2,true,10
+proposer,full,2,breadth_32,32,7,2588,80,,,,ran,,,80,th5+mod2,pair_first,flip2,true,10
+proposer,full,2,breadth_32,32,8,2588,80,,,,ran,,,86,th3,mod_first,flip1,false,0
+proposer,full,2,breadth_32,32,9,2588,80,,,,ran,,,80,mod2,pair_first,flip1,true,10
+proposer,full,2,breadth_32,32,10,2588,80,,,,ran,,,85,th1+th2,mod_first,flip2,true,10
+proposer,full,2,breadth_32,32,11,2588,80,,,,ran,,,80,th4+th5,pair_first,flip2,false,0
+proposer,full,2,breadth_32,32,12,2588,80,,,,ran,,,80,th3+mod2,mod_first,flip1,false,0
+proposer,full,2,breadth_32,32,13,2588,80,,,,ran,,,80,th1+mod2,pair_first,flip1,false,0
+proposer,full,2,breadth_32,32,14,2588,80,,,,ran,,,80,th2+th4,mod_first,flip2,false,0
+proposer,full,2,breadth_32,32,15,2588,80,,,,ran,,,80,th5+mod2,pair_first,flip2,true,10
+proposer,full,2,breadth_32,32,16,2588,80,,,,ran,,,86,th3,mod_first,flip1,false,0
+proposer,full,2,breadth_32,32,17,2588,80,,,,ran,,,80,mod2,pair_first,flip1,true,10
+proposer,full,2,breadth_32,32,18,2588,80,,,,ran,,,80,th1+th2,mod_first,flip2,true,10
+proposer,full,2,breadth_32,32,19,2588,80,,,,ran,,,80,th4+th5,pair_first,flip2,false,0
+proposer,full,2,breadth_32,32,20,2588,80,,,,ran,,,80,th3+mod2,mod_first,flip1,true,10
+proposer,full,2,breadth_32,32,21,2588,80,,,,ran,,,80,th1+mod2,pair_first,flip1,false,0
+proposer,full,2,breadth_32,32,22,2588,80,,,,ran,,,80,th2+th4,mod_first,flip2,true,10
+proposer,full,2,breadth_32,32,23,2588,80,,,,ran,,,80,th5+mod2,pair_first,flip2,true,10
+proposer,full,2,breadth_32,32,24,2588,80,,,,ran,,,86,th3,mod_first,flip1,false,0
+proposer,full,2,breadth_32,32,25,2588,80,,,,ran,,,86,mod2,pair_first,flip1,false,0
+proposer,full,2,breadth_32,32,26,2588,80,,,,ran,,,80,th1+th2,mod_first,flip2,true,10
+proposer,full,2,breadth_32,32,27,2588,80,,,,ran,,,80,th4+th5,pair_first,flip2,false,0
+proposer,full,2,breadth_32,32,28,2588,80,,,,ran,,,80,th3+mod2,mod_first,flip1,false,1
+proposer,full,2,breadth_32,32,29,2588,80,,,,ran,,,80,th1+mod2,pair_first,flip1,false,0
+proposer,full,2,breadth_32,32,30,2588,80,,,,ran,,,80,th2+th4,mod_first,flip2,true,10
+proposer,full,2,breadth_32,32,31,2588,80,,,,ran,,,79,th5+mod2,pair_first,flip2,false,0
+run,full,2,breadth_32,32,,2588,80,proposers_run=32,,,distinct_lens=7,,,2588,,,,,0.9091
+target,full,2,breadth_32,32,,2588,80,B,0,"B1 random monomial deg2",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,1,"B2 random monomial deg3",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,2,"B3 sum(g) % 7",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,3,"B4 sign%mod 11",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,4,"B5 Walsh χ{S=0x11}",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,5,"B6 Walsh χ{S=0xA4}",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,6,"B7 Walsh χ{S=0x0A}",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,7,"B8 parity-of-count",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,8,"B9 oriented v1>v0",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,9,"B10 parity AND sum%5",1,14,0,,,,,,
+target,full,2,breadth_32,32,,2588,80,B,10,"B11 inversion parity",0,0,-1,,,,,,
+target,full,2,breadth_32,32,,2588,80,C,0,"C02 parity XOR 0x33",0,0,-1,,,,,,
+target,full,2,breadth_32,32,,2588,80,C,1,"C04 XOR 0xAA",1,1,28,,,,,,
+target,full,2,breadth_32,32,,2588,80,C,2,"C05 XOR 0x3C",0,0,-1,,,,,,
+target,full,2,breadth_32,32,,2588,80,C,3,"C06 XOR 0x66",0,0,-1,,,,,,
+target,full,2,breadth_32,32,,2588,80,C,4,"C09 inv parity",0,0,-1,,,,,,

@@ -1,0 +1,12 @@
+E18 surrogate fidelity: layer 30, context A, 128 tokens (96 fit / 32 held-out)
+
+per-expert HELD-OUT output cosine (our surrogate vs the real expert), by surrogate rank:
+ rank e   0 e  50 e 150 e 300   bytes/expert  WS@250x58
+   16 0.239 0.196 0.131 0.176   0.49MB      7GB
+   32 0.137 0.109 0.070 0.098   0.95MB      14GB
+   48 0.123 0.095 0.058 0.074   1.40MB      20GB
+   64 0.073 0.070 0.031 0.061   1.86MB      27GB
+   84 0.040 0.028 0.019 0.027   2.44MB      35GB
+
+for scale: P3 per-matmul cosine is ~0.98; an expert-level surrogate >0.95 held-out would be competitive.
+NOTE: linear surrogate is the FLOOR of what's achievable; a small nonlinear core (rank-r in, rank-r out, tiny MLP) would do better at similar size. This measures whether the LOCAL manifold is benign enough for cheap surrogates.

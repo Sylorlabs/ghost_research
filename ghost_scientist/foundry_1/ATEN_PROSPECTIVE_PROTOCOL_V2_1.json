@@ -1,0 +1,23 @@
+{
+  "version": "FOUNDRY_ATEN_PROSPECTIVE_PROTOCOL_V2_1",
+  "base_protocol": "ATEN_PROSPECTIVE_PROTOCOL_V2.json",
+  "base_freeze_sha256": "44dd17f9740c2eae8fb973c1874a32c4d26dd2ea35249dde75ecab8d7ded9b4b",
+  "failure_receipt": "results/phase22_v2_infrastructure_failure.json",
+  "candidate_outcomes_observed_before_amendment": false,
+  "permitted_delta": {
+    "file": "phase22_1_prospective_resource_audit.py",
+    "change": "replace nonexistent Limits and meter imports with run_metered_tree calls using the already frozen numeric limits"
+  },
+  "forbidden_deltas": [
+    "candidate library",
+    "validation sources",
+    "runtime harness",
+    "input shapes",
+    "seed",
+    "fixed portfolio",
+    "search ledger",
+    "pass gates",
+    "phase21 evaluator"
+  ],
+  "classification": "OUTCOME_BLIND_INFRASTRUCTURE_REMEDIATION"
+}

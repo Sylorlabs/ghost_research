@@ -1,0 +1,10 @@
+E20 new-math probe: real expert L30 e0 (3072, 7168) vs matched gaussian
+
+-- distinguishing statistics (real vs matched gaussian) --
+  kurtosis (excess):      real +0.1011  | gauss +0.0017
+  WHT energy in top-1%:   real 8.36% | gauss 8.37%  (flat=1%)
+  row-norm CV:            real 0.0289     | gauss 0.0084
+  lag-1 autocorr (rows):  real +0.0001     | gauss -0.0024
+
+VERDICT: if real ~= gauss on all stats -> information-theoretically dense, math space closed.
+if real differs sharply on some stat -> that statistic is the structure to exploit.

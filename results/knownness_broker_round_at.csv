@@ -1,0 +1,18 @@
+# frozen_corpus_id=AT1-LOCAL-CITATIONS-v1
+## Q-STATIC-ZIG
+query_id,classification,citation_id,citation_fnv64,title,source,date,license,scope,evidence,status,policy
+Q-STATIC-ZIG,known_directly_applicable,CIT-001,cddda9d519c7a0b3,"Deterministic AST dependency walk","fixture://archive/ast-walk-v1",2025-01-10,MIT,"zig source; static imports; acyclic modules","reproduction command and passing fixture digest retained",demonstrated,EVIDENCE_NOT_TRUTH_REPRODUCE_WITH_SEPARATE_WORKER
+Q-STATIC-ZIG,known_directly_applicable,CIT-002,d794cc8c55f80626,"Dependency walk with dynamic loaders","fixture://archive/dynamic-loader-note",2025-02-08,CC-BY-4.0,"javascript source; runtime loaders; cyclic modules","benchmark table only; no retained reproduction bundle",claim_only,EVIDENCE_NOT_TRUTH_REPRODUCE_WITH_SEPARATE_WORKER
+## Q-DYNAMIC-ZIG
+query_id,classification,citation_id,citation_fnv64,title,source,date,license,scope,evidence,status,policy
+Q-DYNAMIC-ZIG,known_but_mismatched,CIT-001,cddda9d519c7a0b3,"Deterministic AST dependency walk","fixture://archive/ast-walk-v1",2025-01-10,MIT,"zig source; static imports; acyclic modules","reproduction command and passing fixture digest retained",demonstrated,EVIDENCE_NOT_TRUTH_REPRODUCE_WITH_SEPARATE_WORKER
+Q-DYNAMIC-ZIG,known_but_mismatched,CIT-002,d794cc8c55f80626,"Dependency walk with dynamic loaders","fixture://archive/dynamic-loader-note",2025-02-08,CC-BY-4.0,"javascript source; runtime loaders; cyclic modules","benchmark table only; no retained reproduction bundle",claim_only,EVIDENCE_NOT_TRUTH_REPRODUCE_WITH_SEPARATE_WORKER
+## Q-TRACE-COMPACTION
+query_id,classification,citation_id,citation_fnv64,title,source,date,license,scope,evidence,status,policy
+Q-TRACE-COMPACTION,claimed_unverified,CIT-003,ead885af0db12aa1,"Speculative trace compactor","fixture://archive/trace-compactor-post",2025-03-01,CC-BY-4.0,"generic event traces; unspecified runtime","author assertion; no method, code, or independent replication",claim_only,EVIDENCE_NOT_TRUTH_REPRODUCE_WITH_SEPARATE_WORKER
+## Q-NOT-IN-CORPUS
+query_id,classification,citation_id,citation_fnv64,title,source,date,license,scope,evidence,status,policy
+Q-NOT-IN-CORPUS,not_found,NONE,0,"","","","","","",none,EVIDENCE_NOT_TRUTH_NO_CONCLUSION
+## Q-AMBIGUOUS
+query_id,classification,citation_id,citation_fnv64,title,source,date,license,scope,evidence,status,policy
+Q-AMBIGUOUS,inconclusive,NONE,0,"","","","","","",none,EVIDENCE_NOT_TRUTH_NO_CONCLUSION

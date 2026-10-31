@@ -1,0 +1,11 @@
+artifact,fixture,opaque_claim_id,prediction_before_outcome,instrument,primary_result,recoding_replication,changed_condition_replication,attacker_alternative,simplicity_alternative,answer_key_or_trace,posthoc_rewrite,correlation_only,decision,verdict
+aq4,candidate_originated_precommitted_record,61762ff346232c82,true,earned_raw_ordered_pair,true,true,true,true,true,false,false,false,admit,ADMIT:opaque_precommitted_raw_causal_prediction_replicated
+aq4,posthoc_claim_rewrite,61762ff346232c82,false,rewritten_after_outcome,true,true,true,true,true,false,true,false,reject,REJECT:posthoc_claim_rewrite
+aq4,correlation_only_story,61762ff346232c82,true,no_intervention,false,true,true,true,true,false,false,true,reject,REJECT:correlation_only_story
+aq4,failed_replication,61762ff346232c82,true,earned_raw_ordered_pair,true,false,true,true,true,false,false,false,reject,REJECT:heldout_recoding_failed
+aq4,answer_key_or_memorized_trace,61762ff346232c82,true,opaque_but_leaked_trace,true,true,true,true,true,true,false,false,reject,REJECT:answer_key_or_memorized_trace_channel
+aq4,missing_attacker_alternative,61762ff346232c82,true,earned_raw_ordered_pair,true,true,true,false,true,false,false,false,reject,REJECT:missing_attacker_alternative
+aq4,missing_simplicity_alternative,61762ff346232c82,true,earned_raw_ordered_pair,true,true,true,true,false,false,false,false,reject,REJECT:missing_simplicity_alternative
+aq4,audit,0,true,protocol,true, true, true,true,true,false,false,false,admit,CONTACTS:primary=4 recoded=4 changed=4 total=12 synthetic_only
+aq4,audit,0,true,protocol,true,true,true,true,true,false,false,false,admit,LIMIT:fixture_has_evaluator_and_candidate_in_one_source_not_a_process_isolation_proof
+aq4,audit,0,true,protocol,true,true,true,true,true,false,false,false,admit,LIMIT:no_real_world_novelty_or_open_ended_invention_claim

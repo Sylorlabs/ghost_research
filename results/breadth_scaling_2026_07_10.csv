@@ -1,0 +1,250 @@
+pool_seed,target,family,arm,N,reached,n_certified,novel,distinct_closures,total_evals,cov_before,baseline_solved
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,baseline,0,0,,,,,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,diverse,1,0,0,0,0,42,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,diverse,2,0,0,0,0,84,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,diverse,4,0,0,0,0,168,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,diverse,8,0,0,0,0,336,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,diverse,16,0,0,0,0,672,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,diverse,32,0,0,0,0,1344,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,identical,1,0,0,0,0,42,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,identical,2,0,0,0,0,84,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,identical,4,0,0,0,0,168,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,identical,8,0,0,0,0,336,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,identical,16,0,0,0,0,672,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,identical,32,0,0,0,0,1344,0.4851,0
+0xF0235A11CE0FF1CE,"C01 XOR 0x0F",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.4851,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,baseline,0,0,,,,,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,diverse,1,0,0,0,0,42,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,diverse,2,0,0,0,0,84,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,diverse,4,0,0,0,0,168,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,diverse,8,0,0,0,0,336,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,diverse,16,0,0,0,0,672,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,diverse,32,0,0,0,0,1344,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,identical,1,0,0,0,0,42,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,identical,2,0,0,0,0,84,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,identical,4,0,0,0,0,168,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,identical,8,0,0,0,0,336,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,identical,16,0,0,0,0,672,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,identical,32,0,0,0,0,1344,0.5051,0
+0xF0235A11CE0FF1CE,"C03 XOR 0x55",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.5051,0
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,diverse,1,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,diverse,2,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,diverse,4,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,diverse,8,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,diverse,16,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,diverse,32,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,identical,1,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,identical,2,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,identical,4,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,identical,8,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,identical,16,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,identical,32,1,0,0,0,0,1.0000,1
+0xF0235A11CE0FF1CE,"C08 parity count",mod_synthesis,baseline,0,1,,,,,1.0000,1
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,baseline,0,0,,,,,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,diverse,1,0,0,0,0,42,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,diverse,2,0,0,0,0,84,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,diverse,4,0,0,0,0,168,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,diverse,8,0,0,0,0,336,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,diverse,16,0,0,0,0,672,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,diverse,32,0,0,0,0,1344,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,identical,1,0,0,0,0,42,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,identical,2,0,0,0,0,84,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,identical,4,0,0,0,0,168,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,identical,8,0,0,0,0,336,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,identical,16,0,0,0,0,672,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,identical,32,0,0,0,0,1344,0.5023,0
+0xF0235A11CE0FF1CE,"C09 inv parity",pipeline,exhaustive_depth,1,0,0,0,0,475,0.5023,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,baseline,0,0,,,,,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,diverse,1,0,0,0,0,42,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,diverse,2,0,0,0,0,84,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,diverse,4,0,0,0,0,168,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,diverse,8,0,0,0,0,336,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,diverse,16,0,0,0,0,672,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,diverse,32,0,0,0,0,1344,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,identical,1,0,0,0,0,42,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,identical,2,0,0,0,0,84,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,identical,4,0,0,0,0,168,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,identical,8,0,0,0,0,336,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,identical,16,0,0,0,0,672,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,identical,32,0,0,0,0,1344,0.5086,0
+0xF0235A11CE0FF1CE,"C10 parity XOR 0x0F",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.5086,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,baseline,0,0,,,,,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,diverse,1,0,0,0,0,42,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,diverse,2,0,0,0,0,84,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,diverse,4,0,0,0,0,168,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,diverse,8,0,0,0,0,336,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,diverse,16,0,0,0,0,672,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,diverse,32,0,0,0,0,1344,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,identical,1,0,0,0,0,42,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,identical,2,0,0,0,0,84,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,identical,4,0,0,0,0,168,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,identical,8,0,0,0,0,336,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,identical,16,0,0,0,0,672,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,identical,32,0,0,0,0,1344,0.4857,0
+0xF0235A11CE0FF1CE,"C11 XOR 0x37",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.4857,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,baseline,0,0,,,,,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,diverse,1,0,0,0,0,42,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,diverse,2,0,0,0,0,84,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,diverse,4,0,0,0,0,168,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,diverse,8,0,0,0,0,336,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,diverse,16,0,0,0,0,672,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,diverse,32,0,0,0,0,1344,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,identical,1,0,0,0,0,42,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,identical,2,0,0,0,0,84,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,identical,4,0,0,0,0,168,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,identical,8,0,0,0,0,336,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,identical,16,0,0,0,0,672,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,identical,32,0,0,0,0,1344,0.5023,0
+0x00C1B10D20260706,"C01 XOR 0x0F",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.5023,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,baseline,0,0,,,,,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,diverse,1,0,0,0,0,42,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,diverse,2,0,0,0,0,84,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,diverse,4,0,0,0,0,168,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,diverse,8,0,0,0,0,336,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,diverse,16,0,0,0,0,672,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,diverse,32,0,0,0,0,1344,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,identical,1,0,0,0,0,42,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,identical,2,0,0,0,0,84,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,identical,4,0,0,0,0,168,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,identical,8,0,0,0,0,336,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,identical,16,0,0,0,0,672,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,identical,32,0,0,0,0,1344,0.5120,0
+0x00C1B10D20260706,"C03 XOR 0x55",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.5120,0
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,diverse,1,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,diverse,2,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,diverse,4,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,diverse,8,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,diverse,16,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,diverse,32,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,identical,1,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,identical,2,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,identical,4,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,identical,8,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,identical,16,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,identical,32,1,0,0,0,0,1.0000,1
+0x00C1B10D20260706,"C08 parity count",mod_synthesis,baseline,0,1,,,,,1.0000,1
+0x00C1B10D20260706,"C09 inv parity",pipeline,baseline,0,0,,,,,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,diverse,1,0,0,0,0,42,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,diverse,2,0,0,0,0,84,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,diverse,4,0,0,0,0,168,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,diverse,8,0,0,0,0,336,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,diverse,16,0,0,0,0,672,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,diverse,32,0,0,0,0,1344,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,identical,1,0,0,0,0,42,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,identical,2,0,0,0,0,84,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,identical,4,0,0,0,0,168,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,identical,8,0,0,0,0,336,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,identical,16,0,0,0,0,672,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,identical,32,0,0,0,0,1344,0.4931,0
+0x00C1B10D20260706,"C09 inv parity",pipeline,exhaustive_depth,1,0,0,0,0,475,0.4931,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,baseline,0,0,,,,,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,diverse,1,0,0,0,0,42,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,diverse,2,0,0,0,0,84,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,diverse,4,0,0,0,0,168,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,diverse,8,0,0,0,0,336,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,diverse,16,0,0,0,0,672,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,diverse,32,0,0,0,0,1344,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,identical,1,0,0,0,0,42,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,identical,2,0,0,0,0,84,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,identical,4,0,0,0,0,168,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,identical,8,0,0,0,0,336,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,identical,16,0,0,0,0,672,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,identical,32,0,0,0,0,1344,0.4989,0
+0x00C1B10D20260706,"C10 parity XOR 0x0F",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,baseline,0,0,,,,,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,diverse,1,0,0,0,0,42,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,diverse,2,0,0,0,0,84,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,diverse,4,0,0,0,0,168,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,diverse,8,0,0,0,0,336,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,diverse,16,0,0,0,0,672,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,diverse,32,0,0,0,0,1344,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,identical,1,0,0,0,0,42,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,identical,2,0,0,0,0,84,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,identical,4,0,0,0,0,168,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,identical,8,0,0,0,0,336,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,identical,16,0,0,0,0,672,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,identical,32,0,0,0,0,1344,0.4989,0
+0x00C1B10D20260706,"C11 XOR 0x37",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.4989,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,baseline,0,0,,,,,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,diverse,1,0,0,0,0,42,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,diverse,2,0,0,0,0,84,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,diverse,4,0,0,0,0,168,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,diverse,8,0,0,0,0,336,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,diverse,16,0,0,0,0,672,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,diverse,32,0,0,0,0,1344,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,identical,1,0,0,0,0,42,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,identical,2,0,0,0,0,84,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,identical,4,0,0,0,0,168,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,identical,8,0,0,0,0,336,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,identical,16,1,1,1,1,672,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,identical,32,1,1,1,1,1344,0.5006,0
+0x00C2B10D20260707,"C01 XOR 0x0F",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.5006,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,baseline,0,0,,,,,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,diverse,1,0,0,0,0,42,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,diverse,2,0,0,0,0,84,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,diverse,4,0,0,0,0,168,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,diverse,8,0,0,0,0,336,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,diverse,16,0,0,0,0,672,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,diverse,32,0,0,0,0,1344,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,identical,1,0,0,0,0,42,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,identical,2,0,0,0,0,84,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,identical,4,0,0,0,0,168,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,identical,8,0,0,0,0,336,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,identical,16,0,0,0,0,672,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,identical,32,0,0,0,0,1344,0.4920,0
+0x00C2B10D20260707,"C03 XOR 0x55",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.4920,0
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,diverse,1,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,diverse,2,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,diverse,4,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,diverse,8,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,diverse,16,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,diverse,32,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,identical,1,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,identical,2,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,identical,4,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,identical,8,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,identical,16,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,identical,32,1,0,0,0,0,1.0000,1
+0x00C2B10D20260707,"C08 parity count",mod_synthesis,baseline,0,1,,,,,1.0000,1
+0x00C2B10D20260707,"C09 inv parity",pipeline,baseline,0,0,,,,,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,diverse,1,0,0,0,0,42,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,diverse,2,0,0,0,0,84,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,diverse,4,0,0,0,0,168,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,diverse,8,0,0,0,0,336,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,diverse,16,0,0,0,0,672,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,diverse,32,0,0,0,0,1344,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,identical,1,0,0,0,0,42,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,identical,2,0,0,0,0,84,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,identical,4,0,0,0,0,168,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,identical,8,0,0,0,0,336,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,identical,16,0,0,0,0,672,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,identical,32,0,0,0,0,1344,0.4914,0
+0x00C2B10D20260707,"C09 inv parity",pipeline,exhaustive_depth,1,0,0,0,0,475,0.4914,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,baseline,0,0,,,,,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,diverse,1,1,1,1,1,42,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,diverse,2,1,1,1,1,84,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,diverse,4,1,1,1,1,168,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,diverse,8,1,1,1,1,336,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,diverse,16,1,1,1,1,672,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,diverse,32,1,1,1,1,1344,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,identical,1,0,0,0,0,42,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,identical,2,0,0,0,0,84,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,identical,4,0,0,0,0,168,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,identical,8,0,0,0,0,336,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,identical,16,0,0,0,0,672,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,identical,32,1,2,2,1,1344,0.4954,0
+0x00C2B10D20260707,"C10 parity XOR 0x0F",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.4954,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,baseline,0,0,,,,,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,diverse,1,0,0,0,0,42,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,diverse,2,0,0,0,0,84,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,diverse,4,0,0,0,0,168,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,diverse,8,0,0,0,0,336,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,diverse,16,0,0,0,0,672,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,diverse,32,0,0,0,0,1344,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,identical,1,0,0,0,0,42,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,identical,2,0,0,0,0,84,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,identical,4,0,0,0,0,168,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,identical,8,0,0,0,0,336,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,identical,16,0,0,0,0,672,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,identical,32,0,0,0,0,1344,0.4857,0
+0x00C2B10D20260707,"C11 XOR 0x37",xor_popcount,exhaustive_depth,1,0,0,0,0,475,0.4857,0

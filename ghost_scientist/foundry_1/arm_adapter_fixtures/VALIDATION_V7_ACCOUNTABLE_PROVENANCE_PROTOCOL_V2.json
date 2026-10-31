@@ -1,0 +1,278 @@
+{
+  "version": "FOUNDRY_VALIDATION_V7_ACCOUNTABLE_PROVENANCE_PROTOCOL_V2",
+  "status": "PREFROZEN_BEFORE_EXTERNAL_TRUST_ROOT_ENROLLMENT_OR_V2_BUNDLE",
+  "supersedes": "FOUNDRY_VALIDATION_V7_ACCOUNTABLE_PROVENANCE_PROTOCOL_V1",
+  "v1_real_attestation_acceptance_forbidden": true,
+  "purpose": "mechanically verify accountable curator and reviewer identities, candidate-roster disjointness, exact v2 source-choice binding, and externally anchored chronology without claiming proof of social independence",
+  "trust_root_directory": "validation_v7_external_trust_root",
+  "provenance_inbox": "validation_v7_provenance_inbox",
+  "required_trust_root_files": [
+    "authorized_sponsor_fingerprint.sha256"
+  ],
+  "required_provenance_files": [
+    "sponsor_public_key.pem",
+    "trust_registry.v2.json",
+    "trust_registry.v2.sig",
+    "candidate_boundary.v2.json",
+    "candidate_boundary.v2.sig",
+    "provenance_statement.v2.json",
+    "curator_public_key.pem",
+    "curator_statement.sig",
+    "reviewer_public_key.pem",
+    "reviewer_statement.sig",
+    "external_log_public_key.pem",
+    "external_log_entry.v2.json",
+    "external_log_entry.v2.sig"
+  ],
+  "candidate_snapshot_contract": {
+    "candidate_library_sha256": "9f3d30638f3c30bb8c81fa3af2305930a4d88782a373223b5fbc7303e8208e8d",
+    "fixed_portfolio_sha256": "a1cfe21f09f2be579f33a24604e4f16ce438b4f411932f345ebd11f5e5b76061",
+    "portfolio_optimizer_receipt_sha256": "a02a23edf815faedd36956dd9471e5eb487af7f1009676b99db2b0cc9b146fbf",
+    "arm_adapter_contract_receipt_sha256": "e7e981e79f34039f37c8bdc2f20af125e1f0fd2265d8e1b5d2cd7cf67f59c43a",
+    "readiness_iteration_5_32_sha256": "fe405aa72e7e8b19a388e6a59778a76cfd2254dcadf04908f998ed2db2442108"
+  },
+  "commitment_constructions": {
+    "candidate_roster_root": {
+      "domain_separator": "ghost-foundry:v7:candidate-roster-root:v2",
+      "leaf": "32 raw bytes decoded from each lowercase identity-commitment SHA-256",
+      "ordering": "lexicographically sort the raw 32-byte leaves",
+      "root": "SHA-256(UTF-8 domain-separator || NUL || concatenated sorted raw leaves)",
+      "minimum_leaves": 1,
+      "maximum_leaves": 64
+    },
+    "source_choice_set_root": {
+      "domain_separator": "ghost-foundry:v7:source-choice-set-root:v2",
+      "leaf": "SHA-256(canonical UTF-8 JSON plus LF for each complete public-manifest v2 source row)",
+      "ordering": "lexicographically sort the four raw 32-byte leaf hashes",
+      "root": "SHA-256(UTF-8 domain-separator || NUL || concatenated sorted raw leaves)",
+      "leaves": 4
+    }
+  },
+  "trust_registry_contract": {
+    "version": "FOUNDRY_VALIDATION_V7_TRUST_REGISTRY_V2",
+    "exact_fields": [
+      "version",
+      "scope",
+      "enrolled_utc",
+      "registration_method",
+      "sponsor_key_fingerprint_sha256",
+      "candidate_team_identity_commitments",
+      "candidate_team_roster_root_sha256",
+      "curator",
+      "reviewer",
+      "external_log"
+    ],
+    "scope": "validation-v7-accountable-provenance",
+    "registration_method": "out-of-band identity, organization, purpose, and conflict review by the experiment sponsor",
+    "actor_exact_fields": [
+      "opaque_actor_id",
+      "legal_identity_commitment_sha256",
+      "organization_commitment_sha256",
+      "public_key_fingerprint_sha256",
+      "sponsor_review_receipt_sha256",
+      "key_purpose",
+      "conflict_check_completed"
+    ],
+    "curator_key_purpose": "validation-corpus-curation",
+    "reviewer_key_purpose": "validation-provenance-review",
+    "external_log_exact_fields": [
+      "opaque_log_id",
+      "organization_commitment_sha256",
+      "public_key_fingerprint_sha256",
+      "sponsor_review_receipt_sha256",
+      "key_purpose"
+    ],
+    "external_log_key_purpose": "append-only-choice-commitment-log",
+    "candidate_team_identity_commitments_unique": true,
+    "curator_and_reviewer_identity_commitments_must_not_be_candidate_roster_members": true,
+    "curator_reviewer_identity_organization_key_and_receipt_must_be_pairwise_distinct": true,
+    "external_log_organization_key_and_receipt_must_be_distinct_from_both_actors": true,
+    "conflict_check_completed": true
+  },
+  "candidate_boundary_contract": {
+    "version": "FOUNDRY_VALIDATION_V7_CANDIDATE_BOUNDARY_V2",
+    "exact_fields": [
+      "version",
+      "snapshot_created_utc",
+      "candidate_library_sha256",
+      "fixed_portfolio_sha256",
+      "portfolio_optimizer_receipt_sha256",
+      "arm_adapter_contract_receipt_sha256",
+      "readiness_iteration_5_32_sha256",
+      "candidate_team_roster_root_sha256",
+      "matcher_release_policy_sha256",
+      "matcher_released"
+    ],
+    "matcher_released": false
+  },
+  "provenance_statement_contract": {
+    "version": "FOUNDRY_VALIDATION_V7_PROVENANCE_STATEMENT_V2",
+    "exact_fields": [
+      "version",
+      "attestation_id",
+      "issued_utc",
+      "corpus_id",
+      "public_manifest_sha256",
+      "payload_ciphertext_sha256",
+      "source_choice_set_root_sha256",
+      "source_count",
+      "trust_registry_sha256",
+      "candidate_boundary_sha256",
+      "selection_log_commitment_sha256",
+      "choices_finalized_utc",
+      "statements",
+      "claim_boundary"
+    ],
+    "source_count": 4,
+    "statements_exact": {
+      "curator_is_not_candidate_author_selector_or_evaluator": true,
+      "reviewer_is_not_curator_candidate_author_selector_or_evaluator": true,
+      "curator_reviewer_and_candidate_team_are_organizationally_disjoint": true,
+      "source_selection_completed_before_candidate_fixed_or_control_matching": true,
+      "candidate_fixed_control_and_outcome_access_unavailable_during_selection": true,
+      "four_choices_final_before_log_commitment": true,
+      "calibration_repositories_excluded": true,
+      "redistributable_licenses_reviewed": true,
+      "selection_log_preserved_for_post_authorization_audit": true,
+      "no_offline_match_results_disclosed_to_curator_or_reviewer": true
+    },
+    "claim_boundary_exact": {
+      "social_independence_cryptographically_proved": false,
+      "off_system_collusion_ruled_out": false,
+      "source_identities_revealed": false,
+      "payload_decrypted": false,
+      "source_runtime_graph_shape_or_outcome_accessed": false,
+      "corpus_properties_verified_after_reveal": false,
+      "P2_advanced": false,
+      "P6_advanced": false,
+      "V08_passed": false,
+      "prospective_trial_authorized": false,
+      "prospective_trial_executed": false
+    }
+  },
+  "external_log_contract": {
+    "version": "FOUNDRY_VALIDATION_V7_EXTERNAL_LOG_ENTRY_V2",
+    "exact_fields": [
+      "version",
+      "opaque_log_id",
+      "sequence_number",
+      "integrated_utc",
+      "previous_checkpoint_sha256",
+      "provenance_statement_sha256",
+      "selection_log_commitment_sha256",
+      "source_choice_set_root_sha256"
+    ],
+    "sequence_number_minimum": 1,
+    "external_checkpoint_must_be_witnessed_outside_sylorlabs": true
+  },
+  "ordering_contract": {
+    "trust_registry_enrolled_at_or_before_candidate_snapshot": true,
+    "candidate_snapshot_at_or_before_choices_finalized": true,
+    "choices_finalized_at_or_before_statement_issue": true,
+    "statement_issue_at_or_before_external_log_integration": true,
+    "matcher_must_remain_unreleased_through_log_integration": true,
+    "future_matcher_release_receipt_must_name_log_entry_as_predecessor": true
+  },
+  "cryptographic_policy": {
+    "canonicalization": "UTF-8 RFC8259 JSON sorted keys compact separators plus one LF",
+    "signature": "RSA-PSS SHA-256 detached signatures",
+    "public_keys": "PEM SubjectPublicKeyInfo RSA at least 3072 bits",
+    "sponsor_fingerprint_source": "exact lowercase SHA-256 of DER SubjectPublicKeyInfo enrolled out of band in authorized_sponsor_fingerprint.sha256",
+    "sponsor_signs": [
+      "trust_registry.v2.json",
+      "candidate_boundary.v2.json"
+    ],
+    "curator_and_reviewer_both_sign": "identical canonical provenance_statement.v2.json",
+    "external_log_signs": "canonical external_log_entry.v2.json",
+    "private_keys_forbidden": true
+  },
+  "decision_rule": {
+    "waiting_external_trust_root": "authorized sponsor fingerprint is absent",
+    "waiting_v2_bundle": "external trust root exists but the corrected identity-only v2 bundle is incomplete",
+    "waiting_provenance": "trust root and v2 bundle exist but one or more provenance v2 files are absent",
+    "mechanism_complete": "both implementations verify schemas, byte-exact roots, roster nonmembership, bindings, signatures, and chronology",
+    "invalid": "any v1 artifact, trust, schema, root, roster, binding, signature, chronology, unknown-file, private-key, or claim-inflation condition fails",
+    "mechanism_complete_label": "ACCOUNTABLE_TWO_PARTY_PROVENANCE_AND_ORDERED_COMMITMENT_ATTESTED",
+    "never_label_as_independence_proved": true,
+    "this_phase_never_closes_P6_or_authorizes_decryption": true
+  },
+  "hostile_requirements": {
+    "cases": 26,
+    "must_cover": [
+      "provenance v1 artifact",
+      "self-provided sponsor key not matching external fingerprint",
+      "missing provenance file",
+      "unknown provenance file",
+      "private key present",
+      "noncanonical JSON",
+      "unknown registry field",
+      "candidate roster root mismatch",
+      "curator is candidate roster member",
+      "reviewer is candidate roster member",
+      "curator reviewer duplicate identity",
+      "curator reviewer duplicate organization",
+      "curator reviewer duplicate public key",
+      "curator reviewer duplicate sponsor receipt",
+      "external log overlaps actor organization",
+      "conflict check false",
+      "candidate snapshot binding mismatch",
+      "matcher already released",
+      "unknown statement field",
+      "independence statement weakened",
+      "claim inflation",
+      "wrong v2 manifest binding",
+      "wrong v2 payload binding",
+      "wrong source-choice root",
+      "curator or reviewer signature mismatch",
+      "external log signature or chronology mismatch"
+    ],
+    "primary_and_independent_rejection_required": true
+  },
+  "resource_limits": {
+    "wall_seconds": 90,
+    "cpu_seconds": 60,
+    "rss_kib": 524288
+  },
+  "provider_records": [
+    {
+      "path": "results/readiness_iteration_5_32.json",
+      "sha256": "fe405aa72e7e8b19a388e6a59778a76cfd2254dcadf04908f998ed2db2442108"
+    },
+    {
+      "path": "results/phase157_validation_v7_identity_only_intake_v2.json",
+      "sha256": "0e5887d50d231afe434f88dc82abce70920f48d138703cc9aa6ddea24072977f"
+    },
+    {
+      "path": "results/phase158_validation_v7_provenance_v1_enforcement_audit.json",
+      "sha256": "00ce82c184e25d2c64a322b303944fce4854c3c896f5f6b100135d8c0837e1e7"
+    },
+    {
+      "path": "results/forged_pareto_tools.json",
+      "sha256": "9f3d30638f3c30bb8c81fa3af2305930a4d88782a373223b5fbc7303e8208e8d"
+    },
+    {
+      "path": "results/phase64_pareto_portfolio_optimizer.json",
+      "sha256": "a02a23edf815faedd36956dd9471e5eb487af7f1009676b99db2b0cc9b146fbf"
+    },
+    {
+      "path": "results/phase83_arm_adapter_contract_conformance.json",
+      "sha256": "e7e981e79f34039f37c8bdc2f20af125e1f0fd2265d8e1b5d2cd7cf67f59c43a"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    }
+  ],
+  "claim_boundary": {
+    "accountability_and_governed_ordering_mechanism_only": true,
+    "real_social_independence_requires_out_of_band_identity_and_conflict_verification": true,
+    "external_log_cannot_rule_out_off-system_collusion": true,
+    "real_v2_bundle_not_yet_present": true,
+    "P2_not_advanced": true,
+    "P6_not_advanced": true,
+    "payload_decrypted": false,
+    "source_runtime_graph_shape_or_outcome_accessed": false,
+    "prospective_trial_authorized": false,
+    "prospective_trial_executed": false
+  }
+}

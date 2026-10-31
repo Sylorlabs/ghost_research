@@ -1,0 +1,19 @@
+artifact,probe,observed,verdict,detail
+round_ap_ap1,baseline_raw_action,ACT_7_1,PASS,real libseccomp BPF was supplied to bwrap --seccomp before candidate exec
+round_ap_ap1,fork,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,clone,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,vfork,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,exec,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,open,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,socket,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,connect,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,unshare,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,setns,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,mount,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,signal,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,clock,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,timeofday,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,sleep,EPERM,PASS,actual syscall denied by stacked seccomp policy; bwrap filter precedes exec and trusted shim loads final rules before probe dispatch
+round_ap_ap1,policy_semantics,default_allow_plus_explicit_errno_deny,PASS,bwrap pre-exec cBPF denies process/network/namespace/signal/time; trusted post-loader shim additionally denies exec/open before opaque-frame parsing; runtime-compatible allowlist remains future hardening
+round_ap_ap1,residual_tcb,kernel_seccomp_bubblewrap_UID_compiler_hardware_and_unlisted_syscalls,DECLARED,no absolute containment claim; default-allow means unlisted runtime syscalls remain available
+round_ap_ap1,verdict,pre_exec_syscall_policy,GATE_READY,all executed listed probes returned EPERM and baseline protocol passed

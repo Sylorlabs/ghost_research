@@ -1,0 +1,9 @@
+E21 optimal-quant vs bitplanes: expert L30 e0 (3072, 7168), 64 real acts
+
+method                  bits/w    cosine
+bitplane P2               2.25    0.9532
+bitplane P3               3.25    0.9812
+Lloyd-Max 2-bit           2.13    0.9563
+Lloyd-Max 3-bit           3.13    0.9921
+VQ d=2 8bit               4.13    0.9976
+VQ d=4 8bit               2.13    0.9638

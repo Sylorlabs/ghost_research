@@ -1,0 +1,11 @@
+record,split,target_audit_only,truth_audit_only,predicted_audit_only,correct,global_gain,global_margin,singleton_gain,singleton_margin,directed_gain,directed_margin,none_gain,none_margin,train_calls,validation_calls,total_calls,enumeration_unique,mask_perm,residue_perm,validity
+TARGET,val,3,global,global,yes,1,0.2889,0.2889,0.0000,0.0000,-0.0511,0.0022,0.0000,0.1022,204,12,216,1270,pass,pass,pass
+TARGET,heldout,4,global,global,yes,1,0.4822,0.2711,0.0978,0.0022,0.0800,0.0089,0.0467,0.0400,204,12,216,1270,pass,pass,pass
+TARGET,val,8,singleton,singleton,yes,1,0.0467,0.0022,0.4644,0.3489,0.0444,0.0089,0.0133,0.0133,204,12,216,1270,pass,pass,pass
+TARGET,heldout,9,singleton,singleton,yes,1,0.0311,0.0089,0.4444,0.3867,0.0444,0.0022,-0.0333,0.0089,204,12,216,1270,pass,pass,pass
+TARGET,val,13,multicell,multicell,yes,1,0.0000,0.0000,0.0000,0.0000,0.3889,0.3644,0.0000,0.0600,204,12,216,1270,pass,pass,pass
+TARGET,heldout,14,multicell,multicell,yes,1,0.0578,0.0178,0.1178,0.0356,0.0667,0.0044,0.0178,0.0044,204,12,216,1270,pass,pass,pass
+TARGET,val,18,none,none,yes,1,0.0511,0.0511,0.0000,0.0000,-0.0356,0.0067,0.3778,0.3778,204,12,216,1270,pass,pass,pass
+TARGET,heldout,19,none,none,yes,1,0.0200,0.0400,0.0067,0.0067,0.0178,0.0044,0.4578,0.3222,204,12,216,1270,pass,pass,pass
+SUMMARY,heldout,-,-,-,4/4,-,-,-,-,-,-,-,-,204,12,216,1270,pass,pass,pass
+GATES,frozen_12_4_4_distance,-,-,-,-,0.117505,-,-,-,-,-,-,-,-,204,12,216,1270,pass,pass,pass

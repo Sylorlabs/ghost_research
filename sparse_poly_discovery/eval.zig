@@ -1,6 +1,7 @@
 const std = @import("std");
 const env_mod = @import("environment.zig");
 const agent_mod = @import("agent.zig");
+const hardness_router = @import("hardness_router.zig");
 
 // =============================================================================
 // sparse_poly_discovery — evaluation harness
@@ -447,9 +448,21 @@ pub fn main() !void {
     // E2: does H-step planning over the learned scalar model beat greedy mb_mass,
     // or close the gap to the tuned thermostat (0.00)?
     std.debug.print("  - - - E2: planning (lookahead) vs greedy mb_mass - - -\n", .{});
-    printRow("mb_plan H=4", try runPolicyPMeanSeeds(allocator, band, .{
-        .action_mode = .mb_plan, .enable_macros = false, .enable_meta = false, .epsilon = 0.0,
-    }, n_steps, seeds));
+    const plan_depths = [_]u8{ 1, 3, 5 };
+    var best_plan: f64 = 1e9;
+    var best_plan_h: u8 = 0;
+    for (plan_depths) |h| {
+        const st = try runPolicyPMeanSeeds(allocator, band, .{
+            .action_mode = .mb_plan, .enable_macros = false, .enable_meta = false, .epsilon = 0.0, .plan_horizon = h,
+        }, n_steps, seeds);
+        var name: [24]u8 = undefined;
+        printRow(try std.fmt.bufPrint(&name, "mb_plan H={d}", .{h}), st);
+        if (st.fail_per_1k < best_plan) {
+            best_plan = st.fail_per_1k;
+            best_plan_h = h;
+        }
+    }
+    std.debug.print("  => best planning: H={d} at {d:.2} fail/1k  vs  greedy mb_mass 11.02  vs  tuned thermostat {d:.2}\n", .{ best_plan_h, best_plan, best_t });
 
     // E3: is the control fragile to STOCHASTIC dynamics? Inject per-step noise.
     const band_noisy = env_mod.TaskParams{ .min_mass = 16, .max_mass = 48, .shock_period = 0, .volatility_after = 1_000_000, .noise_prob = 0.05, .noise_mag = 2 };
@@ -550,6 +563,31 @@ pub fn main() !void {
     }
     std.debug.print("  => BEST PAIR: ({s},{s}) at {d:.2} fail/1k\n", .{ @tagName(best_pair_f1), @tagName(best_pair_f2), best_pair_fail });
     std.debug.print("     Prediction: (sum,left_mass) should win. Did it?\n", .{});
+
+    // Hardness router: Q38 compound classification → cross-class pair (no brute search).
+    std.debug.print("  - - - hardness router: Q38 compound → guided pair discovery - - -\n", .{});
+    {
+        const routed = try hardness_router.route(allocator, dual_band, 5000, n_steps, seeds, 0xABC0);
+        std.debug.print("  task_class={s}  best_deg1={s}({d:.1})  best_extremal={s}({d:.1})\n", .{
+            @tagName(routed.task_class),
+            @tagName(routed.best_deg1), routed.best_deg1_fail,
+            @tagName(routed.best_extremal), routed.best_extremal_fail,
+        });
+        std.debug.print("  guided pair ({s},{s}) = {d:.2} fail/1k  (brute best {d:.2}, {d} cross-class vs {d} directed)\n", .{
+            @tagName(routed.proposal.f1), @tagName(routed.proposal.f2), routed.proposal.fail_per_1k,
+            best_pair_fail, routed.n_cross_class_pairs, pair_feats.len * (pair_feats.len - 1),
+        });
+        const guided_match = (routed.proposal.f1 == best_pair_f1 and routed.proposal.f2 == best_pair_f2) or
+            (routed.proposal.f1 == best_pair_f2 and routed.proposal.f2 == best_pair_f1);
+        if (guided_match) {
+            std.debug.print("  => hardness router MATCHES brute pair search.\n", .{});
+        } else {
+            std.debug.print("  => hardness router DIFFERS from brute: guided ({s},{s}) vs brute ({s},{s}).\n", .{
+                @tagName(routed.proposal.f1), @tagName(routed.proposal.f2),
+                @tagName(best_pair_f1), @tagName(best_pair_f2),
+            });
+        }
+    }
 
     // Model disagreement: how often does the 1D agent (sum) predict safe but fail?
     // This is the "can you see the ceiling" test -- does the agent detect its own blindspot?

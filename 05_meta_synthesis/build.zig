@@ -93,6 +93,7 @@ const exes = [_]Exe{
     .{ .name = "graph_attention_search", .path = "src/graph_attention_search.zig", .z3 = false },
     .{ .name = "attention_alt_search", .path = "src/attention_alt_search.zig", .z3 = false },
     .{ .name = "native_prover_bench", .path = "src/native_prover_bench.zig", .z3 = false },
+    .{ .name = "toaig_audit", .path = "src/toaig_audit.zig", .z3 = false },
     .{ .name = "graph_architect_search", .path = "src/graph_architect_search.zig", .z3 = true },
     .{ .name = "alien_hack_cegis", .path = "src/alien_hack_cegis.zig", .z3 = true },
     .{ .name = "symbolic_tracing_search", .path = "src/symbolic_tracing_search.zig", .z3 = false },
@@ -144,12 +145,33 @@ const exes = [_]Exe{
     .{ .name = "practrand_emit_mulfree", .path = "src/practrand_emit_mulfree.zig" },
     .{ .name = "practrand_emit", .path = "src/practrand_emit.zig" },
     .{ .name = "recursive_engine_loop", .path = "src/recursive_engine_loop.zig" },
+    .{ .name = "swarm_exp19", .path = "src/swarm_exp19_beat_gcc.zig", .z3 = false },
 };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
     const core = b.dependency("core", .{ .target = target, .optimize = optimize });
+
+    // Swarm EXP-20 (D34): isolated step — direct smt_verify import, no core mesh.
+    const smt_verify_mod = b.addModule("smt_verify", .{
+        .root_source_file = b.path("../core/src/adapters/smt_verify.zig"),
+    });
+    const exp20_exe = b.addExecutable(.{
+        .name = "swarm_exp20_weird_hacks",
+        .root_source_file = b.path("src/swarm_exp20_weird_hacks.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    exp20_exe.root_module.addImport("smt_verify", smt_verify_mod);
+    exp20_exe.root_module.addSystemIncludePath(.{ .cwd_relative = "/usr/include" });
+    exp20_exe.root_module.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
+    exp20_exe.root_module.linkSystemLibrary("z3", .{});
+    exp20_exe.root_module.linkSystemLibrary("c", .{});
+    const run_exp20 = b.addRunArtifact(exp20_exe);
+    if (b.args) |args| run_exp20.addArgs(args);
+    const exp20_step = b.step("swarm-exp20", "EXP-20 (D34): CEGIS invent weird u32 bit-hacks vs Hacker's Delight");
+    exp20_step.dependOn(&run_exp20.step);
 
     for (exes) |e| {
         const exe = b.addExecutable(.{
@@ -166,5 +188,11 @@ pub fn build(b: *std.Build) void {
             exe.root_module.linkSystemLibrary("c", .{});
         }
         b.installArtifact(exe);
+
+        if (std.mem.eql(u8, e.name, "swarm_exp19")) {
+            const run = b.addRunArtifact(exe);
+            const step = b.step("swarm-exp19", "EXP-19: verified superoptimization vs gcc -O3");
+            step.dependOn(&run.step);
+        }
     }
 }

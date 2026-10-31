@@ -1,0 +1,78 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V3",
+  "parent_freeze": "results/pareto_remediation_v2_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 77,
+      "objective": "Freeze the exact production trace, documentation, and research-use provenance locally.",
+      "result": "results/phase77_local_trace_provenance.json",
+      "outcome": "THREE_EXACT_UPSTREAM_GIT_BLOBS",
+      "scientific_effect": "The 2,012,418-byte trace and both provenance documents are offline-authenticated; the earlier nonexistent LICENSE-path claim is explicitly corrected to a pinned research-use grant."
+    },
+    {
+      "phase": 78,
+      "objective": "Recompute the connector aggregate entirely offline with two independent parsers.",
+      "result": "results/phase78_offline_trace_replay.json",
+      "outcome": "TWO_LOCAL_PARSERS_AND_CONNECTOR_EXACT",
+      "scientific_effect": "Both local parsers reproduce all 26,823 rows, 86 model identities, 26,392 successes, distribution statistics, and the request multiplicity reference of three."
+    },
+    {
+      "phase": 79,
+      "objective": "Meter the offline provenance and replay pipeline.",
+      "result": "results/phase79_offline_trace_resource_audit.json",
+      "outcome": "TRACE_PIPELINE_RESOURCE_PASS",
+      "scientific_effect": "Both offline stages terminate naturally under complete process-tree accounting; required prospective-arm accounting remains incomplete."
+    },
+    {
+      "phase": 80,
+      "objective": "Audit the units connecting production requests to the Foundry-0 primary horizon.",
+      "result": "results/phase80_horizon_unit_mapping_audit.json",
+      "outcome": "REQUEST_COUNT_TO_ARTIFACT_COUNT_REJECTED",
+      "scientific_effect": "Three requests per model may not be mislabeled as three artifact arrivals; phase 76 remains secondary calibration sensitivity."
+    },
+    {
+      "phase": 81,
+      "objective": "Freeze and independently verify a two-axis pre-outcome endpoint.",
+      "result": "results/phase81_horizon_clarification_conformance.json",
+      "outcome": "FOUR_ARTIFACTS_BY_THREE_INVOCATIONS_CONFORMANCE_PASS",
+      "scientific_effect": "P2 closes as a preflight prerequisite with four independent heldout artifacts, three externally justified executions each, artifact-level bootstrap pairing, and no gate or threshold weakening."
+    },
+    {
+      "phase": 82,
+      "objective": "Meter the unit audit and clarification conformance.",
+      "result": "results/phase82_horizon_protocol_resource_audit.json",
+      "outcome": "HORIZON_PROTOCOL_RESOURCE_PASS",
+      "scientific_effect": "Both protocol-audit paths are resource-visible; P3 remains incomplete until every required prospective arm is integrated and metered."
+    }
+  ],
+  "P2_progress": {
+    "independent_four_repository_graph_corpus_frozen": true,
+    "exact_production_trace_bytes_locally_frozen": true,
+    "research_use_grant_locally_frozen": true,
+    "two_offline_parsers_match": true,
+    "request_to_artifact_unit_mismatch_preserved": true,
+    "artifact_count": 4,
+    "invocations_per_artifact": 3,
+    "bootstrap_pairing_unit": "artifact",
+    "independent_no_weakening_checks": 18,
+    "complete": true
+  },
+  "authorization_effect": {
+    "prerequisites_completed_by_remediation": 1,
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "complete the fourth source-faithful external control for P1",
+      "integrate and meter all ten required prospective arms for P3",
+      "resolve the surviving native-dedup stop through a pre-registered measured search distinction or genuinely nonduplicate candidate semantics"
+    ]
+  }
+}

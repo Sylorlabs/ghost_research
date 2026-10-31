@@ -1,0 +1,12 @@
+event,instance,partition,kind,source_hash,payload_hash,token,detail
+stage,0,train,source_structure,7881cbcfeadf54bd,7881cbcfeadf54bd,c13ca1ee095c29a9,real_tracked_artifact_copied_without_origin_path_or_answer
+stage,1,train,csv_parser_integrity,33ea10066bd34815,33ea10066bd34815,4174716d19ad0b0f,real_tracked_artifact_copied_without_origin_path_or_answer
+stage,2,heldout,performance_proxy,44409cdd879ab88,44409cdd879ab88,dc041963e2c686d8,real_tracked_artifact_copied_without_origin_path_or_answer
+stage,3,heldout,behavior_property,6488d024155da2b,6488d024155da2b,daa85b5abd92e94,real_tracked_artifact_copied_without_origin_path_or_answer
+deny,none,none,none,none,none,none,../evaluator/answers
+deny,none,none,none,none,none,none,/repo/04_verified_synthesis
+deny,none,none,none,none,none,none,read expected
+deny,none,none,none,none,none,none,read score
+deny,none,none,none,none,none,none,read progress
+deny,none,none,none,none,none,none,.git/index
+boundary,all,train_and_heldout,mixed,none,none,none,Evaluator must run outside candidate mount; source evaluator and original repo are not candidate inputs. This harness prepares and checks a corpus; it does not prove an inventor advantage.

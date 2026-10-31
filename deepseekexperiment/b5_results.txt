@@ -1,0 +1,13 @@
+activation matrix: (488, 7168)
+pooled activation spectrum (488 samples cap rank at 488):
+  top-  16:  63.79% energy
+  top-  32:  77.20% energy
+  top-  64:  87.68% energy
+  top- 128:  94.60% energy
+  top- 256:  98.61% energy
+  top- 400:  99.85% energy
+  top- 487: 100.00% energy
+held-out capture top-  64:  80.74%  -> compression x112, residual rel-err 0.439
+held-out capture top- 128:  86.81%  -> compression x56, residual rel-err 0.363
+held-out capture top- 256:  90.22%  -> compression x28, residual rel-err 0.313
+held-out capture top- 399:  92.26%  -> compression x18, residual rel-err 0.278

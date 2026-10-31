@@ -1,0 +1,9 @@
+artifact,case,source_hash,plan_hash,disposable_scratch_hash,output_hash,compile_ok,test_ok,instructions,error_tag
+round_at_at2,failed_proposal,4e4a6f7447863fac,948a58413af8334b,571f5979a8ed6fef,0,false,false,2,compile_bad_integer
+round_at_at2,repaired_proposal,88b6dc5c1ab452a,948a58413af8334b,571f5979a8ed6fef,7f89407b4ba0c0a,true,true,4,ok
+round_at_at2,wrong_precommitted_test,c4d4c5d06eec812d,948a57413af83198,571f5979a8ed6fef,7f89407b4ba0c0a,true,false,3,test_expectation_failed
+round_at_at2,traversal_rejected,c7583e4ded30885d,4c2792b85a2d4c3b,571f5979a8ed6fef,0,false,false,0,policy_rejected
+round_at_at2,network_rejected,a4ec304cbb040184,4c2791b85a2d4a88,571f5979a8ed6fef,0,false,false,0,policy_rejected
+round_at_at2,answer_rejected,2a01bf9129f0f5c2,4c2791b85a2d4a88,571f5979a8ed6fef,0,false,false,0,policy_rejected
+round_at_at2,score_rejected,399e21245d31579c,4c2791b85a2d4a88,571f5979a8ed6fef,0,false,false,0,policy_rejected
+round_at_at2,unknown_opcode_rejected,ff32dda8014b3589,4c278ab85a2d3ea3,571f5979a8ed6fef,0,false,false,1,compile_unknown_opcode

@@ -1,0 +1,13 @@
+round,battery,policy,heldout_hits,precommitted_predictions,bounded_tests,record_revisions,checkpoints,corpus_artifacts,verdict
+round_as,AS3,learned_provenance,9648,192,18432,4,8,96,control
+round_as,AS3,blank,8736,192,18432,0,8,96,control
+round_as,AS3,fixed_broad,9216,192,18432,0,8,96,control
+round_as,AS3,random,9165,192,18432,0,8,96,control
+round_as,AS3,replay,9216,192,18432,0,8,96,control
+round_as,AS3,shuffled,8688,192,18432,0,8,96,control
+round_as,AS3,answer_scrub,8736,192,18432,0,8,96,control
+round_as,AS3,ablated,8736,192,18432,0,8,96,control
+round_as,curve,learned_checkpoint_48,2304,48,4608,1,2,96,heldout_curve
+round_as,curve,learned_checkpoint_96,4992,96,9216,2,4,96,heldout_curve
+round_as,curve,learned_checkpoint_192,9648,192,18432,4,8,96,heldout_curve
+round_as,verdict,allocation,0,0,0,0,0,96,FOUNDATION_POSITIVE:provenance_workflow_strictly_beats_blank_fixed_broad_random_replay_shuffled_answer_scrub_and_ablation_on_heldout_local_artifact_corpus

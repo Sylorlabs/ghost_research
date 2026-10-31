@@ -1,0 +1,14 @@
+artifact,partition,policy,upstream_rows,charged_evidence,charged_retrieval,charged_forge,charged_transfer,candidate_frozen,resource_total,verdict
+round_aa_aa2,integration,organism,26,0,0,0,0,0,0,BLOCKED:AA1_valid_negative_experiment_fields_human_partitioned_no_forge_claim
+round_aa_aa2,attack,false_positive_string,1,0,0,0,0,0,0,CONTROL_PASS:negative_marker_dominates
+round_aa_aa2,attack,missing_trace,1,0,0,0,0,0,0,CONTROL_PASS:positive_without_executable_lineage_denied
+round_aa_aa2,attack,hidden_grammar,1,0,0,0,0,0,0,CONTROL_PASS:human_partitioned_experiment_axis_denied
+round_aa_aa2,attack,evaluator_leak,1,0,0,0,0,0,0,CONTROL_PASS:no_evaluator_or_transfer_data_read
+round_aa_aa2,attack,uncharged_trials,1,0,0,0,0,0,0,CONTROL_PASS:no_candidate_execution_when_dependency_blocked
+round_aa_aa2,attack,post_test_selection,1,0,0,0,0,0,0,CONTROL_PASS:no_transfer_partition_opened
+round_aa_aa2,attack,transcript_memory,1,0,0,0,0,0,0,CONTROL_PASS:no_answer_or_score_transcript_ingested
+round_aa_aa2,attack,bloat,1,0,0,0,0,0,0,CONTROL_PASS:no_build_is_honest_abstention
+round_aa_aa2,attack,freeze_edit,1,0,0,0,0,0,0,CONTROL_PASS:no_candidate_exists_to_edit
+round_aa_aa2,attack,provenance,1,0,0,0,0,0,0,CONTROL_PASS:AA1_verdict_and_lineage_gate_required
+round_aa_aa2,attack,llm_text_embedding_symbolic,1,0,0,0,0,0,0,CONTROL_PASS:byte_ledger_gate_only
+round_aa_aa2,closure,aggregate,0,0,0,0,0,0,0,BLOCKED:not_a_negative_forge_result_AA1_did_not_supply_autonomous_distinguishing_evidence

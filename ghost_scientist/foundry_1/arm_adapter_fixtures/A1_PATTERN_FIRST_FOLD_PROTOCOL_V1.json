@@ -1,0 +1,119 @@
+{
+  "version": "FOUNDRY_A1_PATTERN_FIRST_FOLD_PROTOCOL_V1",
+  "status": "PREFROZEN_ADAPTED_CALIBRATION_LOWERING",
+  "frozen_before_lowerer_implementation_or_execution": true,
+  "arm_id": "A1",
+  "classification": "ADAPTED_V5_1_PATTERN_FIRST_BRIDGE",
+  "question": "Can an evaluator-owned typed lowering of the three corrected real conv-to-inference-batchnorm opportunities execute the existing v5.1 fold constructor correctly, while preserving every original grammar decision and adding only the one previously unseen real structural signature?",
+  "targets": [
+    {
+      "artifact_id": "validation_v1:adversarial_image_generation",
+      "conv_node": "conv2d_1",
+      "batch_norm_node": "_native_batch_norm_legit_no_training"
+    },
+    {
+      "artifact_id": "validation_v1:adversarial_image_generation",
+      "conv_node": "conv2d_2",
+      "batch_norm_node": "_native_batch_norm_legit_no_training_1"
+    },
+    {
+      "artifact_id": "validation_v1:adversarial_image_generation",
+      "conv_node": "conv2d_3",
+      "batch_norm_node": "_native_batch_norm_legit_no_training_2"
+    }
+  ],
+  "typed_lowering": {
+    "input": "the conv input becomes the sole v5 input",
+    "parameters": [
+      "conv weight",
+      "conv bias or an explicit zero vector when source bias is None",
+      "batchnorm gamma",
+      "batchnorm beta",
+      "running mean",
+      "running variance"
+    ],
+    "constants": [
+      "batchnorm epsilon",
+      "channel scale reshape [out_channels,1,1,1]"
+    ],
+    "conv_attributes": [
+      "stride",
+      "padding",
+      "dilation",
+      "groups"
+    ],
+    "output": "batchnorm tuple element zero with exact observed tensor type and last-dimension stride-one contract",
+    "supported_dtype": "torch.float32",
+    "source_batchnorm": "aten._native_batch_norm_legit_no_training.default only",
+    "source_conv": "aten.conv2d.default only",
+    "unsupported_signatures_fail_closed": true
+  },
+  "grammar_extension": {
+    "original_grammar_sha256": "e465b9c9398288c34bbce9e2d00aaa31d16c46fd2b2282e2a5c7a86317eb53c7",
+    "original_rule_count_must_not_change_in_place": true,
+    "new_structural_signature_sha256": "0eb7ce8d842823ea0b3fe4ccd429ca6cd3c35c922cce0c1182f0fd2a999eb24a",
+    "original_grammar_contains_new_signature": false,
+    "original_grammar_selected_plan_index": 0,
+    "adapted_extension": {"kind": "leaf", "plan_index": 1},
+    "adapted_grammar_selected_plan_index": 1,
+    "all_original_rule_keys_and_values_byte_semantics_preserved": true,
+    "extension_may_match_only_the_exact_new_signature": true
+  },
+  "actual_value_verification": {
+    "invocations_per_target": 3,
+    "seed": "sha256 of A1-FOLD, artifact id, conv node, and ordinal",
+    "reference": "source conv followed by source inference batchnorm tuple element zero",
+    "candidate": "source conv with independently folded weight and bias",
+    "primary_and_independent_comparators_required": true,
+    "maximum_absolute_error": 0.00001,
+    "type_dtype_shape_layout_stride_alias_and_storage_checks_required": true
+  },
+  "v5_execution": {
+    "strict_artifact_parser_required": true,
+    "primary_and_independent_lowerers_must_emit_byte-identical_artifacts": true,
+    "evaluator_plan_count_per_target": 2,
+    "candidate_plan_count_per_target": 2,
+    "original_grammar_fallback_must_be_preserved": true,
+    "adapted_grammar_must_select_nonreference_plan": true,
+    "nonreference_plan_must_pass_eager_measurement": true,
+    "nonreference_maximum_absolute_error": 0.00001,
+    "nonreference_compiled_maximum_absolute_error": 0.00001,
+    "hostile_lowering_and_grammar_mutations_required": 12
+  },
+  "acceptance": {
+    "all_three_targets_exact": true,
+    "nine_actual_value_comparisons_pass": true,
+    "three_byte_identical_independent_artifacts": true,
+    "three_strict_v5_artifacts_pass": true,
+    "all_six_enumerated_plan_sets_agree": true,
+    "three_original_grammar_plan_zero_selections": true,
+    "three_adapted_grammar_plan_one_selections": true,
+    "three_nonreference_v5_measurements_pass": true,
+    "twelve_hostile_cases_rejected": true,
+    "process_tree_cpu_rss_wall_and_reaping_required": true
+  },
+  "provider_records": [
+    {"path": "results/phase145_a1_subgraph_constructor_reachability_corrected.json", "sha256": "2f49a3ace23a158fd8ee325e3e6d1698ec4fb7453f727a9276423611f9b1dccc"},
+    {"path": "arm_adapter_fixtures/A1_SUBGRAPH_REACHABILITY_DIRECTION_AMENDMENT_V1.json", "sha256": "50492579145ee6ea6f85148167847ad5448a0effd9fe11b451406f24b15c3738"},
+    {"path": "results/a1_subgraph_direction_amendment_v1_freeze.json", "sha256": "1eec71a2032d19179f55923dd529542753fee3276f23add8434c205ba9bbad6f"},
+    {"path": "results/readiness_iteration_5_27.json", "sha256": "2c400c3d9c7ed38edb287bf3ff43566076cbcb1eefa7aa76a19c1b2845c80e96"},
+    {"path": "../operator_v5_1/results/frozen_grammar_v5_1.json", "sha256": "e465b9c9398288c34bbce9e2d00aaa31d16c46fd2b2282e2a5c7a86317eb53c7"},
+    {"path": "../operator_v5/ghost_operator_candidate_v5.py", "sha256": "2709d905aa6c84cd96abb2b94640cb24a6c11c29c694d015c2a7b765bb967313"},
+    {"path": "../operator_v5/ghost_operator_core_v5.py", "sha256": "d5e6d81e71fb3f31a8f4aa50c715bc8da459b9c6504151de2fae74864b553a67"},
+    {"path": "../operator_v5/ghost_operator_corpus_v5.py", "sha256": "3caff56795b2e21d017dc213b64517345294d52e6da4ab66875ca91e681ed744"},
+    {"path": "independent_framework_runtime.py", "sha256": "d7ceddb6046105eb93c27b5bd8480ac08b3f5acdca2cad1538c89352f6dcb53f"},
+    {"path": "phase63_pareto_motif_calibration.py", "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"},
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"}
+  ],
+  "claim_boundary": {
+    "adapted_not_unchanged_v5_1_grammar": true,
+    "one_new_calibration_signature_only": true,
+    "existing_constructor_semantics_only": true,
+    "not_new_tensor_primitive": true,
+    "not_heldout_transfer": true,
+    "not_production_integration_until_contract_batch": true,
+    "production_integrated_arms_after_this_phase": 7,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

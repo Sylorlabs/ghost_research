@@ -1,0 +1,74 @@
+{
+  "version": "FOUNDRY_A7_ENUMO_REAL_GRAPH_TRANSFER_PROTOCOL_V1",
+  "status": "PREFROZEN_CALIBRATION_TRANSFER_FALSIFICATION",
+  "frozen_before_runner_implementation_or_execution": true,
+  "arm_id": "A7",
+  "question": "Do the 18 already-frozen evaluator-authored Enumo tensor rules have directly applicable and concretely correct nonincreasing rewrites on independently extracted real calibration graph islands, rather than only on generated expressions?",
+  "domain": {
+    "operator_mapping": {
+      "aten.add.Tensor": "+",
+      "aten.mul.Tensor": "*",
+      "aten.relu.default": "relu"
+    },
+    "island_boundary": "Every eligible call is a candidate root; recursively connected eligible arguments remain expressions and every other FX value or literal is an opaque typed leaf.",
+    "eligible_graphs_expected": 17,
+    "eligible_calls_expected": 53,
+    "complete_surface": {
+      "graphs": 23,
+      "unique_operator_targets": 41,
+      "call_function_invocations": 337,
+      "historically_unsupported_or_failed": 1
+    }
+  },
+  "rewrite_policy": {
+    "learned_rules_source": "results/phase132_enumo_tensor_domain_feasibility.json",
+    "fixed_rules_source": "arm_adapter_fixtures/ENUMO_TENSOR_RULE_REUSE_PROTOCOL_V1.json",
+    "root_matches_only": true,
+    "candidate_must_not_increase_atom_count": true,
+    "equal_atom_count_requires_strictly_smaller_canonical_serialization": true,
+    "every_selected_rewrite_checked_on_three_deterministic_concrete_captures": true,
+    "primary_and_independent_output_comparators_required": true,
+    "maximum_absolute_error": 0.00001,
+    "floating_commutativity_is_empirical_for_observed_values_not_a_universal_proof": true
+  },
+  "acceptance": {
+    "all_provider_hashes_exact": true,
+    "complete_surface_exact": true,
+    "two_independent_extractors_byte_identical": true,
+    "learned_rule_count": 18,
+    "fixed_rule_count": 13,
+    "learned_root_matches_must_be_positive": true,
+    "learned_selected_rewrites_must_be_positive": true,
+    "all_selected_learned_rewrites_concretely_correct": true,
+    "all_selected_fixed_rewrites_concretely_correct": true,
+    "three_capture_receipts_per_selected_rewrite": true,
+    "process_tree_cpu_rss_wall_and_reaping_required": true
+  },
+  "provider_records": [
+    {"path": "results/phase139_missing_arm_closure_audit.json", "sha256": "a09dcffea259a7d2ce9c7464863b38117060c31dbd365b6e72a08fda6323cc7b"},
+    {"path": "results/phase132_enumo_tensor_domain_feasibility.json", "sha256": "e964d540700874ee82ee8340278f977c2011eb2963bab7f14b9587ff977eccad"},
+    {"path": "results/enumo_tensor_feasibility_result_v1_freeze.json", "sha256": "bdc2cdf7fcb4fd81ae90c0e7338b2b0a3368c55d1ce586c8243443619c9690f8"},
+    {"path": "results/phase133_enumo_tensor_rule_reuse_competitiveness.json", "sha256": "40cce736ac25ad818646f1fc1fc3a55583a691ba6d16b5281c1e6b74e437d344"},
+    {"path": "results/phase105_a7_enumo_compatibility_audit.json", "sha256": "eaafbbea62280447a8dafb5cf70e9fbcaea6653a8ca07660a0c243d0048a3928"},
+    {"path": "phase63_pareto_motif_calibration.py", "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"},
+    {"path": "enumo_tensor_rule_verifier.py", "sha256": "2a2ed4a1bc9b0444972af474f2d962e4f0f339fedea8ff24a4ec8419ea0342f8"},
+    {"path": "independent_framework_runtime.py", "sha256": "d7ceddb6046105eb93c27b5bd8480ac08b3f5acdca2cad1538c89352f6dcb53f"},
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"}
+  ],
+  "decision_rule": {
+    "on_acceptance_pass": "The real-graph transfer mechanism may advance to a separately frozen full A7 calibration adapter and V10 contract batch. This result alone does not integrate A7.",
+    "on_zero_or_incorrect_transfer": "Reject the three-operator A7 production route and move to the A1 typed-lowering bridge.",
+    "fixed_portfolio_win_required_for_mechanism_transfer": false
+  },
+  "claim_boundary": {
+    "calibration_only": true,
+    "evaluator_authored_tensor_domain": true,
+    "not_the_frozen_boolean_A7": true,
+    "not_universal_tensor_rewrite_soundness": true,
+    "not_production_integration": true,
+    "production_integrated_arms_after_this_phase": 6,
+    "P3_integration_advance": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

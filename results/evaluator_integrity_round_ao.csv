@@ -1,0 +1,18 @@
+artifact,fixture,surface,observed,status,detail
+round_ao_ao3,baseline_action,strict_action_schema_and_evaluator_nonce,accepted,PASS,candidate_action_only; evaluator_appends_private_chain_tag
+round_ao_ao3,baseline_action,strict_action_schema_and_evaluator_nonce,accepted,PASS,candidate_action_only; evaluator_appends_private_chain_tag
+round_ao_ao3,baseline_action,strict_action_schema_and_evaluator_nonce,accepted,PASS,candidate_action_only; evaluator_appends_private_chain_tag
+round_ao_ao3,baseline_action,strict_action_schema_and_evaluator_nonce,accepted,PASS,candidate_action_only; evaluator_appends_private_chain_tag
+round_ao_ao3,baseline_transcript,append_only_evaluator_owned_chain,verified,PASS,four fixed turns; end-only aggregate remains evaluator-owned
+round_ao_ao3,forged_nonce,candidate_nonce_forgery,rejected,PASS,wrong evaluator-generated nonce rejected
+round_ao_ao3,reordered_action,out_of_order_turn,rejected,PASS,turn must equal evaluator-owned next index
+round_ao_ao3,replayed_action,duplicate_after_fixed_budget,rejected,PASS,used fixed budget prevents replay acceptance
+round_ao_ao3,budget_overrun,fifth_action_after_fixed_turns,rejected,PASS,fixed turn budget rejects additional action
+round_ao_ao3,early_score_request,candidate_score_query,rejected,PASS,score is not an action-schema verb and is released only after completion
+round_ao_ao3,score_mutation,candidate_score_mutation,rejected,PASS,candidate cannot carry evaluator score field
+round_ao_ao3,evaluator_state_corruption,candidate_originated_evaluator_state_write,rejected,PASS,strict raw-action schema rejects evaluator state commands
+round_ao_ao3,transcript_alteration,posthoc_record_value_change,detected,PASS,chain tag mismatch exposes altered transcript record
+round_ao_ao3,tag_alteration,posthoc_integrity_tag_change,detected,PASS,evaluator recomputation detects tag mutation
+round_ao_ao3,end_only_aggregate,evaluator_owned_score,withheld_until_turn_4,PASS,aggregate=4; candidate receives no interim score
+round_ao_ao3,residual,cryptography_and_hostile_os_containment,NOT_CLAIMED,INCONCLUSIVE,process-private deterministic checksum is not cryptographic security; no OS corruption resistance proved
+round_ao_ao3,verdict,evaluator_integrity_protocol,GATE_READY,PASS,strict schema nonce turn budget chain and end-only score attacks reject or detect locally

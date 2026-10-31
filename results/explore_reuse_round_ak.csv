@@ -1,0 +1,17 @@
+artifact,policy,charged_raw_interactions,hidden_material,post_change_material,reuse_epochs,explore_epochs,appropriate_choices,causal_commits,verdict
+round_ak_ak3,earned_arbitration,5928,15360,5610,283,229,512,229,CANDIDATE_FOUNDATION:provenance_bound_raw_signature_arbitrates_explore_vs_reuse_without_regime_label_or_scalar_uncertainty
+round_ak_ak3,fixed_mix,6144,14355,4605,256,256,405,0,CONTROL:equal_generic_fixed_alternation
+round_ak_ak3,always_replay,4608,8625,1980,448,64,244,0,CONTROL:always_reuse_preceding_record
+round_ak_ak3,always_random,6456,13575,4185,217,295,333,0,CONTROL:equal_generic_random_explore_reuse
+round_ak_ak3,shuffled_history,12288,4290,1590,512,0,61,0,CONTROL:provenance_broken_shuffled_causal_history
+round_ak_ak3,answer_memory,8192,4095,1485,0,512,512,0,CONTROL:raw_answer_bytes_not_relation
+round_ak_ak3,fresh_start,8192,4095,1485,0,512,512,0,CONTROL:equal_cost_no_earned_record
+round_ak_ak3,record_ablated,8192,4095,1485,0,512,512,0,CONTROL:literal_record_ablation
+round_ak_ak3,audit,0,0,0,0,0,0,0,CONTROL_PASS:hidden_change_schedule_and_private_regime_ids_never_reach_policy
+round_ak_ak3,audit,0,0,0,0,0,0,0,CONTROL_PASS:all_policies_get_same_evaluation_contacts_and_generic_raw_variation_cost_is_recorded
+round_ak_ak3,audit,0,0,0,0,0,0,0,CONTROL_PASS:earned_arbitration_beats_fixed_replay_random_shuffled_answer_fresh_and_ablation_on_hidden_aggregate_and_post_change_material
+round_ak_ak3,audit,0,0,0,0,0,0,0,ATTACK:answer_memory_has_no_transferable_relation; shuffled_provenance_severs_current_evidence_binding
+round_ak_ak3,audit,0,0,0,0,0,0,0,PROVENANCE:each_commit_contains_only_raw_signature_direction_phase_evidence_and_lineage_hash
+round_ak_ak3,audit,0,0,0,0,0,0,0,LIMIT:finite_raw_displacements_trace_compression_and_resource_accounting_are_declared_frozen_substrate
+round_ak_ak3,audit,0,0,0,0,0,0,0,FOUNDATION_POSITIVE:bounded_provenance_bound_explore_reuse_arbitration_in_synthetic_hidden_changing_regimes_only
+round_ak_ak3,audit,0,0,0,0,0,0,0,LIMIT:not_open_ended_autonomy_not_hostile_containment_not_general_scientific_method

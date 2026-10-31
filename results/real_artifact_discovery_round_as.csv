@@ -1,0 +1,13 @@
+artifact,policy,cost,primary_precommitted,changed_encoding_replication,accepted_frames,verdict
+round_as_as4,earned_structural,8,4,4,4,CANDIDATE:opaque_precommit_before_parent_owned_test
+round_as_as4,fixed_parser_rule,8,1,1,4,CONTROL:equal_8_parent_owned_tests
+round_as_as4,broad_workflow,8,2,3,4,CONTROL:equal_8_parent_owned_tests
+round_as_as4,random,8,0,2,4,CONTROL:equal_8_parent_owned_tests
+round_as_as4,replay,8,0,0,4,CONTROL:equal_8_parent_owned_tests
+round_as_as4,shuffled_history,8,2,0,4,CONTROL:equal_8_parent_owned_tests
+round_as_as4,answer_trace,8,1,3,4,CONTROL:equal_8_parent_owned_tests
+round_as_as4,posthoc_rewrite,8,1,3,4,CONTROL:equal_8_parent_owned_tests
+round_as_as4,missing_alternatives,8,1,3,4,CONTROL:equal_8_parent_owned_tests
+round_as_as4,provenance,0,0,0,0,ALLOWLISTED_SNAPSHOTS=4; hashes=1a682ecc69e39f41,f559c4c54652ef00,fdcb1b4175f8bd1e,30cd2f68fd5f8fd8; candidate_has_no_paths_text_labels_target_score_or_hidden_result
+round_as_as4,audit,0,0,0,0,ATTACK_PASS:posthoc_rewrite_answer_trace_and_missing_alternatives_modes_are_not_admissible_claims; evaluator checks primary_then_changed_encoding_replication
+round_as_as4,verdict,0,0,0,0,STRUCTURAL_PROCESS_POSITIVE:opaque_precommitted_relation_beats_fixed_broad_random_replay_and_shuffled_controls; bounded artifact-frame result only, not semantic discovery or autonomous engineering

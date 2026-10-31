@@ -1,0 +1,62 @@
+{
+  "version": "FOUNDRY_ATEN_FIXED_PORTFOLIO_V2",
+  "selection": "investigator_supplied_common_aten_macro_baseline",
+  "tools": [
+    {
+      "name": "conv2d_relu",
+      "targets": ["aten.conv2d.default", "aten.relu.default"],
+      "rank": 4,
+      "dtype": "torch.float32",
+      "layout": "torch.strided"
+    },
+    {
+      "name": "relu_conv2d",
+      "targets": ["aten.relu.default", "aten.conv2d.default"],
+      "rank": 4,
+      "dtype": "torch.float32",
+      "layout": "torch.strided"
+    },
+    {
+      "name": "conv2d_relu_conv2d",
+      "targets": ["aten.conv2d.default", "aten.relu.default", "aten.conv2d.default"],
+      "rank": 4,
+      "dtype": "torch.float32",
+      "layout": "torch.strided"
+    },
+    {
+      "name": "relu_conv2d_relu",
+      "targets": ["aten.relu.default", "aten.conv2d.default", "aten.relu.default"],
+      "rank": 4,
+      "dtype": "torch.float32",
+      "layout": "torch.strided"
+    },
+    {
+      "name": "view_linear_relu",
+      "targets": ["aten.view.default", "aten.linear.default", "aten.relu.default"],
+      "rank": 2,
+      "dtype": "torch.float32",
+      "layout": "torch.strided"
+    },
+    {
+      "name": "linear_relu",
+      "targets": ["aten.linear.default", "aten.relu.default"],
+      "rank": 2,
+      "dtype": "torch.float32",
+      "layout": "torch.strided"
+    },
+    {
+      "name": "mm_relu",
+      "targets": ["aten.mm.default", "aten.relu.default"],
+      "rank": 2,
+      "dtype": "torch.float32",
+      "layout": "torch.strided"
+    },
+    {
+      "name": "addmm_relu",
+      "targets": ["aten.addmm.default", "aten.relu.default"],
+      "rank": 2,
+      "dtype": "torch.float32",
+      "layout": "torch.strided"
+    }
+  ]
+}

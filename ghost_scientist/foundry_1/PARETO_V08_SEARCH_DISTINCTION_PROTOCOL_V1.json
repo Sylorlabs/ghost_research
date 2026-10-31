@@ -1,0 +1,201 @@
+{
+  "version": "FOUNDRY_PARETO_V08_SEARCH_DISTINCTION_PROTOCOL_V1",
+  "status": "PREFROZEN_PREFLIGHT_ONLY_UNTIL_FULL_AUTHORIZATION",
+  "frozen_before_validation_v6_source_runtime_graph_or_outcome_access": true,
+  "question": "When candidate runtime bodies normalize to stock compiler decompositions, does the persistent verified tool library still produce a predeclared, directly measured reduction in held-out search cost against matched no-library and per-instance search controls?",
+  "parent_contract": {
+    "foundry_0_protocol": "foundry_0/FALSIFICATION_PROTOCOL.md",
+    "foundry_0_V08": "All accepted tools pass native-compiler deduplication or disclose a measured search-cost distinction.",
+    "prospective_protocol": "foundry_1/PARETO_PROSPECTIVE_PROTOCOL_V1.json",
+    "candidate_freeze": "foundry_1/results/pareto_candidate_v1_freeze.json",
+    "candidate_identity_changed": false,
+    "fixed_portfolio_changed": false,
+    "heldout_selection_changed": false,
+    "scientific_threshold_weakened": false
+  },
+  "chronology": {
+    "candidate_and_protocol_already_frozen": true,
+    "native_duplicate_result_already_observed": true,
+    "calibration_results_already_observed": true,
+    "validation_v6_manifest_previously_accessed": true,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "this_measurement_frozen_before_heldout_execution": true
+  },
+  "identity_boundary": {
+    "candidate_arm": "A2",
+    "primary_comparators": ["A3", "A9"],
+    "fixed_and_stock_reporting_arms": ["A0", "ATEN_FIXED_PORTFOLIO_V2"],
+    "candidate_tools": 4,
+    "candidate_runtime_inventions_admitted": 0,
+    "candidate_stock_decomposition_duplicates": 4,
+    "candidate_search_level_artifacts_retained": 4,
+    "runtime_novelty_claim_allowed": false,
+    "search_process_distinction_claim_only": true
+  },
+  "measurement_schedule": {
+    "artifacts": 4,
+    "invocations_per_artifact": 3,
+    "search_or_selection_events_per_artifact_per_arm": 1,
+    "search_cost_is_not_multiplied_by_invocations": true,
+    "pairing_unit": "artifact",
+    "bootstrap_sample_size": 4,
+    "arms_share_identical_artifact_order_shapes_correctness_checks_resource_ceilings_and_warmup_policy": true,
+    "arm_outputs_sealed_before_evaluator_private_outcomes_are_mounted": true
+  },
+  "search_cost_boundary": {
+    "A2_includes": [
+      "scan of every frozen candidate tool",
+      "typed pattern matching and selector comparisons",
+      "exact digest verification",
+      "every accepted and rejected candidate verification",
+      "failed or timed-out selection work"
+    ],
+    "A3_includes": [
+      "empty-state candidate enumeration",
+      "typed construction and matching",
+      "every accepted and rejected verification",
+      "failed or timed-out search work"
+    ],
+    "A9_includes": [
+      "empty-state compute-matched per-instance enumeration",
+      "typed construction and matching",
+      "every accepted and rejected verification",
+      "failed or timed-out search work"
+    ],
+    "excluded_from_search_but_required_in_total_cost": [
+      "A2 calibration discovery and Pareto selection",
+      "one-time compiler construction",
+      "compilation",
+      "three workload executions per artifact"
+    ],
+    "forbidden_exclusions": [
+      "candidate library scan",
+      "zero-match tools",
+      "rejected candidates",
+      "verification failures",
+      "timeouts",
+      "process descendants"
+    ]
+  },
+  "required_raw_receipt_fields": [
+    "artifact_id",
+    "arm_id",
+    "candidate_or_control_state_sha256",
+    "artifact_graph_sha256",
+    "shape_seed_sha256",
+    "search_started_monotonic_ns",
+    "search_finished_monotonic_ns",
+    "process_user_cpu_ns",
+    "process_system_cpu_ns",
+    "process_wall_ns",
+    "peak_process_tree_rss_kib",
+    "observed_process_count",
+    "process_group_reaped",
+    "states_generated",
+    "states_verified",
+    "states_rejected",
+    "selector_comparisons",
+    "exact_tool_digests_reused",
+    "failures",
+    "timeouts",
+    "correctness_passed",
+    "resource_receipt_sha256"
+  ],
+  "primary_endpoint": {
+    "name": "paired_heldout_search_cpu_distinction",
+    "A2_search_cpu": "sum over artifacts of process_user_cpu_ns plus process_system_cpu_ns for A2 search or selection",
+    "control_search_cpu": "minimum of the corresponding A3 and A9 sums",
+    "delta_search": "1 - A2_search_cpu / control_search_cpu",
+    "point_estimate_minimum": 0.05,
+    "paired_bootstrap": {
+      "unit": "artifact",
+      "sample_size": 4,
+      "resamples": 10000,
+      "seed": 812734,
+      "interval": "percentile",
+      "lower_confidence_bound": 0.95,
+      "lower_bound_must_be_strictly_positive": true
+    }
+  },
+  "hard_acceptance": {
+    "all_four_artifacts_correct_for_A2_A3_A9": true,
+    "all_process_trees_naturally_terminate_and_are_reaped": true,
+    "all_required_raw_fields_present": true,
+    "resource_and_structural_ledgers_independently_recompute": true,
+    "delta_search_point_estimate_at_least_five_percent": true,
+    "paired_bootstrap_lower_95_strictly_positive": true,
+    "A2_states_generated_no_greater_than_both_controls": true,
+    "at_least_one_exact_frozen_tool_digest_has_direct_heldout_reuse_receipt": true,
+    "zero_runtime_inventions_disclosed": true,
+    "fixed_and_stock_total_cost_results_still_reported": true,
+    "complete_total_cost_accounting_unchanged": true
+  },
+  "failure_interpretation": {
+    "no_exact_digest_reuse": "No search-level artifact reaches held-out work; V08 fails.",
+    "cpu_or_bootstrap_threshold_failure": "The persistent library has no measured search-cost distinction; V08 fails.",
+    "correctness_or_ledger_failure": "The trial is invalid, not a scientific negative.",
+    "candidate_beats_search_but_loses_total_cost": "V08 may pass, but the primary Foundry scientific endpoint still fails.",
+    "native_duplicate_runtime": "Allowed only as explicitly disclosed search-level evidence; it is never runtime invention."
+  },
+  "preflight_effect": {
+    "native_duplicate_fact_removed": false,
+    "V08_measurement_passed_before_heldout": false,
+    "known_terminal_native_dedup_stop_reclassified": "PENDING_PREFROZEN_V08_MEASUREMENT",
+    "prospective_trial_authorized_by_this_protocol": false,
+    "P1_advanced": false,
+    "production_arm_count_advanced": false
+  },
+  "frozen_inputs": [
+    {
+      "path": "foundry_0/FALSIFICATION_PROTOCOL.md",
+      "sha256": "2643ca83c7a83416f4ef9c1fdb01eb4e236542bda56f843307f79763a1c95131"
+    },
+    {
+      "path": "foundry_1/PARETO_PROSPECTIVE_PROTOCOL_V1.json",
+      "sha256": "b6ca7f41151dc415c49cfb292ab6d4b5ec76b0e7b97b9e3cc75d00f8af557f50"
+    },
+    {
+      "path": "foundry_1/results/pareto_candidate_v1_freeze.json",
+      "sha256": "ad6e60926cf191e464ddfa104ab193605fe44a8de514760db10f88ee0eb8444f"
+    },
+    {
+      "path": "foundry_1/results/forged_pareto_tools.json",
+      "sha256": "9f3d30638f3c30bb8c81fa3af2305930a4d88782a373223b5fbc7303e8208e8d"
+    },
+    {
+      "path": "foundry_1/ATEN_FIXED_PORTFOLIO_V2.json",
+      "sha256": "a1cfe21f09f2be579f33a24604e4f16ce438b4f411932f345ebd11f5e5b76061"
+    },
+    {
+      "path": "foundry_1/results/phase55_diversity_tool_forge.json",
+      "sha256": "da7a9ab03f32a6a85d6b81a2e4388a713a331e2489f5e9ffcfc4142e70589ed4"
+    },
+    {
+      "path": "foundry_1/results/phase65_independent_pareto_conformance.json",
+      "sha256": "a908d839a9b6cae63b7b33b06181d25db012acabf8abb102f77c20eebaf9198b"
+    },
+    {
+      "path": "foundry_1/results/phase66_pareto_native_dedup.json",
+      "sha256": "eb8de95682e402b994921e8aad16d4e39815d8f210f53baf32bf5ee92aa80354"
+    },
+    {
+      "path": "foundry_1/results/phase67_pareto_resource_audit.json",
+      "sha256": "890a6c92647c13c501b2ceef69e94dff7a5247d375b07474cdfcc3182d4dddc5"
+    },
+    {
+      "path": "foundry_1/PARETO_HORIZON_CLARIFICATION_V1.json",
+      "sha256": "c21f60ff1c792337fa95328fcdb0918d29153fd30fc59f9095d11f70a9f1dff3"
+    },
+    {
+      "path": "foundry_1/results/readiness_iteration_5_21.json",
+      "sha256": "fc754f744f1e74b4c0287170156d9c1f10fa8fdcb7812172505033997b6f080d"
+    }
+  ],
+  "claim_boundary": {
+    "calibration_only_evidence_used_to_design_measurement": true,
+    "heldout_result_claimed": false,
+    "V08_pass_claimed": false,
+    "runtime_novelty_claimed": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

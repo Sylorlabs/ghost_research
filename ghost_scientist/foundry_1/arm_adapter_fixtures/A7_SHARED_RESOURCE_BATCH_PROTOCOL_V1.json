@@ -1,0 +1,44 @@
+{
+  "version": "FOUNDRY_A7_SHARED_RESOURCE_BATCH_PROTOCOL_V1",
+  "status": "PREFROZEN_A7_CALIBRATION_BATCH_ASSEMBLY",
+  "frozen_before_batch_assembly": true,
+  "base_contract_version": "FOUNDRY_ARM_ADAPTER_CONTRACT_V1",
+  "batch_version": "FOUNDRY_A7_ARM_ADAPTER_BATCH_V1",
+  "arm_id": "A7",
+  "expected_artifacts": 23,
+  "expected_raw_tool_uses": 24,
+  "expected_unique_transformations": 12,
+  "rules": [
+    "Every artifact has one strict v1 input and PASS output accepted by both base-contract verifiers.",
+    "The frozen 18-rule library digest is state-before and state-after for every artifact and retention is true.",
+    "Exactly one complete A7 mount process-tree receipt is canonicalized, hash-identified, referenced by all 23 bindings, and charged once.",
+    "Tool receipts identify only selected frozen rule identities; their direct-use counts sum to the 24 raw selected applications while the separately bound unique-transformation count remains 12.",
+    "The exact historical source-build and source-run candidate-generation CPU charge appears in exactly one artifact ledger.",
+    "Whole-graph parity and concrete intermediate rewrite checks remain distinct from execution of a rewritten whole graph, atom-cost reduction, universal floating-point soundness, heldout transfer, or fixed-portfolio superiority.",
+    "Changed hashes, missing or duplicate artifacts, resource projections, retained state, tools, use counts, unique counts, accounting multipliers, validation access, prospective claims, and unknown fields fail closed."
+  ],
+  "provider_records": [
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"},
+    {"path": "arm_adapter_contract.py", "sha256": "ac7eb5e7a00813cd2ee722059bf5265b0e270f3e56efae0325e337136eca1a5e"},
+    {"path": "independent_arm_adapter_contract.py", "sha256": "cc2ccece0b76d33b9fb933eb8547d66b46be788f9f1146cc2d6fb3180e6b2173"},
+    {"path": "a7_enumo_runtime_mount.py", "sha256": "e50ddcdb2f87d3dc0065b51c1396cac865618d5ae274c1941779ec226b925350"},
+    {"path": "results/phase141_a7_enumo_runtime_conformance.json", "sha256": "12d10038016ea258f78a301829f9579e223fb3e7fbce8c1b8b14ba9edd61d211"},
+    {"path": "results/phase142_a7_enumo_runtime_resource_audit.json", "sha256": "35b7d6685ad5a038e9cef7368df7b2e5a309b04c47d325ea7cbfe23fd8dbc87d"},
+    {"path": "results/phase132_enumo_tensor_domain_feasibility.json", "sha256": "e964d540700874ee82ee8340278f977c2011eb2963bab7f14b9587ff977eccad"},
+    {"path": "results/forged_diversity_tools.json", "sha256": "64abcef88f8c4f152e39db684e8bd1a7f24fdf25928a24d411d15d8499d46f5b"},
+    {"path": "results/a7_enumo_runtime_mount_v1_freeze.json", "sha256": "9e0e8f21cd67ce16de171619ffa7cfaa843f35e9c23594d34056e880286ea89a"}
+  ],
+  "claim_boundary": {
+    "production_integrated_arms_before_pass": 6,
+    "production_integrated_arms_after_pass": 7,
+    "A7_may_become_production_integrated_adapted_calibration_arm": true,
+    "frozen_boolean_A7_relabelled": false,
+    "equal_cost_operand_canonicalization_only": true,
+    "strict_atom_cost_reduction": false,
+    "heldout_generalization_measured": false,
+    "fixed_portfolio_beaten": false,
+    "P3_complete_after_pass": false,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

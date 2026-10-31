@@ -1,0 +1,36 @@
+{
+  "schema": "foundry-stitch-conformance-fixture-v1",
+  "provenance": {
+    "repository": "mlb2251/stitch",
+    "revision": "0ef5ec7f17091d22b8fa959fb5705e359d735a47",
+    "readme_blob_sha": "5a6741bc283854b44c325f557e62ad93573a9c94",
+    "binding_repository": "mlb2251/stitch_bindings",
+    "binding_revision": "8ba2c1c041ab384ccaa11e68226d5654474d161a",
+    "binding_cargo_blob_sha": "9bb3fbc371f82df7a90b76207a764f2eb8b6a803",
+    "fixture_origin": "official Stitch README Quickstart and official stitch_core tutorial"
+  },
+  "call": {
+    "programs": [
+      "(foo (a a a))",
+      "(bar (b b b))"
+    ],
+    "iterations": 1,
+    "max_arity": 3,
+    "threads": 1,
+    "silent": true
+  },
+  "expected": {
+    "abstractions": 1,
+    "name": "fn_0",
+    "body": "(#0 #0 #0)",
+    "arity": 1,
+    "rewritten": [
+      "(foo (fn_0 a))",
+      "(bar (fn_0 b))"
+    ],
+    "original_cost": 806,
+    "rewritten_cost": 604,
+    "utility": 200,
+    "uses": 2
+  }
+}

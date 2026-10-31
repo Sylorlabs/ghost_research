@@ -1,0 +1,13 @@
+material_id,origin_class,shape_fingerprint,decision,reason_code,charged_inspection,provenance_digest
+mat_alpha,corpus,41,ADMIT,VERIFIED_PROVENANCE,1,verified
+mat_beta,simulator,77,ADMIT,VERIFIED_PROVENANCE,1,verified
+mat_alias,corpus,41,REJECT,DUPLICATE_CONTENT,1,verified
+mat_missing,quarantined,18,REJECT,NO_PROVENANCE,1,invalid
+mat_forged,quarantined,19,REJECT,FORGED_PROVENANCE,1,invalid
+mat_service,quarantined,22,REJECT,FORBIDDEN_ORIGIN,1,verified
+mat_oracle,quarantined,23,REJECT,FORBIDDEN_ORIGIN,1,verified
+mat_correlated,corpus,24,REJECT,CORRELATED_METADATA,1,verified
+mat_join,simulator,25,REJECT,PRIVATE_JOIN,1,verified
+mat_post,corpus,26,REJECT,POST_EVALUATION,1,verified
+mat_free,quarantined,27,REJECT,UNBOUNDED_INPUT,1,verified
+campaign_closure,aggregate,na,SEALED,ADMITTED_2_REJECTED_9,0,aggregate_only

@@ -1,0 +1,40 @@
+{
+  "schema": "FOUNDRY_OFFLINE_TRACE_REPLAY_PROTOCOL_V1",
+  "frozen_before_offline_replay": true,
+  "input": {
+    "path": "external_traces/source/alibaba_lora_request_trace.csv",
+    "sha256": "263fb88f1095f62d360cf89ded8cfc24fa2c5d111c1b16e7aaa9ccbfc4b37d78",
+    "git_blob_sha1": "db8d3cfaea62e7086aff40e98ab6446619d9e5ce"
+  },
+  "parsers": [
+    "Python standard-library csv.reader over decoded text",
+    "independently implemented byte-level RFC4180 subset state machine"
+  ],
+  "required_exact_relations": [
+    "header",
+    "data row count",
+    "malformed row count",
+    "timestamp endpoints",
+    "status histogram",
+    "empty-model rows",
+    "nonempty model identities",
+    "zero-success model identities",
+    "successful-request sum",
+    "successful-request minimum, q10, q25, median, q75, q90, and maximum",
+    "N-star reference"
+  ],
+  "estimator": {
+    "population": "Every nonempty checkpoint_model_version_id.",
+    "success": "predict_status equals SUCCEED.",
+    "quantile": 0.25,
+    "method": "nearest rank",
+    "filters": []
+  },
+  "expected_from_pinned_connector_receipt": {
+    "data_rows": 26823,
+    "nonempty_model_identities": 86,
+    "successful_requests": 26392,
+    "N_star_reference": 3
+  },
+  "validation_v6_access_allowed": false
+}

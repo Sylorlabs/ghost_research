@@ -21,6 +21,7 @@ const alien = @import("inv_alien.zig");
 const open = @import("inv_open.zig");
 const coevo = @import("inv_coevo.zig");
 const forge = @import("inv_atomforge.zig");
+const synergy = @import("inv_synergy_check.zig");
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -87,15 +88,24 @@ pub fn main() !void {
     } else if (std.mem.eql(u8, phase, "irreducible")) {
         try alienIrreducible(al, out, seed);
     } else if (std.mem.eql(u8, phase, "budgetscan")) {
-        try budgetScan(al, out, seed);
+        const dmax: usize = if (args.len > 3) (std.fmt.parseInt(usize, args[3], 0) catch 8) else 8;
+        try budgetScan(al, out, seed, dmax);
     } else if (std.mem.eql(u8, phase, "auditscan")) {
         try auditScan(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "matchstress")) {
+        try matchStress(al, out, seed);
     } else if (std.mem.eql(u8, phase, "atomforge")) {
         try alienAtomForge(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "atomminimize")) {
+        try alienAtomMinimize(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "exp14") or std.mem.eql(u8, phase, "inventedoninvented")) {
+        try alienExp14InventedOnInvented(al, out, seed);
+    } else if (std.mem.eql(u8, phase, "synergy") or std.mem.eql(u8, phase, "exp15")) {
+        try synergy.run(out);
     } else if (std.mem.eql(u8, phase, "beathuman")) {
         try alienBeatHuman(al, out, seed);
     } else {
-        try out.print("unknown phase '{s}'. try: phase0..phase8 | seq | frontier | novelty | alien | hunt | probe | curriculum | gamble | forbid | fuse | getrecall | corner | openended | infodesc | coevo | oecoevo | irreducible | atomforge | beathuman\n", .{phase});
+        try out.print("unknown phase '{s}'. try: phase0..phase8 | seq | frontier | novelty | alien | hunt | probe | curriculum | gamble | forbid | fuse | getrecall | corner | openended | infodesc | coevo | oecoevo | irreducible | atomforge | atomminimize | exp14 | synergy | beathuman\n", .{phase});
     }
 }
 
@@ -449,50 +459,20 @@ fn alienAtomForge(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
     try out.writeAll("=== RESEARCH PHASE 16: the atom-forge — an OPEN-ENDED atom set ===\n\n");
     try out.writeAll("novelty search GENERATES behaviours; the irreducibility test CERTIFIES which are new\n");
     try out.writeAll("relative to the current library; certified ones are INVENTED as atoms; then it recurs.\n\n");
-    const dseed = base_seed ^ 0x1F0; // descriptor seed
-    const fseed = base_seed +% 0xA70F; // irreducibility-test stream seed
     const depth: usize = 3; // composition depth the irreducibility test searches
 
-    var atoms = forge.baseAtoms();
-    const base_n = atoms.len;
+    const promo = try forge.runPromotion(al, base_seed);
+    var atoms = promo.atoms;
+    const base_n = forge.baseAtoms().len;
+    const n_invented = promo.n_invented;
+    const lengths = promo.lengths;
     try out.print("Base atoms: {d} (gxor gadd pkxor pkadd shift). Irreducibility searches compositions ≤ depth {d}.\n\n", .{ base_n, depth });
 
-    var lengths: [forge.MAX_ATOMS]usize = undefined;
-    var n_invented: usize = 0;
-    const MAX_ROUNDS: usize = 8;
-    for (0..MAX_ROUNDS) |round| {
-        // generate candidate behaviours with task-agnostic novelty search
-        var prng = std.Random.DefaultPrng.init(base_seed +% round *% 0x9E3779B97F4A7C15);
-        var archive = try open.search(al, prng.random(), .{ .pop = 90, .gens = 45, .info = true, .seed = dseed });
-        defer archive.deinit();
-        // prefer MINIMAL atoms: shortest program first
-        std.mem.sort(open.Member, archive.items, {}, struct {
-            fn lt(_: void, a: open.Member, b: open.Member) bool {
-                return a.prog.len() < b.prog.len();
-            }
-        }.lt);
-
-        var invented: ?alien.Program = null;
-        for (archive.items) |cand| {
-            if (!forge.clean(&cand.prog, dseed)) continue;
-            if (forge.reducibleLib(&cand.prog, atoms.slice(), depth, fseed)) continue; // composition → not new
-            invented = cand.prog;
-            break;
+    for (0..n_invented) |round| {
+        try out.print("round {d}: INVENTED atom #{d} (program length {d}) — certified IRREDUCIBLE vs the prior {d} atoms.\n", .{ round, round + base_n + 1, lengths[round], round + base_n });
+        if (round < 2) {
+            try alien.writeProgram(&atoms.get(round + base_n), out);
         }
-
-        if (invented == null) {
-            try out.print("round {d}: SATURATED — novelty search found no CLEAN candidate irreducible to the\n", .{round});
-            try out.print("         current {d}-atom library. The reachable clean behaviours are now all composable.\n", .{atoms.len});
-            break;
-        }
-        atoms.appendAssumeCapacity(invented.?);
-        lengths[n_invented] = invented.?.len();
-        n_invented += 1;
-        try out.print("round {d}: INVENTED atom #{d} (program length {d}) — certified IRREDUCIBLE vs the prior {d} atoms.\n", .{ round, atoms.len, invented.?.len(), atoms.len - 1 });
-        if (n_invented <= 2) {
-            try alien.writeProgram(&invented.?, out);
-        }
-        if (atoms.len >= forge.MAX_ATOMS) break;
     }
 
     // ---- the trajectory + verdict ----------------------------------------------
@@ -539,6 +519,128 @@ fn alienAtomForge(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
     }
 }
 
+fn writeChainLabel(out: anytype, idxs: []const usize) !void {
+    for (idxs, 0..) |ix, i| {
+        if (i > 0) try out.writeAll("∘");
+        const label = forge.atomLabel(ix);
+        if (ix >= forge.BASE_ATOMS) {
+            try out.print("{s}#{d}", .{ label, ix - forge.BASE_ATOMS + 1 });
+        } else {
+            try out.print("{s}", .{label});
+        }
+    }
+}
+
+/// EXP-14 (RQ A6) — tasks solvable only after ≥2 promotion rounds (invented-on-invented).
+fn alienExp14InventedOnInvented(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    try out.writeAll("=== EXP-14 (A6): invented-on-invented — tasks flipping at promotion round ≥ 2 ===\n\n");
+    try out.writeAll("Protocol: atom-forge promotion snapshots (inv_atomforge + inv_open info-descriptor\n");
+    try out.print("novelty search); enumerate distinct composition behaviours (depth≤{d}) in the final\n", .{forge.COMPOSE_DEPTH});
+    try out.writeAll("library; for each round record first round where behaviour is composable from the\n");
+    try out.writeAll("current atom set. Flag late flips (first solvable round ≥ 2) and invented-on-invented\n");
+    try out.writeAll("(witness chain uses ≥ 2 invented atoms).\n\n");
+
+    var res = try forge.analyzeInventedOnInvented(al, base_seed);
+    defer forge.freeInventedOnInvented(al, &res);
+
+    const snap = &res.snapshots;
+    try out.writeAll("Promotion trajectory:\n");
+    for (0..snap.n_rounds) |r| {
+        const atom_lib = snap.rounds[r].atoms.slice();
+        try out.print("  round {d}: {d} atoms ({d} invented)\n", .{ r, atom_lib.len, snap.rounds[r].n_invented });
+    }
+    try out.writeAll("\n");
+
+    const pass = res.late_flip_count > 0;
+    try out.print("[RESULT] late_flip_tasks (round≥2): {d}  invented_on_invented (≥2 inv atoms): {d}\n", .{
+        res.late_flip_count, res.invented_on_invented_count,
+    });
+
+    const show_n: usize = 8;
+    if (res.late_flips.len > 0) {
+        try out.print("\nLate-flip examples (up to {d}):\n", .{show_n});
+        for (res.late_flips[0..@min(show_n, res.late_flips.len)]) |t| {
+            try out.print("  round {d}  inv_used={d}  chain ", .{ t.first_solvable_round, t.n_invented_used });
+            try writeChainLabel(out, t.idxs);
+            try out.writeAll("\n");
+        }
+    }
+
+    if (res.invented_on_invented.len > 0) {
+        try out.print("\nInvented-on-invented examples (up to {d}):\n", .{show_n});
+        for (res.invented_on_invented[0..@min(show_n, res.invented_on_invented.len)]) |t| {
+            try out.print("  round {d}  inv_used={d}  chain ", .{ t.first_solvable_round, t.n_invented_used });
+            try writeChainLabel(out, t.idxs);
+            try out.writeAll("\n");
+        }
+    }
+
+    try out.print("\n[VERDICT] invented_on_invented={s}\n", .{if (pass) "PASS" else "FAIL"});
+    if (pass) {
+        try out.writeAll("  At least one composition behaviour becomes solvable only after ≥2 promotions.\n");
+    } else {
+        try out.writeAll("  No composition task flips solvability at round≥2 under this enumeration.\n");
+    }
+}
+
+/// EXP-13 (RQ A4) — after promotion rounds, can the atom set be minimised without losing
+/// coverage? Drop-each-atom ablation + greedy removal; coverage = every full-library
+/// behaviour composable from the minimal set at depth ≤ 3.
+fn alienAtomMinimize(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    const fseed = base_seed +% 0xA70F;
+    const depth: usize = 3;
+
+    try out.writeAll("=== EXP-13 (A4): atom-set minimisation after promotion ===\n\n");
+    try out.writeAll("Protocol: run atom-forge promotion, then drop-each-atom ablation (reducible to\n");
+    try out.print("the other atoms at depth≤{d}?), then greedy removal. Coverage preserved iff every\n", .{depth});
+    try out.writeAll("full-library behaviour is composable from the minimal set.\n\n");
+
+    const promo = try forge.runPromotion(al, base_seed);
+    const full = promo.atoms.slice();
+    const base_n = forge.baseAtoms().len;
+    try out.print("Promoted library: {d} atoms ({d} base + {d} invented).\n\n", .{ full.len, base_n, promo.n_invented });
+
+    const redundant = try forge.dropAblation(al, full, depth, fseed);
+    defer al.free(redundant);
+
+    var redundant_count: usize = 0;
+    try out.writeAll("Drop-each-atom ablation:\n");
+    for (full, 0..) |_, i| {
+        const label = if (i < base_n) forge.atomLabel(i) else "inv";
+        const inv_n = if (i >= base_n) i - base_n + 1 else 0;
+        try out.print("  atom #{d:>2} {s}", .{ i + 1, label });
+        if (i >= base_n) try out.print("#{d}", .{inv_n});
+        if (redundant[i]) {
+            redundant_count += 1;
+            try out.writeAll("  REDUNDANT (composable from others)\n");
+        } else {
+            try out.writeAll("  ESSENTIAL\n");
+        }
+    }
+
+    const minimal = try forge.greedyMinimal(al, full, depth, fseed);
+    defer al.free(minimal.kept_indices);
+    const cov_ok = forge.coveragePreserved(full, minimal.atoms.slice(), depth, fseed);
+
+    try out.print("\n[RESULT] promoted={d}  redundant={d}  minimal={d}  coverage_preserved={s}\n", .{
+        full.len, redundant_count, minimal.atoms.len, if (cov_ok) "YES" else "NO",
+    });
+
+    try out.writeAll("Minimal set indices (1-based): ");
+    for (minimal.kept_indices) |ki| try out.print("{d} ", .{ki + 1});
+    try out.writeAll("\n");
+
+    const compress_pass = redundant_count > 0 and cov_ok and minimal.atoms.len < full.len;
+    try out.print("\n[VERDICT] library_compression={s}\n", .{if (compress_pass) "PASS" else "FAIL"});
+    if (compress_pass) {
+        try out.print("  {d}/{d} atoms are redundant; minimal set {d} preserves full behavioural coverage.\n", .{ redundant_count, full.len, minimal.atoms.len });
+    } else if (!cov_ok) {
+        try out.writeAll("  Greedy removal broke coverage — ablation protocol error.\n");
+    } else {
+        try out.writeAll("  No atom is composable from the others — promoted library is already minimal.\n");
+    }
+}
+
 /// RESEARCH PHASE 15 — THE IRREDUCIBILITY TEST. The instrument the whole arc lacked. The
 /// fingerprint certifier flags any COMPOSITION "novel" (it only checks distance from single
 /// known atoms — the §22/§24 blind spot). The irreducibility test asks the right question:
@@ -553,16 +655,19 @@ fn alienAtomForge(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
 /// artifacts), or does ANYTHING survive deep reduction (a candidate genuine atom)?
 /// The answer is not known in advance. reducible() is exhaustive, so "irreducible at
 /// DMAX" means no composition of <= DMAX atoms reproduces the behaviour.
-fn budgetScan(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
-    const DMAX: usize = 8;
+fn budgetScan(al: std.mem.Allocator, out: anytype, base_seed: u64, dmax_in: usize) !void {
+    const DMAX: usize = if (dmax_in < 1 or dmax_in > 32) 8 else dmax_in;
     const tseed = base_seed +% 0x133D;
     try out.print("=== BUDGET SCAN: does deeper reduction collapse every solver? (DMAX={d}) ===\n\n", .{DMAX});
 
-    // Sanity: the hand-built true outsider must stay irreducible even at DMAX.
+    // Sanity kill-test: distinct-count must stay irreducible. Capped at depth 8
+    // (proven in budget_scan.md) — exhaustive sanity at scan-DMAX would dominate
+    // runtime (~5^DMAX) without strengthening the claim.
     const dc = coevo.distinctCountProg();
-    const dc_red = coevo.reducible(&dc, DMAX, tseed);
+    const sanity_dmax: usize = if (DMAX < 8) DMAX else 8;
+    const dc_red = coevo.reducible(&dc, sanity_dmax, tseed);
     if (dc_red == null) {
-        try out.print("[sanity] distinct-count (true outsider): IRREDUCIBLE at depth<=" ++ "{d} -- instrument non-vacuous.\n\n", .{DMAX});
+        try out.print("[sanity] distinct-count (true outsider): IRREDUCIBLE at depth<=" ++ "{d} (kill-test; scan DMAX={d}) -- instrument non-vacuous.\n\n", .{ sanity_dmax, DMAX });
     } else {
         try out.print("[sanity] distinct-count UNEXPECTEDLY reduced -- instrument suspect; results below are weak.\n\n", .{});
     }
@@ -602,7 +707,8 @@ fn budgetScan(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
     }
 
     // Scan: minimum reduction depth per deep solver (or irreducible at DMAX).
-    var hist = [_]usize{0} ** (DMAX + 1); // hist[d] = #solvers whose min reduction depth is d
+    const HIST_MAX: usize = 32;
+    var hist = [_]usize{0} ** (HIST_MAX + 1); // hist[d] = #solvers whose min reduction depth is d
     var deep: usize = 0;
     var survivors: usize = 0;
     for (arch.items) |a| {
@@ -709,6 +815,217 @@ fn auditScan(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
         try out.print("VERDICT: {d} solver(s) are 95%%-approximable by a composition but NOT exactly one --\n", .{masked});
         try out.print("the loose threshold WAS masking near-novelty. These are the first real candidates;\n", .{});
         try out.print("next: are they exact-irreducible at higher DMAX, and are they USEFUL (solve a task)?\n", .{});
+    }
+}
+
+const DeepArchPair = struct { genome: coevo.Genome, solver: alien.Program, depth: usize };
+
+/// Build the §24-style ladder of deep solvers shared by budget/audit/match-stress phases.
+fn buildDeepArch(al: std.mem.Allocator, base_seed: u64) !std.ArrayList(DeepArchPair) {
+    const regs: usize = 8;
+    var arch = std.ArrayList(DeepArchPair).init(al);
+    for ([_]coevo.Stage{ .st_gxor, .st_gadd, .st_pkxor, .st_pkadd, .st_shift }, 0..) |st, i| {
+        var g = coevo.Genome{};
+        g.appendAssumeCapacity(st);
+        var pr0 = std.Random.DefaultPrng.init(base_seed +% 0x100 +% i *% 0x9E37);
+        const r = try coevo.evolveComposed(al, pr0.random(), g.slice(), 80_000, regs, base_seed +% i, null);
+        if (r.fit >= 0.95) try arch.append(.{ .genome = g, .solver = r.best, .depth = 1 });
+    }
+    var pr = std.Random.DefaultPrng.init(base_seed +% 0xEE);
+    const rng = pr.random();
+    for (0..36) |it| {
+        if (arch.items.len == 0) break;
+        const parent = arch.items[rng.uintLessThan(usize, arch.items.len)];
+        const cg = coevo.mutateGenome(rng, parent.genome);
+        if (cg.len < 2) continue;
+        var dup = false;
+        for (arch.items) |a| if (coevo.genomeEql(a.genome.slice(), cg.slice())) {
+            dup = true;
+        };
+        if (dup) continue;
+        var r = try coevo.evolveComposed(al, rng, cg.slice(), 50_000, regs, base_seed +% it, &parent.solver);
+        var t: usize = 0;
+        while (r.fit < 0.95 and t < 2) : (t += 1) {
+            const q = arch.items[rng.uintLessThan(usize, arch.items.len)];
+            const r2 = try coevo.evolveComposed(al, rng, cg.slice(), 30_000, regs, base_seed +% it +% t, &q.solver);
+            if (r2.fit > r.fit) r = r2;
+        }
+        if (r.fit >= 0.95 and arch.items.len < 60) try arch.append(.{ .genome = cg, .solver = r.best, .depth = cg.len });
+    }
+    return arch;
+}
+
+/// I54/I55: stress-test behaviorMatches for false positives (near-miss declared equal)
+/// and false negatives (true equal missed at low sample budget). Also sweeps total sample
+/// count 32→256→4096 on historical deep solvers and checks for verdict flips.
+fn matchStress(al: std.mem.Allocator, out: anytype, base_seed: u64) !void {
+    const DMAX: usize = 8;
+    const tseed = base_seed +% 0x133D;
+    const Budget = struct { n: usize, L: usize, total: usize };
+    const budgets = [_]Budget{
+        .{ .n = 1, .L = 32, .total = 32 },
+        .{ .n = 8, .L = 32, .total = 256 },
+        .{ .n = 64, .L = 64, .total = 4096 },
+    };
+    try out.print("=== MATCH STRESS (I54/I55): behaviorMatches false-pos/neg audit ===\n\n", .{});
+
+    // ---- A. adversarial near-miss pairs ------------------------------------
+    try out.writeAll("--- A. Adversarial near-miss pairs (loose vs exact, 4096 symbols) ---\n\n");
+    const EN: usize = 64;
+    const EL: usize = 64;
+    const task_kinds = [_]coevo.TaskKind{ .g_xor, .g_add, .pk_xor, .pk_add };
+    const stages = [_]coevo.Stage{ .st_gxor, .st_gadd, .st_pkxor, .st_pkadd, .st_shift };
+    var false_pos: usize = 0; // loose match but NOT exact
+    var max_wrong_agree: f64 = 0;
+    var max_wrong_label: []const u8 = "";
+
+    for (task_kinds) |tk| {
+        const prog = coevo.refSolver(tk);
+        const correct: coevo.Stage = switch (tk) {
+            .g_xor => .st_gxor,
+            .g_add => .st_gadd,
+            .pk_xor => .st_pkxor,
+            .pk_add => .st_pkadd,
+        };
+        for (stages) |st| {
+            const g = [_]coevo.Stage{st};
+            const agree = coevo.behaviorAgreement(&prog, &g, EN, EL, tseed);
+            const loose = coevo.behaviorMatches(&prog, &g, EN, EL, tseed);
+            const exact = coevo.behaviorMatchesExact(&prog, &g, EN, EL, tseed);
+            if (st != correct) {
+                if (agree > max_wrong_agree) {
+                    max_wrong_agree = agree;
+                    max_wrong_label = tk.name();
+                }
+                if (loose and !exact) {
+                    false_pos += 1;
+                    try out.print("  [FALSE-POS] {s} vs stage {c}: agree={d:.3} loose=Y exact=N\n", .{ tk.name(), coevo.stageChar(st), agree });
+                }
+            } else {
+                try out.print("  [TRUE-POS]  {s} vs own stage {c}: agree={d:.3} loose={s} exact={s}\n", .{ tk.name(), coevo.stageChar(st), agree, if (loose) "Y" else "N", if (exact) "Y" else "N" });
+            }
+        }
+    }
+
+    const dc = coevo.distinctCountProg();
+    for (stages) |st| {
+        const g = [_]coevo.Stage{st};
+        const agree = coevo.behaviorAgreement(&dc, &g, EN, EL, tseed);
+        const loose = coevo.behaviorMatches(&dc, &g, EN, EL, tseed);
+        if (loose) try out.print("  [FALSE-POS] distinct-count vs stage {c}: agree={d:.3}\n", .{ coevo.stageChar(st), agree });
+        if (loose) false_pos += 1;
+    }
+    try out.print("\n  wrong-pair max agreement (4096 sym): {d:.3} ({s})\n", .{ max_wrong_agree, max_wrong_label });
+    try out.print("  false-positive count (loose=Y, exact=N): {d}\n\n", .{false_pos});
+
+    // depth-2 near-miss: refSolver vs every 2-stage genome
+    var d2_false_pos: usize = 0;
+    var d2_max_wrong: f64 = 0;
+    const nstage = stages.len;
+    for (task_kinds) |tk| {
+        const prog = coevo.refSolver(tk);
+        var i: usize = 0;
+        while (i < nstage * nstage) : (i += 1) {
+            const s0 = stages[i / nstage];
+            const s1 = stages[i % nstage];
+            const g = [_]coevo.Stage{ s0, s1 };
+            const agree = coevo.behaviorAgreement(&prog, &g, EN, EL, tseed);
+            const loose = coevo.behaviorMatches(&prog, &g, EN, EL, tseed);
+            const exact = coevo.behaviorMatchesExact(&prog, &g, EN, EL, tseed);
+            const is_own = (tk == .g_xor and s0 == .st_gxor and s1 == .st_gxor) or
+                (tk == .g_add and s0 == .st_gadd and s1 == .st_gadd) or
+                (tk == .pk_xor and s0 == .st_pkxor and s1 == .st_pkxor) or
+                (tk == .pk_add and s0 == .st_pkadd and s1 == .st_pkadd);
+            if (!is_own and agree > d2_max_wrong) d2_max_wrong = agree;
+            if (loose and !exact) {
+                d2_false_pos += 1;
+                try out.print("  [D2-FALSE-POS] {s} vs {c}{c}: agree={d:.3}\n", .{ tk.name(), coevo.stageChar(s0), coevo.stageChar(s1), agree });
+            }
+        }
+    }
+    try out.print("  depth-2 wrong-pair max agreement: {d:.3}\n", .{d2_max_wrong});
+    try out.print("  depth-2 false-positive count: {d}\n\n", .{d2_false_pos});
+
+    // ---- B. false-negative: true-equal pairs at low sample budget ----------
+    try out.writeAll("--- B. False-negative hunt (exact-equal pairs, shrinking budget) ---\n\n");
+    var false_neg: usize = 0;
+    for (task_kinds) |tk| {
+        const prog = coevo.refSolver(tk);
+        const g = switch (tk) {
+            .g_xor => [_]coevo.Stage{.st_gxor},
+            .g_add => [_]coevo.Stage{.st_gadd},
+            .pk_xor => [_]coevo.Stage{.st_pkxor},
+            .pk_add => [_]coevo.Stage{.st_pkadd},
+        };
+        if (!coevo.behaviorMatchesExact(&prog, &g, EN, EL, tseed)) continue;
+        for (budgets) |b| {
+            const loose = coevo.behaviorMatches(&prog, &g, b.n, b.L, tseed);
+            if (!loose) {
+                false_neg += 1;
+                try out.print("  [FALSE-NEG] {s} at {d} symbols: loose=N (exact=Y)\n", .{ tk.name(), b.total });
+            }
+        }
+    }
+    if (false_neg == 0) try out.writeAll("  no false negatives on reference solvers at 32/256/4096 budgets.\n\n");
+
+    // ---- C. sample-budget sweep on historical deep solvers -----------------
+    try out.writeAll("--- C. Verdict sweep 32→256→4096 on deep solvers (per seed) ---\n\n");
+    const sweep_seeds = [_]u64{ 0xD00D, 0xBEEF, 0x1111, 0xFACE, base_seed };
+    var total_flips: usize = 0;
+    var total_deep: usize = 0;
+    for (sweep_seeds) |s| {
+        var arch = try buildDeepArch(al, s);
+        defer arch.deinit();
+        var deep: usize = 0;
+        var flips: usize = 0;
+        try out.print("  seed 0x{X}:\n", .{s});
+        for (arch.items) |a| {
+            if (a.depth < 2) continue;
+            deep += 1;
+            var verdicts: [3]bool = undefined; // true = reducible
+            for (budgets, 0..) |b, bi| {
+                verdicts[bi] = coevo.reducibleWithBudget(&a.solver, DMAX, tseed, b.n, b.L) != null;
+            }
+            const v32 = verdicts[0];
+            const v256 = verdicts[1];
+            const v4096 = verdicts[2];
+            if (v32 != v256 or v256 != v4096 or v32 != v4096) {
+                flips += 1;
+                try out.print("    [FLIP] depth-{d} genome ", .{a.depth});
+                for (a.genome.slice()) |st| try out.print("{c}", .{coevo.stageChar(st)});
+                try out.print(": 32={s} 256={s} 4096={s}\n", .{ if (v32) "RED" else "IRR", if (v256) "RED" else "IRR", if (v4096) "RED" else "IRR" });
+            }
+        }
+        try out.print("    {d} deep solvers, {d} verdict flip(s)\n", .{ deep, flips });
+        total_deep += deep;
+        total_flips += flips;
+    }
+    try out.print("\n  TOTAL: {d} deep solvers across seeds, {d} verdict flip(s)\n\n", .{ total_deep, total_flips });
+
+    // ---- D. loose vs exact on deep solvers (masked hunt, I54) --------------
+    try out.writeAll("--- D. Masked hunt: loose-reducible but exact-irreducible (I54) ---\n\n");
+    var arch = try buildDeepArch(al, base_seed);
+    defer arch.deinit();
+    var masked: usize = 0;
+    for (arch.items) |a| {
+        if (a.depth < 2) continue;
+        const rl = coevo.reducible(&a.solver, DMAX, tseed);
+        const re = coevo.reducibleExact(&a.solver, DMAX, tseed, EN, EL);
+        if (rl != null and re == null) {
+            masked += 1;
+            try out.print("  [MASKED] depth-{d}: loose-REDUCIBLE, exact-IRREDUCIBLE\n", .{a.depth});
+        }
+    }
+    try out.print("  masked count: {d}\n\n", .{masked});
+
+    // ---- verdict ------------------------------------------------------------
+    const pass = false_pos == 0 and d2_false_pos == 0 and false_neg == 0 and total_flips == 0 and masked == 0;
+    if (pass) {
+        try out.writeAll("VERDICT: PASS — behaviorMatches is trustworthy on this substrate.\n");
+        try out.writeAll("  No false positives on adversarial pairs, no false negatives on references,\n");
+        try out.writeAll("  no verdict flips across 32/256/4096, no masked near-novelty.\n");
+    } else {
+        try out.writeAll("VERDICT: FAIL — instrument may be lying; inspect flagged cases above.\n");
     }
 }
 

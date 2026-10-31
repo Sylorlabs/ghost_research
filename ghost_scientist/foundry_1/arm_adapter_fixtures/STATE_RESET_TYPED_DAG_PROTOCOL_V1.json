@@ -1,0 +1,54 @@
+{
+  "version": "FOUNDRY_STATE_RESET_TYPED_DAG_PROTOCOL_V1",
+  "frozen_before_adapter_execution": true,
+  "artifact": "arm_adapter_fixtures/state_reset_typed_dag_v1.json",
+  "arms": [
+    "A3",
+    "A9"
+  ],
+  "artifact_language": {
+    "version": "FOUNDRY_TYPED_DAG_ARTIFACT_V1",
+    "allowed_ops": [
+      "add",
+      "mul",
+      "relu"
+    ],
+    "dtype": "float64",
+    "layout": "strided",
+    "rank": 1,
+    "path_lengths": [
+      2,
+      3
+    ],
+    "invocations": 3
+  },
+  "A3_selection": {
+    "state": "empty before and discarded after every artifact",
+    "rule": "Select only exact typed path bodies with at least two occurrences and strictly positive description-length gain.",
+    "retention": false
+  },
+  "A9_selection": {
+    "state": "empty before and discarded after every artifact",
+    "rule": "Greedily select exact typed path bodies by marginal covered nodes per structural unit until no positive marginal coverage remains.",
+    "retention": false
+  },
+  "required_relations": [
+    "Two independently implemented strict artifact parsers accept the fixture.",
+    "Two independently implemented interpreters produce the exact declared output on all three invocations.",
+    "A3 selects no singleton or nonpositive-MDL motif.",
+    "A9 covers at least as many unique graph nodes as A3.",
+    "Both arms start and finish with the SHA-256 digest of an empty state object.",
+    "Both complete outputs pass the primary and independent frozen arm-contract verifiers.",
+    "Unknown operations, cycles, type mismatches, changed expected outputs, retained state, malformed hashes, and wrong invocation counts fail closed.",
+    "The outer resource audit charges the complete adapter process tree."
+  ],
+  "claim_boundary": {
+    "classification": "BOUNDED_TYPED_DAG_ADAPTER_NOT_VALIDATION_V6_INTEGRATION",
+    "production_integrated_arms_after_pass": 2,
+    "A3_A9_interface_implemented_after_pass": true,
+    "A3_A9_production_integrated_after_pass": false,
+    "reason": "The fixture proves a generic typed-DAG search and execution boundary over add, mul, and relu, but not the full operator and runtime surface of validation-v6.",
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

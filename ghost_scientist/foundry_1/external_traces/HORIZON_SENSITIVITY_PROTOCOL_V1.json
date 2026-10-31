@@ -1,0 +1,29 @@
+{
+  "schema": "FOUNDRY_EXTERNAL_HORIZON_SENSITIVITY_PROTOCOL_V1",
+  "frozen_before_sensitivity_execution": true,
+  "inputs": {
+    "external_horizon_result": "external_traces/INVOCATION_TRACE_AGGREGATE_V1.json",
+    "calibration_portfolio_result": "results/phase64_pareto_portfolio_optimizer.json"
+  },
+  "cost_equation": {
+    "candidate_at_N": "shared_construction_cost + N * (definition_cost + graph_node_visits + edge_checks)",
+    "fixed_at_N": "N * (definition_cost + graph_node_visits + edge_checks)",
+    "break_even": "smallest positive integer N where candidate_at_N < fixed_at_N"
+  },
+  "horizons": {
+    "minimum_positive": 1,
+    "external_q10": 1,
+    "external_q25_primary_N_star": 3,
+    "external_median": 27,
+    "external_q75": 71,
+    "external_q90": 718
+  },
+  "pass_condition": "Candidate calibration cost is strictly lower than fixed calibration cost at external_q25_primary_N_star.",
+  "scientific_boundary": [
+    "This is a calibration-only economic stress test.",
+    "It does not use validation-v6 graphs or outcomes.",
+    "The cost units are abstract search-accounting units, not wall time or dollars.",
+    "Stable Diffusion request reuse is not automatically a Foundry artifact-reuse distribution.",
+    "A pass does not complete P2, establish runtime novelty, or authorize a prospective trial."
+  ]
+}

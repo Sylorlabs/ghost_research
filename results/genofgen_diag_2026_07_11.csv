@@ -1,0 +1,5 @@
+row,tag,evals,val_acc,test_acc,n_included
+diag_wallhard,steered,,,,,404,1.0000,1.0000,20
+diag_wallhard,blind_0xB1,,,,,404,0.9754,0.9794,0
+diag_wallhard,blind_0xB2,,,,,404,0.9754,0.9794,0
+diag_wallhard,blind_0xB3,,,,,404,0.9754,0.9794,0

@@ -1,0 +1,41 @@
+{
+  "version": "FOUNDRY_CALIBRATION_OPERATOR_VOCAB_PROTOCOL_V1",
+  "classification": "CALIBRATION_ROUTE_AUDIT_NOT_PROSPECTIVE",
+  "chronology": {
+    "preliminary_operator_census_observed_before_this_freeze": true,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_claim_allowed": false
+  },
+  "source": {
+    "workload_constructor": "phase63_pareto_motif_calibration.workloads",
+    "expected_exported_graphs": 23,
+    "expected_unsupported_or_failed": 1
+  },
+  "current_bounded_mapping": {
+    "add": "aten.add.Tensor",
+    "mul": "aten.mul.Tensor",
+    "relu": "aten.relu.default"
+  },
+  "audit_dimensions": [
+    "unique operator targets",
+    "call-function invocations",
+    "graphs reached",
+    "families reached",
+    "repositories reached",
+    "semantic domains reached"
+  ],
+  "route_rule": {
+    "manual_interpreter_production_ready_only_if_unique_operator_coverage": 1.0,
+    "manual_interpreter_production_ready_only_if_invocation_coverage": 1.0,
+    "on_incomplete_coverage": "Reject manual typed-DAG interpretation as the production runtime route and build an evaluator-side framework runtime mount whose source and graph digests remain contract-bound.",
+    "reason": "A partial handwritten operator interpreter is a proxy and cannot establish full heldout correctness."
+  },
+  "claim_boundary": {
+    "a_failed_manual_route_does_not_fail_A3_or_A9": true,
+    "a_framework_runtime_mount_must_still_preserve_empty_state": true,
+    "a_framework_runtime_mount_must_still_use_two independent search verifiers": true,
+    "production_integrated_arms_after_audit": 2,
+    "P3_complete_after_audit": false,
+    "prospective_trial_authorized": false
+  }
+}

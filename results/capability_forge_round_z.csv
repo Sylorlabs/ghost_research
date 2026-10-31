@@ -1,0 +1,13 @@
+artifact,partition,policy,charged_forge_trials,tick_budget,viable_ticks,resource_balance,reproduced_worlds,denied,verdict
+round_z_z3,fresh,forged,384,2304,2034,45,0,0,VALID_NEGATIVE:request_and_vm_partition_install_forge_axis
+round_z_z3,fresh,existing_only,384,2304,2049,38,0,0,CONTROL
+round_z_z3,fresh,blind,384,2304,1980,54,0,0,CONTROL
+round_z_z3,fresh,fixed_menu,384,2304,2037,71,0,0,CONTROL
+round_z_z3,fresh,random,384,2304,2004,23,0,0,CONTROL
+round_z_z3,fresh,replay,384,2304,2040,33,0,0,CONTROL
+round_z_z3,fresh,request_free,384,2304,2094,52,0,0,CONTROL
+round_z_z3,fresh,ablated,384,2304,2055,73,0,0,CONTROL:causal_removal
+round_z_z3,fresh,supplied_ceiling,384,2304,2304,5856,24,0,ORACLE_CEILING:not_available_to_organism
+round_z_z3,fresh,post_edit,384,2304,0,-999,0,24,CONTROL_PASS:frozen_edit_denied
+round_z_z3,audit,unauthorized_request,0,0,0,0,0,1,CONTROL_PASS:authority_fail_closed
+round_z_z3,audit,answer_packet,0,0,0,0,0,1,CONTROL_PASS:answer_leak_rejected

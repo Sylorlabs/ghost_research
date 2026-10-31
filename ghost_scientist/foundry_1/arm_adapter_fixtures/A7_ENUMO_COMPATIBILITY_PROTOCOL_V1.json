@@ -1,0 +1,49 @@
+{
+  "version": "FOUNDRY_A7_ENUMO_COMPATIBILITY_PROTOCOL_V1",
+  "status": "PREFROZEN_DIRECT_ADAPTER_COMPATIBILITY_AUDIT",
+  "frozen_before_framework_graph_inspection": true,
+  "arm_id": "A7",
+  "question": "Can the source-faithful Enumo Boolean control be directly wrapped around the complete calibration framework graph surface without inventing a new domain language, evaluator, workload grammar, validation relation, or rule-selection policy?",
+  "direct_adapter_definition": [
+    "Only byte-exact existing Enumo control language operators and semantics may be used.",
+    "Framework operator targets must map directly to existing language variants; renaming unrelated tensor operators to Boolean symbols is forbidden.",
+    "No evaluator-authored tensor SynthLanguage, tensor concrete evaluator, interval semantics, variable sampler, validation rule, workload recipe, or cost/filter policy may be introduced.",
+    "The source-faithful control, reduced-core boundary, and failed pre-frozen metamorphic result must remain explicit.",
+    "A rejected direct adapter is a valid fail-closed compatibility outcome and must not increase the integrated-arm count."
+  ],
+  "acceptance": {
+    "framework_graphs": 23,
+    "framework_operator_targets": 41,
+    "framework_call_function_invocations": 337,
+    "unsupported_or_failed_graphs": 1,
+    "existing_boolean_operator_variants": ["&", "->", "^", "|", "~"],
+    "direct_operator_target_matches_required_for_adapter": 337,
+    "source_control_conformance_must_remain_pass": true,
+    "metamorphic_exact_rule_set_failure_must_remain_visible": true
+  },
+  "provider_records": [
+    {"path": "results/enumo_source_result_v1_freeze.json", "sha256": "59f2a6037b3f7980c44d2e5c503fee4b33328d6b824b462d7bd4c453767d9b90"},
+    {"path": "results/enumo_metamorphic_result_v1_freeze.json", "sha256": "8fd7bb2ad31e4b2944dcf48a5b2f4def55eaf2fcb5d2d1885d71e15c0094f713"},
+    {"path": "results/phase45_enumo_source_control.json", "sha256": "7633a6f85dede77b55b7a9ca66e5a0ca8775a19ac7dc27bf75807d2e4f567d2f"},
+    {"path": "results/phase46_enumo_source_resource_audit.json", "sha256": "ecc49ccede0975e96a5eb7a68a1c2260862a11b25bc04b176a645446d674498a"},
+    {"path": "results/phase47_enumo_metamorphic_control.json", "sha256": "c3ac7b3424dfd2a4756a8a8f158341d1fcfcd011d4de899ff86b23abedbc7e8a"},
+    {"path": "results/phase48_enumo_metamorphic_resource_audit.json", "sha256": "b8a6bff38d835240160ad080c0f65095ac5ed4f777c69341d433f0ff6e8af1ed"},
+    {"path": "external_controls/enumo/upstream_tests/bool.rs", "sha256": "54d0846163edf6a8184b7ce984b748f95c988fe923c03a3ee3a714d185fc2ae3"},
+    {"path": "external_controls/enumo/source/src/language.rs", "sha256": "e6d120e30cee9912fa869a64ed836d5058987fd69b5068ce6fe92243faccdf9d"},
+    {"path": "external_controls/enumo/source/src/enumo/workload.rs", "sha256": "0f5e96081410df24963bd16363f6988e0326c6be50ae340c41aca0a08f0997bf"},
+    {"path": "external_controls/enumo/source/src/enumo/ruleset.rs", "sha256": "473a604dbfd9925d20d0f761bf1c0f036a713c97737c406a02ca8613efe7657e"},
+    {"path": "phase63_pareto_motif_calibration.py", "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"},
+    {"path": "results/pareto_remediation_v11_freeze.json", "sha256": "33c2e1ceab19edc665a895492c976d0c05a8370987646c0dbc0d86ab3e0a074d"},
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"}
+  ],
+  "claim_boundary": {
+    "direct_wrapper_only": true,
+    "new_tensor_domain_construction_forbidden_in_this_phase": true,
+    "A7_production_integrated_before_audit": false,
+    "production_integrated_arms_before_audit": 6,
+    "production_integrated_arms_after_rejected_direct_adapter": 6,
+    "P3_complete_after_audit": false,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

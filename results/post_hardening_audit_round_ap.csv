@@ -1,0 +1,15 @@
+artifact,route,observed,result,transcript,detail
+round_ap_ap4,baseline_action,strict_raw_action,PASS,advanced_turn_0,opaque input accepted; evaluator state remains parent-owned
+round_ap_ap4,environment_and_cwd,ENV=1;CWD=/work,CONTAINED,unchanged_turn_0,empty environment and private /work expose no evaluator data
+round_ap_ap4,evaluator_file_read,SECRET:EPERM,DENIED,unchanged_turn_0,hostile output rejected; evaluator transcript and budget unchanged
+round_ap_ap4,proc_and_descriptor_inspection,PROC_FD:EPERM,DENIED,unchanged_turn_0,hostile output rejected; evaluator transcript and budget unchanged
+round_ap_ap4,fork_clone_exec_open_socket_mount_signal,FORK=EPERM;CLONE=EPERM;EXEC=EPERM;OPEN=EPERM;SOCKET=EPERM;MOUNT=EPERM;SIGNAL=EPERM,DENIED,unchanged_turn_0,hostile output rejected; evaluator transcript and budget unchanged
+round_ap_ap4,score_request_and_protocol_injection,GET:SCORE|ACT:4109:0:1,DENIED,unchanged_turn_0,hostile output rejected; evaluator transcript and budget unchanged
+round_ap_ap4,oversized_stdout,StdoutStreamTooLong,DENIED,unchanged_turn_0,hostile output rejected; evaluator transcript and budget unchanged
+round_ap_ap4,forged_nonce_reordered_action,ACT:7:9:9,DENIED,unchanged_turn_0,hostile output rejected; evaluator transcript and budget unchanged
+round_ap_ap4,replayed_action,ACT:4109:0:1,DENIED,unchanged_turn_0,hostile output rejected; evaluator transcript and budget unchanged
+round_ap_ap4,bounded_pid_resource_attempt,RESOURCE:COMPLETE,CONTAINED,unchanged_turn_0,fork is seccomp-denied; parent timeout/resource bounds remain outside candidate
+round_ap_ap4,direct_and_vdso_time,DIRECT_CLOCK=EPERM;DIRECT_SLEEP=EPERM;VDSO_CLOCK=ALLOW;VDSO_TIME=ALLOW,RESIDUAL,unchanged_turn_0,direct clock/sleep denied; libc vDSO time may remain, but this probe received no evaluator data and transcript stayed unchanged
+round_ap_ap4,evaluator_integrity_after_attacks,nonce_budget_chain_unchanged,PASS,unchanged_turn_0,no rejected hostile candidate output altered transcript, budget, or end-only score
+round_ap_ap4,residual_tcb,loader_bootstrap_unlisted_syscalls_kernel_compiler_hardware_physical_sidechannels,UNTESTED,not_applicable,no absolute containment claim; vDSO/physical timing is residual, not an evaluator leak demonstrated here
+round_ap_ap4,verdict,combined_runtime_attack,GATE_READY,unchanged_turn_0,all executed evaluator-leak, corruption, process, network, protocol, and direct-time routes denied or contained; vDSO timing recorded as residual without leak/corruption evidence

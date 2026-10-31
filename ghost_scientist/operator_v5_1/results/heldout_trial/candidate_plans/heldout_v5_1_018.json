@@ -1,0 +1,1 @@
+{"parameter_program":{"nodes":[{"args":["p0","p1"],"attrs":{},"id":"d0","op":"matmul"}]},"program":{"nodes":[{"args":[],"attrs":{"name":"i0"},"id":"r0","op":"input"},{"args":[],"attrs":{"name":"d0"},"id":"r1","op":"parameter"},{"args":["r0","r1"],"attrs":{},"id":"r2","op":"matmul"}],"outputs":["r2"]},"version":"GHOST_OPERATOR_PLAN_V5"}

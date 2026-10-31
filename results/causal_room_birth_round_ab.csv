@@ -1,0 +1,29 @@
+artifact,policy,cohorts,charged_trials,exact_rooms,heldout_resource,verdict
+round_ab_ab1,born,32,61440,0,90416,VALID_NEGATIVE:strong_self_created_subset_search_but_host_supplies_subset_room_grammar
+round_ab_ab1,random,32,61440,0,55736,CONTROL:random_full_width_room
+round_ab_ab1,fixed4,32,61440,0,56744,CONTROL:fixed_size_four_address_room
+round_ab_ab1,fixed8,32,61440,0,49928,CONTROL:fixed_size_eight_address_room
+round_ab_ab1,address,32,61440,0,53528,CONTROL:raw_address_prefix
+round_ab_ab1,replay,32,61440,0,57416,CONTROL:prior_cohort_replay
+round_ab_ab1,frequency,32,61440,0,50672,CONTROL:frequency_surrogate
+round_ab_ab1,age,32,61440,0,59288,CONTROL:age_surrogate
+round_ab_ab1,human_origin,32,61440,0,58904,CONTROL:human_origin_receives_no_privilege
+round_ab_ab1,oracle,32,61440,32,127448,INVALID_ORACLE:evaluator_private_ceiling
+round_ab_ab1,shuffled,32,61440,0,52304,CONTROL:shuffled_partitions_remove_advantage
+round_ab_ab1,ablated,32,61440,0,61400,CONTROL:room_removal_erases_gain
+round_ab_ab1,restored,32,61440,0,90416,CONTROL:room_restoration_restores_gain
+round_ab_ab1,recoded,32,61440,0,90416,CONTROL_PASS:relearn_after_storage_relocation_and_reencoding
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:truth_masks_absent_from_organism_receipts_and_freeze_state
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:calibration_and_hidden_context_indices_disjoint
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:no_named_feature_port_action_edit_component_or_request_field
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:no_intermediate_correctness_uncertainty_novelty_or_grounding_score
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:duplicate_observation_cannot_create_independent_context
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:heldout_worlds_evaluated_only_after_room_freeze
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:evaluator_private_truth_and scores_are_read_only
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:all_proposal_evaluations_and complexity_are_charged
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:random_birth_context_changes_per_cohort
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:no_post_test_selection_or_freeze_edit
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:no_llm_text_token_embedding_neural_or_neurosymbolic_path
+round_ab_ab1,attack,1,0,0,0,CONTROL_PASS:byte_identical_deterministic_replay
+round_ab_ab1,attack,1,0,0,0,CONTROL_FAIL:hidden_boundary_grammar_subset_membership_is_host_supplied
+round_ab_ab1,closure,32,61440,0,90416,VALID_NEGATIVE:organism_finds_and_reconstructs_functional_rooms_but_does_not_invent_what_a_room_can_be

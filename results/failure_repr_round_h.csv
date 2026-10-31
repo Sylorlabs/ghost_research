@@ -1,0 +1,15 @@
+record,contract,split,target_audit_only,truth_audit_only,predicted_prior,correct,dims,validity
+ABLATION,cheap6,validation,-,-,-,2/4,6,pass
+ABLATION,residual10,validation,-,-,-,3/4,10,pass
+ABLATION,orientation10,validation,-,-,-,2/4,10,pass
+ABLATION,full16,validation,-,-,-,4/4,16,pass
+TARGET,full16,val,TE4,thresh,thresh,1,16,pass
+TARGET,full16,heldout,TE5,thresh,ratio,0,16,pass
+TARGET,full16,val,ME4,mixr,mixr,1,16,pass
+TARGET,full16,heldout,ME5,mixr,mixr,1,16,pass
+TARGET,full16,val,RE4,ratio,ratio,1,16,pass
+TARGET,full16,heldout,RE5,ratio,run,0,16,pass
+TARGET,full16,val,RN4,run,run,1,16,pass
+TARGET,full16,heldout,RN5,run,mixr,0,16,pass
+SUMMARY,full16,heldout,-,-,-,1/4,16,pass
+GATES,full16,train12_distance,-,-,-,1.448328,16,pass

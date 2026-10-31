@@ -1,0 +1,87 @@
+{
+  "version": "FOUNDRY_EGGMIND_SOURCE_INTAKE_V1",
+  "checked_utc_date": "2026-07-30",
+  "paper": {
+    "title": "LLM-Guided Strategy Synthesis for Scalable Equality Saturation",
+    "authors": [
+      "Chenyun Yin",
+      "Youwei Xiao",
+      "Yuze Luo",
+      "Yuyang Zou",
+      "Yun Liang"
+    ],
+    "arxiv_id": "2604.17364v1",
+    "arxiv_url": "https://arxiv.org/abs/2604.17364v1",
+    "arxiv_html_url": "https://arxiv.org/html/2604.17364",
+    "submitted_utc": "2026-04-19T10:21:26Z",
+    "license": "CC BY 4.0"
+  },
+  "paper_claims": {
+    "calls_framework_open_source": true,
+    "repository_url_in_arxiv_metadata": false,
+    "repository_url_in_arxiv_html": false,
+    "formal_eqsatl_syntax_published": true,
+    "complete_executable_implementation_published_in_paper": false
+  },
+  "artifact_searches": [
+    {
+      "provider": "GitHub repository search",
+      "query": "EggMind equality saturation EqSatL",
+      "matching_official_repositories": []
+    },
+    {
+      "provider": "GitHub repository search",
+      "query": "EqSatL",
+      "matching_official_repositories": []
+    },
+    {
+      "provider": "GitHub repository search",
+      "query": "\"LLM-Guided Strategy Synthesis\"",
+      "matching_official_repositories": []
+    },
+    {
+      "provider": "GitHub repository search",
+      "query": "Chenyun Yin equality saturation",
+      "matching_official_repositories": []
+    },
+    {
+      "provider": "web search",
+      "query": "\"EggMind\" EqSatL GitHub",
+      "matching_official_repositories": []
+    },
+    {
+      "provider": "web search",
+      "query": "site:github.com \"EqSatL\"",
+      "matching_official_repositories": []
+    }
+  ],
+  "available_paper_boundary": {
+    "eqsatl_controls": [
+      "ruleset partitioning by semantic tags",
+      "phase, sequence, and repeat schedule construction",
+      "heuristic or hint-guided simplification"
+    ],
+    "workflow_components": [
+      "strategy repository",
+      "generator",
+      "evaluator",
+      "partitioner",
+      "simplifier",
+      "proof-derived rewrite motif cache",
+      "dependency-based tractability guidance"
+    ],
+    "reported_default_llm": "Doubao-Seed-2.0-pro",
+    "reported_vectorization_offline_model_requests": 53,
+    "reported_vectorization_offline_input_tokens": 4350000,
+    "reported_vectorization_offline_output_tokens": 36600
+  },
+  "decision": {
+    "upstream_source_available": false,
+    "upstream_execution_authorized": false,
+    "source_faithful_label_allowed": false,
+    "paper_derived_adaptation_allowed": true,
+    "required_label": "ADAPTED",
+    "a8_conformance_complete": false,
+    "reason": "No official source repository or immutable source revision was discoverable from the paper record or repository searches."
+  }
+}

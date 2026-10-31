@@ -45,4 +45,18 @@ pub fn build(b: *std.Build) void {
     if (b.args) |args| run_math_cmd.addArgs(args);
     const run_math_step = b.step("math", "Four analytical hypotheses on the n=4 predicate landscape");
     run_math_step.dependOn(&run_math_cmd.step);
+
+    const export_exe = b.addExecutable(.{
+        .name = "function_hardness_export_top",
+        .root_source_file = b.path("export_top.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    b.installArtifact(export_exe);
+
+    const run_export_cmd = b.addRunArtifact(export_exe);
+    run_export_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| run_export_cmd.addArgs(args);
+    const run_export_step = b.step("export-top", "Top-5 hardest predicates per substrate");
+    run_export_step.dependOn(&run_export_cmd.step);
 }

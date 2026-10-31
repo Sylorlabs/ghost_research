@@ -1,0 +1,17 @@
+artifact,policy,charged_raw_interactions,old_private_resource,new_private_resource,ablated_resource,commits,rollbacks,retired_tapes,verdict
+round_ae_ae2,competing,4128,197,1197,197,24,0,48,BOUNDED_CAPABILITY:two_mutable_prediction_tapes_compete_and_loser_is_retired
+round_ae_ae2,random,288,197,512,197,19,5,38,CONTROL
+round_ae_ae2,replay,288,197,547,197,20,4,40,CONTROL
+round_ae_ae2,static,288,197,397,197,18,6,36,CONTROL
+round_ae_ae2,fixed_semantics,4128,197,1197,197,24,0,48,CONTROL
+round_ae_ae2,shuffled_lineage,4128,197,522,197,20,4,40,CONTROL
+round_ae_ae2,false_lineage,4128,197,197,197,0,24,0,CONTROL
+round_ae_ae2,oracle,3840,197,1197,197,24,0,48,INVALID_ORACLE:private_ceiling_not_available_to_organism
+round_ae_ae2,audit,0,0,0,0,0,0,0,CONTROL_PASS:two_incompatible_executable_prediction_tapes_created_from_observed_consequences
+round_ae_ae2,audit,0,0,0,0,0,0,0,CONTROL_PASS:selected_tape_improves_evaluator_private_world_resource_and_ablation_erases_gain
+round_ae_ae2,audit,0,0,0,0,0,0,0,CONTROL_PASS:random_replay_static_equal_cost_fixed_semantics_false_and_shuffled_lineage_controls_recorded
+round_ae_ae2,audit,0,0,0,0,0,0,0,CONTROL_PASS:deterministic_csv_replay_no_llm_text_embeddings_neural_or_answer_trace
+round_ae_ae2,audit,0,0,0,0,0,0,0,CONTROL_FAIL:host_defines_u16_tape_atom_boundary_prediction_bit_meaning_and_action_scan
+round_ae_ae2,audit,0,0,0,0,0,0,0,CONTROL_FAIL:host_supplies_complement_hypothesis_language_probe_schedule_additive_comparison_and_commit_rule
+round_ae_ae2,audit,0,0,0,0,0,0,0,CONTROL_FAIL:fixed_semantics_ties_competing_construction_so_semantics_not_organism_owned
+round_ae_ae2,audit,0,0,0,0,0,0,0,VALID_NEGATIVE:bounded_selection_and_retirement_work_but_not_endogenous_semantic_birth

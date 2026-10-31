@@ -1,0 +1,13 @@
+protocol,record_type,policy_token,bank,examples,best_correct,accuracy_milli,charged_calls
+round_l_sealed,diagnostic,L3-00,global,12,7,583,2
+round_l_sealed,diagnostic,L3-00,singleton,12,11,916,128
+round_l_sealed,diagnostic,L3-00,directed,12,10,833,186
+round_l_sealed,diagnostic,L3-00,adjacency,12,9,750,96
+round_l_sealed,diagnostic,L3-01,global,12,6,500,2
+round_l_sealed,diagnostic,L3-01,singleton,12,9,750,128
+round_l_sealed,diagnostic,L3-01,directed,12,10,833,186
+round_l_sealed,diagnostic,L3-01,adjacency,12,8,666,96
+round_l_sealed,diagnostic,L3-02,global,12,7,583,2
+round_l_sealed,diagnostic,L3-02,singleton,12,9,750,128
+round_l_sealed,diagnostic,L3-02,directed,12,10,833,186
+round_l_sealed,diagnostic,L3-02,adjacency,12,12,1000,96

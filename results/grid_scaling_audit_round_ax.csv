@@ -1,0 +1,168 @@
+kind,config,worker,step,display_tool,canonical_tool_hash,frontier_branch,task_kind,repair,resource_hash,verdict
+receipt,1x1_homogeneous,0,0,worker_0_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d4e7725b60,unscored
+receipt,1x1_homogeneous,0,1,worker_0_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d4e7725b61,unscored
+receipt,1x1_homogeneous,0,2,worker_0_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d4e7725b62,unscored
+receipt,1x1_homogeneous,0,3,worker_0_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d4e7725b63,unscored
+receipt,1x1_homogeneous,0,4,worker_0_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91d4e7725b64,unscored
+receipt,1x1_homogeneous,0,5,worker_0_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d4e7725b65,unscored
+receipt,1x1_homogeneous,1,0,worker_1_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d5e7725b60,unscored
+receipt,1x1_homogeneous,1,1,worker_1_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d5e7725b61,unscored
+receipt,1x1_homogeneous,1,2,worker_1_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d5e7725b62,unscored
+receipt,1x1_homogeneous,1,3,worker_1_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d5e7725b63,unscored
+receipt,1x1_homogeneous,1,4,worker_1_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91d5e7725b64,unscored
+receipt,1x1_homogeneous,1,5,worker_1_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d5e7725b65,unscored
+receipt,1x1_homogeneous,2,0,worker_2_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d6e7725b60,unscored
+receipt,1x1_homogeneous,2,1,worker_2_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d6e7725b61,unscored
+receipt,1x1_homogeneous,2,2,worker_2_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d6e7725b62,unscored
+receipt,1x1_homogeneous,2,3,worker_2_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d6e7725b63,unscored
+receipt,1x1_homogeneous,2,4,worker_2_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91d6e7725b64,unscored
+receipt,1x1_homogeneous,2,5,worker_2_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d6e7725b65,unscored
+receipt,1x1_homogeneous,3,0,worker_3_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d7e7725b60,unscored
+receipt,1x1_homogeneous,3,1,worker_3_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d7e7725b61,unscored
+receipt,1x1_homogeneous,3,2,worker_3_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d7e7725b62,unscored
+receipt,1x1_homogeneous,3,3,worker_3_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d7e7725b63,unscored
+receipt,1x1_homogeneous,3,4,worker_3_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91d7e7725b64,unscored
+receipt,1x1_homogeneous,3,5,worker_3_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d7e7725b65,unscored
+receipt,1x1_homogeneous,4,0,worker_4_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d0e7725b60,unscored
+receipt,1x1_homogeneous,4,1,worker_4_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d0e7725b61,unscored
+receipt,1x1_homogeneous,4,2,worker_4_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d0e7725b62,unscored
+receipt,1x1_homogeneous,4,3,worker_4_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d0e7725b63,unscored
+receipt,1x1_homogeneous,4,4,worker_4_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91d0e7725b64,unscored
+receipt,1x1_homogeneous,4,5,worker_4_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d0e7725b65,unscored
+receipt,1x1_homogeneous,5,0,worker_5_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d1e7725b60,unscored
+receipt,1x1_homogeneous,5,1,worker_5_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d1e7725b61,unscored
+receipt,1x1_homogeneous,5,2,worker_5_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d1e7725b62,unscored
+receipt,1x1_homogeneous,5,3,worker_5_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d1e7725b63,unscored
+receipt,1x1_homogeneous,5,4,worker_5_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91d1e7725b64,unscored
+receipt,1x1_homogeneous,5,5,worker_5_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d1e7725b65,unscored
+receipt,1x1_homogeneous,6,0,worker_6_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d2e7725b60,unscored
+receipt,1x1_homogeneous,6,1,worker_6_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d2e7725b61,unscored
+receipt,1x1_homogeneous,6,2,worker_6_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d2e7725b62,unscored
+receipt,1x1_homogeneous,6,3,worker_6_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d2e7725b63,unscored
+receipt,1x1_homogeneous,6,4,worker_6_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91d2e7725b64,unscored
+receipt,1x1_homogeneous,6,5,worker_6_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d2e7725b65,unscored
+receipt,1x1_homogeneous,7,0,worker_7_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d3e7725b60,unscored
+receipt,1x1_homogeneous,7,1,worker_7_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d3e7725b61,unscored
+receipt,1x1_homogeneous,7,2,worker_7_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d3e7725b62,unscored
+receipt,1x1_homogeneous,7,3,worker_7_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d3e7725b63,unscored
+receipt,1x1_homogeneous,7,4,worker_7_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91d3e7725b64,unscored
+receipt,1x1_homogeneous,7,5,worker_7_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d3e7725b65,unscored
+receipt,1x1_homogeneous,8,0,worker_8_renamed_tool_0,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91dce7725b60,unscored
+receipt,1x1_homogeneous,8,1,worker_8_renamed_tool_0,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91dce7725b61,unscored
+receipt,1x1_homogeneous,8,2,worker_8_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91dce7725b62,unscored
+receipt,1x1_homogeneous,8,3,worker_8_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91dce7725b63,unscored
+receipt,1x1_homogeneous,8,4,worker_8_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91dce7725b64,unscored
+receipt,1x1_homogeneous,8,5,worker_8_renamed_tool_4,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91dce7725b65,unscored
+receipt,2x2_corners,0,0,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d4e7725b60,unscored
+receipt,2x2_corners,0,1,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d4e7725b61,unscored
+receipt,2x2_corners,0,2,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,timing_loop,0,a83c91d4e7725b62,unscored
+receipt,2x2_corners,0,3,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,source_structure,1,a83c91d4e7725b63,unscored
+receipt,2x2_corners,0,4,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,csv_shape,0,a83c91d4e7725b64,unscored
+receipt,2x2_corners,0,5,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,timing_loop,0,a83c91d4e7725b65,unscored
+receipt,2x2_corners,1,0,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,csv_shape,0,a83c91d5e7725b60,unscored
+receipt,2x2_corners,1,1,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,timing_loop,0,a83c91d5e7725b61,unscored
+receipt,2x2_corners,1,2,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,branch_behavior,0,a83c91d5e7725b62,unscored
+receipt,2x2_corners,1,3,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,csv_shape,1,a83c91d5e7725b63,unscored
+receipt,2x2_corners,1,4,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,timing_loop,0,a83c91d5e7725b64,unscored
+receipt,2x2_corners,1,5,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,branch_behavior,0,a83c91d5e7725b65,unscored
+receipt,2x2_corners,2,0,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,timing_loop,0,a83c91d6e7725b60,unscored
+receipt,2x2_corners,2,1,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,branch_behavior,0,a83c91d6e7725b61,unscored
+receipt,2x2_corners,2,2,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,source_structure,0,a83c91d6e7725b62,unscored
+receipt,2x2_corners,2,3,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,timing_loop,1,a83c91d6e7725b63,unscored
+receipt,2x2_corners,2,4,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,branch_behavior,0,a83c91d6e7725b64,unscored
+receipt,2x2_corners,2,5,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,source_structure,0,a83c91d6e7725b65,unscored
+receipt,2x2_corners,3,0,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,branch_behavior,0,a83c91d7e7725b60,unscored
+receipt,2x2_corners,3,1,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,source_structure,0,a83c91d7e7725b61,unscored
+receipt,2x2_corners,3,2,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,csv_shape,0,a83c91d7e7725b62,unscored
+receipt,2x2_corners,3,3,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,branch_behavior,1,a83c91d7e7725b63,unscored
+receipt,2x2_corners,3,4,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d7e7725b64,unscored
+receipt,2x2_corners,3,5,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d7e7725b65,unscored
+receipt,2x2_corners,4,0,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d0e7725b60,unscored
+receipt,2x2_corners,4,1,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d0e7725b61,unscored
+receipt,2x2_corners,4,2,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,timing_loop,0,a83c91d0e7725b62,unscored
+receipt,2x2_corners,4,3,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,source_structure,1,a83c91d0e7725b63,unscored
+receipt,2x2_corners,4,4,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,csv_shape,0,a83c91d0e7725b64,unscored
+receipt,2x2_corners,4,5,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,timing_loop,0,a83c91d0e7725b65,unscored
+receipt,2x2_corners,5,0,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,csv_shape,0,a83c91d1e7725b60,unscored
+receipt,2x2_corners,5,1,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,timing_loop,0,a83c91d1e7725b61,unscored
+receipt,2x2_corners,5,2,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,branch_behavior,0,a83c91d1e7725b62,unscored
+receipt,2x2_corners,5,3,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,csv_shape,1,a83c91d1e7725b63,unscored
+receipt,2x2_corners,5,4,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,timing_loop,0,a83c91d1e7725b64,unscored
+receipt,2x2_corners,5,5,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,branch_behavior,0,a83c91d1e7725b65,unscored
+receipt,2x2_corners,6,0,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,timing_loop,0,a83c91d2e7725b60,unscored
+receipt,2x2_corners,6,1,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,branch_behavior,0,a83c91d2e7725b61,unscored
+receipt,2x2_corners,6,2,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,source_structure,0,a83c91d2e7725b62,unscored
+receipt,2x2_corners,6,3,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,timing_loop,1,a83c91d2e7725b63,unscored
+receipt,2x2_corners,6,4,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,branch_behavior,0,a83c91d2e7725b64,unscored
+receipt,2x2_corners,6,5,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,source_structure,0,a83c91d2e7725b65,unscored
+receipt,2x2_corners,7,0,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,branch_behavior,0,a83c91d3e7725b60,unscored
+receipt,2x2_corners,7,1,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,source_structure,0,a83c91d3e7725b61,unscored
+receipt,2x2_corners,7,2,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,csv_shape,0,a83c91d3e7725b62,unscored
+receipt,2x2_corners,7,3,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,branch_behavior,1,a83c91d3e7725b63,unscored
+receipt,2x2_corners,7,4,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d3e7725b64,unscored
+receipt,2x2_corners,7,5,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d3e7725b65,unscored
+receipt,2x2_corners,8,0,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91dce7725b60,unscored
+receipt,2x2_corners,8,1,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91dce7725b61,unscored
+receipt,2x2_corners,8,2,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,timing_loop,0,a83c91dce7725b62,unscored
+receipt,2x2_corners,8,3,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,source_structure,1,a83c91dce7725b63,unscored
+receipt,2x2_corners,8,4,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,csv_shape,0,a83c91dce7725b64,unscored
+receipt,2x2_corners,8,5,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,timing_loop,0,a83c91dce7725b65,unscored
+receipt,3x3_lattice,0,0,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,source_structure,0,a83c91d4e7725b60,unscored
+receipt,3x3_lattice,0,1,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d4e7725b61,unscored
+receipt,3x3_lattice,0,2,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,branch_behavior,1,a83c91d4e7725b62,unscored
+receipt,3x3_lattice,0,3,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,source_structure,0,a83c91d4e7725b63,unscored
+receipt,3x3_lattice,0,4,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,timing_loop,1,a83c91d4e7725b64,unscored
+receipt,3x3_lattice,0,5,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,branch_behavior,0,a83c91d4e7725b65,unscored
+receipt,3x3_lattice,1,0,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,csv_shape,0,a83c91d5e7725b60,unscored
+receipt,3x3_lattice,1,1,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,timing_loop,0,a83c91d5e7725b61,unscored
+receipt,3x3_lattice,1,2,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,source_structure,1,a83c91d5e7725b62,unscored
+receipt,3x3_lattice,1,3,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,csv_shape,0,a83c91d5e7725b63,unscored
+receipt,3x3_lattice,1,4,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,branch_behavior,1,a83c91d5e7725b64,unscored
+receipt,3x3_lattice,1,5,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,source_structure,0,a83c91d5e7725b65,unscored
+receipt,3x3_lattice,2,0,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,timing_loop,0,a83c91d6e7725b60,unscored
+receipt,3x3_lattice,2,1,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,branch_behavior,0,a83c91d6e7725b61,unscored
+receipt,3x3_lattice,2,2,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,csv_shape,1,a83c91d6e7725b62,unscored
+receipt,3x3_lattice,2,3,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,timing_loop,0,a83c91d6e7725b63,unscored
+receipt,3x3_lattice,2,4,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,source_structure,1,a83c91d6e7725b64,unscored
+receipt,3x3_lattice,2,5,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d6e7725b65,unscored
+receipt,3x3_lattice,3,0,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,csv_shape,0,a83c91d7e7725b60,unscored
+receipt,3x3_lattice,3,1,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,timing_loop,0,a83c91d7e7725b61,unscored
+receipt,3x3_lattice,3,2,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,source_structure,1,a83c91d7e7725b62,unscored
+receipt,3x3_lattice,3,3,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,csv_shape,0,a83c91d7e7725b63,unscored
+receipt,3x3_lattice,3,4,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,branch_behavior,1,a83c91d7e7725b64,unscored
+receipt,3x3_lattice,3,5,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,source_structure,0,a83c91d7e7725b65,unscored
+receipt,3x3_lattice,4,0,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,timing_loop,0,a83c91d0e7725b60,unscored
+receipt,3x3_lattice,4,1,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,branch_behavior,0,a83c91d0e7725b61,unscored
+receipt,3x3_lattice,4,2,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,csv_shape,1,a83c91d0e7725b62,unscored
+receipt,3x3_lattice,4,3,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,timing_loop,0,a83c91d0e7725b63,unscored
+receipt,3x3_lattice,4,4,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,source_structure,1,a83c91d0e7725b64,unscored
+receipt,3x3_lattice,4,5,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d0e7725b65,unscored
+receipt,3x3_lattice,5,0,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,branch_behavior,0,a83c91d1e7725b60,unscored
+receipt,3x3_lattice,5,1,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,source_structure,0,a83c91d1e7725b61,unscored
+receipt,3x3_lattice,5,2,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d1e7725b62,unscored
+receipt,3x3_lattice,5,3,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d1e7725b63,unscored
+receipt,3x3_lattice,5,4,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,source_structure,1,a83c91d1e7725b64,unscored
+receipt,3x3_lattice,5,5,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d1e7725b65,unscored
+receipt,3x3_lattice,6,0,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,timing_loop,0,a83c91d2e7725b60,unscored
+receipt,3x3_lattice,6,1,trace sleep calls to enclosing loop witnesses,c1cfaf3d09313cc,loop_causality,branch_behavior,0,a83c91d2e7725b61,unscored
+receipt,3x3_lattice,6,2,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,csv_shape,1,a83c91d2e7725b62,unscored
+receipt,3x3_lattice,6,3,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,timing_loop,0,a83c91d2e7725b63,unscored
+receipt,3x3_lattice,6,4,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,source_structure,1,a83c91d2e7725b64,unscored
+receipt,3x3_lattice,6,5,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91d2e7725b65,unscored
+receipt,3x3_lattice,7,0,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,branch_behavior,0,a83c91d3e7725b60,unscored
+receipt,3x3_lattice,7,1,trace missing-argument branches to offsets,414aa7e731525b9b,argument_guard,source_structure,0,a83c91d3e7725b61,unscored
+receipt,3x3_lattice,7,2,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,timing_loop,1,a83c91d3e7725b62,unscored
+receipt,3x3_lattice,7,3,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,branch_behavior,0,a83c91d3e7725b63,unscored
+receipt,3x3_lattice,7,4,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,source_structure,1,a83c91d3e7725b64,unscored
+receipt,3x3_lattice,7,5,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,csv_shape,0,a83c91d3e7725b65,unscored
+receipt,3x3_lattice,8,0,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,source_structure,0,a83c91dce7725b60,unscored
+receipt,3x3_lattice,8,1,differential tokenizer with string/comment states,beb77cc9d83d0148,stateful_tokenizer,csv_shape,0,a83c91dce7725b61,unscored
+receipt,3x3_lattice,8,2,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,timing_loop,1,a83c91dce7725b62,unscored
+receipt,3x3_lattice,8,3,scan declarations while excluding line comments,d3290f144660acf9,lexical_contamination,branch_behavior,0,a83c91dce7725b63,unscored
+receipt,3x3_lattice,8,4,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,csv_shape,1,a83c91dce7725b64,unscored
+receipt,3x3_lattice,8,5,split CSV rows and count fields with malformed-row witnesses,a4b8bfbdf03ee65e,row_arity,timing_loop,0,a83c91dce7725b65,unscored
+summary,config,receipts,unique_tool_hashes,unique_frontier_branches,task_kind_coverage,duplicate_receipts,repairs,resource_rows,resource_xor,verdict
+summary,1x1_homogeneous,54,2,2,4,52,9,54,1,DIVERSITY_ONLY_NOT_CORRECTNESS
+summary,2x2_corners,54,4,4,4,50,9,54,1,DIVERSITY_ONLY_NOT_CORRECTNESS
+summary,3x3_lattice,54,5,5,4,49,18,54,1,DIVERSITY_ONLY_NOT_CORRECTNESS
+audit,all_configs,54,identical_slot_step_resource_schedule,no_hidden_answers,no_scores,renamed_duplicate_detection,equal_total_compute,PASS

@@ -1,0 +1,28 @@
+U2 spectrum: layer 10, w1, 512 rows/expert, train=300 test=34
+  expert 0  t=1s
+  expert 50  t=31s
+  expert 100  t=61s
+  expert 150  t=90s
+  expert 200  t=121s
+  expert 250  t=153s
+covariance over 153600 rows done t=185s; eigh...
+
+spectrum energy capture (train rows): 
+  top-  128:   3.99%
+  top-  256:   7.39%
+  top-  512:  13.50%
+  top- 1024:  24.25%
+  top- 1536:  33.77%
+  top- 2048:  42.40%
+  top- 3072:  57.64%
+MP control: q=0.0467, bulk edges ~ [62.94, 151.4], top eigenvalue = 354.9 (3.5x mean)
+
+held-out expert reconstruction (rel Frobenius error, experts 350..383):
+  k=  128: rel_err mean 0.9818  (compression x56.0 per expert)
+  k=  256: rel_err mean 0.9665  (compression x28.0 per expert)
+  k=  512: rel_err mean 0.9387  (compression x14.0 per expert)
+  k= 1024: rel_err mean 0.8874  (compression x7.0 per expert)
+  k= 1536: rel_err mean 0.8386  (compression x4.7 per expert)
+  k= 2048: rel_err mean 0.7905  (compression x3.5 per expert)
+  k= 3072: rel_err mean 0.6930  (compression x2.3 per expert)
+total time 310s

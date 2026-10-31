@@ -1,0 +1,22 @@
+[
+  { "name": "count_parity_bit", "formula_kind": "count_parity", "params": {} },
+  { "name": "walsh_full_cube", "formula_kind": "walsh", "params": { "subset": 255 } },
+  { "name": "spectral_count_pi", "formula_kind": "spectral_count", "params": { "omega": 3.141592653589793 } },
+  { "name": "xor_popcount_sign", "formula_kind": "xor_popcount", "params": {} },
+  { "name": "median_centered", "formula_kind": "median_centered", "params": {} },
+  { "name": "sin_of_variance", "formula_kind": "variance_sin", "params": { "scale": 0.4 } },
+  { "name": "gcd_all_cells", "formula_kind": "gcd_masked", "params": { "mask": 255 } },
+  { "name": "walsh_hidden_pair", "formula_kind": "walsh", "params": { "subset": 36 } },
+  { "name": "threshold_xor_2_5", "formula_kind": "hidden_xor", "params": { "i": 2, "j": 5 } },
+  { "name": "monomial_phi_2_5", "formula_kind": "monomial", "params": { "mask": 36 } },
+  { "name": "raw_cell_diff_2_5", "formula_kind": "cell_diff_oriented", "params": { "i": 2, "j": 5 } },
+  { "name": "abs_gap_cells_2_5", "formula_kind": "abs_diff_pair", "params": { "i": 2, "j": 5 } },
+  { "name": "sum_mod7_indicator", "formula_kind": "sum_mod_indicator", "params": { "modulus": 7 } },
+  { "name": "sum_sq_mod7", "formula_kind": "sum_sq_mod", "params": { "modulus": 7 } },
+  { "name": "sign_bitmap_mod7", "formula_kind": "sign_pattern_int_mod", "params": { "modulus": 7 } },
+  { "name": "product_cells_mod7", "formula_kind": "product_mod", "params": { "mask": 255, "modulus": 7 } },
+  { "name": "max_minus_min", "formula_kind": "max_min_diff", "params": {} },
+  { "name": "harmonic_mean_cells", "formula_kind": "harmonic_mean", "params": {} },
+  { "name": "cell_values_xor_parity", "formula_kind": "cell_values_xor_parity", "params": {} },
+  { "name": "lcm_masked_mod2", "formula_kind": "lcm_masked_mod", "params": { "mask": 255, "modulus": 2 } }
+]

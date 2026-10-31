@@ -1,0 +1,129 @@
+{
+  "version": "FOUNDRY_ARM_ADAPTER_CONTRACT_V1",
+  "status": "PREFLIGHT_CONTRACT_NOT_HELDOUT_EXECUTION",
+  "required_arms": [
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "A7",
+    "A8",
+    "A9"
+  ],
+  "optional_arms": [
+    "A10"
+  ],
+  "input_schema": {
+    "required_fields": [
+      "version",
+      "arm_id",
+      "artifact",
+      "budgets",
+      "execution",
+      "sealed_inputs"
+    ],
+    "version": "FOUNDRY_ARM_ADAPTER_INPUT_V1",
+    "artifact_required_fields": [
+      "artifact_id",
+      "source_sha256",
+      "family",
+      "repository",
+      "semantic_domain",
+      "graph_ir_sha256",
+      "shape_seed_sha256"
+    ],
+    "budget_required_fields": [
+      "wall_limit_seconds",
+      "cpu_limit_seconds",
+      "rss_limit_kib",
+      "search_unit_limit"
+    ],
+    "execution_exact": {
+      "invocations": 3,
+      "pairing_unit": "artifact",
+      "retain_individual_invocation_receipts": true
+    },
+    "sealed_input_required_fields": [
+      "candidate_library_sha256",
+      "fixed_portfolio_sha256",
+      "protocol_freeze_sha256"
+    ]
+  },
+  "output_schema": {
+    "required_fields": [
+      "version",
+      "arm_id",
+      "artifact_id",
+      "status",
+      "state_policy",
+      "tool_receipts",
+      "cost_ledger",
+      "correctness",
+      "resources",
+      "provenance"
+    ],
+    "version": "FOUNDRY_ARM_ADAPTER_OUTPUT_V1",
+    "status_values": [
+      "PASS",
+      "CORRECTNESS_FAIL",
+      "BUDGET_FAIL",
+      "REQUIRED_UNSUPPORTED",
+      "INFRASTRUCTURE_FAIL"
+    ],
+    "cost_fields": [
+      "candidate_generation_cpu_ns",
+      "verification_cpu_ns",
+      "compiler_cpu_ns",
+      "selector_cpu_ns",
+      "executed_workload_cpu_ns",
+      "failed_attempt_cpu_ns",
+      "total_cpu_ns"
+    ],
+    "resource_fields": [
+      "wall_ns",
+      "peak_group_rss_kib",
+      "observed_process_count",
+      "process_group_reaped",
+      "termination"
+    ],
+    "correctness_fields": [
+      "invocation_receipts",
+      "all_invocations_correct",
+      "max_abs_error",
+      "alias_storage_checks_passed"
+    ],
+    "provenance_fields": [
+      "adapter_sha256",
+      "artifact_source_sha256",
+      "protocol_freeze_sha256",
+      "validation_v6_outcome_mounted"
+    ]
+  },
+  "invariants": [
+    "Every adapter receives the same artifact identity, three-invocation schedule, and declared resource ceilings.",
+    "Every output is sealed before evaluator-private cross-arm outcomes are mounted.",
+    "Total CPU equals the sum of all six CPU ledger components.",
+    "PASS requires three correct invocation receipts, finite maximum error at most 1e-5, alias and storage checks, natural termination, and a reaped process group.",
+    "A3 and A9 begin and end every artifact with empty state and retain no promoted library.",
+    "Unsupported and infrastructure failures remain charged and cannot be omitted.",
+    "Unknown fields, unknown arms, malformed hashes, negative counters, and non-finite numbers are rejected.",
+    "The contract defines transport and accounting only; it does not make an incomplete A6 or A8 implementation conformant."
+  ],
+  "current_integration_truth": {
+    "A0": "PRODUCTION_INTEGRATED",
+    "A1": "COMPONENT_AVAILABLE_NOT_ADAPTED",
+    "A2": "PRODUCTION_INTEGRATED",
+    "A3": "CALIBRATION_KERNEL_NOT_ADAPTED",
+    "A4": "HISTORICAL_REPLAY_COMPONENT_NOT_ADAPTED",
+    "A5": "ADAPTED_CONTROL_NOT_PROSPECTIVE_ADAPTED",
+    "A6": "INCOMPLETE_CONTROL_NOT_ADAPTED",
+    "A7": "ADAPTED_CONTROL_NOT_PROSPECTIVE_ADAPTED",
+    "A8": "INCOMPLETE_PARTIAL_BOUNDARY_NOT_ADAPTED",
+    "A9": "CALIBRATION_KERNEL_NOT_ADAPTED"
+  },
+  "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+  "prospective_trial_authorized": false
+}

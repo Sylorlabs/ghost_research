@@ -1,0 +1,10 @@
+claim,row,observed,threshold_or_control,verdict,detail
+sampler,affine_809,1270_unique,all_1270_unique,PASS,reimplemented semantic-key permutation
+sampler,affine_251,1270_unique,all_1270_unique,PASS,independent affine permutation
+prefix_order,claimed_809,best=0.5667;answer_in_120=no;pos=1270,fixed_order_only,SCOPE_LIMIT,Prefix best scores change across valid orderings; J2 checks membership not performance invariance
+prefix_order,control_251,best=0.5689;answer_in_120=no;pos=1270,fixed_order_only,SCOPE_LIMIT,Prefix best scores change across valid orderings; J2 checks membership not performance invariance
+prefix_order,identity,best=0.6178;answer_in_120=no;pos=1270,fixed_order_only,SCOPE_LIMIT,Prefix best scores change across valid orderings; J2 checks membership not performance invariance
+unrelated_control,xor_count_adj,best_other=0.5711;best_directed=0.5644,no_exact_candidate_expected,PASS,J2's 'none' is a dedicated adjacency grammar rather than an unrelated/no-grammar control
+label_availability,pre_route_labels,required,external_evaluator_required,SCOPE_LIMIT,J2 is applicable only where labelled candidate evaluation exists before routing
+j4_fairness,fixed_small_bank_coverage,30_global+48_singleton+5_adjacency+301_directed,600_total_calls,PASS,Equal total cost is correctly charged; fixed is a strong human-designed coverage baseline
+j4_verdict,guided_vs_fixed,10_of_12_vs_12_of_12,strict_improvement_required,PASS,J4 terminal negative reproduced by its raw ledger; audit finds no reason to reverse it

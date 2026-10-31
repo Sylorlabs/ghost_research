@@ -1,0 +1,13 @@
+artifact,partition,policy,worlds,ticks_budget,viable_ticks,resource_return,useful_actions,recovered_worlds,reproduced_worlds,rewrite_denied,drive_lineage,verdict
+round_w_w2,fresh_changed_worlds,endogenous,24,3072,1275,-1082,369,2,0,0,energy=6;organization=2;damage=3;explore=5,VALID_NEGATIVE:mutable_endogenous_drive_does_not_beat_fixed_drive
+round_w_w2,fresh_changed_worlds,inert,24,3072,744,-2304,0,0,0,0,energy=6;organization=2;damage=3;explore=5,CONTROL
+round_w_w2,fresh_changed_worlds,random,24,3072,1022,-1094,143,0,0,0,energy=6;organization=2;damage=3;explore=5,CONTROL
+round_w_w2,fresh_changed_worlds,fixed_drive,24,3072,1300,-774,526,7,0,0,energy=6;organization=2;damage=3;explore=5,CONTROL
+round_w_w2,fresh_changed_worlds,replay,24,3072,1023,-1371,104,0,0,0,energy=6;organization=2;damage=3;explore=5,CONTROL_PASS:copied_trajectory_tested
+round_w_w2,fresh_changed_worlds,favorable_birth,24,3072,1235,442,1242,14,1,0,energy=6;organization=2;damage=3;explore=5,INVALID_ORACLE_CONTROL
+round_w_w2,fresh_changed_worlds,rewrite,24,3072,744,-2304,0,0,0,768,energy=6;organization=2;damage=3;explore=5,CONTROL_PASS:evaluator_rewrite_denied
+round_w_w2,fresh_changed_worlds,oscillate,24,3072,956,-1446,272,7,0,0,energy=6;organization=2;damage=3;explore=5,CONTROL_PASS:oscillatory_farming_no_special_credit
+round_w_w2,attack,duplicate_evidence,1,0,0,0,0,0,0,0,independent_world_digest_required,CONTROL_PASS:duplicate_not_reproduction
+round_w_w2,attack,post_freeze_edit,1,0,0,0,0,0,0,0,frozen_drive_digest,CONTROL_PASS:post_freeze_edit_rejected
+round_w_w2,attack,bloat,1,0,0,0,0,0,0,0,bytes_charged_by_universe,CONTROL_PASS:bloat_no_free_viability
+round_w_w2,closure,aggregate,24,3072,withheld,withheld,withheld,withheld,withheld,3072,no_language_no_task_no_semantic_reward,VALID_NEGATIVE:development_beats_inert_random_replay_but_not_fixed_drive_and_installed_viability_axes_remain

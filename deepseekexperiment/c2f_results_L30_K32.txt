@@ -1,0 +1,39 @@
+C2F v2: layer 30, K=32, 64 real layer-30 inputs (avail 256)
+weight read (sorted single pass): 215s, 2304 tensors
+  fwd expert 0 t=2s
+  fwd expert 96 t=393s
+  fwd expert 192 t=783s
+  fwd expert 288 t=1144s
+forward all experts: 1601s
+
+=== E15 functional sibling cosine (output space) ===
+  sibling cos>=0.99:   0.0%
+  sibling cos>=0.95:   0.0%
+  sibling cos>=0.90:   0.0%
+  sibling cos>=0.80:   0.0%
+  sibling cos>=0.70:   0.0%
+  mean nearest sibling=0.0170 median=0.0115
+
+=== C2F clustering: 32 super-experts, sizes min=1 med=6 max=114 ===
+
+=== served-by-super-expert residual cos(true expert out, centroid) over ALL (expert,token) ===
+   cos>=0.99:   0.3% served from RAM
+   cos>=0.95:   0.3% served from RAM
+   cos>=0.90:   0.3% served from RAM
+   cos>=0.80:   0.4% served from RAM
+   cos>=0.70:   1.7% served from RAM
+   cos>=0.50:   7.3% served from RAM
+  mean res=0.2487 median=0.1529
+  centroid/true norm ratio mean=0.259
+
+=== CONDITIONAL on real top-6 routing: 48 (expert,token) invocations ===
+   cos>=0.95:   0.0% served-from-RAM => phi_disk=1.000
+   cos>=0.90:   0.0% served-from-RAM => phi_disk=1.000
+   cos>=0.80:   0.0% served-from-RAM => phi_disk=1.000
+   cos>=0.70:   4.2% served-from-RAM => phi_disk=0.958
+  mean conditional res=0.3095 median=0.3069
+
+=== projected disk fraction phi_disk (C2F, K=32 RAM-resident centroids) ===
+   bar cos>=0.95: phi_disk=0.997
+   bar cos>=0.90: phi_disk=0.997
+   bar cos>=0.80: phi_disk=0.996

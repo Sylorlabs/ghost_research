@@ -71,20 +71,47 @@ beat hand-coded control — a tuned thermostat scores 0.00; see the E1 correctio
   beating the XOR readout 3–15× (the escape). It remains a poor controller: a tuned
   thermostat solves the band at 0.00 (`sparse_poly_discovery/docs/research/closure_escape_control.md`).
 
-## Refinement: the generator can be irreducibly a *pair* (emergent escape)
+## Refinement: emergent pairs are budget-relative (CORRECTED 2026-07-10)
 
-The escape generator is not always a single op. An exact u8 experiment (`zig build
-synergy`, `sparse_poly_discovery/docs/research/emergent_escape.md`) finds targets reachable by
-`base+{X,Y}` but **neither** `base+{X}` nor `base+{Y}`: `x&(x-1)` needs {AND,SUB},
-`x|(x*x)` needs {OR,MUL}. Consequence (tested, and a self-correction): greedy
-one-op-at-a-time substrate growth misses these **only when the components have no
-standalone use** — measured: on a rich 5-target set greedy reaches 5/5 (it picks up
-each component for some other target), but on an isolated `{x&(x-1)}` greedy reaches
-0/1 while the full op-set reaches 1/1, because AND and SUB are then useless alone and
-greedy never starts. So tuple search is needed *exactly* for components with no
-standalone use, not in general (my first "provably misses" was overstated; I caught
-it by testing). Falsification side of the same run: the affine base reaches 0/5
-nonlinear targets — the principle survived an honest attempt to break it.
+> ⚠️ **The original version of this section was refuted** by the I53
+> falsification round (`docs/research/i53_falsification_2026_07_10.md`). It
+> claimed pair-*necessity* without qualifiers: "`x&(x-1)` needs {AND,SUB},
+> `x|(x*x)` needs {OR,MUL}". Both are false: a depth-6 BFS on the same
+> substrate finds `x&(x-1)` with **SUB alone** (the original search stopped at
+> depth 3), and `x|(x*x)` has a 19-instruction witness using only
+> {SHR,SHL,XOR,NOT,AND} (u4, K=5, exhaustively verified, independently
+> re-verified in Python). The synergy substrate's walls are **(depth,
+> register-count) resource bounds, not algebraic closure** — base+{AND} is
+> functionally complete over GF(2) given enough registers.
+
+Corrected statement: at a *fixed search budget* (depth D, K registers), the
+escape generator can be irreducibly a pair — targets reachable by `base+{X,Y}`
+within budget but by neither `base+{X}` nor `base+{Y}` within the same budget.
+This is a real and useful phenomenon for any budget-bounded searcher (which
+every real searcher is), but it is a statement about *reachability under
+resources*, not about closure. Only the affine/GF(2) witness below is a
+resource-independent closure theorem. The greedy-growth consequence still
+holds as measured: on a rich 5-target set greedy one-op-at-a-time reaches 5/5,
+but on an isolated `{x&(x-1)}`-style target whose pair components have no
+standalone use, greedy reaches 0/1 within budget while tuple search reaches
+1/1 — tuple search matters exactly when components have no standalone value
+at the operating budget.
+
+General qualifiers (from the same falsification round) that every
+"outside the closure" claim in this repo must carry:
+1. **Width:** the fact is per-domain-width (at u1 all five witness targets are
+   affine; at u2 the old flagship pair witness degenerates to the identity
+   map). State the width.
+2. **Resources:** for program-search witnesses, say "not reachable at depth ≤ D
+   with K registers", not "outside the closure" — unless a fixpoint proof
+   exists. The affine base has one: at u2 its closure reaches an exact
+   fixpoint (64/256 functions) and the nonlinear targets are unreachable at
+   **any** depth; at u4/u8 the 0/5 result is budget-bounded (depth 9 / 8M
+   states, depth 8 / 1.2M states).
+
+Falsification side of the same run: the affine base reaches 0/5 nonlinear
+targets everywhere tested — the core principle survived the attack and came
+out stronger (the u2 fixpoint upgrades it to an infinite-depth proof).
 
 ## Practical corollary for this repo (and any learner)
 

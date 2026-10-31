@@ -1,0 +1,133 @@
+seed,arm,battery,idx,target,solved,cov,label,checked_delta,novel_delta,remix_blocked_delta,nlib,basis_at_target,revision_fired_at
+0xF0235A11CE0FF1CE,off,B,0,"B1 random monomial deg2",1,1.0000,rq1_escalation,4,0,4,11,3,frozen
+0xF0235A11CE0FF1CE,off,B,1,"B2 random monomial deg3",1,1.0000,rq1_escalation,3,0,3,11,3,frozen
+0xF0235A11CE0FF1CE,off,B,2,"B3 sum(g) % 7",1,1.0000,unified escalation,1,1,0,12,3,frozen
+0xF0235A11CE0FF1CE,off,B,3,"B4 sign%mod 11",1,0.9034,frozen/grown monomials,0,0,0,12,3,frozen
+0xF0235A11CE0FF1CE,off,B,4,"B5 Walsh χ{S=0x11}",1,1.0000,rq1_escalation,3,0,3,12,3,frozen
+0xF0235A11CE0FF1CE,off,B,5,"B6 Walsh χ{S=0xA4}",1,1.0000,rq1_escalation,2,0,2,12,3,frozen
+0xF0235A11CE0FF1CE,off,B,6,"B7 Walsh χ{S=0x0A}",1,1.0000,rq1_escalation,3,0,3,12,3,frozen
+0xF0235A11CE0FF1CE,off,B,7,"B8 parity-of-count",1,1.0000,rq1_escalation,2,0,2,12,3,frozen
+0xF0235A11CE0FF1CE,off,B,8,"B9 oriented v1>v0",1,1.0000,frozen/grown monomials,0,0,0,12,3,frozen
+0xF0235A11CE0FF1CE,off,B,9,"B10 parity AND sum%5",1,0.9097,frozen/grown monomials,0,0,0,12,3,frozen
+0xF0235A11CE0FF1CE,off,B,10,"B11 inversion parity",1,1.0000,rq1_escalation,0,0,0,12,3,frozen
+0xF0235A11CE0FF1CE,off,C,11,"C01 XOR 0x0F",0,0.5240,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,12,"C02 parity XOR 0x33",0,0.4857,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,13,"C03 XOR 0x55",0,0.5040,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,14,"C04 XOR 0xAA",0,0.4880,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,15,"C05 XOR 0x3C",0,0.5074,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,16,"C06 XOR 0x66",0,0.4966,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,17,"C07 XOR 0x99",0,0.4989,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,18,"C08 parity count",0,0.5103,base,2,0,2,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,19,"C09 inv parity",0,0.4943,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,20,"C10 parity XOR 0x0F",0,0.5223,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,off,C,21,"C11 XOR 0x37",0,0.4897,base,0,0,0,11,3,frozen
+0xF0235A11CE0FF1CE,on,B,0,"B1 random monomial deg2",1,1.0000,rq1_escalation,4,0,4,11,3,pre
+0xF0235A11CE0FF1CE,on,B,1,"B2 random monomial deg3",1,1.0000,rq1_escalation,3,0,3,11,3,post
+0xF0235A11CE0FF1CE,on,B,2,"B3 sum(g) % 7",1,1.0000,unified escalation,1,1,0,12,4,post
+0xF0235A11CE0FF1CE,on,B,3,"B4 sign%mod 11",1,0.9034,frozen/grown monomials,0,0,0,12,4,post
+0xF0235A11CE0FF1CE,on,B,4,"B5 Walsh χ{S=0x11}",1,1.0000,unified escalation,1,1,0,13,4,post
+0xF0235A11CE0FF1CE,on,B,5,"B6 Walsh χ{S=0xA4}",1,1.0000,unified escalation,1,1,0,14,4,post
+0xF0235A11CE0FF1CE,on,B,6,"B7 Walsh χ{S=0x0A}",1,1.0000,unified escalation,1,1,0,15,4,post
+0xF0235A11CE0FF1CE,on,B,7,"B8 parity-of-count",1,1.0000,unified escalation,1,1,0,16,4,post
+0xF0235A11CE0FF1CE,on,B,8,"B9 oriented v1>v0",1,1.0000,frozen/grown monomials,0,0,0,16,4,post
+0xF0235A11CE0FF1CE,on,B,9,"B10 parity AND sum%5",1,1.0000,unified escalation,1,1,0,17,4,post
+0xF0235A11CE0FF1CE,on,B,10,"B11 inversion parity",1,1.0000,rq1_escalation,0,0,0,17,4,post
+0xF0235A11CE0FF1CE,on,C,11,"C01 XOR 0x0F",0,0.5240,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,12,"C02 parity XOR 0x33",0,0.4857,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,13,"C03 XOR 0x55",0,0.5040,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,14,"C04 XOR 0xAA",0,0.4880,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,15,"C05 XOR 0x3C",0,0.5074,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,16,"C06 XOR 0x66",0,0.4966,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,17,"C07 XOR 0x99",0,0.4989,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,18,"C08 parity count",1,1.0000,walsh,1,1,0,12,4,post
+0xF0235A11CE0FF1CE,on,C,19,"C09 inv parity",0,0.4971,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,20,"C10 parity XOR 0x0F",0,0.5223,base,0,0,0,11,4,post
+0xF0235A11CE0FF1CE,on,C,21,"C11 XOR 0x37",0,0.4897,base,0,0,0,11,4,post
+0x00C1B10D20260706,off,B,0,"B1 random monomial deg2",1,1.0000,rq1_escalation,4,0,4,11,3,frozen
+0x00C1B10D20260706,off,B,1,"B2 random monomial deg3",1,1.0000,rq1_escalation,3,0,3,11,3,frozen
+0x00C1B10D20260706,off,B,2,"B3 sum(g) % 7",1,1.0000,unified escalation,1,1,0,12,3,frozen
+0x00C1B10D20260706,off,B,3,"B4 sign%mod 11",1,0.9051,frozen/grown monomials,0,0,0,12,3,frozen
+0x00C1B10D20260706,off,B,4,"B5 Walsh χ{S=0x11}",1,1.0000,rq1_escalation,3,0,3,12,3,frozen
+0x00C1B10D20260706,off,B,5,"B6 Walsh χ{S=0xA4}",1,1.0000,rq1_escalation,2,0,2,12,3,frozen
+0x00C1B10D20260706,off,B,6,"B7 Walsh χ{S=0x0A}",1,1.0000,rq1_escalation,3,0,3,12,3,frozen
+0x00C1B10D20260706,off,B,7,"B8 parity-of-count",1,1.0000,rq1_escalation,2,0,2,12,3,frozen
+0x00C1B10D20260706,off,B,8,"B9 oriented v1>v0",1,1.0000,frozen/grown monomials,0,0,0,12,3,frozen
+0x00C1B10D20260706,off,B,9,"B10 parity AND sum%5",0,0.8977,saturated,0,0,0,12,3,frozen
+0x00C1B10D20260706,off,B,10,"B11 inversion parity",1,1.0000,rq1_escalation,0,0,0,12,3,frozen
+0x00C1B10D20260706,off,C,11,"C01 XOR 0x0F",0,0.5051,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,12,"C02 parity XOR 0x33",0,0.4983,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,13,"C03 XOR 0x55",0,0.5137,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,14,"C04 XOR 0xAA",0,0.4829,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,15,"C05 XOR 0x3C",0,0.5091,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,16,"C06 XOR 0x66",0,0.4897,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,17,"C07 XOR 0x99",0,0.4926,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,18,"C08 parity count",0,0.4874,base,2,0,2,11,3,frozen
+0x00C1B10D20260706,off,C,19,"C09 inv parity",0,0.4949,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,20,"C10 parity XOR 0x0F",0,0.4983,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,off,C,21,"C11 XOR 0x37",0,0.5029,base,0,0,0,11,3,frozen
+0x00C1B10D20260706,on,B,0,"B1 random monomial deg2",1,1.0000,rq1_escalation,4,0,4,11,3,pre
+0x00C1B10D20260706,on,B,1,"B2 random monomial deg3",1,1.0000,rq1_escalation,3,0,3,11,3,post
+0x00C1B10D20260706,on,B,2,"B3 sum(g) % 7",1,1.0000,unified escalation,1,1,0,12,4,post
+0x00C1B10D20260706,on,B,3,"B4 sign%mod 11",1,0.9051,frozen/grown monomials,0,0,0,12,4,post
+0x00C1B10D20260706,on,B,4,"B5 Walsh χ{S=0x11}",1,1.0000,unified escalation,1,1,0,13,4,post
+0x00C1B10D20260706,on,B,5,"B6 Walsh χ{S=0xA4}",1,1.0000,unified escalation,1,1,0,14,4,post
+0x00C1B10D20260706,on,B,6,"B7 Walsh χ{S=0x0A}",1,1.0000,unified escalation,1,1,0,15,4,post
+0x00C1B10D20260706,on,B,7,"B8 parity-of-count",1,1.0000,unified escalation,1,1,0,16,4,post
+0x00C1B10D20260706,on,B,8,"B9 oriented v1>v0",1,1.0000,frozen/grown monomials,0,0,0,16,4,post
+0x00C1B10D20260706,on,B,9,"B10 parity AND sum%5",1,1.0000,unified escalation,1,1,0,17,4,post
+0x00C1B10D20260706,on,B,10,"B11 inversion parity",1,1.0000,rq1_escalation,0,0,0,17,4,post
+0x00C1B10D20260706,on,C,11,"C01 XOR 0x0F",0,0.5051,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,12,"C02 parity XOR 0x33",0,0.4983,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,13,"C03 XOR 0x55",0,0.5137,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,14,"C04 XOR 0xAA",0,0.4829,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,15,"C05 XOR 0x3C",0,0.5091,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,16,"C06 XOR 0x66",0,0.4897,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,17,"C07 XOR 0x99",0,0.4926,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,18,"C08 parity count",1,1.0000,walsh,1,1,0,12,4,post
+0x00C1B10D20260706,on,C,19,"C09 inv parity",0,0.4903,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,20,"C10 parity XOR 0x0F",0,0.4983,base,0,0,0,11,4,post
+0x00C1B10D20260706,on,C,21,"C11 XOR 0x37",0,0.5029,base,0,0,0,11,4,post
+0x00C2B10D20260707,off,B,0,"B1 random monomial deg2",1,1.0000,rq1_escalation,4,0,4,11,3,frozen
+0x00C2B10D20260707,off,B,1,"B2 random monomial deg3",1,1.0000,rq1_escalation,3,0,3,11,3,frozen
+0x00C2B10D20260707,off,B,2,"B3 sum(g) % 7",1,1.0000,unified escalation,1,1,0,12,3,frozen
+0x00C2B10D20260707,off,B,3,"B4 sign%mod 11",1,0.9063,frozen/grown monomials,0,0,0,12,3,frozen
+0x00C2B10D20260707,off,B,4,"B5 Walsh χ{S=0x11}",1,1.0000,rq1_escalation,3,0,3,12,3,frozen
+0x00C2B10D20260707,off,B,5,"B6 Walsh χ{S=0xA4}",1,1.0000,rq1_escalation,2,0,2,12,3,frozen
+0x00C2B10D20260707,off,B,6,"B7 Walsh χ{S=0x0A}",1,1.0000,rq1_escalation,3,0,3,12,3,frozen
+0x00C2B10D20260707,off,B,7,"B8 parity-of-count",1,1.0000,rq1_escalation,2,0,2,12,3,frozen
+0x00C2B10D20260707,off,B,8,"B9 oriented v1>v0",1,1.0000,frozen/grown monomials,0,0,0,12,3,frozen
+0x00C2B10D20260707,off,B,9,"B10 parity AND sum%5",1,0.9097,frozen/grown monomials,0,0,0,12,3,frozen
+0x00C2B10D20260707,off,B,10,"B11 inversion parity",1,1.0000,rq1_escalation,0,0,0,12,3,frozen
+0x00C2B10D20260707,off,C,11,"C01 XOR 0x0F",0,0.4960,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,12,"C02 parity XOR 0x33",0,0.5057,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,13,"C03 XOR 0x55",0,0.4909,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,14,"C04 XOR 0xAA",0,0.5069,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,15,"C05 XOR 0x3C",0,0.4926,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,16,"C06 XOR 0x66",0,0.4983,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,17,"C07 XOR 0x99",0,0.5189,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,18,"C08 parity count",0,0.5017,base,2,0,2,11,3,frozen
+0x00C2B10D20260707,off,C,19,"C09 inv parity",0,0.4909,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,20,"C10 parity XOR 0x0F",0,0.4994,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,off,C,21,"C11 XOR 0x37",0,0.5051,base,0,0,0,11,3,frozen
+0x00C2B10D20260707,on,B,0,"B1 random monomial deg2",1,1.0000,rq1_escalation,4,0,4,11,3,pre
+0x00C2B10D20260707,on,B,1,"B2 random monomial deg3",1,1.0000,rq1_escalation,3,0,3,11,3,post
+0x00C2B10D20260707,on,B,2,"B3 sum(g) % 7",1,1.0000,unified escalation,1,1,0,12,4,post
+0x00C2B10D20260707,on,B,3,"B4 sign%mod 11",1,0.9063,frozen/grown monomials,0,0,0,12,4,post
+0x00C2B10D20260707,on,B,4,"B5 Walsh χ{S=0x11}",1,1.0000,unified escalation,1,1,0,13,4,post
+0x00C2B10D20260707,on,B,5,"B6 Walsh χ{S=0xA4}",1,1.0000,unified escalation,1,1,0,14,4,post
+0x00C2B10D20260707,on,B,6,"B7 Walsh χ{S=0x0A}",1,1.0000,unified escalation,1,1,0,15,4,post
+0x00C2B10D20260707,on,B,7,"B8 parity-of-count",1,1.0000,unified escalation,1,1,0,16,4,post
+0x00C2B10D20260707,on,B,8,"B9 oriented v1>v0",1,1.0000,frozen/grown monomials,0,0,0,16,4,post
+0x00C2B10D20260707,on,B,9,"B10 parity AND sum%5",1,0.9086,frozen/grown monomials,0,0,0,16,4,post
+0x00C2B10D20260707,on,B,10,"B11 inversion parity",1,1.0000,rq1_escalation,0,0,0,16,4,post
+0x00C2B10D20260707,on,C,11,"C01 XOR 0x0F",0,0.4960,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,12,"C02 parity XOR 0x33",0,0.5057,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,13,"C03 XOR 0x55",0,0.4909,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,14,"C04 XOR 0xAA",0,0.5069,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,15,"C05 XOR 0x3C",0,0.4926,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,16,"C06 XOR 0x66",0,0.4983,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,17,"C07 XOR 0x99",0,0.5189,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,18,"C08 parity count",1,1.0000,walsh,1,1,0,12,4,post
+0x00C2B10D20260707,on,C,19,"C09 inv parity",0,0.5034,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,20,"C10 parity XOR 0x0F",0,0.4994,base,0,0,0,11,4,post
+0x00C2B10D20260707,on,C,21,"C11 XOR 0x37",0,0.5051,base,0,0,0,11,4,post

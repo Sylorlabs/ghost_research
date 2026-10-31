@@ -1,0 +1,96 @@
+{
+  "version": "FOUNDRY_ENUMO_TENSOR_RULE_REUSE_PROTOCOL_V1",
+  "status": "PREFROZEN_POST_FEASIBILITY_COMPETITIVENESS_AUDIT",
+  "frozen_before_reuse_runner_implementation_or_execution": true,
+  "question": "Do the 18 frozen learned rules produce strictly cheaper, independently sound held-out expressions than a strong fixed algebraic portfolio, rather than merely rediscovering its identities?",
+  "identity": {
+    "experiment_name": "ENUMO_TENSOR_RULE_REUSE_COMPETITIVENESS",
+    "input_result_is_frozen": true,
+    "is_frozen_boolean_A7": false,
+    "may_promote_A7": false,
+    "may_increase_production_integrated_arm_count": false
+  },
+  "held_out_generator": {
+    "exact_atom_count": 5,
+    "training_atom_counts_excluded": [3, 4],
+    "ordered_leaf_forms": [
+      "a",
+      "b",
+      "[-2,-2,-2,-2]",
+      "[-1,-1,-1,-1]",
+      "[0,0,0,0]",
+      "[1,1,1,1]",
+      "[2,2,2,2]"
+    ],
+    "ordered_operators": ["relu", "+", "*"],
+    "binary_operand_order_preserved": true,
+    "expected_expression_count": 3339,
+    "selection": "all_distinct_generated_expressions",
+    "outcome_based_case_selection": false
+  },
+  "optimization": {
+    "cost": ["atom_count", "canonical_serialization"],
+    "rewrite_scope": "all_matching_subexpressions",
+    "closure": "all_nonincreasing_atom_count_rewrites_with_strict_lexicographic_tie_orientation",
+    "maximum_unique_states_per_expression_per_portfolio": 512,
+    "resource_failure_if_state_cap_reached": true
+  },
+  "strong_fixed_portfolio": [
+    "(+ ?a [0,0,0,0]) ==> ?a",
+    "(+ [0,0,0,0] ?a) ==> ?a",
+    "(* ?a [1,1,1,1]) ==> ?a",
+    "(* [1,1,1,1] ?a) ==> ?a",
+    "(* ?a [0,0,0,0]) ==> [0,0,0,0]",
+    "(* [0,0,0,0] ?a) ==> [0,0,0,0]",
+    "(relu (relu ?a)) ==> (relu ?a)",
+    "(relu (* ?a ?a)) ==> (* ?a ?a)",
+    "(relu [-2,-2,-2,-2]) ==> [0,0,0,0]",
+    "(relu [-1,-1,-1,-1]) ==> [0,0,0,0]",
+    "(relu [0,0,0,0]) ==> [0,0,0,0]",
+    "(relu [1,1,1,1]) ==> [1,1,1,1]",
+    "(relu [2,2,2,2]) ==> [2,2,2,2]"
+  ],
+  "semantic_validation": {
+    "independent_scalar_domain": [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+    "all_four_literal_lanes_checked": true,
+    "every_selected_best_expression_must_equal_its_input": true
+  },
+  "acceptance": {
+    "all_3339_held_out_expressions_executed": true,
+    "no_state_cap_reached": true,
+    "all_selected_outputs_independently_sound": true,
+    "learned_portfolio_strict_wins_over_fixed_must_be_positive": true,
+    "fixed_portfolio_strict_wins_reported": true,
+    "ties_reported": true,
+    "process_tree_cpu_rss_wall_and_reaping_required": true
+  },
+  "frozen_inputs": [
+    {
+      "path": "results/phase132_enumo_tensor_domain_feasibility.json",
+      "sha256": "e964d540700874ee82ee8340278f977c2011eb2963bab7f14b9587ff977eccad"
+    },
+    {
+      "path": "results/enumo_tensor_feasibility_result_v1_freeze.json",
+      "sha256": "bdc2cdf7fcb4fd81ae90c0e7338b2b0a3368c55d1ce586c8243443619c9690f8"
+    },
+    {
+      "path": "enumo_tensor_rule_verifier.py",
+      "sha256": "2a2ed4a1bc9b0444972af474f2d962e4f0f339fedea8ff24a4ec8419ea0342f8"
+    }
+  ],
+  "failure_interpretation": {
+    "zero_learned_strict_wins": "tensor-domain operation is feasible, but learned tool reuse has not beaten a strong fixed portfolio even on generated held-out expressions",
+    "semantic_failure": "reuse implementation or learned portfolio is unsound",
+    "state_or_resource_failure": "competitiveness is not established under the declared operational boundary"
+  },
+  "claim_boundary": {
+    "generated_not_real_artifacts": true,
+    "full_tensor_graph_language": false,
+    "full_23_graph_adapter": false,
+    "production_integration": false,
+    "P1_advance": false,
+    "P3_integration_advance": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

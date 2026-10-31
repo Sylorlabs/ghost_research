@@ -1,0 +1,9 @@
+E19d structural ceiling (in-sample, perfect basis): layer 30, 128 tokens
+   r  input-proj  full-surr  (mean over 8 experts, in-sample)
+  48       0.826      0.781
+  64       0.881      0.839
+  84       0.932      0.898
+ 110       0.979      0.954
+ 124       0.997      0.977
+
+NOTE in-sample is OPTIMISTIC (128 tokens, basis up to r dims). Tells the STRUCTURAL ceiling, not deployable fidelity. >0.95 here => structure is sound, gap is warm-up.

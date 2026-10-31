@@ -1,0 +1,72 @@
+=== E11: full V4 stack with MLA attention — standalone perplexity A/B ===
+T=128 real text tokens (stream offset 8000) | ref(f32) vs quant(H+P3refit weights, int8 acts)
+attention: MLA + window-128 + gated compressor (exact at this T)
+
+L00 r128 hash  cos=0.98206 route_ov=1.00 experts=302 t=98s
+L01 r128 hash  cos=0.97763 route_ov=1.00 experts=297 t=191s
+L02 r4   hash  cos=0.97546 route_ov=1.00 experts=309 t=286s
+L03 r128 score cos=0.97455 route_ov=0.85 experts=200 t=351s
+L04 r4   score cos=0.98084 route_ov=0.86 experts=189 t=418s
+L05 r128 score cos=0.97863 route_ov=0.85 experts=187 t=480s
+L06 r4   score cos=0.97529 route_ov=0.85 experts=173 t=537s
+L07 r128 score cos=0.96836 route_ov=0.84 experts=221 t=608s
+L08 r4   score cos=0.96417 route_ov=0.80 experts=218 t=674s
+L09 r128 score cos=0.95081 route_ov=0.82 experts=170 t=728s
+L10 r4   score cos=0.93831 route_ov=0.77 experts=198 t=784s
+L11 r128 score cos=0.92719 route_ov=0.78 experts=210 t=840s
+L12 r4   score cos=0.92686 route_ov=0.82 experts=182 t=893s
+L13 r128 score cos=0.92323 route_ov=0.82 experts=185 t=948s
+L14 r4   score cos=0.92683 route_ov=0.83 experts=196 t=1001s
+L15 r128 score cos=0.92748 route_ov=0.78 experts=184 t=1054s
+L16 r4   score cos=0.92693 route_ov=0.81 experts=159 t=1102s
+L17 r128 score cos=0.92285 route_ov=0.81 experts=153 t=1147s
+L18 r4   score cos=0.92005 route_ov=0.78 experts=175 t=1200s
+L19 r128 score cos=0.90785 route_ov=0.75 experts=166 t=1258s
+L20 r4   score cos=0.88811 route_ov=0.74 experts=182 t=1315s
+L21 r128 score cos=0.87853 route_ov=0.72 experts=179 t=1373s
+L22 r4   score cos=0.85063 route_ov=0.74 experts=166 t=1430s
+L23 r128 score cos=0.86817 route_ov=0.82 experts=201 t=1484s
+L24 r4   score cos=0.86725 route_ov=0.79 experts=189 t=1537s
+L25 r128 score cos=0.88402 route_ov=0.79 experts=197 t=1589s
+L26 r4   score cos=0.87898 route_ov=0.77 experts=175 t=1641s
+L27 r128 score cos=0.87529 route_ov=0.72 experts=164 t=1690s
+L28 r4   score cos=0.87812 route_ov=0.74 experts=177 t=1737s
+L29 r128 score cos=0.88658 route_ov=0.76 experts=240 t=1795s
+L30 r4   score cos=0.87179 route_ov=0.77 experts=170 t=1848s
+L31 r128 score cos=0.87008 route_ov=0.74 experts=216 t=1902s
+L32 r4   score cos=0.86829 route_ov=0.72 experts=213 t=1957s
+L33 r128 score cos=0.86874 route_ov=0.74 experts=236 t=2016s
+L34 r4   score cos=0.86875 route_ov=0.74 experts=151 t=2060s
+L35 r128 score cos=0.88394 route_ov=0.81 experts=229 t=2119s
+L36 r4   score cos=0.88337 route_ov=0.76 experts=177 t=2167s
+L37 r128 score cos=0.88825 route_ov=0.74 experts=192 t=2216s
+L38 r4   score cos=0.88748 route_ov=0.77 experts=175 t=2266s
+L39 r128 score cos=0.88835 route_ov=0.73 experts=209 t=2317s
+L40 r4   score cos=0.88948 route_ov=0.77 experts=180 t=2370s
+L41 r128 score cos=0.89181 route_ov=0.73 experts=217 t=2428s
+L42 r4   score cos=0.89042 route_ov=0.74 experts=167 t=2483s
+L43 r128 score cos=0.89361 route_ov=0.75 experts=225 t=2540s
+L44 r4   score cos=0.89283 route_ov=0.75 experts=200 t=2593s
+L45 r128 score cos=0.89137 route_ov=0.74 experts=203 t=2648s
+L46 r4   score cos=0.88857 route_ov=0.72 experts=184 t=2700s
+L47 r128 score cos=0.88616 route_ov=0.69 experts=202 t=2753s
+L48 r4   score cos=0.88837 route_ov=0.75 experts=197 t=2804s
+L49 r128 score cos=0.88587 route_ov=0.73 experts=208 t=2857s
+L50 r4   score cos=0.88342 route_ov=0.73 experts=177 t=2907s
+L51 r128 score cos=0.87951 route_ov=0.75 experts=198 t=2961s
+L52 r4   score cos=0.88392 route_ov=0.72 experts=204 t=3017s
+L53 r128 score cos=0.86723 route_ov=0.75 experts=234 t=3072s
+L54 r4   score cos=0.83649 route_ov=0.75 experts=170 t=3121s
+L55 r128 score cos=0.83479 route_ov=0.74 experts=198 t=3170s
+L56 r4   score cos=0.84060 route_ov=0.77 experts=169 t=3214s
+L57 r128 score cos=0.85950 route_ov=0.73 experts=217 t=3266s
+L58 r4   score cos=0.86091 route_ov=0.70 experts=181 t=3314s
+L59 r128 score cos=0.86348 route_ov=0.77 experts=213 t=3365s
+L60 r4   score cos=0.88645 route_ov=0.77 experts=201 t=3415s
+
+--- perplexity (eval positions: second half, step 1) ---
+
+REF   mean NLL = 2.6285 nats  ppl = 13.85
+QUANT mean NLL = 2.9014 nats  ppl = 18.20
+top1 agreement at eval positions: 48/63
+total time: 3497s

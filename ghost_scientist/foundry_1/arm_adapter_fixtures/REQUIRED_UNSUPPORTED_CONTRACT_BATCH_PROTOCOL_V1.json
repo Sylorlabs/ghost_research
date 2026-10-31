@@ -1,0 +1,46 @@
+{
+  "version": "FOUNDRY_REQUIRED_UNSUPPORTED_CONTRACT_BATCH_PROTOCOL_V1",
+  "status": "PREFROZEN_FAIL_CLOSED_CONTRACT_BATCH",
+  "frozen_before_batch_assembly": true,
+  "batch_version": "FOUNDRY_REQUIRED_UNSUPPORTED_ARM_BATCH_V1",
+  "arms": ["A1", "A6", "A7", "A8"],
+  "artifacts_per_arm": 23,
+  "expected_pairs": 92,
+  "expected_reasons": {
+    "A1": "INCOMPLETE_IR_SURFACE",
+    "A6": "TOP_LEVEL_ISAMORE_CONTROL_UNAVAILABLE",
+    "A7": "NEW_TENSOR_SYNTH_LANGUAGE_REQUIRED",
+    "A8": "UPSTREAM_EGGMIND_NOT_DISCOVERED_PARTIAL_BOUNDARY_ONLY"
+  },
+  "rules": [
+    "Every arm-artifact pair must have one exact v1 request and REQUIRED_UNSUPPORTED output accepted by primary and independent base-contract verifiers.",
+    "Every output has empty tool and invocation receipts, false correctness and alias claims, zero numerical error, empty unchanged unretained state, and no validation outcome mounted.",
+    "The candidate-library sealed digest identifies the authenticated arm-specific unsupported evidence, not a usable candidate library.",
+    "Exactly one complete matrix-audit process receipt is canonicalized, referenced 92 times, and charged once.",
+    "The receipt's complete user-plus-system CPU is allocated deterministically across exactly one leading artifact per arm; aggregate ledger CPU equals receipt CPU exactly.",
+    "All bindings repeat only the exact common-contract resource projection and share one protocol hash.",
+    "The Cartesian product of four arms and 23 artifacts must be exact; missing, duplicate, or substituted pairs fail closed.",
+    "Completing unsupported resource accounting may close P3 but cannot change conformance, production integration, numerical correctness, or prospective authorization.",
+    "Both batch verifiers must reject changed receipt identity/body, pair identity, evidence reason/hash, status, state, resources, CPU allocation, integration, validation, prospective, or unknown fields."
+  ],
+  "provider_records": [
+    {"path": "arm_adapter_fixtures/REQUIRED_UNSUPPORTED_MATRIX_PROTOCOL_V1.json", "sha256": "4cadf8d7f48df34b0e971da2e8ca61b462ec431ec433073491b675a759a179bd"},
+    {"path": "phase107_required_unsupported_matrix_audit.py", "sha256": "3739319480aca95ff13fc2cd5c3a74f497af66a79a9cd88702a2ae509176ae2a"},
+    {"path": "results/phase107_required_unsupported_matrix_audit.json", "sha256": "2024919da60487544b801b469c10780dd637e023fd5d6381ac54ed0a22a28360"},
+    {"path": "phase108_required_unsupported_matrix_resource_audit.py", "sha256": "3eae3ee80b5d4f50178c6cc716a9643db53cd9f77683d38573cc8caf491dc2c6"},
+    {"path": "results/phase108_required_unsupported_matrix_resource_audit.json", "sha256": "4a5d97f23392838b553c3b2ccb7de148d3e836fe97effd4377522289fbd4723f"},
+    {"path": "results/pareto_remediation_v12_freeze.json", "sha256": "d736bfb43a8bd7504ae41212244c7b323f107900a65b6c22069e0999ed1e120c"},
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"},
+    {"path": "arm_adapter_contract.py", "sha256": "ac7eb5e7a00813cd2ee722059bf5265b0e270f3e56efae0325e337136eca1a5e"},
+    {"path": "independent_arm_adapter_contract.py", "sha256": "cc2ccece0b76d33b9fb933eb8547d66b46be788f9f1146cc2d6fb3180e6b2173"},
+    {"path": "results/forged_diversity_tools.json", "sha256": "64abcef88f8c4f152e39db684e8bd1a7f24fdf25928a24d411d15d8499d46f5b"}
+  ],
+  "claim_boundary": {
+    "P3_complete_after_full_batch_and_resource_pass": true,
+    "newly_conformant_arms": 0,
+    "newly_production_integrated_arms": 0,
+    "production_integrated_arms_after_pass": 6,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

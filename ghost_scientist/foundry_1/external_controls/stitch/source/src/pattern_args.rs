@@ -1,0 +1,359 @@
+use std::{ops::DerefMut, str::FromStr};
+use itertools::Itertools;
+
+use lambdas::*;
+use rustc_hash::FxHashMap;
+
+use crate::*;
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Copy, PartialOrd, Ord, serde::Serialize)]
+pub enum VariableType {
+    Metavar,
+    Symvar,
+}
+
+impl FromStr for VariableType {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "M" => Ok(VariableType::Metavar),
+            "S" => Ok(VariableType::Symvar),
+            _ => Err(format!("Invalid variable type: {}", s)),
+        }
+    }
+}
+
+impl std::fmt::Display for VariableType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            VariableType::Metavar => write!(f, "M"),
+            VariableType::Symvar => write!(f, "S"),
+        }
+    }
+}
+
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]
+pub struct PatternArgs {
+    arg_choices: Vec<LabelledZId>, // a hole gets moved into here when it becomes an abstraction argument, again these are in order of when they were added
+    variables: Vec<(u32, VariableType)>, //varibales[i].0 gives the index zipper to the ith argument (#i), i.e. this is zipper is also somewhere in arg_choices
+}
+
+impl PartialOrd for PatternArgs {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for PatternArgs {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        // only compare the arg_choices, since the variables is just a mapping to the arg_choices
+        self.arg_choices.cmp(&other.arg_choices)
+    }
+}
+
+
+impl PatternArgs {
+    pub fn arity(&self) -> usize {
+        self.variables.len()
+    }
+
+    pub fn num_ivars(&self) -> usize {
+        self.variables.iter().filter(|(_,t)| *t == VariableType::Metavar).count()
+    }
+
+    #[inline]
+    pub fn iterate_arguments(&self) -> impl Iterator<Item = &LabelledZId> {
+        self.arg_choices.iter()
+    }
+
+    #[inline]
+    pub fn iterate_one_zid_per_argument(&self) -> impl Iterator<Item = ZId> + '_ {
+        self.variables.iter().map(|(zid, _)| *zid as ZId)
+    }
+    
+    pub fn add_var(&mut self, ivar: usize, zid: ZId, vtype: VariableType) {
+        self.arg_choices.push(LabelledZId::new(zid, ivar));
+        if ivar == self.variables.len() {
+            self.variables.push((zid as u32, vtype));
+        }
+    }
+
+    pub fn variable_types(&self) -> Vec<VariableType> {
+        self.variables.iter().map(|(_,t)| *t).collect()
+    }
+
+    pub fn type_of(&self, ivar: usize) -> VariableType {
+        self.variables[ivar].1
+    }
+
+    fn zippers(&self, shared: &SharedData) -> Vec<Vec<ZNode>> {
+        self.arg_choices.iter().map(|lzid|
+            shared.zip_of_zid[lzid.zid].clone()
+        ).collect()
+    }
+
+    pub fn use_args(&self, shared: &SharedData, node: &Idx) -> Vec<ZId> {
+        self.variables.iter().map(|(zid, _)|
+            shared.arg_of_zid_node[*zid as usize][node].shifted_id
+        ).collect()
+    }
+
+    pub fn multiuses(&self) -> Vec<(ZId, Cost)> {
+        // returns the zids of the first zipper of each var, which is used to check for multiuse
+        self.arg_choices.iter().map(|labelled|labelled.ivar).counts()
+            .iter().filter_map(|(ivar,count)| if *count > 1 { Some((self.variables[*ivar].0 as ZId, (*count-1) as Cost)) } else { None }).collect()
+    }
+
+    pub fn has_free_ivars(&self, shared: &SharedData, loc: &Idx) -> bool {
+        //  if there are any free ivars in the arg at this location then we can't apply this invention here so *total* util should be 0
+        for i in 0..self.variables.len() {
+            if self.variables[i].1 != VariableType::Metavar {
+                continue;
+            }
+            let zid = self.variables[i].0 as ZId;
+            let shifted_arg = shared.arg_of_zid_node[zid][loc].shifted_id;
+            if !shared.analyzed_ivars[shifted_arg].is_empty() {
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn is_useless_abstract(&self, shared: &SharedData, locs: &[Idx]) ->  bool {
+        // Pruning (ARGUMENT CAPTURE): check for useless abstractions (ie ones that take the same arg everywhere). We check for this all the time, not just when adding a new variables,
+        // because subsetting of match_locations can turn previously useful abstractions into useless ones. In the paper this is referred to as "argument capture"
+        if !shared.cfg.no_opt_useless_abstract {
+            // note I believe it'd be save to iterate over variables instead
+            for argchoice in self.arg_choices.iter() {
+                if self.variables[argchoice.ivar].1 != VariableType::Metavar {
+                    continue;
+                }
+                // if its the same arg in every place, and doesnt have any free vars (ie it's safe to inline)
+                if locs.iter().map(|loc| shared.arg_of_zid_node[argchoice.zid][loc].shifted_id).all_equal()
+                    && shared.analyzed_free_vars[shared.arg_of_zid_node[argchoice.zid][&locs[0]].shifted_id].is_empty()
+                {
+                    if !shared.cfg.no_stats { shared.stats.lock().deref_mut().useless_abstract_fired += 1; };
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    pub fn is_redundant_argument(&self, shared: &SharedData, locs: &[Idx]) -> bool {
+        // PRUNING (REDUNDANT ARGUMENT) if two different ivars #i and #j have the same arg at every location, then we can prune this pattern
+        // because there must exist another pattern where theyre just both the same ivar. Note that this pruning
+        // happens here and not just at the ivar creation point because new subsetting can happen. In this paper this is referred to as
+        // "redundant argument elimination".
+        if !shared.cfg.no_opt_force_multiuse {
+            // for all pairs of ivars #i and #j, get the first zipper and compare the arg value across all locations
+            for (i,(ivar_zid_1, type_1)) in self.variables.iter().enumerate() {
+                if *type_1 != VariableType::Metavar {
+                    continue;
+                }
+                let arg_of_loc_1 = &shared.arg_of_zid_node[*ivar_zid_1 as ZId];
+                // for some reason, the enumerate makes it like 1% faster?????
+                for (_j, (ivar_zid_2, type_2)) in self.variables.iter().enumerate().skip(i+1) {
+                    if *type_2 != VariableType::Metavar {
+                        continue;
+                    }
+                    let arg_of_loc_2 = &shared.arg_of_zid_node[*ivar_zid_2 as ZId];
+                    if locs.iter().all(|loc|
+                        arg_of_loc_1[loc].shifted_id == arg_of_loc_2[loc].shifted_id)
+                    {
+                        if !shared.cfg.no_stats { shared.stats.lock().deref_mut().force_multiuse_fired += 1; };
+                        return true;
+                    }
+                }
+            }
+        }
+        false
+    }
+
+    pub fn find_variable(&self, shared: &SharedData, i: Idx) -> Idx {
+        // in the case where we're searching for an IVar we need to be robust to relabellings
+        // since this doesn't have to be canonical. What we can do is we can look over
+        // each ivar the the pattern has defined with a first zid in pattern.variables, and
+        // if our expressions' zids_of_ivar[i] contains this zid then we know these two ivars
+        // must correspond to each other in the pattern and the tracked expr and we can just return
+        // the pattern version (`j` below).
+        let zids = shared.tracking.as_ref().unwrap().zids_of_ivar[i].clone();
+        for (j,(zid, _)) in self.variables.iter().enumerate() {
+            if zids.contains(&(*zid as ZId)) {
+                return j
+            }
+        }
+        // it's a new ivar that hasnt been used already so it must take on the next largest var number
+        self.variables.len()
+    }
+
+}
+
+pub struct LocationsForReusableArgs<'a> {
+    all_locs: &'a Vec<Idx>,
+    // lazily computed on an as-needed basis
+    sym_locs: Option<Vec<Idx>>,
+}
+
+impl LocationsForReusableArgs<'_> {
+    pub fn new<'a>(all_locs: &'a Vec<Idx>) -> LocationsForReusableArgs<'a> {
+        LocationsForReusableArgs {
+            all_locs,
+            sym_locs: None,
+        }
+    }
+
+    fn sym_locs<'a>(&'a mut self, arg_of_loc: &FxHashMap<Idx, Arg>, sym_var_info: &SymvarInfo) -> &'a Vec<Idx> {
+        if self.sym_locs.is_some() {
+            return self.sym_locs.as_ref().unwrap();
+        }
+        let locs: Vec<_> = self.all_locs.iter()
+            .filter(|loc| arg_of_loc[loc].expands_to.is_prim_symbol(sym_var_info))
+            .cloned().collect();
+        self.sym_locs = Some(locs.clone());
+        self.sym_locs.as_mut().unwrap()
+    }
+
+    fn relevant_locs<'a>(&'a mut self, var_type: VariableType, arg_of_loc: &FxHashMap<Idx, Arg>, sym_var_info: &Option<SymvarInfo>) -> &'a Vec<Idx> {
+        match var_type {
+            // should  be safe because this only happens if there's a symvar
+            VariableType::Symvar => self.sym_locs(arg_of_loc, sym_var_info.as_ref().unwrap()),
+            VariableType::Metavar => self.all_locs,
+        }
+    }
+}
+
+impl PatternArgs {
+    pub fn reusable_args_location(&self, shared: &SharedData, ivar: Idx, arg_of_loc: &FxHashMap<Idx, Arg>, match_locations: &mut LocationsForReusableArgs) -> Vec<Idx> {
+        let (first_zid_of_var, type_of_var) = self.variables[ivar];
+        let arg_of_loc_ivar = &shared.arg_of_zid_node[first_zid_of_var as ZId];
+        let relevant_locs = match_locations.relevant_locs(type_of_var, arg_of_loc, &shared.sym_var_info);
+        compatible_locations(shared, relevant_locs, arg_of_loc, arg_of_loc_ivar, type_of_var)
+    }
+}
+
+
+#[inline]
+pub fn compatible_locations(shared: &SharedData, locs: &[Idx], arg_of_loc_1:  &FxHashMap<Idx,Arg>, arg_of_loc_2:  &FxHashMap<Idx,Arg>, type_of_var: VariableType) -> Vec<usize> {
+    let require_valid = match type_of_var {
+        VariableType::Metavar => true,
+        VariableType::Symvar => false,
+    };
+    locs.iter()
+        .filter(|loc:&&Idx|
+            arg_of_loc_1[loc].shifted_id ==
+            arg_of_loc_2[loc].shifted_id
+            && (!require_valid || !invalid_metavar_location(shared, arg_of_loc_1[loc].shifted_id))
+        ).cloned().collect()
+}
+
+fn unifies(
+    shared: &SharedData,
+    overall_abs: Option<ZipTrieSlice>,
+    partial_abs: Option<ZipTrieSlice>,
+    overall_loc: Idx,
+    partial_loc: Idx
+) -> bool {
+    // if either is a variable, then we can unify
+    if overall_abs.is_some_and(|x| x.is_present()) || partial_abs.is_some_and(|x| x.is_present()) {
+        return true;
+    }
+    // if they are the same location, then we can unify
+    if overall_loc == partial_loc {
+        return true;
+    }
+    // if neither has any variables, and they are not the same location (struct-hashed), then we cannot unify
+    if overall_abs.is_none() && partial_abs.is_none() {
+        return false
+    }
+    // neither is a variable. Match on the literal structure of overall
+    match &shared.set[overall_loc] {
+        Node::App(overall_f, overall_x) => {
+            let Node::App(partial_f, partial_x) = &shared.set[partial_loc] else {
+                return false; // if the overall is an application, the partial must also be an application
+            };
+            unifies(
+                shared,
+                overall_abs.and_then(|x| x.func()),
+                partial_abs.and_then(|x| x.func()),
+                *overall_f,
+                *partial_f
+            ) && unifies(
+                shared,
+                overall_abs.and_then(|x| x.arg()),
+                partial_abs.and_then(|x| x.arg()),
+                *overall_x,
+                *partial_x
+            )
+        },
+        Node::Lam(b, _) => {
+            let Node::Lam(partial_b, _) = &shared.set[partial_loc] else {
+                return false; // if the overall is a lambda, the partial must also be a lambda
+            };
+            unifies(
+                shared,
+                overall_abs.and_then(|x| x.body()),
+                partial_abs.and_then(|x| x.body()),
+                *b,
+                *partial_b
+            )
+        },
+        _ => shared.set[overall_loc] == shared.set[partial_loc], // if they are not applications or lambdas, they must be the same node
+    }
+}
+
+fn find_self_unification_points(
+    shared: &SharedData,
+    self_unify_zids: &mut Vec<ZId>,
+    overall_abs: ZipTrieSlice,
+    partial_abs: Option<ZipTrieSlice>,
+    partial_zid: ZId,
+    overall_loc: Idx,
+    partial_loc: Idx
+) {
+    let Some(partial_abs) = partial_abs else {
+        // if there's no variables in the partial abstraction, we can't unify with the overall abstraction,
+        // since it's either equal (and we skip this) or strictly smaller
+        return;
+    };
+    if partial_abs.is_present() {
+        // variables do not count as self-unification points
+        return;
+    }
+    if partial_zid != EMPTY_ZID && unifies(shared, Some(overall_abs), Some(partial_abs), overall_loc, partial_loc) {
+        // if the overall abstraction unifies with the partial abstraction at this location
+        // then we can add the partial abstraction's zid to the self-unification points
+        self_unify_zids.push(partial_zid);
+    }
+    let ext = &shared.extensions_of_zid[partial_zid];
+    match &shared.set[partial_loc] {
+        Node::App(f, x) => {
+            // if the partial abstraction is an application, we can recurse into its children
+            find_self_unification_points(shared, self_unify_zids, overall_abs, partial_abs.func(), ext.func.unwrap(), overall_loc, *f);
+            find_self_unification_points(shared, self_unify_zids, overall_abs, partial_abs.arg(), ext.arg.unwrap(), overall_loc, *x);
+        },
+        Node::Lam(b, _) => {
+            find_self_unification_points(shared, self_unify_zids, overall_abs, partial_abs.body(), ext.body.unwrap(), overall_loc, *b);
+        },
+        _ => {}
+    }
+}
+
+
+pub fn can_self_unify(pattern_args: &PatternArgs, shared: &SharedData, example_match_loc: Idx) -> Vec<ZId> {
+    // check if a given set of pattern arguments can self-unify (i.e., if the abstraction unifies with one of its
+    // non-variable subtrees). An example is the pattern (#0 #1 x), which unifies with (#0 #1).
+    // This is an overapproximation that does not take into account variable reuse.
+    let zippers = pattern_args.zippers(shared);
+    let Some(zippers) = ZipTrie::new(zippers) else {
+        // if the zippers are empty, there's no variables; we can't self-unify
+        return vec![];
+    };
+    let zippers = ZipTrieSlice::new(&zippers);
+    let mut self_unify_zids = Vec::new();
+
+    find_self_unification_points(shared, &mut self_unify_zids, zippers, Some(zippers), EMPTY_ZID, example_match_loc, example_match_loc);
+
+    self_unify_zids
+}
