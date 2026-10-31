@@ -1,0 +1,57 @@
+{
+  "version": "FOUNDRY_ATEN_PROSPECTIVE_PROTOCOL_V2",
+  "classification": "PROSPECTIVE_TRANSFER_AND_SEARCH_ECONOMICS_COMPONENT",
+  "candidate_library": {
+    "path": "results/forged_aten_tools.json",
+    "sha256": "7c74193df05a75113895ded043f4c4a2d9efd726ab9b43534b2a2dfe9848f0e9",
+    "constructed_before_protocol": true
+  },
+  "workloads": {
+    "source_intake": "external_validation_v2/SOURCE_INTAKE.json",
+    "runtime_harness": "external_validation_v2_runtime.py",
+    "families": 4,
+    "seed": 4029489190,
+    "transformer_architecture": false,
+    "attention_operation": false
+  },
+  "arms": {
+    "candidate": "six LLM-free calibration-forged typed ATen macros",
+    "fixed": "eight investigator-supplied common typed ATen macros",
+    "causal_removal": "empty macro library"
+  },
+  "search_cost_ledger": {
+    "definition_node": 1,
+    "eligible_graph_node_visit_per_tool": 1,
+    "eligible_outgoing_edge_check": 1,
+    "total_cost": "definition_nodes + graph_node_visits + outgoing_edge_checks",
+    "benefit": "sum of nodes in all exact typed matches",
+    "efficiency": "benefit / total_cost"
+  },
+  "candidate_component_pass": {
+    "minimum_supported_families": 3,
+    "minimum_matched_families": 2,
+    "minimum_distinct_matched_tools": 2,
+    "all_candidate_replays_exact": true,
+    "candidate_benefit_at_least_fixed": true,
+    "candidate_total_cost_at_most_90_percent_fixed": true,
+    "causal_removal_loses_all_candidate_matches": true
+  },
+  "failure_policy": {
+    "export_or_execution_failure": "REQUIRED_UNSUPPORTED with stage and exception type",
+    "numerical_mismatch": "FAIL",
+    "zero_reachability": "VALID_NEGATIVE",
+    "timeout_or_resource_limit": "FAIL",
+    "outcome_driven_code_or_protocol_change": "FORBIDDEN"
+  },
+  "resource_limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 100,
+    "rss_kib": 4000000
+  },
+  "scientific_boundary": {
+    "this_can_complete_P2_component": true,
+    "this_cannot_complete_external_control_conformance": true,
+    "this_cannot_admit_search_macros_as_runtime_inventions": true,
+    "this_cannot_authorize_full_foundry_v6_trial": true
+  }
+}

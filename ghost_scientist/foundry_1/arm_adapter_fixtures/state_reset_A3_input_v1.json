@@ -1,0 +1,29 @@
+{
+  "version": "FOUNDRY_ARM_ADAPTER_INPUT_V1",
+  "arm_id": "A3",
+  "artifact": {
+    "artifact_id": "state-reset-repeated-add-relu-v1",
+    "source_sha256": "b32e0efc67634cf50e290ac1b8113f0acd36389a6b9bcad2a96e4d2faac416cf",
+    "family": "typed_dag_contract_fixture",
+    "repository": "local/evaluator",
+    "semantic_domain": "vector_arithmetic",
+    "graph_ir_sha256": "b32e0efc67634cf50e290ac1b8113f0acd36389a6b9bcad2a96e4d2faac416cf",
+    "shape_seed_sha256": "b32e0efc67634cf50e290ac1b8113f0acd36389a6b9bcad2a96e4d2faac416cf"
+  },
+  "budgets": {
+    "wall_limit_seconds": 20,
+    "cpu_limit_seconds": 15,
+    "rss_limit_kib": 524288,
+    "search_unit_limit": 1000
+  },
+  "execution": {
+    "invocations": 3,
+    "pairing_unit": "artifact",
+    "retain_individual_invocation_receipts": true
+  },
+  "sealed_inputs": {
+    "candidate_library_sha256": "9f3d30638f3c30bb8c81fa3af2305930a4d88782a373223b5fbc7303e8208e8d",
+    "fixed_portfolio_sha256": "a1cfe21f09f2be579f33a24604e4f16ce438b4f411932f345ebd11f5e5b76061",
+    "protocol_freeze_sha256": "7cac149b889cf63f655ffc44e57be0dbad2bfae4671e8afdcf2674c8f3463b3c"
+  }
+}

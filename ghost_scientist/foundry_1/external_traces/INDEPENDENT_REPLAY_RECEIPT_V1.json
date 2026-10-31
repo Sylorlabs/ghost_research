@@ -1,0 +1,31 @@
+{
+  "schema": "FOUNDRY_EXTERNAL_TRACE_INDEPENDENT_REPLAY_RECEIPT_V1",
+  "protocol": "external_traces/INDEPENDENT_REPLAY_PROTOCOL_V1.json",
+  "parser": "independently written CSV state machine v2",
+  "transport": "second GitHub connector immutable-blob fetch",
+  "trace_blob": "db8d3cfaea62e7086aff40e98ab6446619d9e5ce",
+  "source_bytes": 2012418,
+  "data_rows": 26823,
+  "malformed_rows": 0,
+  "status_counts": {
+    "SUCCEED": 26392,
+    "FAILED": 398,
+    "PENDING": 30,
+    "PROCESSING": 3
+  },
+  "empty_model_rows": 25,
+  "nonempty_model_identities": 86,
+  "zero_success_model_identities": 7,
+  "successful_requests_per_model": {
+    "minimum": 0,
+    "q10_nearest_rank": 1,
+    "q25_nearest_rank": 3,
+    "median_nearest_rank": 27,
+    "q75_nearest_rank": 71,
+    "q90_nearest_rank": 718,
+    "maximum": 8229,
+    "sum": 26392
+  },
+  "N_star_external_reference": 3,
+  "validation_v6_accessed": false
+}

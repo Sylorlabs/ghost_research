@@ -1,0 +1,15 @@
+[submodule "babble"]
+	path = babble
+	url = https://github.com/isamore-group/babble.git
+	branch = main
+[submodule "enumo"]
+	path = enumo
+	url = https://github.com/isamore-group/ruler.git
+	branch = main
+[submodule "jlm"]
+	path = jlm
+	url = git@github.com:isamore-group/jlm.git
+	branch = isamore
+[submodule "profiler"]
+	path = profiler
+	url = git@github.com:isamore-group/profiler.git

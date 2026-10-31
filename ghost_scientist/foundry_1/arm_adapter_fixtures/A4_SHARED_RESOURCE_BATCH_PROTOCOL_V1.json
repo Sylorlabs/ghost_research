@@ -1,0 +1,36 @@
+{
+  "version": "FOUNDRY_A4_SHARED_RESOURCE_BATCH_PROTOCOL_V1",
+  "status": "PREFROZEN_A4_CALIBRATION_BATCH_ASSEMBLY",
+  "frozen_before_batch_assembly": true,
+  "base_contract_version": "FOUNDRY_ARM_ADAPTER_CONTRACT_V1",
+  "batch_version": "FOUNDRY_A4_ARM_ADAPTER_BATCH_V1",
+  "arm_id": "A4",
+  "expected_artifacts": 23,
+  "rules": [
+    "Every artifact must have one strict v1 input and PASS output accepted by the primary and independent base-contract verifiers.",
+    "The immutable replay library digest is both state-before and state-after for every artifact and retention is true.",
+    "Exactly one complete A4 mount process-tree receipt is canonicalized and hash-identified.",
+    "All 23 artifact bindings name that receipt and repeat only its exact base-contract resource projection.",
+    "Aggregate accounting charges the unique resource receipt once, never 23 times.",
+    "All three frozen replay tools remain visible in every artifact output as reused or none according to direct-use count.",
+    "Unknown fields, changed digests, duplicate artifacts, changed resource projections, changed state, inflated multipliers, or prospective claims fail closed."
+  ],
+  "provider_records": [
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"},
+    {"path": "arm_adapter_contract.py", "sha256": "ac7eb5e7a00813cd2ee722059bf5265b0e270f3e56efae0325e337136eca1a5e"},
+    {"path": "independent_arm_adapter_contract.py", "sha256": "cc2ccece0b76d33b9fb933eb8547d66b46be788f9f1146cc2d6fb3180e6b2173"},
+    {"path": "a4_replay_runtime_mount.py", "sha256": "0e8c2fd7383eaa177d243e198daad08e3b6a94d59c0ffb6d47d0e1ad6838e7c0"},
+    {"path": "results/phase95_a4_replay_runtime_conformance.json", "sha256": "d60329093407afb0a4a33719516f4a2001dc4c186a916d929efe54bb57b450e8"},
+    {"path": "results/phase96_a4_replay_runtime_resource_audit.json", "sha256": "81baa543a83d4562dc332d4a173f882134519dd477c35f0a564c67b5286afc47"},
+    {"path": "results/pareto_remediation_v9_freeze.json", "sha256": "b6be0061e3a6779f3194951399a9e5bbffed924fdc77c4e089bf4505c00eb081"},
+    {"path": "results/forged_diversity_tools.json", "sha256": "64abcef88f8c4f152e39db684e8bd1a7f24fdf25928a24d411d15d8499d46f5b"}
+  ],
+  "claim_boundary": {
+    "production_integrated_arms_before_pass": 4,
+    "production_integrated_arms_after_pass": 5,
+    "A4_may_become_production_integrated_calibration_arm": true,
+    "P3_complete_after_pass": false,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

@@ -1,0 +1,4 @@
+(cons 42 (cons 42 (cons 42 empty)))
+(cons -3 (cons -3 (cons -3 empty)))
+(cons 11 (cons 11 (cons 11 empty)))
+(cons 7 (cons 7 (cons 7 empty)))

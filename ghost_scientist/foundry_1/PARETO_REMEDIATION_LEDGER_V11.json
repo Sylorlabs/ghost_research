@@ -1,0 +1,58 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V11",
+  "parent_freeze": "results/pareto_remediation_v10_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phases": [99, 100],
+      "objective": "Run byte-exact upstream Stitch over two independently produced typed encodings of all complete calibration graphs and meter the full process tree.",
+      "outcome": "A5_STITCH_TYPED_GRAPH_COMPONENT_PASS",
+      "scientific_effect": "Stitch found one arity-three abstraction with 329 uses and a 66458 encoding-cost reduction. Independent source-semantics analysis narrows it to the empty-kwargs call/sequence scaffold; it is not a tensor primitive or runtime tool."
+    },
+    {
+      "phases": [101, 102],
+      "objective": "Reproduce the frozen source result, independently expand every rewrite, verify framework numerical parity, and meter both gates.",
+      "outcome": "A5_STITCH_RUNTIME_CONFORMANCE_PASS",
+      "scientific_effect": "All 23 rewritten programs reconstruct their independently normalized originals, while raw equality is correctly zero because Stitch normalizes nullary dict syntax. All 69 eager/exported executions are exact. No rewritten tensor runtime is executed."
+    },
+    {
+      "phases": [103, 104],
+      "objective": "Assemble and meter 23 strict A5 adapter pairs under one shared resource identity and two fail-closed batch verifiers.",
+      "outcome": "A5_SHARED_RESOURCE_BATCH_RESOURCE_PASS",
+      "scientific_effect": "All pairs pass, one process receipt and one global candidate-generation CPU charge are counted, and both verifiers reject 19 hostile mutations. The structural control becomes production-integrated without a novelty, held-out, speed, or portfolio-superiority claim."
+    }
+  ],
+  "integration_progress": {
+    "A5": "PRODUCTION_INTEGRATED_CALIBRATION_STRUCTURAL_CONTROL",
+    "abstractions": 1,
+    "structural_rewrite_uses": 329,
+    "unabstracted_nonempty_kwargs_calls": 8,
+    "normalized_reconstructions": 23,
+    "raw_encoder_byte_reconstructions": 0,
+    "whole_graph_executions": 69,
+    "maximum_error": 0.0,
+    "base_contract_pairs_accepted": 23,
+    "shared_resource_receipts_charged": 1,
+    "hostile_batches_rejected_twice": 19,
+    "production_integrated_arms": 6,
+    "required_arms": 10,
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "audit A7 rule inference against the complete typed framework graph surface before adapting it",
+      "preserve A1, A6, and A8 as explicit non-integrated outcomes until faithful paths exist",
+      "continue fourth-control P1 acquisition",
+      "recompute P3 only after all ten arms have explicit metered outcomes"
+    ]
+  }
+}

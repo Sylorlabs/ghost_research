@@ -1,0 +1,39 @@
+{
+  "version": "FOUNDRY_A5_SHARED_RESOURCE_BATCH_PROTOCOL_V1",
+  "status": "PREFROZEN_A5_CALIBRATION_BATCH_ASSEMBLY",
+  "frozen_before_batch_assembly": true,
+  "base_contract_version": "FOUNDRY_ARM_ADAPTER_CONTRACT_V1",
+  "batch_version": "FOUNDRY_A5_ARM_ADAPTER_BATCH_V1",
+  "arm_id": "A5",
+  "expected_artifacts": 23,
+  "expected_direct_uses": 329,
+  "rules": [
+    "Every artifact has one strict v1 input and PASS output accepted by both base-contract verifiers.",
+    "The frozen Stitch calibration-library digest is state-before and state-after for every artifact and retention is true.",
+    "Exactly one complete A5 mount process-tree receipt is canonicalized, hash-identified, referenced by all 23 bindings, and charged once.",
+    "Exactly one structural abstraction receipt is present per artifact; direct-use counts come from rewritten AST invocation nodes and sum to 329.",
+    "The one global Stitch candidate-generation CPU charge appears in exactly one artifact ledger.",
+    "Normalized rewrite reversibility and framework parity remain distinct from rewritten tensor execution, tensor-primitive invention, held-out generalization, or fixed-portfolio superiority.",
+    "Changed hashes, duplicate or missing artifacts, resource projections, states, tools, use counts, accounting multipliers, validation access, prospective claims, and unknown fields fail closed."
+  ],
+  "provider_records": [
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"},
+    {"path": "arm_adapter_contract.py", "sha256": "ac7eb5e7a00813cd2ee722059bf5265b0e270f3e56efae0325e337136eca1a5e"},
+    {"path": "independent_arm_adapter_contract.py", "sha256": "cc2ccece0b76d33b9fb933eb8547d66b46be788f9f1146cc2d6fb3180e6b2173"},
+    {"path": "a5_stitch_runtime_mount.py", "sha256": "605743face73c0a00dcf3e4d2de5884ae0bc10a169873dc5683fb0406db725fa"},
+    {"path": "results/phase101_a5_stitch_runtime_conformance.json", "sha256": "7ed96704c56faf4515aaf4dd69741dd8521d892fda1a816bd657ad3b1d4887ab"},
+    {"path": "results/phase102_a5_stitch_runtime_resource_audit.json", "sha256": "b6b1629cb574c91763c81cfca49ef70d740e34dbf8ef5734af98f929c3ede719"},
+    {"path": "results/a5_stitch_calibration_library_v1.json", "sha256": "7a2767f6936f566e663291252f727996e5b88f3cab5827a525d5346a17be02cd"},
+    {"path": "results/forged_diversity_tools.json", "sha256": "64abcef88f8c4f152e39db684e8bd1a7f24fdf25928a24d411d15d8499d46f5b"},
+    {"path": "results/pareto_remediation_v10_freeze.json", "sha256": "a888733f7afa6524b532390259befeefbea6b8ae5cbc202a22cbbceb54bedc27"}
+  ],
+  "claim_boundary": {
+    "production_integrated_arms_before_pass": 5,
+    "production_integrated_arms_after_pass": 6,
+    "A5_may_become_production_integrated_calibration_arm": true,
+    "structural_control_not_tensor_tool_invention": true,
+    "P3_complete_after_pass": false,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "foundry-external-control-execution-v1",
+  "classification": "PRE_EXECUTION_CONTROL_PROTOCOL",
+  "control": {
+    "id": "stitch",
+    "implementation_repository": "mlb2251/stitch",
+    "implementation_revision": "0ef5ec7f17091d22b8fa959fb5705e359d735a47",
+    "implementation_license": "MIT",
+    "binding_repository": "mlb2251/stitch_bindings",
+    "binding_revision": "8ba2c1c041ab384ccaa11e68226d5654474d161a",
+    "binding_package": "stitch-core",
+    "binding_version": "0.1.29",
+    "binding_targets_implementation_revision": "0ef5ec7"
+  },
+  "artifact": {
+    "filename": "stitch_core-0.1.29-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "sha256": "850d0f29acda59011e25acf3f05060eb51f3aff371a5307838ad53d12e8e8adf",
+    "pypi_url": "https://files.pythonhosted.org/packages/bb/37/c246585f7b7d42b83d2511147719db3753930e661f46fbd2c825152143a9/stitch_core-0.1.29-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "required_local_path": "external_controls/vendor/stitch_core-0.1.29-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "unverified_installed_packages_allowed": false
+  },
+  "conformance": {
+    "fixture": "external_controls/stitch/conformance_fixture_v1.json",
+    "exact_abstraction_required": true,
+    "exact_rewrite_required": true,
+    "paper_or_official_fixture_before_adaptation": true,
+    "ghost_artifacts_visible_to_control": false
+  },
+  "resource_limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 45,
+    "rss_kib": 1000000,
+    "process_tree_meter_required": true
+  },
+  "gate": {
+    "artifact_sha256_verified": true,
+    "official_backend_executed": true,
+    "exact_fixture_passed": true,
+    "natural_termination": true,
+    "resource_limits_passed": true
+  },
+  "claim_boundary": "A missing or unverifiable wheel is an infrastructure failure, not a failed control and not a reproduction. Metadata, official expected output, or a locally reimplemented approximation cannot satisfy conformance."
+}

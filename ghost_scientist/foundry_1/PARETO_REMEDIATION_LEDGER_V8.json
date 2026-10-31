@@ -1,0 +1,52 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V8",
+  "parent_freeze": "results/pareto_remediation_v7_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 91,
+      "objective": "Assemble complete A3/A9 v1 contract batches under one hash-bound process-tree resource receipt per arm and falsification-test the overlay.",
+      "result": "results/phase91_shared_resource_batch_conformance.json",
+      "outcome": "SHARED_RESOURCE_BATCH_CONFORMANCE_PASS",
+      "scientific_effect": "All 46 strict base-contract pairs pass primary and independent verification. Each arm charges one unique resource receipt across 23 artifact bindings. Two overlay verifiers reject all nine corrupt batch forms. A3 and A9 advance to production-integrated calibration arms without changing the frozen v1 contract."
+    },
+    {
+      "phase": 92,
+      "objective": "Process-tree meter A3/A9 batch assembly and the hostile conformance gate under identical ceilings.",
+      "result": "results/phase92_shared_resource_batch_resource_audit.json",
+      "outcome": "SHARED_RESOURCE_BATCH_RESOURCE_PASS",
+      "scientific_effect": "Both complete batch assembly paths and the two-verifier hostile gate terminate naturally with CPU, RSS, and process-group accounting. This closes A3/A9 assembly, not all-arm P3."
+    }
+  ],
+  "integration_progress": {
+    "A0": "PRODUCTION_INTEGRATED",
+    "A2": "PRODUCTION_INTEGRATED",
+    "A3": "PRODUCTION_INTEGRATED_CALIBRATION_ARM",
+    "A9": "PRODUCTION_INTEGRATED_CALIBRATION_ARM",
+    "base_contract_pairs_accepted": 46,
+    "shared_resource_receipts_charged": 2,
+    "resource_receipt_references": 46,
+    "hostile_batches_rejected_twice": 9,
+    "production_integrated_arms": 4,
+    "required_arms": 10,
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "adapt A1 historical baseline to the same contract and shared receipt envelope",
+      "adapt A4 historical replay and A5/A7 source-faithful controls",
+      "keep A6 and A8 fail-closed unless their declared incomplete dependencies become executable",
+      "continue acquisition of the fourth independent source-faithful control for P1",
+      "recompute P3 only after all ten required arm paths have explicit metered outcomes"
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "version": "FOUNDRY_A6_TYPED_ANTI_UNIFICATION_REACHABILITY_PROTOCOL_V1",
+  "status": "PREFROZEN_BEFORE_IMPLEMENTATION_OR_EXECUTION",
+  "frozen_before_enumerator_implementation_or_execution": true,
+  "arm_id": "A6",
+  "classification": "ADAPTED_BABBLE_ISAMORE_STYLE_TYPED_ANTI_UNIFICATION_FEASIBILITY",
+  "question": "Does source-authenticated e-graph anti-unification have a nontrivial, independently reproducible structural intersection with the complete 23-graph calibration surface that justifies a distinct A6 production-control implementation?",
+  "source_semantics": {
+    "required": [
+      "unordered pairs of rooted terms",
+      "bottom-up recursive generalization when operators agree",
+      "a shared metavariable for each repeated pair-state",
+      "alpha-normalization by first metavariable occurrence",
+      "rejection of concrete and variable-only anti-unifications"
+    ],
+    "source_faithful_claim": false,
+    "adapted_label_required": true,
+    "hardware_aware_ISAMORE_selection_claim": false,
+    "full_Babble_or_ISAMORE_execution_claim": false
+  },
+  "typed_term_domain": {
+    "root_set": "every call_function node in all 23 calibration FX graphs",
+    "expected_roots": 337,
+    "expected_unordered_root_pairs": 56616,
+    "maximum_recursive_operator_depth": 4,
+    "operator_identity": "exact string form of the FX call_function target",
+    "operator_arguments": "ordered positional arguments followed by lexically ordered keyword arguments",
+    "tensor_type": [
+      "dtype",
+      "rank"
+    ],
+    "tuple_and_list_structure_preserved": true,
+    "literal_values_preserved_only_when_exactly_equal": true,
+    "placeholder_parameter_and_cutoff_boundaries_are_typed_leaves": true,
+    "type_incompatible_pair_states_fail_closed": true
+  },
+  "candidate_contract": {
+    "minimum_operator_nodes": 2,
+    "minimum_distinct_metavariables": 1,
+    "minimum_concrete_matches": 3,
+    "minimum_distinct_artifacts": 2,
+    "alpha_equivalent_patterns_deduplicated": true,
+    "source_pair_must_not_be_byte_identical": true,
+    "primary_and_independent_term_extractors_required": true,
+    "primary_and_independent_anti_unifiers_required": true,
+    "primary_and_independent_matchers_required": true,
+    "all_candidate_and_match_sets_must_agree": true
+  },
+  "selection_rule": {
+    "applied_only_after_all_candidates_are_enumerated": true,
+    "descending_keys": [
+      "distinct matching artifacts",
+      "matches multiplied by operator nodes",
+      "operator nodes"
+    ],
+    "ascending_keys": [
+      "distinct metavariables",
+      "canonical pattern serialization"
+    ],
+    "exactly_one_top_candidate_selected_if_feasible": true
+  },
+  "decision_rule": {
+    "positive": "at least one candidate satisfies every candidate contract field",
+    "positive_next_action": "freeze the selected candidate and its complete match set before implementing numerical execution or a production adapter",
+    "zero_next_action": "record A6 structural infeasibility under this domain and select the distinctly named A8 adapted route",
+    "this_phase_never_integrates_A6": true
+  },
+  "hostile_requirements": {
+    "cases": 12,
+    "must_cover": [
+      "operator identity mutation",
+      "argument order mutation",
+      "type mutation",
+      "metavariable inconsistency",
+      "alpha-normalization mutation",
+      "concrete-only candidate",
+      "variable-only candidate",
+      "single-operator candidate",
+      "insufficient matches",
+      "single-artifact matches",
+      "duplicate source pair",
+      "unknown term field"
+    ],
+    "primary_and_independent_rejection_required": true
+  },
+  "resource_limits": {
+    "wall_seconds": 180,
+    "cpu_seconds": 150,
+    "rss_kib": 4500000
+  },
+  "provider_records": [
+    {
+      "path": "results/readiness_iteration_5_28.json",
+      "sha256": "7f874df9a8fd61b6740ac02e0db9cb3ec82211b5cc33f95effb2fb7d1603732f"
+    },
+    {
+      "path": "results/phase41_babble_source_control.json",
+      "sha256": "810e98b78dbbc0a4ed63ad1ff6fe787b72c4483051135387e2d2a60ac497b87d"
+    },
+    {
+      "path": "external_controls/babble/source/src/learn.rs",
+      "sha256": "b5e40b2a8644940abe81cd447803ccdba4648755d6df5654b78a16629a8cef96"
+    },
+    {
+      "path": "results/phase111_isamore_recursive_source_acquisition.json",
+      "sha256": "f80f5db9832dffc9565b1bdaa47ba4de6000d6610bb245bc17f2978640752f8a"
+    },
+    {
+      "path": "external_controls/isamore/source/babble/src/learn.rs",
+      "sha256": "3de8c3299a87d906373549e1330946c6f125239ac36aa7d29b73f658e4ae2e26"
+    },
+    {
+      "path": "results/phase135_eggmind_full_reproduction_sufficiency_audit.json",
+      "sha256": "7895c50267961f409346ab0559812199c39480e53c75cfe36ced5b26bc2f469b"
+    },
+    {
+      "path": "results/phase68_pareto_authorization_audit.json",
+      "sha256": "8048d51079bbafaa2d0365ec4a3cc4e90f61d7ef01940d3fcc70b77923ad23bd"
+    },
+    {
+      "path": "phase63_pareto_motif_calibration.py",
+      "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    },
+    {
+      "path": "ARM_ADAPTER_CONTRACT_V1.json",
+      "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"
+    }
+  ],
+  "claim_boundary": {
+    "calibration_reachability_only": true,
+    "not_source_faithful_Babble": true,
+    "not_source_faithful_ISAMORE": true,
+    "not_hardware_selection": true,
+    "not_tool_execution": true,
+    "not_production_integration": true,
+    "production_integrated_arms_after_phase": 8,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

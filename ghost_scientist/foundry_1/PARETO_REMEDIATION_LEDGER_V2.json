@@ -1,0 +1,54 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V2",
+  "parent_freeze": "results/pareto_remediation_v1_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 74,
+      "objective": "Source a licensed independently observed deployment-demand trace and execute a predeclared N-star estimator.",
+      "result": "results/phase74_external_invocation_trace_audit.json",
+      "outcome": "EXTERNAL_INVOCATION_HORIZON_COMPONENT_READY",
+      "scientific_effect": "A pinned Alibaba production trace yields conservative N-star=3 after a preserved schema failure and source-documented amendment; cross-domain transfer remains unproven."
+    },
+    {
+      "phase": 75,
+      "objective": "Independently refetch, parse, and exactly recompute the production trace aggregate.",
+      "result": "results/phase75_external_trace_independent_replay.json",
+      "outcome": "INDEPENDENT_REPLAY_PASS_12_OF_12",
+      "scientific_effect": "A separately written parser reproduces all population, status, order-statistic, and N-star relations."
+    },
+    {
+      "phase": 76,
+      "objective": "Falsify calibration economics at the independently sourced conservative horizon.",
+      "result": "results/phase76_external_horizon_sensitivity.json",
+      "outcome": "CALIBRATION_HORIZON_SENSITIVITY_PASS",
+      "scientific_effect": "At N=3 the candidate costs 4,862 versus 7,848 abstract units for fixed, but this does not establish held-out transfer, wall-time savings, or runtime novelty."
+    }
+  ],
+  "P2_progress": {
+    "independent_production_invocation_trace": true,
+    "predeclared_horizon_estimator_executed": true,
+    "independent_aggregate_replay": true,
+    "calibration_horizon_sensitivity": true,
+    "source_bytes_locally_frozen": false,
+    "heldout_stream_transfer_justified": false,
+    "complete": false
+  },
+  "authorization_effect": {
+    "prerequisites_completed_by_remediation": 0,
+    "stop_conditions_cleared_by_remediation": 0,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "locally freeze and hash the exact licensed trace bytes",
+      "pre-register a defensible mapping from external per-model demand to Foundry per-artifact reuse",
+      "integrate A1 and A3-A9 behind one frozen prospective arm interface",
+      "obtain the fourth complete source-faithful control",
+      "retain only candidate runtime novelty or a pre-registered measured search distinction"
+    ]
+  }
+}

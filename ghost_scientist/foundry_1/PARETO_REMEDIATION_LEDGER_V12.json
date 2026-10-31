@@ -1,0 +1,49 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V12",
+  "parent_freeze": "results/pareto_remediation_v11_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 105,
+      "objective": "Compatibility-audit a direct source-faithful Enumo Boolean wrapper against all complete calibration framework graphs before constructing any new tensor domain.",
+      "outcome": "A7_DIRECT_ADAPTER_REJECTED",
+      "scientific_effect": "The existing five-operator Boolean language directly supports zero of 41 framework targets and zero of 337 calls. A tensor path requires eight classes of new domain construction and cannot be mislabeled as a wrapper. The historical source conformance remains valid and its pre-frozen metamorphic rule-set failure remains visible."
+    },
+    {
+      "phase": 106,
+      "objective": "Process-tree meter the complete fail-closed A7 compatibility audit.",
+      "outcome": "A7_COMPATIBILITY_RESOURCE_PASS",
+      "scientific_effect": "The compatibility rejection terminates naturally with CPU, RSS, and process-group accounting. A7 remains non-integrated, and the integrated count does not change."
+    }
+  ],
+  "integration_progress": {
+    "A7": "REQUIRED_UNSUPPORTED_DIRECT_ADAPTER",
+    "framework_graphs_audited": 23,
+    "framework_operator_targets": 41,
+    "framework_call_function_invocations": 337,
+    "direct_operator_target_matches": 0,
+    "direct_call_matches": 0,
+    "new_tensor_domain_component_classes_required": 8,
+    "A7_production_integrated": false,
+    "production_integrated_arms": 6,
+    "required_arms": 10,
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "freeze a separate research protocol for a tensor Enumo SynthLanguage before constructing it, if the new-domain route is pursued",
+      "record complete fail-closed common-contract outcomes for A1, A6, A7, and A8",
+      "continue fourth-control P1 acquisition",
+      "recompute P3 only after all ten arms have explicit metered outcomes"
+    ]
+  }
+}

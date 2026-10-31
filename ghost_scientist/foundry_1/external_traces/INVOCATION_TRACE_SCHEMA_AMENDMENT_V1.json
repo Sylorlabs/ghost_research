@@ -1,0 +1,42 @@
+{
+  "schema": "FOUNDRY_EXTERNAL_INVOCATION_TRACE_SCHEMA_AMENDMENT_V1",
+  "amends": "external_traces/INVOCATION_TRACE_INTAKE_V1.json",
+  "trigger": "The preserved first-pass schema failure.",
+  "source": {
+    "repository": "alibaba/clusterdata",
+    "commit": "0d0f3f1efdbf1add6a7bcc63676eafbd1eb11f71",
+    "documentation_blob": "a2891c8fcd4b70357370004f33c5a00a72c67050",
+    "documentation_lines": {
+      "gmt_create": 168,
+      "predict_status": 170,
+      "checkpoint_model_version_id": 177
+    }
+  },
+  "schema_corrections": {
+    "timestamp_field": {
+      "from": "timestamp",
+      "to": "gmt_create"
+    },
+    "completion_field": {
+      "from": "status",
+      "to": "predict_status"
+    },
+    "successful_status": {
+      "from": "Succeeded",
+      "to": "SUCCEED"
+    }
+  },
+  "unchanged_predeclared_estimator": {
+    "population": "Every nonempty checkpoint_model_version_id in the selected trace.",
+    "measure": "Count successful rows for each model identity.",
+    "quantile": 0.25,
+    "quantile_method": "nearest-rank: sorted_counts[ceil(0.25 * model_count) - 1]",
+    "filters": []
+  },
+  "forbidden_changes": [
+    "No model-count threshold.",
+    "No removal of zero-success identities.",
+    "No quantile change.",
+    "No Foundry candidate or validation-v6 outcome access."
+  ]
+}

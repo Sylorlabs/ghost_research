@@ -1,0 +1,29 @@
+[package]
+name = "foundry_stitch_source_control"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "stitch_core"
+path = "src/lib.rs"
+
+[[bin]]
+name = "foundry-stitch-control"
+path = "control_main.rs"
+
+[dependencies]
+chrono = "0.4"
+clap = { path = "clap_shim" }
+colorful = { path = "colorful_shim" }
+itertools = "0.12"
+lambdas = { path = "lambdas" }
+parking_lot = "0.12"
+rand = "0.8"
+rustc-hash = "1.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+shlex = "1.3"
+
+[patch.crates-io]
+rustc-hash = { path = "rustc_hash_1_1_0" }

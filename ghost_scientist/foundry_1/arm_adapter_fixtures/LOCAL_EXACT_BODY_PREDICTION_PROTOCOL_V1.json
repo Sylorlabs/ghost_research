@@ -1,0 +1,103 @@
+{
+  "version": "FOUNDRY_LOCAL_EXACT_BODY_PREDICTION_PROTOCOL_V1",
+  "status": "PREFROZEN_BEFORE_EXACT_BODY_PREDICTION_IMPLEMENTATION",
+  "research_question": "Can the training-only topology predictor construct a complete canonical tool body that exactly recurs on a heldout graph, including operators, recipes, input and output types, and output boundary?",
+  "classification": {
+    "local_exploratory_only": true,
+    "post_phase163_followup": true,
+    "previously_observed_graph_corpus_not_pristine": true,
+    "same_prefrozen_five_fold_split_required": true,
+    "validation_v6_or_v7_prospective_claim_allowed": false
+  },
+  "split": {
+    "salt": "ghost-foundry:operator-prediction-v1:",
+    "folds": 5,
+    "expected_graph_counts": [6, 4, 4, 1, 8],
+    "cross_fold_learning_forbidden": true
+  },
+  "candidate": {
+    "eligible_topology": "at least three training occurrences spanning at least two training families",
+    "predicted_object": "the complete canonical FOUNDRY_LOCAL_EXACT_DAG_TOOL_V1 body",
+    "selection": "most frequent complete body among training motifs with that exact topology",
+    "tie_break": "lexicographically smallest canonical body bytes",
+    "heldout_body_access_before_prediction": false
+  },
+  "controls": {
+    "boundary_body_frequency": "most frequent complete training body grouped by node count and output indices on identical eligible rows",
+    "global_size_body_frequency": "most frequent complete training body grouped by node count on identical eligible rows",
+    "supplied_fixed_portfolio": "report exact target-sequence membership without treating it as an exact body prediction",
+    "operator_prediction_upper_bound": "retain Phase163 exact operator-sequence count"
+  },
+  "decision_rule": {
+    "exact_body_prediction_positive": "at least one complete predicted body is byte-identical to a heldout body, appears in at least two heldout families and two folds, exceeds both full-body controls, and all independent, hostile, and resource gates pass",
+    "valid_negative": "complete execution passes but every positive condition is not satisfied",
+    "infrastructure_failure": "implementations disagree, heldout bytes leak, fold/source bindings change, hostile checks fail, or resource limits fail",
+    "positive_creates_concrete_exact_tool_candidates": true,
+    "positive_requires_execution_causal_and_native_dedup_next": true,
+    "never_call_exact_recurrence_new_operation_semantics": true,
+    "never_advance_P2_or_P6_or_authorize_prospective_trial": true
+  },
+  "hostile_requirements": {
+    "cases": 14,
+    "must_cover": [
+      "fold mutation",
+      "graph omission",
+      "eligibility weakening",
+      "training family fabrication",
+      "predicted operator mutation",
+      "predicted recipe mutation",
+      "predicted input type mutation",
+      "predicted output type mutation",
+      "predicted output boundary mutation",
+      "heldout body leakage enabled",
+      "exact match fabricated",
+      "control count mutation",
+      "family or fold inflation",
+      "claim inflation"
+    ],
+    "primary_and_independent_rejection_required": true
+  },
+  "resource_limits": {
+    "wall_seconds": 240,
+    "cpu_seconds": 200,
+    "rss_kib": 4500000
+  },
+  "provider_records": [
+    {
+      "path": "results/phase163_local_operator_prediction.json",
+      "sha256": "001f6c8586fb0c24b5e05aeaa9d4d03b190cede346d37f300b877d047fe67f40"
+    },
+    {
+      "path": "results/local_operator_prediction_v1_freeze.json",
+      "sha256": "640c1caea77f5ba821e189d372a9d009362d4bcd5c89f7fccc6f53387d1222bf"
+    },
+    {
+      "path": "local_operator_prediction_core_v1.py",
+      "sha256": "fc9ec78b2e15ab3610b3a40eba818bc42bd53bf413b1fdc0fcd9e4c00751b2a7"
+    },
+    {
+      "path": "independent_local_operator_prediction_v1.py",
+      "sha256": "f6959de05d07a894e42003fe537d934f5f8aed523d8bebaee374ca8b3e6e7e55"
+    },
+    {
+      "path": "phase163_local_operator_prediction.py",
+      "sha256": "314c4745ab45c051a69119852e5210d02c6f1a1a17efd2e0ccb897ff4a944eda"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    }
+  ],
+  "claim_boundary": {
+    "bounded_local_cross_validation_only": true,
+    "exact_recurrence_not_new_semantics": true,
+    "execution_not_yet_demonstrated": true,
+    "native_novelty_not_yet_tested": true,
+    "no_runtime_primitive_invention_claim": true,
+    "P2_not_advanced": true,
+    "P6_not_advanced": true,
+    "validation_v7_payload_decrypted": false,
+    "prospective_trial_authorized": false,
+    "prospective_trial_executed": false
+  }
+}

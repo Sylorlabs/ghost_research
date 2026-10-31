@@ -1,0 +1,237 @@
+{
+  "version": "FOUNDRY_TYPED_DAG_ARTIFACT_V1",
+  "artifact_id": "state-reset-repeated-add-relu-v1",
+  "family": "typed_dag_contract_fixture",
+  "repository": "local/evaluator",
+  "semantic_domain": "vector_arithmetic",
+  "inputs": [
+    {
+      "id": "x",
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "y",
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "op": "add",
+      "args": [
+        "x",
+        "y"
+      ],
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "n2",
+      "op": "relu",
+      "args": [
+        "n1"
+      ],
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "n3",
+      "op": "add",
+      "args": [
+        "n2",
+        "y"
+      ],
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "n4",
+      "op": "relu",
+      "args": [
+        "n3"
+      ],
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "n5",
+      "op": "add",
+      "args": [
+        "n4",
+        "y"
+      ],
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "n6",
+      "op": "relu",
+      "args": [
+        "n5"
+      ],
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "n7",
+      "op": "mul",
+      "args": [
+        "n6",
+        "x"
+      ],
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    },
+    {
+      "id": "n8",
+      "op": "relu",
+      "args": [
+        "n7"
+      ],
+      "type": {
+        "rank": 1,
+        "dtype": "float64",
+        "layout": "strided",
+        "shape": [
+          4
+        ]
+      }
+    }
+  ],
+  "outputs": [
+    "n8"
+  ],
+  "invocations": [
+    {
+      "ordinal": 1,
+      "inputs": {
+        "x": [
+          1.0,
+          -2.0,
+          3.0,
+          -4.0
+        ],
+        "y": [
+          0.5,
+          0.5,
+          -1.0,
+          2.0
+        ]
+      },
+      "expected_outputs": [
+        [
+          2.5,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "ordinal": 2,
+      "inputs": {
+        "x": [
+          -1.0,
+          2.0,
+          -3.0,
+          4.0
+        ],
+        "y": [
+          2.0,
+          -1.0,
+          4.0,
+          -2.0
+        ]
+      },
+      "expected_outputs": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "ordinal": 3,
+      "inputs": {
+        "x": [
+          0.25,
+          -0.5,
+          1.5,
+          -2.0
+        ],
+        "y": [
+          -0.5,
+          1.0,
+          0.5,
+          3.0
+        ]
+      },
+      "expected_outputs": [
+        [
+          0.0,
+          0.0,
+          4.5,
+          0.0
+        ]
+      ]
+    }
+  ]
+}

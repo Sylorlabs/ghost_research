@@ -1,0 +1,68 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V1",
+  "parent_authorization_freeze": "results/pareto_authorization_result_v1_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 70,
+      "objective": "Acquire an immutable official EggMind implementation route.",
+      "result": "results/phase70_eggmind_source_route_audit.json",
+      "outcome": "UPSTREAM_SOURCE_NOT_DISCOVERED",
+      "scientific_effect": "A8 remains incomplete; an upstream or fully conformance-tested implementation cannot be claimed."
+    },
+    {
+      "phase": 71,
+      "objective": "Freeze and independently test the paper-specified EqSatL and scoring boundary.",
+      "result": "results/phase71_eggmind_adapted_boundary_conformance.json",
+      "outcome": "ADAPTED_PARTIAL_BOUNDARY_PASS",
+      "scientific_effect": "Strict parsing, schedule lowering, motif ordering, and the published risk equation are reproducible; full EggMind synthesis is not."
+    },
+    {
+      "phase": 72,
+      "objective": "Implement no-library rediscovery and per-instance-search control kernels.",
+      "result": "results/phase72_per_instance_control_conformance.json",
+      "outcome": "CALIBRATION_KERNEL_CONFORMANCE_PASS",
+      "scientific_effect": "A3 and A9 now have state-reset kernels, but not sealed prospective adapters."
+    },
+    {
+      "phase": 73,
+      "objective": "Meter A3 and A9 under identical process-tree ceilings.",
+      "result": "results/phase73_per_instance_resource_audit.json",
+      "outcome": "CALIBRATION_RESOURCE_COMPONENT_READY",
+      "scientific_effect": "Both kernels are resource-visible; full required-arm metering remains incomplete."
+    }
+  ],
+  "arm_progress": {
+    "A3": {
+      "conformance_ready": true,
+      "calibration_metered": true,
+      "production_integrated": false
+    },
+    "A8": {
+      "paper_boundary_conformance_ready": true,
+      "full_control_conformance_ready": false,
+      "production_integrated": false
+    },
+    "A9": {
+      "conformance_ready": true,
+      "calibration_metered": true,
+      "production_integrated": false
+    }
+  },
+  "authorization_effect": {
+    "prerequisites_completed_by_remediation": 0,
+    "stop_conditions_cleared_by_remediation": 0,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "obtain or fully reproduce the defining EggMind synthesis workflow",
+      "integrate A1 and A3-A9 behind the frozen prospective arm interface",
+      "source and freeze an independent invocation trace for N*",
+      "produce candidate semantics that survive native deduplication or pre-register a measured search distinction"
+    ]
+  }
+}

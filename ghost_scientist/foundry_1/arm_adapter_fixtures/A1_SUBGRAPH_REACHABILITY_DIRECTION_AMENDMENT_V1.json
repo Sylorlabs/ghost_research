@@ -1,0 +1,58 @@
+{
+  "version": "FOUNDRY_A1_SUBGRAPH_REACHABILITY_DIRECTION_AMENDMENT_V1",
+  "status": "POST_DIAGNOSTIC_SEMANTIC_DIRECTION_CORRECTION",
+  "pristine_preregistration": false,
+  "frozen_before_corrected_runner_implementation_or_execution": true,
+  "reason": "The initial runner treated either operand position as sufficient for dense_matrix_chain. Direct inspection showed all three initial dense candidates have the first matmul result as argument 1 of the second matmul, while the frozen v5.1 constructor recognizes only a left-associated chain where that result is argument 0. The initial positive result is preserved and must not be used as A1 implementation authorization.",
+  "preserved_initial_result": {
+    "path": "results/phase145_a1_subgraph_constructor_reachability.json",
+    "sha256": "1481fc559c1f568a94539c5fbb6c174d979afd8c7f862eb068a9e7e46cbae958",
+    "status": "A1_SUBGRAPH_CONSTRUCTOR_REACHABILITY_POSITIVE",
+    "histogram_candidates": 6,
+    "semantic_candidates_reported": 6,
+    "incorrect_dense_candidates_reported": 3
+  },
+  "amended_semantic_adjacency": {
+    "dense_matrix_chain": "For ordered matmul nodes inner and outer, inner must be exactly outer.args[0]. A match in outer.args[1] is rejected because the frozen constructor's associativity transformation does not apply.",
+    "fold_conv_batch_norm": "The mapped conv2d node must be exactly batch_norm.args[0].",
+    "other_constructor_families": "The base protocol conditions remain unchanged because none produced an initial histogram candidate."
+  },
+  "unchanged": [
+    "all 23 calibration graphs",
+    "all 41 observed targets and 337 calls",
+    "eligible-node mapping",
+    "connected-subset enumeration sizes two through six",
+    "six frozen constructor histograms",
+    "all process-tree ceilings",
+    "positive semantic candidate requirement",
+    "validation-v6 sealing",
+    "production arm count"
+  ],
+  "acceptance": {
+    "initial_result_hash_must_match": true,
+    "both independent enumerators_must_still_agree": true,
+    "histogram_candidate_count_must_remain_6": true,
+    "all_argument_1_dense_candidates_must_be_rejected": true,
+    "all_argument_0_dense_candidates_must_be_reported": true,
+    "all_conv_argument_0_batchnorm_candidates_must_be_reported": true,
+    "corrected_result_path": "results/phase145_a1_subgraph_constructor_reachability_corrected.json"
+  },
+  "provider_records": [
+    {"path": "arm_adapter_fixtures/A1_SUBGRAPH_CONSTRUCTOR_REACHABILITY_PROTOCOL_V1.json", "sha256": "632cf08413c7f19d2d00e9ec85da2cb0405a1963dd8a88b39ab575dbc56e57e0"},
+    {"path": "results/a1_subgraph_constructor_reachability_v1_freeze.json", "sha256": "e70cea85d184d3c73060c9a915fd90b0a20caab27535da00cea9c4e1a12891d1"},
+    {"path": "results/phase145_a1_subgraph_constructor_reachability.json", "sha256": "1481fc559c1f568a94539c5fbb6c174d979afd8c7f862eb068a9e7e46cbae958"},
+    {"path": "phase145_a1_subgraph_constructor_reachability.py", "sha256": "e0d78cd79fe73fd7294aa128667e215cff2eb2ef301ab17e8ef38762079b1009"},
+    {"path": "../operator_v5/ghost_operator_candidate_v5.py", "sha256": "2709d905aa6c84cd96abb2b94640cb24a6c11c29c694d015c2a7b765bb967313"},
+    {"path": "results/readiness_iteration_5_26.json", "sha256": "ac4b68dff5fa5f2331211b9b8e47e7e65405a71a765a67676f8723bf5eb9a559"}
+  ],
+  "claim_boundary": {
+    "post_diagnostic_correction": true,
+    "initial_false_positive_preserved": true,
+    "not_typed_lowering": true,
+    "not_constructor_execution": true,
+    "not_A1_integration": true,
+    "production_integrated_arms": 7,
+    "validation_v6_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

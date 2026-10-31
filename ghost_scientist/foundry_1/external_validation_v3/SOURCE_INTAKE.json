@@ -1,0 +1,39 @@
+{
+  "version": "FOUNDRY_EXTERNAL_VALIDATION_V3_SOURCE_INTAKE",
+  "repository": "pytorch/examples",
+  "commit": "acc295dc7b90714f1bf47f06004fc19a7fe235c4",
+  "license_path": "../external_workloads/LICENSE.pytorch-examples",
+  "sources": [
+    {
+      "family": "multiprocess_image_classification",
+      "upstream_path": "mnist_hogwild/main.py",
+      "upstream_blob_sha": "6fa449233d3a38c97fd1f3e87ac91132f6681131",
+      "local_model_snapshot": "hogwild_model.py"
+    },
+    {
+      "family": "forward_forward_local_learning",
+      "upstream_path": "mnist_forward_forward/main.py",
+      "upstream_blob_sha": "25bc187b2928e7e58f7a85332849a724a24dd47e",
+      "local_model_snapshot": "forward_forward_layer.py",
+      "adapter": "forward method preserved; optimizer and global CLI state removed"
+    },
+    {
+      "family": "distributed_data_parallel_toy",
+      "upstream_path": "distributed/ddp/example.py",
+      "upstream_blob_sha": "d64b4739769e3c36cc5522605edd43582895b59b",
+      "local_model_snapshot": "ddp_toy_model.py"
+    },
+    {
+      "family": "remote_recurrent_decoder",
+      "upstream_path": "distributed/rpc/rnn/rnn.py",
+      "upstream_blob_sha": "ded3781711487e3a0537d946b3599c6cfa69730f",
+      "local_model_snapshot": "rpc_decoder_model.py"
+    }
+  ],
+  "selection_boundary": {
+    "selected_before_semantic_forge_execution": true,
+    "selected_before_semantic_tool_records_exist": true,
+    "no_transformer_architecture": true,
+    "no_attention_operation": true
+  }
+}

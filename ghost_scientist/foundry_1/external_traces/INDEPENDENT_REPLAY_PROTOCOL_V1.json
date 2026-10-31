@@ -1,0 +1,28 @@
+{
+  "schema": "FOUNDRY_EXTERNAL_TRACE_INDEPENDENT_REPLAY_PROTOCOL_V1",
+  "frozen_before_independent_replay": true,
+  "input": {
+    "repository": "alibaba/clusterdata",
+    "trace_blob": "db8d3cfaea62e7086aff40e98ab6446619d9e5ce"
+  },
+  "independence_requirements": [
+    "Fetch the immutable blob again.",
+    "Use a separately written CSV parser.",
+    "Resolve columns from the header, never positional constants.",
+    "Reject malformed row widths.",
+    "Recompute status totals, nonempty model population, zero-success population, successful-count quantiles, and N-star."
+  ],
+  "exact_expected_relations": [
+    "data row count equals the primary aggregate",
+    "status histogram equals the primary aggregate",
+    "model population equals the primary aggregate",
+    "all seven reported successful-count order statistics equal the primary aggregate",
+    "N-star equals the unchanged nearest-rank q25 estimator"
+  ],
+  "forbidden": [
+    "No edits to the primary aggregate.",
+    "No model filtering.",
+    "No quantile substitution.",
+    "No validation-v6 access."
+  ]
+}

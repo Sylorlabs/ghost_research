@@ -1,0 +1,122 @@
+{
+  "version": "FOUNDRY_LOCAL_EXACT_TOOL_UTILITY_PROTOCOL_V1",
+  "status": "PREFROZEN_BEFORE_TOTAL_COST_OR_REACHABILITY_IMPLEMENTATION",
+  "research_question": "After charging construction and use, do the three executed exact tools cost less than or reach heldout graph nodes not reached by the unchanged strong fixed portfolio?",
+  "classification": {
+    "local_exploratory_cross_validation_only": true,
+    "post_phase165_required_gate": true,
+    "previously_observed_graph_corpus_not_pristine": true,
+    "validation_v6_or_v7_prospective_claim_allowed": false
+  },
+  "evaluation_universe": {
+    "graphs": 23,
+    "folds": 5,
+    "each_graph_heldout_exactly_once": true,
+    "candidate_matches": "the exact seventeen Phase164 rows executed by Phase165",
+    "candidate_tools": "the three unique complete bodies executed by Phase165",
+    "fixed_portfolio": "ATEN_FIXED_PORTFOLIO_V2 unchanged",
+    "node_identity": "graph_id colon FX node name"
+  },
+  "abstract_cost": {
+    "candidate_training_motif_scans": "every encoded motif is charged once in each of the four folds where its graph is training",
+    "candidate_heldout_motif_scans": "every encoded motif is charged once when its graph is heldout",
+    "candidate_model_definition": "for every fold topology prediction record, charge topology node count plus internal edges plus external input uses plus outputs plus predicted body nodes plus predicted body inputs",
+    "candidate_exact_comparisons": "one per eligible heldout motif",
+    "candidate_dispatch": "one per executed predicted-body node",
+    "candidate_native_compile_units": "twice the node count of each unique body for candidate and stock compilation",
+    "fixed_definition": "one per target in every supplied fixed tool",
+    "fixed_match_visits": "one per attempted path node visit under the unchanged matcher",
+    "fixed_edge_checks": "one per attempted successor edge",
+    "total": "sum of the named integer components within each route",
+    "do_not_mix_cpu_nanoseconds_with_abstract_units": true
+  },
+  "resource_accounting": {
+    "carry_phase165_process_tree_receipt": true,
+    "report_candidate_and_stock_compile_cpu_ns_per_unique_body": true,
+    "report_phase163_phase164_phase165_process_tree_cpu_and_peak_rss_separately": true
+  },
+  "reachability": {
+    "candidate_coverage": "unique nodes in the seventeen exact executed rows",
+    "fixed_coverage": "unique nodes in every unchanged fixed-portfolio match across the same twenty-three graphs",
+    "candidate_only_nodes": "candidate coverage minus fixed coverage",
+    "candidate_only_families": "families containing at least one candidate-only node",
+    "causal": "removing all three candidate bodies removes every candidate node and candidate-only node"
+  },
+  "decision_rule": {
+    "local_utility_positive": "candidate total abstract cost is lower than fixed total abstract cost or candidate-only nodes is nonzero, with two implementations and all hostile/resource gates passing",
+    "local_utility_valid_negative": "complete execution passes but candidate is neither cheaper nor locally newly reachable",
+    "infrastructure_failure": "implementations, cost arithmetic, coverage, causality, hostile, or resource accounting disagree",
+    "positive_is_not_prospective_real_world_discovery": true,
+    "positive_does_not_advance_P2_or_P6": true,
+    "positive_may_justify_fresh_external_trial_only_after_existing_gates": true
+  },
+  "hostile_requirements": {
+    "cases": 16,
+    "must_cover": [
+      "candidate match mutation",
+      "candidate tool count mutation",
+      "training scan undercharge",
+      "heldout scan undercharge",
+      "model definition undercharge",
+      "exact comparison undercharge",
+      "dispatch undercharge",
+      "compile unit undercharge",
+      "fixed definition overcharge",
+      "fixed visit overcharge",
+      "fixed edge overcharge",
+      "candidate coverage fabrication",
+      "fixed coverage removal",
+      "candidate-only node fabrication",
+      "causal loss mutation",
+      "claim inflation"
+    ],
+    "primary_and_independent_rejection_required": true
+  },
+  "resource_limits": {
+    "wall_seconds": 240,
+    "cpu_seconds": 200,
+    "rss_kib": 4500000
+  },
+  "provider_records": [
+    {
+      "path": "results/phase163_local_operator_prediction.json",
+      "sha256": "001f6c8586fb0c24b5e05aeaa9d4d03b190cede346d37f300b877d047fe67f40"
+    },
+    {
+      "path": "results/phase164_local_exact_body_prediction.json",
+      "sha256": "f88c07a68c8e29fe33c0acb7b601fb9702b1482434ac6d350437941fe8b9dc7d"
+    },
+    {
+      "path": "results/phase165_local_exact_tool_execution.json",
+      "sha256": "1783d2944b9713553f115b4cf1b3e6a81c52eaa9d445784f700b0044a6aa884f"
+    },
+    {
+      "path": "ATEN_FIXED_PORTFOLIO_V2.json",
+      "sha256": "a1cfe21f09f2be579f33a24604e4f16ce438b4f411932f345ebd11f5e5b76061"
+    },
+    {
+      "path": "local_grammar_emergence_core_v1.py",
+      "sha256": "2f8410df1614aa4a606d1791e48e3fbf8445b4c13a16ccc5e8c939675d8b4c57"
+    },
+    {
+      "path": "independent_local_grammar_emergence_v1.py",
+      "sha256": "096a4023b5881f7ab3c7f2b1f65bc72d50df11e9de934d4bb07acc0875b0b4ea"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    }
+  ],
+  "claim_boundary": {
+    "bounded_local_cross_validation_utility_only": true,
+    "previously_observed_corpus_not_fresh_external_evidence": true,
+    "abstract_cost_not_wall_clock_speedup": true,
+    "stock_duplicates_not_runtime_inventions": true,
+    "no_whole_graph_replacement_claim": true,
+    "P2_not_advanced": true,
+    "P6_not_advanced": true,
+    "validation_v7_payload_decrypted": false,
+    "prospective_trial_authorized": false,
+    "prospective_trial_executed": false
+  }
+}

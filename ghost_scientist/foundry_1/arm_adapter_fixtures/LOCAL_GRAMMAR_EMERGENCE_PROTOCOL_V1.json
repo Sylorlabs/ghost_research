@@ -1,0 +1,157 @@
+{
+  "version": "FOUNDRY_LOCAL_GRAMMAR_EMERGENCE_PROTOCOL_V1",
+  "status": "PREFROZEN_POST_EXPLORATORY_LOCAL_ONLY",
+  "research_question": "Can an LLM-free learner select recurring typed DAG topology productions from training graphs, construct exact reusable tools under those learned productions, and reach held-out local structures that the prior supplied chain grammar and fixed portfolio cannot?",
+  "classification": {
+    "local_exploratory_only": true,
+    "post_exploratory_not_pristine": true,
+    "calibration_and_historical_graphs_reused": true,
+    "validation_v6_or_v7_prospective_claim_allowed": false
+  },
+  "split": {
+    "source": "the 23 authenticated graph identities and graph SHA-256 values in pareto_tool_pool.json",
+    "assignment": "integer value of SHA-256(UTF-8 'ghost-foundry:grammar-v1:' || graph_id) modulo 5; bucket 0 held out, buckets 1-4 training",
+    "expected_training_graphs": 16,
+    "expected_heldout_graphs": 7,
+    "heldout_graph_ids": [
+      "original_external:image_classification",
+      "original_external:time_series_recurrence",
+      "validation_v1:convolutional_style_transfer",
+      "validation_v3:distributed_data_parallel_toy",
+      "validation_v4:healthcare_dense_graph_convolution",
+      "validation_v4:parameter_server_image_classification",
+      "validation_v4:robust_gaussian_graph_convolution"
+    ]
+  },
+  "universal_typed_dag_metalanguage": {
+    "eligible_node": "torch.fx call_function node whose target starts with aten. and whose meta val is a typed Tensor",
+    "minimum_nodes": 2,
+    "maximum_nodes": 5,
+    "subgraph": "every unique node subset whose undirected induced dependency graph is connected",
+    "node_order": "parent graph topological order",
+    "inputs": "all typed tensor dependencies from outside the subset, first-use ordered; supported literals retain exact values",
+    "outputs": "every internal node with any user outside the subset, ordered by parent graph order",
+    "topology_production": {
+      "fields": [
+        "node_count",
+        "internal_edges",
+        "external_input_uses",
+        "output_indices"
+      ],
+      "internal_edges": "sorted [producer_index, consumer_index] pairs for all internal tensor dependencies",
+      "external_input_uses": "per node count of direct external typed-tensor dependencies",
+      "fixed_chain": "one output at final index and internal edges exactly [[0,1],[1,2],...]"
+    }
+  },
+  "training_rule": {
+    "topology_minimum_occurrences": 3,
+    "topology_minimum_families": 2,
+    "topology_description_length_gain": "occurrences * (node_count + edge_count + output_count) - ((node_count + edge_count + output_count) + occurrences)",
+    "select_topology_if_gain_strictly_positive": true,
+    "exact_tool_minimum_occurrences": 2,
+    "exact_tool_minimum_families": 2,
+    "exact_tool_description_length_gain": "occurrences * (nodes + typed_inputs + outputs) - ((nodes + typed_inputs + outputs) + occurrences)",
+    "select_tool_if_gain_strictly_positive": true,
+    "llm_calls": 0,
+    "human_selected_topology_productions": 0
+  },
+  "heldout_rule": {
+    "no_topology_or_tool_learning_on_heldout": true,
+    "match": "byte-identical canonical exact tool body learned from training, under a selected training topology production",
+    "coverage": "unique heldout graph call_function node identities participating in at least one exact match",
+    "candidate_cost": "all training subsets visited + learned production structural units + learned tool structural units + heldout subsets visited",
+    "chain_control_cost": "all training chain subsets visited + learned chain-tool structural units + heldout chain subsets visited",
+    "supplied_fixed_control": "unchanged ATEN_FIXED_PORTFOLIO_V2 target-sequence matcher"
+  },
+  "primary_endpoints": {
+    "learned_non_chain_productions": "count selected productions not satisfying fixed_chain",
+    "learned_multi_output_productions": "count selected productions with more than one output",
+    "candidate_only_heldout_tools": "exact candidate tools with heldout matches and no exact chain-control or supplied-fixed target-sequence equivalent",
+    "candidate_only_heldout_nodes": "heldout nodes covered by candidate matches but neither control",
+    "candidate_coverage_vs_chain": "paired unique heldout node coverage",
+    "candidate_coverage_vs_supplied_fixed": "paired unique heldout node coverage"
+  },
+  "causal_tests": {
+    "remove_all_learned_non_chain_productions": "candidate-only non-chain heldout matches must fall to zero",
+    "remove_each_candidate_only_tool": "that exact tool digest must lose all of its heldout matches",
+    "shuffle_topology_output_indices": "both implementations must reject or change the production digest"
+  },
+  "decision_rule": {
+    "positive": "at least one learned non-chain production constructs an exact training tool that transfers to heldout and covers at least one node unreachable by both controls; all causal, independent, hostile, and resource gates pass",
+    "valid_negative": "the complete bounded search and all gates pass but the positive endpoint is not reached",
+    "infrastructure_failure": "enumerators disagree, authenticated split changes, any graph cannot be accounted for, hostile tests fail, or resource limits fail",
+    "never_advance_P6_or_authorize_prospective_trial": true
+  },
+  "hostile_requirements": {
+    "cases": 18,
+    "must_cover": [
+      "split assignment mutation",
+      "graph digest mutation",
+      "disconnected subset",
+      "duplicate node index",
+      "non-topological node order",
+      "missing internal edge",
+      "extra internal edge",
+      "external input count mutation",
+      "missing output index",
+      "duplicate output index",
+      "non-boundary output",
+      "unknown topology field",
+      "tool topology digest mismatch",
+      "tool body digest mismatch",
+      "heldout learning flag enabled",
+      "fabricated heldout match",
+      "causal removal ledger mutation",
+      "claim inflation to prospective"
+    ],
+    "primary_and_independent_rejection_required": true
+  },
+  "native_dedup_rule": {
+    "required_only_after_positive_reachability": true,
+    "classification": "compile each candidate-only exact tool and its inlined reference under the existing native-dedup receipt contract",
+    "a compiler duplicate remains evidence of search-level construction but not runtime primitive invention": true
+  },
+  "resource_limits": {
+    "wall_seconds": 240,
+    "cpu_seconds": 210,
+    "rss_kib": 4500000
+  },
+  "provider_records": [
+    {
+      "path": "results/readiness_iteration_5_33.json",
+      "sha256": "1200e9282e8a300f3c178b76c965318442f79e6b657453fbcde4d4e8d9bca0f1"
+    },
+    {
+      "path": "results/phase63_pareto_motif_calibration.json",
+      "sha256": "7c30c47097e1887d53e2bad9e0afe483034707a630d523b48c21062856e28c5c"
+    },
+    {
+      "path": "results/pareto_tool_pool.json",
+      "sha256": "3c41a76921fc56504707279b40e870cf292101b4a4827de1c8d0ecb1c4cd60bf"
+    },
+    {
+      "path": "ATEN_FIXED_PORTFOLIO_V2.json",
+      "sha256": "a1cfe21f09f2be579f33a24604e4f16ce438b4f411932f345ebd11f5e5b76061"
+    },
+    {
+      "path": "phase63_pareto_motif_calibration.py",
+      "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    }
+  ],
+  "claim_boundary": {
+    "local_grammar_emergence_experiment_only": true,
+    "universal_metalanguage_is_still_evaluator_supplied": true,
+    "machine_selects_bounded_topology_productions_not_the_universal_representation": true,
+    "real_external_prospective_generalization_not_measured": true,
+    "new_runtime_primitive_not_claimed_without_native_dedup": true,
+    "P2_not_advanced": true,
+    "P6_not_advanced": true,
+    "validation_v7_payload_decrypted": false,
+    "prospective_trial_authorized": false,
+    "prospective_trial_executed": false
+  }
+}

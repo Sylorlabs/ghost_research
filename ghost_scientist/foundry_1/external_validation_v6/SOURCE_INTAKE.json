@@ -1,0 +1,101 @@
+{
+  "version": "FOUNDRY_EXTERNAL_VALIDATION_SOURCE_INTAKE_V6",
+  "selected_utc_date": "2026-07-30",
+  "selection_boundary": {
+    "pareto_candidate_records_constructed": false,
+    "candidate_or_fixed_execution_observed": false,
+    "validation_graphs_exported_or_inspected": false,
+    "validation_runtime_executed": false
+  },
+  "selection_rule": {
+    "calibration_repositories_excluded": [
+      "DSE-MSU/DeepRobust",
+      "jcjohnson/pytorch-examples",
+      "pytorch/examples",
+      "pytorch/tutorials",
+      "sunlabuiuc/PyHealth",
+      "udacity/deep-learning-v2-pytorch",
+      "yunjey/pytorch-tutorial"
+    ],
+    "minimum_distinct_repositories": 4,
+    "minimum_distinct_semantic_domains": 4,
+    "model_requirements": [
+      "public immutable upstream commit",
+      "MIT license at the same commit",
+      "CPU-executable using installed torch alone",
+      "no Transformer or attention architecture",
+      "selected from source semantics without candidate matching"
+    ]
+  },
+  "sources": [
+    {
+      "repository": "mateuszbuda/brain-segmentation-pytorch",
+      "commit": "d45f8908ab2f0246ba204c702a6161c9eb25f902",
+      "paths": [
+        {
+          "path": "unet.py",
+          "blob_sha1": "1ea7bad750367733c82610a108126eb732d5acb3"
+        }
+      ],
+      "license_path": "LICENSE",
+      "license_blob_sha1": "bcd6173cc8daaf2421b727ed68d2c08d24bd166b",
+      "license": "MIT",
+      "semantic_domain": "dense_image_segmentation",
+      "family": "unet_brain_segmentation",
+      "local_adaptation": "init_features reduced from default 32 to 4 and batch fixed at 1; complete U-Net topology and forward dataflow unchanged"
+    },
+    {
+      "repository": "bentrevett/pytorch-seq2seq",
+      "commit": "b3cd54c72cd6e4e63f672d334c795b4fe744ef92",
+      "paths": [
+        {
+          "path": "1 - Sequence to Sequence Learning with Neural Networks.ipynb",
+          "blob_sha1": "5724e6806ad6a6389ebfeb5edd4b02eae4624081",
+          "source_cell_indices": [77, 79, 81]
+        }
+      ],
+      "license_path": "LICENSE",
+      "license_blob_sha1": "c42c068cec342e74df7ad2c9392893beecf42f42",
+      "license": "MIT",
+      "semantic_domain": "sequence_to_sequence_translation",
+      "family": "recurrent_sequence_translation",
+      "local_adaptation": "vocabulary, embedding, hidden, batch, and sequence dimensions reduced through upstream constructors; two-layer encoder-decoder LSTM and teacher-forced full decoding loop unchanged"
+    },
+    {
+      "repository": "maciejkula/spotlight",
+      "commit": "75f4c8c55090771b52b88ef1a00f75bb39f9f2a9",
+      "paths": [
+        {
+          "path": "spotlight/factorization/representations.py",
+          "blob_sha1": "e85e50a7e6dc956e8eb383a462c9bc605c502a54"
+        },
+        {
+          "path": "spotlight/layers.py",
+          "blob_sha1": "6715629047127fd826a5f008b793908f8a7d18a4"
+        }
+      ],
+      "license_path": "LICENSE",
+      "license_blob_sha1": "be3dd2ca5ef3b8e1110924162cffd8b7548ee525",
+      "license": "MIT",
+      "semantic_domain": "recommendation_ranking",
+      "family": "bilinear_implicit_recommendation",
+      "local_adaptation": "user, item, embedding, and batch dimensions reduced through upstream constructors; scaled embeddings, bias embeddings, dot product, and bias additions unchanged"
+    },
+    {
+      "repository": "locuslab/TCN",
+      "commit": "2f8c2b817050206397458dfd1f5a25ce8a32fe65",
+      "paths": [
+        {
+          "path": "TCN/tcn.py",
+          "blob_sha1": "37dfd435e5c5a66cb2706f80d540b7ce4c396be5"
+        }
+      ],
+      "license_path": "LICENSE",
+      "license_blob_sha1": "a5116828431b348dbff6a012c1fbd7f5a8ba4fd7",
+      "license": "MIT",
+      "semantic_domain": "temporal_sequence_modeling",
+      "family": "dilated_temporal_convolution",
+      "local_adaptation": "channel widths, levels, batch, and sequence length reduced through upstream constructors and dropout set to zero for deterministic evaluation; dilated residual topology unchanged"
+    }
+  ]
+}

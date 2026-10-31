@@ -1,0 +1,29 @@
+[package]
+name = "foundry_babble_source_control"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "babble"
+path = "generated/lib.rs"
+
+[[bin]]
+name = "foundry-babble-control"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+babble-macros = { path = "../source/babble-macros" }
+egg = { path = "../egg_control" }
+itertools = "0.12"
+lazy_static = "1"
+log = "0.4"
+nom = "7"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+
+[features]
+default = []
+grb = []

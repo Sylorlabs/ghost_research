@@ -1,0 +1,17 @@
+[package]
+name = "symbol_table"
+version = "0.2.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "../symbol_table_0_2/src/lib.rs"
+
+[dependencies]
+ahash = { version = "0.8", default-features = false }
+hashbrown = { version = "0.12", default-features = false, features = ["inline-more"] }
+serde = { version = "1", optional = true, features = ["derive"] }
+
+[features]
+default = []
+global = []

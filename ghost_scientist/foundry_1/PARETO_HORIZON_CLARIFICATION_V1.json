@@ -1,0 +1,50 @@
+{
+  "version": "FOUNDRY_PARETO_HORIZON_CLARIFICATION_V1",
+  "status": "PREFLIGHT_ONLY_UNTIL_AUTHORIZED",
+  "parent_protocol": "PARETO_PROSPECTIVE_PROTOCOL_V1.json",
+  "parent_protocol_sha256": "b6ca7f41151dc415c49cfb292ab6d4b5ec76b0e7b97b9e3cc75d00f8af557f50",
+  "reason": "Foundry-0 uses N for a workload stream while separately requiring executed workload time at externally sourced invocation counts. The first trace audit incorrectly treated requests-per-model as artifact arrivals. This clarification separates the two dimensions before any validation-v6 execution.",
+  "primary_coordinates": {
+    "A_star_artifacts": 4,
+    "A_star_source": "The already-frozen validation-v6 intake contains four repositories and four semantic domains.",
+    "K_star_invocations_per_artifact": 3,
+    "K_star_source": "The predeclared nearest-rank lower quartile of successful requests per nonempty model identity in the exact Alibaba production trace.",
+    "total_execution_events": 12,
+    "event_schedule": "Each of the four prospectively selected artifacts is executed exactly three times by every arm after its one-time construction and compilation costs are charged.",
+    "pairing_and_bootstrap_unit": "artifact",
+    "bootstrap_sample_size": 4,
+    "pseudoreplication_rule": "The three executions improve workload-cost measurement but never count as three independent artifacts or bootstrap samples."
+  },
+  "primary_estimand": "Delta(A*=4,K*=3) = 1 - TotalCost_A2(A*=4,K*=3) / min(TotalCost_A3..A9(A*=4,K*=3))",
+  "cost_accounting": [
+    "Charge candidate generation, every rejected and accepted verification, compiler construction, compilation, selector/search, failures, and timeouts once where actually incurred.",
+    "Charge executed workload latency for exactly K*=3 executions of every artifact in every arm.",
+    "Keep CPU process time, wall time, compiler time, executed latency, memory, model tokens, and monetary cost separately reported.",
+    "Do not multiply one-time construction or compilation cost by K*.",
+    "Do not treat calibration accounting units from phase 76 as the primary total-cost scalar."
+  ],
+  "unchanged_from_parent": [
+    "candidate identity and tool bytes",
+    "heldout source identities and post-freeze selection procedure",
+    "all required and optional arms",
+    "all hard validity gates",
+    "all scientific gates",
+    "all stop conditions",
+    "all correctness, containment, resource, and provenance thresholds",
+    "the at-least-5-percent point-estimate requirement",
+    "the positive lower 95-percent paired bootstrap confidence-bound requirement"
+  ],
+  "chronology": {
+    "validation_v6_manifest_previously_accessed": true,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "candidate_or_fixed_heldout_outcome_observed": false,
+    "trace_estimator_frozen_before_trace_distribution": true,
+    "clarification_frozen_before_heldout_execution": true
+  },
+  "claim_boundary": {
+    "K_star_is_not_artifact_stream_length": true,
+    "phase76_is_secondary_calibration_sensitivity_only": true,
+    "P2_may_complete_only_if_independent_conformance_finds_no_gate_weakening": true,
+    "prospective_trial_authorized_by_this_file": false
+  }
+}

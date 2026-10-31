@@ -1,0 +1,54 @@
+{
+  "version": "FOUNDRY_ISAMORE_EXACT_ARTIFACT_INGRESS_PROTOCOL_V1",
+  "frozen_before_ingress_implementation_or_execution": true,
+  "question": "Can exact registry artifacts be admitted and safely staged without a human editing versions, manifests, or vendor paths?",
+  "provider_records": [
+    {
+      "path": "external_controls/isamore/source/Cargo.lock",
+      "sha256": "d652b86e3c50f5c6e58bbe0270c03ea5ee4fa01d485e97ba75ba1117d06adff2"
+    },
+    {
+      "path": "results/phase130_isamore_exact_archive_transport_recovery_audit.json",
+      "sha256": "42ec1dd8e97de2ccf6460b70760aa9a76d82589bbfdd35fd651196a20335b8a5"
+    },
+    {
+      "path": "results/phase135_eggmind_full_reproduction_sufficiency_audit.json",
+      "sha256": "7895c50267961f409346ab0559812199c39480e53c75cfe36ced5b26bc2f469b"
+    }
+  ],
+  "admission_contract": {
+    "identity_source": "exact name, version, and registry checksum in the pinned Cargo.lock",
+    "required_filename": "<name>-<version>.crate",
+    "required_archive_root": "<name>-<version>/",
+    "required_manifest": "<name>-<version>/Cargo.toml",
+    "accepted_member_types": [
+      "regular_file",
+      "directory"
+    ],
+    "atomic_all_or_nothing_batch": true,
+    "existing_destination_policy": "reject",
+    "unknown_artifact_policy": "reject",
+    "checksum_mismatch_policy": "reject",
+    "unsafe_path_or_link_policy": "reject"
+  },
+  "hostile_cases": [
+    "unknown filename",
+    "checksum mismatch",
+    "malformed gzip tar",
+    "absolute member path",
+    "parent traversal member",
+    "wrong archive root",
+    "symbolic link",
+    "hard link",
+    "duplicate member",
+    "missing Cargo.toml",
+    "preexisting destination"
+  ],
+  "claim_boundary": {
+    "ingress_conformance_may_advance_P1": false,
+    "synthetic_archive_may_count_as_upstream_source": false,
+    "empty_real_inbox_may_count_as_acquisition": false,
+    "validation_v6_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

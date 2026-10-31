@@ -1,0 +1,54 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V9",
+  "parent_freeze": "results/pareto_remediation_v8_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 93,
+      "objective": "Audit whether the frozen A1 v5.1 conditional constructor can be directly and faithfully lowered from the complete 23-graph calibration surface.",
+      "result": "results/phase93_a1_ir_compatibility_audit.json",
+      "outcome": "A1_DIRECT_ADAPTER_REJECTED_INCOMPLETE_IR_SURFACE",
+      "scientific_effect": "Two source-vocabulary extractors agree on 22 frozen A1 runtime operations. Only 9/41 observed ATen targets and 143/337 calls are direct exact mappings; 114 calls need composite proofs and 80 are unsupported. Four of 23 graphs are wholly direct and none matches a non-reference frozen constructor pattern. A generic wrapper is rejected."
+    },
+    {
+      "phase": 94,
+      "objective": "Process-tree meter the complete A1 compatibility audit without weakening its failed production criterion.",
+      "result": "results/phase94_a1_ir_compatibility_resource_audit.json",
+      "outcome": "A1_IR_COMPATIBILITY_RESOURCE_PASS",
+      "scientific_effect": "The full 23-graph, 41-target, 337-call negative audit terminates naturally with CPU, RSS, and process-group accounting. A1 remains compatibility-audited, not production-integrated."
+    }
+  ],
+  "integration_progress": {
+    "A1": "COMPATIBILITY_AUDITED_NOT_ADAPTED",
+    "A1_runtime_ops": 22,
+    "direct_exact_ATen_targets": 9,
+    "conditional_composite_ATen_targets": 11,
+    "unsupported_ATen_targets": 21,
+    "direct_exact_calls": 143,
+    "conditional_composite_calls": 114,
+    "unsupported_calls": 80,
+    "whole_graphs_direct": 4,
+    "exact_constructor_pattern_candidates": 0,
+    "production_integrated_arms": 4,
+    "required_arms": 10,
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "build an evaluator-owned ATen-to-Operator-v5 typed IR lowering layer",
+      "prove conditional composites through argument and adjacency checks",
+      "fail closed on unsupported operators or use only the frozen A1 reference-plan behavior where formally justified",
+      "demonstrate at least one non-reference A1 construction on calibration before promotion",
+      "continue A4/A5/A7 integration and fourth-control P1 acquisition independently"
+    ]
+  }
+}

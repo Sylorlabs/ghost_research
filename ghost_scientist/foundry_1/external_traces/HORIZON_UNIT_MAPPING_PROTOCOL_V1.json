@@ -1,0 +1,60 @@
+{
+  "schema": "FOUNDRY_HORIZON_UNIT_MAPPING_PROTOCOL_V1",
+  "frozen_before_unit_decision": true,
+  "normative_sources": {
+    "foundry_0_dossier": "../foundry_0/FOUNDRY_0_DOSSIER.md",
+    "foundry_0_falsification_protocol": "../foundry_0/FALSIFICATION_PROTOCOL.md",
+    "heldout_intake_manifest": "results/external_validation_v6_intake_freeze.json",
+    "offline_trace_result": "results/phase78_offline_trace_replay.json"
+  },
+  "declared_dimensions": {
+    "N_artifacts": "Length of the chronological workload-artifact stream processed by a method.",
+    "K_invocations": "Executed workload requests charged for one deployed artifact.",
+    "trace_q25": "Lower-quartile successful request count per nonempty deployed model identity."
+  },
+  "decision_rules": [
+    {
+      "id": "U01",
+      "rule": "A request count for repeated use of the same model may justify K-invocations but may not be relabeled as N-artifacts."
+    },
+    {
+      "id": "U02",
+      "rule": "A distinct stable model identity may count as one external artifact arrival only once, at first appearance."
+    },
+    {
+      "id": "U03",
+      "rule": "An external artifact-stream N-star is executable only if the frozen heldout harness can supply at least that many prospectively selected artifacts under its committed procedure."
+    },
+    {
+      "id": "U04",
+      "rule": "A cross-domain mapping must preserve the counted event: request to execution and model identity to compiled artifact."
+    },
+    {
+      "id": "U05",
+      "rule": "If units or executable stream capacity disagree, P2 remains incomplete and the invocation-trace stop condition remains active."
+    }
+  ],
+  "candidate_mappings": [
+    {
+      "id": "M1",
+      "mapping": "trace q25 successful requests per model -> Foundry N-star artifact stream length",
+      "required_unit": "artifact arrivals"
+    },
+    {
+      "id": "M2",
+      "mapping": "trace q25 successful requests per model -> K-star executions charged per Foundry artifact",
+      "required_unit": "requests per artifact"
+    },
+    {
+      "id": "M3",
+      "mapping": "86 distinct trace model identities -> Foundry N-star artifact stream length",
+      "required_unit": "artifact arrivals plus heldout capacity of at least 86 artifacts"
+    }
+  ],
+  "forbidden": [
+    "Do not silently change the Foundry-0 definition of N.",
+    "Do not count repeated requests as newly discovered artifacts.",
+    "Do not infer 86 heldout artifacts from four frozen source identities.",
+    "Do not inspect validation-v6 source, runtime, graphs, or outcomes."
+  ]
+}

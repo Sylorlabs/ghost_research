@@ -1,0 +1,62 @@
+{
+  "schema": "FOUNDRY_EXTERNAL_INVOCATION_TRACE_AGGREGATE_V1",
+  "provenance": {
+    "repository": "alibaba/clusterdata",
+    "commit": "0d0f3f1efdbf1add6a7bcc63676eafbd1eb11f71",
+    "trace_blob": "db8d3cfaea62e7086aff40e98ab6446619d9e5ce",
+    "documentation_blob": "a2891c8fcd4b70357370004f33c5a00a72c67050",
+    "transport": "GitHub connector immutable-blob fetch",
+    "source_bytes": 2012418
+  },
+  "parse": {
+    "physical_nonempty_lines": 26824,
+    "data_rows": 26823,
+    "bad_width_rows": 0,
+    "header": [
+      "gmt_create",
+      "predict_type",
+      "predict_status",
+      "exec_time_seconds",
+      "groupId",
+      "prompt_length",
+      "negative_prompt_length",
+      "num_images_per_prompt",
+      "num_inference_steps",
+      "checkpoint_model_version_id",
+      "num_lora"
+    ],
+    "timestamp_min": "2024-11-15 16:57:50",
+    "timestamp_max": "2024-12-08 17:33:57",
+    "status_counts": {
+      "FAILED": 398,
+      "PENDING": 30,
+      "PROCESSING": 3,
+      "SUCCEED": 26392
+    },
+    "empty_model_rows": 25,
+    "nonempty_model_identities": 86,
+    "zero_success_model_identities": 7
+  },
+  "successful_requests_per_model": {
+    "minimum": 0,
+    "q10_nearest_rank": 1,
+    "q25_nearest_rank": 3,
+    "median_nearest_rank": 27,
+    "q75_nearest_rank": 71,
+    "q90_nearest_rank": 718,
+    "maximum": 8229,
+    "sum": 26392
+  },
+  "predeclared_result": {
+    "estimator": "unfiltered nearest-rank lower quartile of SUCCEED rows per nonempty checkpoint_model_version_id",
+    "N_star_external_reference": 3
+  },
+  "limitations": {
+    "source_bytes_locally_frozen": false,
+    "aggregate_reproducible_from_pinned_blob_with_connector": true,
+    "workload_family": "Stable Diffusion serving",
+    "heldout_foundry_family_mapping_prospectively_justified": false,
+    "P2_complete": false
+  },
+  "validation_v6_source_runtime_graph_or_outcome_accessed": false
+}

@@ -1,0 +1,76 @@
+rvsdg_path = "tests/liquid-tests/rvsdgfiles/vector_ll"
+profile_path = "tests/liquid-tests/merged-profiled-minor-cache/vector.profiled.csv"
+workspace_dir = "result/liquid/vector/vector_ll_mode_mixed_vec_√_meta-au_√_phases_1"
+log_file = "vector_ll_mode_mixed_vec_√_meta-au_√_phases_1.json"
+
+[isax_config]
+max_frontiers_to_keep = 10
+
+[isax_config.phase_config]
+mode = "none"
+phases = 1
+enable_vectorize_phase = false
+enable_meta_au_phase = false
+enable_widths_merge = false
+
+[isax_config.extract_config]
+final_beams = 10
+inter_beams = 10
+lib_iter_limit = 1
+lps = 10
+learn_constants = false
+max_arity = 1000
+clock_period = 1000
+
+[isax_config.liblearn_config]
+cost = "latencygainarea"
+au_merge_mod = "boundary"
+enum_mode = "pruning_gold"
+sample_num = 5
+hamming_threshold = 36
+jaccard_threshold = 0.9
+max_libs = 500
+min_lib_size = 5
+max_lib_size = 50
+
+[isax_config.vectorize_config]
+enable_gather = false
+enable_shuffle = false
+enable_post_check = false
+max_vec_len = 8
+lift_rules = "resources/libsel_rewrites/lift_vec.rules"
+lower_rules = "resources/libsel_rewrites/lower_vec.rules"
+transform_rules = "resources/libsel_rewrites/transform_vec.rules"
+
+[isax_config.op_pack_config]
+prune_eclass_pair = false
+learn_trivial = true
+num_meta_au_mask = 100
+max_operation = 5
+
+[isax_config.ci_encoding_config]
+max_total_bits = 32
+default_bits_per_register = 5
+
+[isax_config.ci_encoding_config.packed_access]
+enabled = true
+max_packed_width = 32
+pack_sizes = [8, 16]
+
+[isax_config.ci_encoding_config.register_grouping]
+enabled = true
+hand_bits = 2
+dis_bits = 3
+max_hands = 4
+allow_override = false
+override_bits = 2
+
+[isax_config.ci_encoding_config.register_neighboring]
+enabled = true
+neighbor_extra_bits = 1
+max_neighbors = 1
+
+
+[isax_config.find_pack_config]
+prune_similar = true
+learn_trivial = false

@@ -1,0 +1,25 @@
+{
+  "schema": "FOUNDRY_EXTERNAL_INVOCATION_TRACE_SCHEMA_FAILURE_V1",
+  "intake": "external_traces/INVOCATION_TRACE_INTAKE_V1.json",
+  "trace_blob": "db8d3cfaea62e7086aff40e98ab6446619d9e5ce",
+  "observed_bytes": 2012418,
+  "observed_physical_nonempty_lines": 26824,
+  "observed_header": [
+    "gmt_create",
+    "predict_type",
+    "predict_status",
+    "exec_time_seconds",
+    "groupId",
+    "prompt_length",
+    "negative_prompt_length",
+    "num_images_per_prompt",
+    "num_inference_steps",
+    "checkpoint_model_version_id",
+    "num_lora"
+  ],
+  "valid_data_rows": 26823,
+  "bad_width_rows": 0,
+  "failure": "The frozen intake named documentation-level timestamp and status fields that do not exist in the pinned CSV. Its attempted status lookup therefore produced undefined for every row and no valid success-count distribution.",
+  "scientific_action": "Preserve this failure, permit only a source-documented field-name and success-label amendment, and do not alter the predeclared population, quantile, quantile method, or filtering rule.",
+  "N_star_external_reference_produced": false
+}

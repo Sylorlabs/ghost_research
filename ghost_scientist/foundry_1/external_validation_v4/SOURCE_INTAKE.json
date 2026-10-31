@@ -1,0 +1,49 @@
+{
+  "version": "FOUNDRY_EXTERNAL_VALIDATION_V4_SOURCE_INTAKE",
+  "sources": [
+    {
+      "family": "healthcare_dense_graph_convolution",
+      "repository": "sunlabuiuc/PyHealth",
+      "commit": "ef489180ddd5fa40c10f7bff530aac9fa46e9cc6",
+      "upstream_path": "pyhealth/models/gnn.py",
+      "upstream_blob_sha": "9ef323cb31a2d6aecbb1480cc5630ecca7b39fd9",
+      "local_model_snapshot": "pyhealth_graph_model.py",
+      "license": "LICENSE.PyHealth"
+    },
+    {
+      "family": "robust_gaussian_graph_convolution",
+      "repository": "DSE-MSU/DeepRobust",
+      "commit": "92ad433645fef68c8e3d74458451842323809bf6",
+      "upstream_path": "deeprobust/graph/defense/r_gcn.py",
+      "upstream_blob_sha": "027b689331bf74003e03189128b7617f1a7d20fe",
+      "local_model_snapshot": "deeprobust_gaussian_model.py",
+      "license": "LICENSE.DeepRobust"
+    },
+    {
+      "family": "parameter_server_image_classification",
+      "repository": "pytorch/examples",
+      "commit": "acc295dc7b90714f1bf47f06004fc19a7fe235c4",
+      "upstream_path": "distributed/rpc/parameter_server/rpc_parameter_server.py",
+      "upstream_blob_sha": "79846e56aab0605b6283d0163a803130f0ed7eea",
+      "local_model_snapshot": "parameter_server_model.py",
+      "license": "../external_workloads/LICENSE.pytorch-examples"
+    },
+    {
+      "family": "distributed_linear_training_job",
+      "repository": "pytorch/examples",
+      "commit": "acc295dc7b90714f1bf47f06004fc19a7fe235c4",
+      "upstream_path": "distributed/ddp-tutorial-series/single_gpu.py",
+      "upstream_blob_sha": "e91ab81cc1158b515d132214dabcf3d3895a6916",
+      "local_model_snapshot": "distributed_linear_model.py",
+      "license": "../external_workloads/LICENSE.pytorch-examples"
+    }
+  ],
+  "selection_boundary": {
+    "selected_before_polymorphic_forge_execution": true,
+    "selected_before_polymorphic_tool_records_exist": true,
+    "validation_v3_not_reused": true,
+    "repositories": 3,
+    "no_transformer_architecture": true,
+    "no_attention_operation": true
+  }
+}

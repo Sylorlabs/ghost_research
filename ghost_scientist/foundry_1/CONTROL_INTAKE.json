@@ -1,0 +1,58 @@
+{
+  "schema": "foundry-external-control-intake-v1",
+  "audit_date": "2026-07-30",
+  "network_boundary": {
+    "github_connector_read_succeeded": true,
+    "shell_git_transport_succeeded": false,
+    "shell_error": "Could not resolve host: github.com"
+  },
+  "controls": [
+    {
+      "id": "stitch",
+      "repository": "mlb2251/stitch",
+      "revision": "0ef5ec7f17091d22b8fa959fb5705e359d735a47",
+      "readme_blob_sha": "5a6741bc283854b44c325f557e62ad93573a9c94",
+      "paper_artifact": "mlb2251/stitch-artifact",
+      "license": "not_yet_audited",
+      "defining_fixture": "learn one arity-1 abstraction for repeated x-x-x structure and emit rewritten programs plus compression cost",
+      "source_checkout_available": false,
+      "conformance_executed": false
+    },
+    {
+      "id": "babble_isamore",
+      "repository": "dcao/babble",
+      "revision": "popl23",
+      "readme_blob_sha": "db20073af0eb007403a66640d29545a704135937",
+      "second_repository": "pku-liang/ISAMORE",
+      "second_revision": "5f51b1d432a61d8be01eac0e29445881d80395e2",
+      "second_readme_blob_sha": "6c972fed3287c2bdcc9d91ea1b66e2c670bfe049",
+      "license": "Babble repository license link present; ISAMORE MIT",
+      "defining_fixture": "e-graph anti-unification must learn a reusable semantic pattern and ISAMORE adaptation must expose hardware-aware selection separately",
+      "source_checkout_available": false,
+      "conformance_executed": false
+    },
+    {
+      "id": "ruler_enumo",
+      "repository": "uwplse/ruler",
+      "revision": "7ed456de94df26fdddc0c15417a987d101dc57b5",
+      "readme_blob_sha": "c93a4bf2faf3b39ac4144e2980f33cf2927a270b",
+      "paper_branch": "oopsla21-aec",
+      "license": "MIT",
+      "defining_fixture": "infer and minimize a validated ruleset from a declared language, workload, interpreter, and rule validator",
+      "source_checkout_available": false,
+      "conformance_executed": false
+    },
+    {
+      "id": "eggmind",
+      "repository": null,
+      "revision": null,
+      "readme_blob_sha": null,
+      "paper": "https://arxiv.org/abs/2604.17364",
+      "license": "unknown",
+      "defining_fixture": "synthesize a reusable EqSatL strategy with proof-derived motif caching and tractability feedback under charged model cost",
+      "source_checkout_available": false,
+      "conformance_executed": false
+    }
+  ],
+  "claim_boundary": "Repository identity and defining behavior are pinned where available. No external control has been checked out or reproduced, and EggMind code was not located."
+}

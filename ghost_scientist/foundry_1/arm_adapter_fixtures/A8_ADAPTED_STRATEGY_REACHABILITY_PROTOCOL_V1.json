@@ -1,0 +1,149 @@
+{
+  "version": "FOUNDRY_A8_ADAPTED_STRATEGY_REACHABILITY_PROTOCOL_V1",
+  "status": "PREFROZEN_AFTER_DISCLOSED_EXPLORATORY_ORDERING_PROBE",
+  "frozen_before_formal_enumerator_implementation_or_execution": true,
+  "pristine_preregistration": false,
+  "arm_id": "A8",
+  "classification": "NEW_ADAPTED_LLM_FREE_STRATEGY_SYNTHESIS_CONTROL_NOT_EGGMIND",
+  "question": "Can a deterministic strategy synthesizer construct an EqSatL-shaped priority schedule over the unchanged strong fixed tool grammar that preserves maximum calibration coverage while using fewer nonoverlapping tool applications than the supplied fixed order?",
+  "disclosed_exploratory_probe": {
+    "complete_calibration_surface_observed": true,
+    "purpose": "establish whether priority ordering changes conflict resolution before committing a full independently reproduced phase",
+    "observed_baseline": {
+      "covered_nodes": 49,
+      "eligible_artifacts": 12,
+      "direct_uses": 22
+    },
+    "observed_candidate_exists_with_direct_uses": 20,
+    "formal_selected_order_not_frozen_from_probe": true,
+    "result_must_not_be_called_pristine_or_heldout": true
+  },
+  "tool_grammar": {
+    "source": "the exact eight tools in ATEN_FIXED_PORTFOLIO_V2.json",
+    "tools": 8,
+    "candidate_strategy_space": "every permutation of all eight tool names",
+    "candidate_strategies": 40320,
+    "strategy_representation": "eight named one-iteration phases in an ordered EqSatL sequence",
+    "tools_are_unchanged": true,
+    "tool_addition_removal_or_parameter_mutation_forbidden": true
+  },
+  "match_and_execution_policy": {
+    "typed_match": "exact target sequence plus exact declared rank dtype and layout",
+    "match_paths_follow_dataflow_users": true,
+    "within_phase_order": "ascending tuple of graph node names",
+    "selection": "greedily accept a match only when none of its nodes was selected earlier in the strategy",
+    "overlapping_matches_are_counted_as_conflict_skips": true,
+    "all_23_calibration_graphs_included": true,
+    "historically_unsupported_workload_remains_explicit": true,
+    "expected_call_function_roots": 337
+  },
+  "repository_policy": {
+    "pending": "all 40320 fully evaluated strategies",
+    "promising": "the lexicographically first strategy for each distinct aggregate score vector",
+    "best": "the single strategy selected by the frozen objective and tie break",
+    "admission": "exactly one canonical record per complete permutation",
+    "eviction": "none during this bounded complete enumeration",
+    "cache": "immutable complete score table digest",
+    "retry_and_nondeterminism": "no retries and no randomness"
+  },
+  "objective": {
+    "descending": [
+      "unique covered graph nodes",
+      "eligible artifacts"
+    ],
+    "ascending": [
+      "selected direct tool applications",
+      "conflict skips",
+      "canonical ordered tool-name tuple"
+    ],
+    "baseline": "the exact listed order in ATEN_FIXED_PORTFOLIO_V2.json",
+    "positive_requires": "candidate coverage and eligible artifacts equal baseline, candidate direct applications strictly lower than baseline, and candidate order differs from baseline"
+  },
+  "independence": {
+    "two_typed_match_enumerators": true,
+    "two_greedy_strategy_evaluators": true,
+    "complete_score_table_digest_agreement": true,
+    "selected_strategy_and_baseline_agreement": true,
+    "selected_EqSatL_artifact_parsed_and_lowered_by_two_existing_parsers": true
+  },
+  "hostile_requirements": {
+    "cases": 12,
+    "must_cover": [
+      "missing tool",
+      "duplicate tool",
+      "unknown tool",
+      "changed target sequence",
+      "changed rank",
+      "changed dtype",
+      "changed layout",
+      "reversed node path",
+      "overlap double selection",
+      "score mutation",
+      "tie-break mutation",
+      "unknown strategy field"
+    ],
+    "primary_and_independent_rejection_required": true
+  },
+  "decision_rule": {
+    "positive_next_action": "freeze the selected adapted strategy and complete match decisions before implementing whole-graph execution and the 23-pair production contract",
+    "zero_next_action": "record bounded A8 strategy infeasibility and do not authorize validation-v6",
+    "this_phase_never_integrates_A8": true
+  },
+  "resource_limits": {
+    "wall_seconds": 180,
+    "cpu_seconds": 150,
+    "rss_kib": 4500000
+  },
+  "provider_records": [
+    {
+      "path": "results/readiness_iteration_5_29.json",
+      "sha256": "1af9f6fb1a84f0c8e6f40c4a8f67148e0bbe1c72fb1ec96f3ef97ea55d20dfe1"
+    },
+    {
+      "path": "ATEN_FIXED_PORTFOLIO_V2.json",
+      "sha256": "a1cfe21f09f2be579f33a24604e4f16ce438b4f411932f345ebd11f5e5b76061"
+    },
+    {
+      "path": "external_controls/eggmind/PAPER_SPECIFICATION_AUDIT_V2.json",
+      "sha256": "ff4d9deb5e8274cad95a431c38e31e14adb3dd65a49fcb53bf6d8bd961503af1"
+    },
+    {
+      "path": "results/phase71_eggmind_adapted_boundary_conformance.json",
+      "sha256": "78fada4408d9f7075551e06f20189960a6acc9172d9d637b0710e2f46899c032"
+    },
+    {
+      "path": "results/phase135_eggmind_full_reproduction_sufficiency_audit.json",
+      "sha256": "7895c50267961f409346ab0559812199c39480e53c75cfe36ced5b26bc2f469b"
+    },
+    {
+      "path": "eggmind_adapted_boundary.py",
+      "sha256": "19036458de0011d42770a4479956cffbeba859962ed7a8e22f10aeb7f06581d5"
+    },
+    {
+      "path": "independent_eggmind_boundary.py",
+      "sha256": "2a5e2edd721aedc7604c955a58cf31523a71f96d837a9c505f72eb8cf559e5e8"
+    },
+    {
+      "path": "phase63_pareto_motif_calibration.py",
+      "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    }
+  ],
+  "claim_boundary": {
+    "new_adapted_control_not_EggMind": true,
+    "post_exploratory_not_pristine": true,
+    "calibration_strategy_reachability_only": true,
+    "unchanged_fixed_tool_grammar": true,
+    "not_new_tool_construction": true,
+    "not_numerical_or_whole_graph_execution": true,
+    "not_production_integration": true,
+    "not_heldout_transfer": true,
+    "fixed_tool_order_may_be_beaten_but_fixed_tool_portfolio_not_beaten": true,
+    "production_integrated_arms_after_phase": 9,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

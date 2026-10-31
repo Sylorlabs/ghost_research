@@ -1,0 +1,93 @@
+{
+  "version": "FOUNDRY_FRAMEWORK_RUNTIME_MOUNT_PROTOCOL_V1",
+  "status": "CALIBRATION_CONFORMANCE_ONLY",
+  "frozen_before_mount_execution": true,
+  "mount_id": "CALIBRATION_23_FRAMEWORK_MOUNT_V1",
+  "provider_records": [
+    {
+      "path": "phase15_external_application_trace.py",
+      "sha256": "8c5745be75a13cb27e374486f9411e8b5ea7299a0fe0878e80d6fbe6b8b54cca"
+    },
+    {
+      "path": "external_validation_runtime.py",
+      "sha256": "b9e704c50553a4e2e13ac844ad8efeeed732c6991c244d12f4a26c15f3b9569d"
+    },
+    {
+      "path": "external_validation_v2_2_runtime.py",
+      "sha256": "981bb0c8a4691d008822efb5270ab3b71f51294612a0f43a085b61ab8adacf09"
+    },
+    {
+      "path": "external_validation_v3_runtime.py",
+      "sha256": "5c8fbd3ad42256860130764ef5ab395b43ac0b3c10e0cea6eb791296411bdc3b"
+    },
+    {
+      "path": "external_validation_v4_runtime.py",
+      "sha256": "c652cda03fb909429aadf0485e71fd9276761ff184d74b23ceaa4aec2302b3f1"
+    },
+    {
+      "path": "external_validation_v5_runtime.py",
+      "sha256": "fc3e69826f5107278b9d2a59662e0c7a0cad7c88188f608c13b8ed85a67eeb02"
+    },
+    {
+      "path": "phase63_pareto_motif_calibration.py",
+      "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"
+    },
+    {
+      "path": "per_instance_controls.py",
+      "sha256": "1165f0346cfb5cf1fc85adbafa85f233ddf7968ea12c36209af5f4457aadcb97"
+    },
+    {
+      "path": "independent_diversity_tool_evaluator.py",
+      "sha256": "5538838a8e62871545a7c3679143376dc484e2577d95cd77c482413a16734479"
+    }
+  ],
+  "sealed_inputs": {
+    "candidate_library_sha256": "9f3d30638f3c30bb8c81fa3af2305930a4d88782a373223b5fbc7303e8208e8d",
+    "fixed_portfolio_sha256": "a1cfe21f09f2be579f33a24604e4f16ce438b4f411932f345ebd11f5e5b76061",
+    "protocol_freeze_sha256": "4e05cfa62372021943de756555e8457e2a9c1da027ab0f45c500fb66821997df"
+  },
+  "expected_surface": {
+    "graphs": 23,
+    "unique_operator_targets": 41,
+    "call_function_invocations": 337,
+    "unsupported_or_failed": 1,
+    "executions_per_graph_per_arm": 3,
+    "total_framework_executions_per_arm": 69,
+    "A3": {
+      "paths": 581,
+      "groups": 388,
+      "tools": 76,
+      "unique_nodes_covered": 126
+    },
+    "A9": {
+      "paths": 581,
+      "groups": 388,
+      "tools": 83,
+      "unique_nodes_covered": 226
+    }
+  },
+  "execution_rules": [
+    "Authenticate every provider record before constructing workloads.",
+    "Export each graph through the installed framework under the committed constructor.",
+    "For each of three invocations, execute eager and exported modules from cloned inputs under the same deterministic RNG seed.",
+    "A primary tree comparator and an independently implemented framework assertion must both accept every output.",
+    "Compare output tensor shape, dtype, layout, values, and within-tree storage-alias relations.",
+    "A3 and A9 begin and end every graph with empty state and retain no library.",
+    "The independent semantic matcher verifies every selected motif against the mounted framework graph.",
+    "Unsupported and failed artifacts remain explicit."
+  ],
+  "resource_rules": {
+    "A3_and_A9_identical_declared_ceilings": true,
+    "complete_arm_process_tree_receipts_required": true,
+    "per_artifact_contract_resource_assembly_deferred": true,
+    "reason": "One arm process mounts all 23 artifacts; the frozen contract lacks a shared resource-receipt identifier, so duplicating one group receipt into 23 artifact outputs would overcount resources."
+  },
+  "claim_boundary": {
+    "framework_runtime_mount_component_may_pass": true,
+    "full_contract_resource_integration_may_pass": false,
+    "production_integrated_arms_after_pass": 2,
+    "P3_complete_after_pass": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

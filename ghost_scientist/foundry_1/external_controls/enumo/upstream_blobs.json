@@ -1,0 +1,39 @@
+{
+  "egg_v0_9_5": {
+    "Cargo.toml": "b444e30287f1d9f19e26822e32d7c100cfefc02b",
+    "LICENSE": "6e6d258f048daa07590e9b32c113e262adfd92c1",
+    "README.md": "bfc0148a92f4d551a3de9f78a09a5d16911af92e",
+    "src/dot.rs": "cefaf44063ee1638fbb4de018903678c71bb58a8",
+    "src/eclass.rs": "5f74b2c2ab5101eb21c77be2937ccfd3872764e9",
+    "src/egraph.rs": "229563489c5a9eb95f151ae7ac4fee6713bf4e38",
+    "src/explain.rs": "79692326853e12ce8de0fa9fe861249183751756",
+    "src/extract.rs": "74fbdc60a219e750db3c9245d4cbb24839bf1ee4",
+    "src/language.rs": "c51ae8265050f985341bb21592bb606857c55996",
+    "src/lib.rs": "5a293a584ee5d5da681006fe14aa8712f0ad9e63",
+    "src/machine.rs": "33abd5051d495709250c978d715f18ed3797a54c",
+    "src/macros.rs": "82c88ef32468a2357958d1ca38e76f4bee276c99",
+    "src/multipattern.rs": "4fe612122e025809824f194701377a415a2d4cc9",
+    "src/pattern.rs": "475465f8c0caf00500d2600f830561f436a31fcd",
+    "src/rewrite.rs": "1687caa691c4a2a077cfb7a50eaaccf7bccfacc0",
+    "src/run.rs": "ae78d84ef364f5e728cb096585cd15efecbb3402",
+    "src/subst.rs": "ffd57cb57802f2d60d0614f1a503ccc26f5fb124",
+    "src/test.rs": "805a5f733fc349987ebd4e72b1bd2639230ef60e",
+    "src/tutorials/_01_background.rs": "9e18528d9c8b3899740f6a8c6904f64a0f38b536",
+    "src/tutorials/_02_getting_started.rs": "895d63f59d4ff3d19c524dc5af8efd53e6bfb794",
+    "src/tutorials/_03_explanations.rs": "018e6b2dca336d9dede9afe174f671550e9dc11c",
+    "src/tutorials/mod.rs": "76fdb145a6f1397520c6c9f63f95b708d7a654e8",
+    "src/unionfind.rs": "39e9bc58fd2860cb80183ee7b6c67208652a3a10",
+    "src/util.rs": "0e9051ee830ba24eadb3a445297f971109f8aad5",
+    "tests/simple.rs": "9261a4c0e0d3fa2a20e8dd8d21215682a3571974"
+  },
+  "symbol_table_v0_2_0": {
+    "Cargo.toml": "e914c85163f24cf819ae49a1a2c2226edab02506",
+    "LICENSE": "6e6d258f048daa07590e9b32c113e262adfd92c1",
+    "src/global.rs": "59b2233836e7360886fd1df56167f6bfa281606c",
+    "src/lib.rs": "1bcd600db0b42803c74fbb4a47e1d1e7b17d89ac"
+  },
+  "ruler_7ed456_tests": {
+    "bool.rs": "825a973094fd2eb15e93bfacef0eb217924a1ea7",
+    "recipes/bool.rs": "db9b8e0d098890f28e425f153b085da443771b42"
+  }
+}

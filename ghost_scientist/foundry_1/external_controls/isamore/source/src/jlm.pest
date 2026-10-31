@@ -1,0 +1,142 @@
+// ===== PROGRAM STRUCTURE =====
+// Top-level program structure
+program = { SOI ~ whole ~ EOI }
+whole = {"[" ~ args ~  "]" ~ bbinfo ~ "{" ~ "\n" ~ funcexpr* ~ "}" ~ "[" ~ results ~ "]" ~ "\n"}
+
+// ===== BASIC BLOCK INFORMATION =====
+// Basic block information: {{ bbids }}
+bbinfo = { "{{" ~ bbids ~ "}}" }
+// Basic block id
+bbids = @{ (ASCII_ALPHANUMERIC|"."|"_"|"#"|","|"-"|"$")*}
+
+// ===== FUNCTION DEFINITIONS =====
+// Function expressions and their components
+funcexpr = {typed_idents ~ ":=" ~ (function | delta | phi)}
+function = { "LAMBDA[" ~ ident ~ "]" ~ typed_idents? ~ "\n" ~ "[" ~ args ~ "]" ~ bbinfo ~ "{" ~ "\n" ~ (funcexpr|expr)* ~ "}" ~ "[" ~ results ~ "]" ~ "\n" }
+delta = { "DELTA[" ~ ident ~ "]"  ~ typed_idents? ~ "\n" ~ "[" ~ args ~ "]" ~ bbinfo ~ "{" ~ "\n" ~ (funcexpr|expr)* ~ "}" ~ "[" ~ results ~ "]" ~ "\n" }
+phi = { "PHI" ~ typed_idents? ~ "\n" ~ "[" ~ args ~ "]" ~ bbinfo ~ "{" ~ "\n" ~ funcexpr* ~ "}" ~ "[" ~ results ~ "]" ~ "\n" }
+
+// ===== ARGUMENTS AND RESULTS =====
+// Argument and result definitions
+args = { arg ~ ("," ~ arg)* | "" }
+arg = { typed_ident | ident ~ "<=" ~ typed_ident }
+results = { result ~ ("," ~ result)* | ""}
+result = { typed_ident | ident ~ "<=" ~ typed_ident }
+
+// Common pattern for typed identifiers
+typed_ident = { ident ~ "-" ~ type_ }
+typed_idents = { typed_ident* }
+
+// ===== EXPRESSIONS =====
+// Expression structure
+expr = { typed_idents? ~ ":=" ~ (Const | gamma | theta | // | undef | poison | ConstantArray
+                           binary | getelementptr | cast | load | 
+                           store | statemerge | iobarrier | vecconst | vecfneg | dummy_expr) ~ "\n"}
+
+// Dummy expression to match any non-mentioned expression names
+// dummy expression should also matches patterns like "ALLOCA[bit32] o1096-bit32" with bracket following the expression name
+dummy_expr = { ident ~ bracket_content? ~ parenthesized_content? ~ typed_ident* }
+parenthesized_content = _{ "(" ~ (!(")" | "(") ~ ANY | parenthesized_content)* ~ ")" }
+bracket_content = _{ "[" ~ (!("]" | "[") ~ ANY | bracket_content)* ~ "]" }
+
+// ===== CONTROL FLOW OPERATIONS =====
+// Control flow structures
+gamma = { "GAMMA" ~ typed_idents ~ "\n" ~ (branch ~ "\n")* ~ branch }
+theta = { "THETA" ~ typed_idents? ~ "\n" ~ branch  }
+// _match = { "MATCH" ~ "[" ~ (number ~ "->" ~ number ~ ",")+ ~ number ~ "]" ~ typed_ident }
+branch = { "[" ~ branchargs ~ "]" ~ bbinfo ~ "{" ~ "\n" ~ expr* ~ "}" ~ "[" ~ results ~ "]" }
+branchargs = { brancharg ~ ("," ~ brancharg)* | "" }
+brancharg = {ident ~ "<=" ~ arg}
+
+// ===== MEMORY OPERATIONS =====
+// Memory access and manipulation
+getelementptr = { "GetElementPtr" ~ typed_idents}
+load = { "Load" ~ typed_ident ~ typed_ident}
+store = { "Store" ~ typed_ident ~ typed_ident ~ typed_ident}
+statemerge = { "MemoryStateMerge" ~ typed_ident ~ typed_ident}
+
+// ===== CONSTANTS =====
+// Constant values
+Const = { (consttype ~ "(" ~ number ~ ")" ) | fptypes}
+ConstantArray = {constarraytype ~ typed_idents}
+// undef = { "undef" }
+// poison = { "poison" }
+// basicconst = { "ConstantAggregateZero"|"ConstantPointerNull" }
+
+// Floating point constants
+float = { "NaN" | "+Inf" | "-Inf" | ((plus|negative)? ~ number ~ "." ~ number ~ "E" ~ (plus|negative) ~ number )}
+fptypes = {"FP(" ~ float ~ ")"}
+plus = {"+"}
+negative = {"-"}
+
+// ===== BINARY OPERATIONS =====
+// Binary operations between values
+binary = { binaryop ~ typed_ident ~ typed_ident}
+binaryop = @{ iops|fpops|fpcmps|ptrcmps|vecfpop|vecfpcmps}
+
+// Integer operations
+iops = @{"IAdd" | "ISub" | "IMul" | "ISDiv" | "IUDiv" | "ISMod" | "IUMod" | "IAShr" | "IShl" | "IShr" | "IAnd" | "IOr" | "IXor" | "IEq" | "INe" | "ISge" | "ISgt" | "ISle" | "ISlt" | "IUge" | "IUgt" | "IUle" | "IUlt" }
+// Floating point operations
+fpops = @{"FPOP add" | "FPOP sub" | "FPOP mul" | "FPOP div"}
+fpcmps = @{"FPCMP olt" | "FPCMP ole" | "FPCMP oeq" | "FPCMP one" | "FPCMP ogt" | 
+           "FPCMP oge" | "FPCMP ord" | "FPCMP uno" | "FPCMP ueq" | "FPCMP ugt" | 
+           "FPCMP uge" | "FPCMP ult" | "FPCMP ule" | "FPCMP une" | "FPCMP" }
+vecfpcmps = @{"VECFPCMP olt" | "VECFPCMP ole" | "VECFPCMP oeq" | "VECFPCMP one" | "VECFPCMP ogt" | 
+           "VECFPCMP oge" | "VECFPCMP ord" | "VECFPCMP uno" | "VECFPCMP ueq" | "VECFPCMP ugt" | 
+           "VECFPCMP uge" | "VECFPCMP ult" | "VECFPCMP ule" | "VECFPCMP une" | "VECFPCMP" }
+vecfpop = @{"VECFPOP add" | "VECFPOP sub" | "VECFPOP mul" | "VECFPOP div"}
+
+// Other vector OPERATIONS
+vecconst = { "CONSTANTDATAVECTOR" ~ typed_idents}
+vecfneg = { "VECFNeg" ~ typed_ident}
+
+// Pointer comparisons
+ptrcmps = @{"PTRCMP eq" | "PTRCMP ne" | "PTRCMP gt" | "PTRCMP ge" | "PTRCMP lt" | "PTRCMP le" }
+
+// ===== CAST OPERATIONS =====
+// Type conversion operations
+cast = { castop ~ WHITESPACE* ~ typed_ident } 
+castop = @{fptrunc|fpext|sext|tr|zext}
+
+// Floating point casts
+// fpneg = {"fpneg"}
+// fp2ui = {"FP2UI"}
+fptrunc = {"FPTrunc"}
+fpext = {"FPExt"}
+// sitofp = {"SITOFP"}
+// ui2fp = {"UITOFP"}
+
+// Pointer/bit conversions
+ptr2bits = { "PTR2BITS" ~ typed_ident }
+bits2ptr = { "BITS2PTR" ~ typed_ident }
+
+
+sext = { "SEXT" ~ "[" ~ number ~ " -> " ~ number ~ "]" }
+tr   = { "TRUNC" ~ "[" ~ number ~ " -> " ~ number ~ "]" }
+zext = { "ZExt" ~ "[" ~ number ~ " -> " ~ number ~ "]" }
+
+// Variable argument list
+// valist = { "VALIST" ~ typed_ident* }
+
+// ===== TYPES AND IDENTIFIERS =====
+// Basic types
+type_ = @{ "bit64" | "iostate" | "mem" | "bit32"|"bit16" |"bit8" | "bit"~number | "ptr"|"double"|"bit1"|"float"| "fixedvector_"~type_~"_"~number |
+          "struct" | ("ctl("~number~")")|"vararg"|"array_" ~number ~"_"~ type_|
+          fpdtypes }
+fpdtypes = @{"x86fp"~number}
+
+// Constant types
+consttype = @{"I64" | "I32" | "I16" | "I8" |"I1" | "CTL"}
+constarraytype = @{"ConstantDataArray" | "ConstantStruct" | "CONSTANTDATAVECTOR" | "ConstantArray"}
+
+// ===== BASIC ELEMENTS =====
+// Identifiers and numbers
+ident = @{ (ASCII_ALPHANUMERIC|"."|"_"|"$")+}
+number = @{ ASCII_DIGIT+ }
+
+// ===== WHITESPACE =====
+// Whitespace handling
+WHITESPACE = _{ " " | "\t" | "\r" }
+
+// ===== IO Barrier =====
+iobarrier = { "IOBarrier" ~ typed_ident ~ typed_ident }

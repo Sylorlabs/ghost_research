@@ -1,0 +1,118 @@
+{
+  "version": "FOUNDRY_A1_FOLD_NUMERICAL_STABILITY_AMENDMENT_V1",
+  "status": "PREFROZEN_POST_FAILURE_REMEDIATION",
+  "pristine_preregistration": false,
+  "frozen_before_amended_runner_implementation_or_panel_execution": true,
+  "arm_id": "A1",
+  "trigger": {
+    "preserved_failed_result": {
+      "path": "results/phase146_a1_pattern_first_fold_conformance.json",
+      "sha256": "2ab304d67725af647ff6b470678ffa6dd7ff744608adc1c6f2a1e8ee3bd6bfa4",
+      "status": "A1_ADAPTED_FOLD_CONFORMANCE_INVALID"
+    },
+    "failed_gate": "nonreference_maximum_absolute_error <= 0.00001",
+    "diagnostic_observation": {
+      "target": "conv2d_3",
+      "observed_maximum_absolute_error": 0.000012874603271484375,
+      "frozen_limit": 0.00001
+    },
+    "history_must_remain_failed": true
+  },
+  "unchanged_requirements": {
+    "exact_three_real_targets": true,
+    "real_source_invocations_per_target": 3,
+    "real_source_maximum_absolute_error": 0.00001,
+    "primary_and_independent_artifacts_byte_identical": true,
+    "strict_v5_artifact_parser": true,
+    "candidate_and_evaluator_plan_sets_agree": true,
+    "original_grammar_selects_plan_index": 0,
+    "adapted_grammar_selects_plan_index": 1,
+    "all_original_grammar_rules_preserved": true,
+    "hostile_cases_rejected": 12,
+    "complete_process_tree_resource_receipt": true
+  },
+  "amended_synthetic_numerical_contract": {
+    "reason": "Algebraic convolution-batchnorm folding changes float32 operation order, so a pure maximum-absolute threshold is not scale-aware.",
+    "elementwise_rule": "abs(candidate-reference) <= absolute_tolerance + relative_tolerance * abs(reference)",
+    "absolute_tolerance": 0.00001,
+    "relative_tolerance": 0.00001,
+    "finite_outputs_required": true,
+    "exact_dtype_shape_layout_stride_and_output_contracts_required": true,
+    "original_absolute_error_still_reported": true,
+    "original_failed_result_not_reclassified": true
+  },
+  "unseen_panel": {
+    "replicates_per_target": 16,
+    "total_replicates": 48,
+    "artifact_id_rule": "original artifact id + :A1-NUMERICAL-STABILITY-V1: + zero-padded two-digit replicate ordinal",
+    "ordinals": {
+      "start_inclusive": 0,
+      "stop_exclusive": 16
+    },
+    "all_artifact_seed_material_derives_from_the_frozen_artifact_id_rule": true,
+    "panel_not_executed_before_this_amendment_freeze": true,
+    "all_48_must_pass": true
+  },
+  "acceptance": {
+    "preserved_phase146_failure_hash_exact": true,
+    "nine_real_source_absolute_checks_pass": true,
+    "forty_eight_unseen_combined_tolerance_checks_pass": true,
+    "all_48_primary_and_independent_lowerings_byte_identical": true,
+    "all_48_strict_v5_artifacts_and_nonreference_plans_execute": true,
+    "all_48_candidate_and_evaluator_plan_sets_agree": true,
+    "all_48_original_plan_zero_and_adapted_plan_one": true,
+    "twelve_hostile_cases_rejected": true,
+    "resource_and_reaping_checks_pass": true
+  },
+  "provider_records": [
+    {
+      "path": "arm_adapter_fixtures/A1_PATTERN_FIRST_FOLD_PROTOCOL_V1.json",
+      "sha256": "e276cd8312f47d5185301f19ba7e2a970958247dea1e365deef4cbb30897556b"
+    },
+    {
+      "path": "results/a1_pattern_first_fold_v1_freeze.json",
+      "sha256": "9106b5742339c306c886181b06b5b29dcdc888f15fcd1661cb82229afdd309a4"
+    },
+    {
+      "path": "results/phase146_a1_pattern_first_fold_conformance.json",
+      "sha256": "2ab304d67725af647ff6b470678ffa6dd7ff744608adc1c6f2a1e8ee3bd6bfa4"
+    },
+    {
+      "path": "a1_pattern_first_fold.py",
+      "sha256": "180e7ac31895b579543b2a83d5713ef67f29cf4f982fbc062b03bb9730412d83"
+    },
+    {
+      "path": "independent_a1_fold_lowering.py",
+      "sha256": "13bdc271ea9ff4da3519c5978d270ec4e931c84034b28595a28b46636228e779"
+    },
+    {
+      "path": "../operator_v5/ghost_operator_core_v5.py",
+      "sha256": "d5e6d81e71fb3f31a8f4aa50c715bc8da459b9c6504151de2fae74864b553a67"
+    },
+    {
+      "path": "../operator_v5/ghost_operator_candidate_v5.py",
+      "sha256": "2709d905aa6c84cd96abb2b94640cb24a6c11c29c694d015c2a7b765bb967313"
+    },
+    {
+      "path": "../operator_v5/ghost_operator_synthesis_v5.py",
+      "sha256": "81b06bbf13439bb53cdface6bdea1dc27efd3a781a7a7b73bf30ab059b1ea053"
+    },
+    {
+      "path": "../operator_v5_1/results/frozen_grammar_v5_1.json",
+      "sha256": "e465b9c9398288c34bbce9e2d00aaa31d16c46fd2b2282e2a5c7a86317eb53c7"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    }
+  ],
+  "claim_boundary": {
+    "post_failure_amendment_disclosed": true,
+    "not_pristine_confirmation": true,
+    "not_heldout_transfer": true,
+    "not_production_integration_until_full_contract_batch": true,
+    "production_integrated_arms_after_this_phase": 7,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

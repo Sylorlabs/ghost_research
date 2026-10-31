@@ -1,0 +1,54 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V5",
+  "parent_freeze": "results/pareto_remediation_v4_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 85,
+      "objective": "Implement A3 and A9 behind the frozen arm contract over an executable evaluator-owned typed-DAG artifact.",
+      "result": "results/phase85_state_reset_adapter_conformance.json",
+      "outcome": "BOUNDED_TYPED_DAG_INTERFACE_PASS",
+      "scientific_effect": "Two artifact parsers and interpreters agree on three exact executions and motif accounting; both arms reset state; nine hostile artifacts fail twice. The limited add/mul/relu surface is not validation-v6 integration."
+    },
+    {
+      "phase": 86,
+      "objective": "Process-tree meter A3 and A9 adapters under identical ceilings.",
+      "result": "results/phase86_state_reset_adapter_resource_audit.json",
+      "outcome": "BOUNDED_ADAPTER_RESOURCE_COMPONENT_PASS",
+      "scientific_effect": "Both contract outputs and the hostile-test path terminate naturally with charged CPU, sampled RSS, reaped groups, and equal 21-unit search construction. P3 remains incomplete."
+    }
+  ],
+  "adapter_progress": {
+    "A3_typed_dag_interface_implemented": true,
+    "A9_typed_dag_interface_implemented": true,
+    "primary_and_independent_artifact_parsers": 2,
+    "primary_and_independent_interpreters": 2,
+    "hostile_artifacts_rejected_twice": 9,
+    "bounded_operator_surface": [
+      "add",
+      "mul",
+      "relu"
+    ],
+    "validation_v6_operator_surface_complete": false,
+    "runtime_mount_integration_complete": false,
+    "production_integrated_arms": 2,
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "generalize the evaluator-owned artifact boundary to the frozen validation operator vocabulary without reading validation-v6 graphs",
+      "integrate an evaluator-side runtime mount that fills real correctness receipts only after authorization",
+      "adapt A1, A4, A5, and A7 and keep A6/A8 fail-closed",
+      "meter every complete required adapter path"
+    ]
+  }
+}

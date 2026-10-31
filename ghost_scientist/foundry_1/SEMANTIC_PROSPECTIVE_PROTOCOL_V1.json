@@ -1,0 +1,76 @@
+{
+  "version": "FOUNDRY_SEMANTIC_PROSPECTIVE_PROTOCOL_V1",
+  "classification": "PROSPECTIVE_AUTONOMOUS_GRAMMAR_CONSTRUCTION_COMPONENT",
+  "calibration": {
+    "source": "supported prospective-v2.2 graphs after their trial closed",
+    "prior_library": "results/forged_aten_tools.json",
+    "demand_signal": "typed ATen nodes not covered by any prior-library match"
+  },
+  "construction": {
+    "contract": "SEMANTIC_TOOL_CONTRACT_V1.json",
+    "script": "phase25_semantic_grammar_forge.py",
+    "llm_calls": 0,
+    "supplied_tool_forms": 0,
+    "minimum_nodes": 2,
+    "maximum_nodes": 4,
+    "minimum_occurrences": 2,
+    "positive_description_length_gain_required": true,
+    "overlapping_candidates_charged": true
+  },
+  "validation": {
+    "sources": "external_validation_v3/SOURCE_INTAKE.json",
+    "runtime": "external_validation_v3_runtime.py",
+    "seed": 1584013350,
+    "families": 4,
+    "independent_evaluator": "phase26_independent_semantic_evaluator.py",
+    "fixed_portfolio": "ATEN_FIXED_PORTFOLIO_V2.json"
+  },
+  "component_pass": {
+    "four_families_executed": true,
+    "five_hostile_mutations_rejected": true,
+    "all_replays_exact_with_tolerance": 1e-6,
+    "minimum_matched_families": 2,
+    "minimum_distinct_matched_tools": 2,
+    "candidate_benefit_at_least_fixed": true,
+    "candidate_total_cost_below_fixed": true,
+    "causal_removal_loses_all_matches": true
+  },
+  "native_admission": {
+    "script": "phase27_semantic_native_dedup.py",
+    "stock_decomposition_rejects_runtime_novelty": true,
+    "normalized_compiler_code_equality_rejects_duplicate": true,
+    "compiler_code_inequality_does_not_prove_novelty": true
+  },
+  "resources": {
+    "script": "phase28_semantic_resource_audit.py",
+    "forge": {
+      "wall_seconds": 90,
+      "cpu_seconds": 75,
+      "rss_kib": 3000000
+    },
+    "evaluator": {
+      "wall_seconds": 120,
+      "cpu_seconds": 100,
+      "rss_kib": 4000000
+    },
+    "native_audit": {
+      "wall_seconds": 240,
+      "cpu_seconds": 200,
+      "rss_kib": 4500000
+    }
+  },
+  "failure_policy": {
+    "no_outcome_driven_intervention": true,
+    "unsupported_native_compile": "record REQUIRED_UNSUPPORTED while retaining stock decomposition classification",
+    "zero_validation_transfer": "VALID_NEGATIVE",
+    "breadth_gate_failure": "VALID_NEGATIVE",
+    "resource_limit": "FAIL"
+  },
+  "boundary": {
+    "can_prove_machine_constructs_tool_grammar": true,
+    "can_prove_bounded semantic transfer": true,
+    "cannot_complete_external_controls": true,
+    "cannot_turn_stock_composites_into_runtime inventions": true,
+    "cannot_authorize_full_foundry_v6_trial": true
+  }
+}

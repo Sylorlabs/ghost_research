@@ -1,0 +1,66 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V10",
+  "parent_freeze": "results/pareto_remediation_v9_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 95,
+      "objective": "Mount the immutable A4 historical replay library across all 23 calibration graphs and bind it to its independent, native-dedup, resource, and valid-negative history.",
+      "result": "results/phase95_a4_replay_runtime_conformance.json",
+      "outcome": "A4_REPLAY_RUNTIME_CONFORMANCE_PASS",
+      "scientific_effect": "All three immutable tools replay 29 times exactly across the complete 41-operator, 337-call surface. Whole-graph eager/exported execution passes 69 times with zero error. Retained library state remains byte-identical; zero native runtime inventions are preserved."
+    },
+    {
+      "phase": 96,
+      "objective": "Meter the complete A4 runtime mount and conformance under identical process-tree ceilings.",
+      "result": "results/phase96_a4_replay_runtime_resource_audit.json",
+      "outcome": "A4_REPLAY_RUNTIME_RESOURCE_COMPONENT_PASS",
+      "scientific_effect": "The complete mount and conformance processes terminate naturally with CPU, RSS, and process-group accounting. Functional readiness alone does not promote A4."
+    },
+    {
+      "phase": 97,
+      "objective": "Assemble 23 strict A4 v1 contract pairs under one hash-bound shared process receipt and falsification-test retained-state accounting.",
+      "result": "results/phase97_a4_shared_resource_batch_conformance.json",
+      "outcome": "A4_SHARED_RESOURCE_BATCH_CONFORMANCE_PASS",
+      "scientific_effect": "Primary and independent verifiers accept all 23 pairs and reject 11 corrupt batch forms twice, including unknown claims, changed state, wrong zero-use tool actions, and 23x resource multiplication."
+    },
+    {
+      "phase": 98,
+      "objective": "Process-tree meter A4 batch assembly and its two-verifier hostile gate.",
+      "result": "results/phase98_a4_shared_resource_batch_resource_audit.json",
+      "outcome": "A4_SHARED_RESOURCE_BATCH_RESOURCE_PASS",
+      "scientific_effect": "The complete A4 batch and hostile conformance path pass matched resource ceilings. A4 advances to a production-integrated calibration arm without being relabeled as a runtime invention or prospective result."
+    }
+  ],
+  "integration_progress": {
+    "A4": "PRODUCTION_INTEGRATED_CALIBRATION_ARM",
+    "immutable_tools": 3,
+    "successful_tool_replays": 29,
+    "whole_graph_executions": 69,
+    "maximum_error": 0.0,
+    "base_contract_pairs_accepted": 23,
+    "shared_resource_receipts_charged": 1,
+    "hostile_batches_rejected_twice": 11,
+    "production_integrated_arms": 5,
+    "required_arms": 10,
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "adapt A5 typed Stitch-style MDL through the common runtime and contract without losing its source-faithful control behavior",
+      "adapt A7 rule inference with an explicit typed-graph compatibility boundary",
+      "preserve A1, A6, and A8 as explicit non-integrated outcomes until faithful paths exist",
+      "continue fourth-control P1 acquisition",
+      "recompute P3 only after all ten arms have explicit metered outcomes"
+    ]
+  }
+}

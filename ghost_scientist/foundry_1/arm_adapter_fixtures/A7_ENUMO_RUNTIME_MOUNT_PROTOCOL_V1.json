@@ -1,0 +1,83 @@
+{
+  "version": "FOUNDRY_A7_ENUMO_RUNTIME_MOUNT_PROTOCOL_V1",
+  "status": "PREFROZEN_CALIBRATION_RUNTIME_MOUNT",
+  "frozen_before_mount_implementation_or_execution": true,
+  "arm_id": "A7",
+  "mount_id": "CALIBRATION_23_A7_ENUMO_ADAPTED_TENSOR_V1",
+  "defining_behavior": "Mount the frozen 18-rule evaluator-authored Enumo tensor library on every calibration graph, independently reproduce typed islands, deduplicate selected rewrites by canonical result, check each on concrete intermediate values, and separately verify eager/export whole-graph parity.",
+  "state_and_cost_policy": {
+    "library_retained_across_artifacts": true,
+    "library_state": "canonical frozen ordered 18-rule list",
+    "candidate_generation_cost_source": "exact phase132 metered source build plus source run user and system CPU",
+    "candidate_generation_cost_charged_to_exactly_one_artifact": true,
+    "historical_candidate_generation_is_not_rerun": true,
+    "reason": "The exact source-produced library and its complete metered construction receipt are frozen; rerunning an unchanged build would double-charge rather than improve provenance."
+  },
+  "rewrite_policy": {
+    "same_as_transfer_protocol": true,
+    "deduplicate_same_root_same_candidate_serialization": true,
+    "expected_raw_selected_rule_applications": 24,
+    "expected_unique_selected_transformations": 12,
+    "expected_selected_rule_semantics": [
+      "(* ?a ?b) ==> (* ?b ?a)",
+      "(* ?b ?a) ==> (* ?a ?b)",
+      "(+ ?a ?b) ==> (+ ?b ?a)",
+      "(+ ?b ?a) ==> (+ ?a ?b)"
+    ],
+    "strict_atom_cost_reductions_expected": 0,
+    "canonical_equal_cost_transformations_expected": 12
+  },
+  "execution_rules": [
+    "Authenticate every provider and exact freeze before workload construction.",
+    "Export all 23 calibration graphs and require primary and independent island serializers to agree byte-for-byte.",
+    "Require the exact 23-graph, 41-target, 337-call surface and keep the one historically unsupported workload explicit.",
+    "Execute eager and exported whole graphs three times from cloned inputs under deterministic artifact-ordinal seeds and use both output comparators.",
+    "During the same exported executions capture intermediate values and check every unique selected rewrite with both comparators.",
+    "Retain the immutable 18-rule library across artifacts and charge its exact frozen source-build and source-run CPU once.",
+    "Record every raw match, raw selected application, unique selected transformation, concrete check, whole-graph invocation, selector cost, compiler cost, verification cost, and executed-workload cost.",
+    "Do not interpret operand canonicalization as an atom-cost reduction, runtime speedup, tensor primitive invention, universal floating-point theorem, heldout transfer, or fixed-portfolio win."
+  ],
+  "expected": {
+    "graphs": 23,
+    "unique_operator_targets": 41,
+    "call_function_invocations": 337,
+    "eligible_graphs": 17,
+    "eligible_calls": 53,
+    "historically_unsupported_or_failed": 1,
+    "learned_rules": 18,
+    "learned_root_matches": 282,
+    "raw_selected_rule_applications": 24,
+    "unique_selected_transformations": 12,
+    "whole_graph_executions": 69,
+    "unique_rewrite_concrete_checks": 36,
+    "maximum_absolute_error": 0.0
+  },
+  "provider_records": [
+    {"path": "results/phase140_a7_enumo_real_graph_transfer.json", "sha256": "8bf23ad8c222509ed0495830325ba39d8f02b7f4855d9362250b5c8b07c0a1e1"},
+    {"path": "results/a7_enumo_real_graph_transfer_v1_freeze.json", "sha256": "554ed0da9e20a2b397c54b1d7b23b893d5acb66a93b42f8907936052320a62a3"},
+    {"path": "arm_adapter_fixtures/A7_ENUMO_REAL_GRAPH_TRANSFER_PROTOCOL_V1.json", "sha256": "9340e793dcf4a217c965f3ccb9f41a019ba3e2f72268642ebc0163d1b09d75f6"},
+    {"path": "phase140_a7_enumo_real_graph_transfer.py", "sha256": "0bf74641d123462f9ced41bd76f73e845bf5757b4452f378d5e08e78b544166e"},
+    {"path": "independent_a7_real_graph_islands.py", "sha256": "7f8c5012127278670c1ff9ead251018db64fe83e7030a65f817fb383b2dad432"},
+    {"path": "results/phase132_enumo_tensor_domain_feasibility.json", "sha256": "e964d540700874ee82ee8340278f977c2011eb2963bab7f14b9587ff977eccad"},
+    {"path": "arm_adapter_fixtures/ENUMO_TENSOR_RULE_REUSE_PROTOCOL_V1.json", "sha256": "0f3f322fd27eabbcd94f6532e8d4665235aeeb3d32226f0a79864e42437727c1"},
+    {"path": "independent_framework_runtime.py", "sha256": "d7ceddb6046105eb93c27b5bd8480ac08b3f5acdca2cad1538c89352f6dcb53f"},
+    {"path": "phase63_pareto_motif_calibration.py", "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"},
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"}
+  ],
+  "claim_boundary": {
+    "adapted_evaluator_authored_tensor_domain": true,
+    "source_faithful_enumo_core_used_to_construct_library": true,
+    "frozen_boolean_A7_relabelled": false,
+    "equal_cost_operand_canonicalization_only": true,
+    "strict_atom_cost_reduction": false,
+    "rewritten_whole_tensor_graph_executed": false,
+    "heldout_generalization_measured": false,
+    "fixed_portfolio_beaten": false,
+    "production_integrated_arms_before_pass": 6,
+    "production_integrated_arms_after_mount_only": 6,
+    "A7_may_become_production_integrated_only_after_contract_batch": true,
+    "P3_complete_after_mount": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

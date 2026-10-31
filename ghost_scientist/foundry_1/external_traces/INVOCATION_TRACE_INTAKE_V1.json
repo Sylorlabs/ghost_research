@@ -1,0 +1,63 @@
+{
+  "schema": "FOUNDRY_EXTERNAL_INVOCATION_TRACE_INTAKE_V1",
+  "frozen_before_distribution_audit": true,
+  "purpose": "Independently justify a reusable-tool invocation horizon without consulting Foundry validation-v6 artifacts or outcomes.",
+  "selection_rule": {
+    "required_properties": [
+      "official public repository",
+      "explicitly described as a production request trace",
+      "stable per-model identity within the trace",
+      "request-level timestamps and completion status",
+      "license permitting research reuse"
+    ],
+    "selected_source": "alibaba_cluster_trace_v2026_genai_lora_requests",
+    "rejected_as_primary": {
+      "mlcommons_inference_loadgen": "A benchmark-generated query schedule, not a deployment-demand trace.",
+      "azure_lmm_inference_dataset_2025": "A real production trace, but its public request rows do not expose a stable model or service identity suitable for estimating per-artifact reuse."
+    }
+  },
+  "selected_source": {
+    "owner": "alibaba",
+    "repository": "clusterdata",
+    "commit": "0d0f3f1efdbf1add6a7bcc63676eafbd1eb11f71",
+    "documentation_path": "cluster-trace-v2026-GenAI/README.md",
+    "documentation_blob": "a2891c8fcd4b70357370004f33c5a00a72c67050",
+    "trace_path": "cluster-trace-v2026-GenAI/lora_request_trace.csv",
+    "trace_blob": "db8d3cfaea62e7086aff40e98ab6446619d9e5ce",
+    "license_path": "LICENSE",
+    "declared_semantics": {
+      "system": "real production Stable Diffusion serving",
+      "identity_field": "checkpoint_model_version_id",
+      "timestamp_field": "timestamp",
+      "completion_field": "status",
+      "successful_status": "Succeeded"
+    }
+  },
+  "reference_source": {
+    "owner": "Azure",
+    "repository": "AzurePublicDataset",
+    "commit": "207bed67dd10090b28ad4f745b2cfd41a11aace4",
+    "documentation_path": "AzureLMMInferenceDataset2025.md",
+    "documentation_blob": "e35d0137c89718bd416c27b3dcc3de48f404ae1b",
+    "analysis_blob": "19e0ca71d6c66c521114bef0f059f7966dcc3a2e",
+    "data_blob": "7e2a6719ff42dc50b990ba55ca941ab75290ffcb",
+    "role": "Independent confirmation that public production GenAI demand traces exist; not used to choose N-star."
+  },
+  "predeclared_estimator": {
+    "population": "Every nonempty checkpoint_model_version_id in the selected trace.",
+    "measure": "Count rows whose status equals Succeeded for each model identity.",
+    "ordering": "Ascending successful-request count.",
+    "quantile": 0.25,
+    "quantile_method": "nearest-rank: sorted_counts[ceil(0.25 * model_count) - 1]",
+    "N_star_external_reference": "The resulting lower-quartile successful-request count.",
+    "filters": [],
+    "rationale": "The lower quartile is a conservative independently fixed reuse horizon and avoids selecting a central or upper-tail value after seeing Foundry economics."
+  },
+  "scientific_boundary": {
+    "validation_v6_source_runtime_graph_or_outcome_access": false,
+    "foundry_candidate_outcomes_used_to_choose_trace_or_estimator": false,
+    "production_trace_bytes_locally_frozen": false,
+    "P2_complete_on_trace_aggregation_alone": false,
+    "remaining_requirement": "Freeze locally reproducible source bytes and prospectively justify transfer from Stable Diffusion model demand to the held-out Foundry workload stream."
+  }
+}

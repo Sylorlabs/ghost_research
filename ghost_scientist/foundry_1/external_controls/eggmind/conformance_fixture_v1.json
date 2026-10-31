@@ -1,0 +1,180 @@
+{
+  "version": "FOUNDRY_EGGMIND_PAPER_FIXTURE_V1",
+  "source": {
+    "paper": "LLM-Guided Strategy Synthesis for Scalable Equality Saturation",
+    "arxiv_id": "2604.17364v1",
+    "sections": [
+      "4 EqSatL: A DSL for EqSat Strategies",
+      "5.2 Proof-Derived Rewrite Motif Caching",
+      "5.3.1 Dependency-based ruleset risk model"
+    ]
+  },
+  "strategy": {
+    "name": "paper_reference_shape",
+    "rulesets": [
+      {
+        "name": "pre_compile",
+        "tags": [
+          "scalar_normalization"
+        ]
+      },
+      {
+        "name": "compile",
+        "tags": [
+          "vector_lifting"
+        ]
+      },
+      {
+        "name": "opt",
+        "tags": [
+          "expose",
+          "vector_optimization"
+        ]
+      }
+    ],
+    "flow": {
+      "sequence": [
+        {
+          "repeat": {
+            "flow": {
+              "sequence": [
+                {
+                  "phase": {
+                    "name": "normalize",
+                    "ruleset": "pre_compile",
+                    "iter_limit": 1
+                  }
+                },
+                {
+                  "phase": {
+                    "name": "lift",
+                    "ruleset": "compile",
+                    "iter_limit": 1
+                  }
+                },
+                {
+                  "heuristic_simplify": {
+                    "theta": 0.5
+                  }
+                }
+              ]
+            },
+            "rounds": 20
+          }
+        },
+        {
+          "phase": {
+            "name": "optimize",
+            "ruleset": "opt",
+            "iter_limit": 10
+          }
+        }
+      ]
+    }
+  },
+  "expected": {
+    "lowered_action_count": 61,
+    "phase_action_count": 41,
+    "simplify_action_count": 20,
+    "referenced_rulesets": [
+      "compile",
+      "opt",
+      "pre_compile"
+    ]
+  },
+  "motifs": [
+    {
+      "tags": [
+        "vector_lifting",
+        "vector_optimization"
+      ],
+      "relative_gain": 0.25,
+      "successful_case_frequency": 4
+    },
+    {
+      "tags": [
+        "scalar_normalization",
+        "vector_lifting"
+      ],
+      "relative_gain": 0.4,
+      "successful_case_frequency": 2
+    },
+    {
+      "tags": [
+        "expose",
+        "vector_lifting"
+      ],
+      "relative_gain": 0.1,
+      "successful_case_frequency": 3
+    }
+  ],
+  "expected_motif_order": [
+    [
+      "vector_lifting",
+      "vector_optimization"
+    ],
+    [
+      "scalar_normalization",
+      "vector_lifting"
+    ],
+    [
+      "expose",
+      "vector_lifting"
+    ]
+  ],
+  "risk_model": {
+    "phase_assignment": {
+      "pre": 1,
+      "compile": 2,
+      "opt": 3
+    },
+    "edges": [
+      {
+        "source": "pre",
+        "target": "compile",
+        "weight": 4
+      },
+      {
+        "source": "compile",
+        "target": "opt",
+        "weight": 3
+      },
+      {
+        "source": "opt",
+        "target": "compile",
+        "weight": 2
+      },
+      {
+        "source": "compile",
+        "target": "pre",
+        "weight": 1
+      },
+      {
+        "source": "pre",
+        "target": "pre",
+        "weight": 1
+      }
+    ],
+    "coefficients": {
+      "alpha": 2,
+      "beta": 3,
+      "gamma": 5,
+      "delta": 7
+    },
+    "expected_terms": {
+      "forward": 14,
+      "backflow": -9,
+      "phase_1_inflow": -5,
+      "same_phase": -7,
+      "total": -7
+    }
+  },
+  "adaptation_boundary": {
+    "motif_utility_formula": "relative_gain * successful_case_frequency",
+    "motif_utility_formula_exactly_specified_by_paper": false,
+    "llm_strategy_generation_implemented": false,
+    "proof_tree_extraction_implemented": false,
+    "egglog_backend_lowering_implemented": false,
+    "full_eggmind_conformance_claim_allowed": false
+  }
+}

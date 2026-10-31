@@ -1,0 +1,172 @@
+{
+  "version": "FOUNDRY_VALIDATION_V7_IDENTITY_ONLY_INTAKE_PROTOCOL_V2",
+  "status": "PREFROZEN_BEFORE_EXTERNAL_BUNDLE_ARRIVAL",
+  "supersedes": "FOUNDRY_VALIDATION_V7_IDENTITY_ONLY_INTAKE_PROTOCOL_V1",
+  "v1_real_bundle_acceptance_forbidden": true,
+  "frozen_before_v2_validator_implementation_or_external_bundle_access": true,
+  "inbox": "validation_v7_sealed_inbox",
+  "required_files": [
+    "public_manifest.v2.json",
+    "public_manifest.v2.sig",
+    "curator_public_key.pem",
+    "payload.v7.enc",
+    "payload.v7.sha256"
+  ],
+  "candidate_visible_boundary": {
+    "allowed": [
+      "opaque source identifiers",
+      "domain-separated salted SHA-256 commitments to repository identity, immutable revision, family, semantic domain, license identity, and canonical source-tree identity",
+      "distinctness counts over commitments",
+      "externally asserted selection properties",
+      "ciphertext size and SHA-256",
+      "encryption algorithm, nonce, and authentication-tag encodings",
+      "curator public-key fingerprint and detached manifest signature"
+    ],
+    "forbidden": [
+      "repository names or URLs",
+      "revision plaintext",
+      "family or semantic-domain names",
+      "source paths or filenames",
+      "raw or unsalted source-tree digests",
+      "model, operator, architecture, graph, shape, fixture, or expected-output details",
+      "source or runtime bytes",
+      "commitment salts",
+      "payload decryption key",
+      "candidate, fixed, or control match results"
+    ]
+  },
+  "commitment_policy": {
+    "construction": "SHA-256(domain-separator || NUL || salt || NUL || canonical-identity-bytes)",
+    "minimum_secret_salt_bits": 128,
+    "unique_salt_per_source_and_field": true,
+    "salts_stored_only_inside_encrypted_payload": true,
+    "domain_separators": {
+      "repository_commitment_sha256": "ghost-foundry:v7:repository:v2",
+      "revision_commitment_sha256": "ghost-foundry:v7:revision:v2",
+      "family_commitment_sha256": "ghost-foundry:v7:family:v2",
+      "semantic_domain_commitment_sha256": "ghost-foundry:v7:semantic-domain:v2",
+      "license_commitment_sha256": "ghost-foundry:v7:license:v2",
+      "source_tree_commitment_sha256": "ghost-foundry:v7:source-tree:v2"
+    }
+  },
+  "public_manifest_contract": {
+    "version": "FOUNDRY_VALIDATION_V7_PUBLIC_MANIFEST_V2",
+    "exact_top_level_fields": [
+      "version",
+      "corpus_id",
+      "created_utc",
+      "curator_key_fingerprint_sha256",
+      "selection_attestation",
+      "sources",
+      "payload"
+    ],
+    "corpus_id_format": "v7-[0-9a-f]{32}",
+    "created_utc_format": "YYYY-MM-DDTHH:MM:SSZ",
+    "sources": 4,
+    "source_exact_fields": [
+      "opaque_source_id",
+      "repository_commitment_sha256",
+      "revision_commitment_sha256",
+      "family_commitment_sha256",
+      "semantic_domain_commitment_sha256",
+      "license_commitment_sha256",
+      "source_tree_commitment_sha256"
+    ],
+    "all_source_commitments_unique_by_field": true,
+    "selection_attestation_exact": {
+      "independently_selected_without_candidate_matching": true,
+      "public_immutable_upstream_revisions": true,
+      "redistributable_licenses_verified": true,
+      "cpu_executable_with_declared_frozen_environment": true,
+      "non_transformer_non_attention": true,
+      "calibration_repositories_excluded": true,
+      "distinct_repositories": 4,
+      "distinct_semantic_domains": 4,
+      "all_identity_commitments_domain_separated_and_salted": true
+    },
+    "payload_exact_fields": [
+      "ciphertext_sha256",
+      "ciphertext_bytes",
+      "encryption",
+      "nonce_base64",
+      "authentication_tag_base64",
+      "plaintext_tree_commitment_sha256"
+    ],
+    "encryption": "AES-256-GCM",
+    "minimum_ciphertext_bytes": 4096,
+    "minimum_observed_ciphertext_entropy_bits_per_byte": 7.0
+  },
+  "cryptographic_policy": {
+    "manifest_canonicalization": "UTF-8 RFC8259 JSON sorted keys compact separators plus one LF",
+    "signature": "RSA-PSS SHA-256 detached signature verified by OpenSSL 3",
+    "public_key": "PEM SubjectPublicKeyInfo RSA at least 3072 bits",
+    "curator_fingerprint": "SHA-256 of DER SubjectPublicKeyInfo",
+    "payload_digest": "payload.v7.sha256 contains lowercase SHA-256, two spaces, payload.v7.enc, and LF",
+    "decryption_forbidden_in_this_phase": true,
+    "private_or_symmetric_key_in_inbox_forbidden": true
+  },
+  "decision_rule": {
+    "complete": "all five v2 files exist and both validators agree on every schema, signature, key, payload, entropy, commitment-policy attestation, and forbidden-file check",
+    "waiting": "one or more required v2 files are absent and no unrecognized or forbidden sensitive file is present",
+    "invalid": "any v1 artifact, raw source-tree digest, contract violation, forbidden key, plaintext-like file, validator disagreement, or cryptographic mismatch exists",
+    "this_phase_never_closes_P6": true,
+    "complete_next_action": "freeze the exact opaque v2 bundle and separately verify accountable curator provenance and ordering before authorization",
+    "waiting_next_action": "retain the empty v2 inbox and await an externally curated signed encrypted bundle",
+    "invalid_next_action": "quarantine without decrypting and preserve the rejection receipt"
+  },
+  "hostile_requirements": {
+    "cases": 18,
+    "must_cover": [
+      "v1 manifest artifact",
+      "missing required file",
+      "unknown file",
+      "private key present",
+      "plaintext source-like file present",
+      "unknown manifest field",
+      "plaintext repository identity field",
+      "raw source-tree digest field",
+      "duplicate opaque source id",
+      "duplicate repository commitment",
+      "malformed commitment",
+      "salted-commitment attestation weakened",
+      "ciphertext digest mismatch",
+      "digest sidecar mismatch",
+      "ciphertext too small",
+      "ciphertext entropy too low",
+      "public key fingerprint mismatch",
+      "manifest signature mismatch"
+    ],
+    "primary_and_independent_rejection_required": true
+  },
+  "resource_limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 45,
+    "rss_kib": 524288
+  },
+  "provider_records": [
+    {
+      "path": "results/readiness_iteration_5_31.json",
+      "sha256": "8f3909c22e0adc1ef9d661f1916929ea5efbf95f3c317a619e57c720465440d9"
+    },
+    {
+      "path": "results/phase156_validation_v7_identity_privacy_audit.json",
+      "sha256": "e6c55ae37b998bd9831a4572577aee91ae97230dd93f291f71ba3daa7ffa221f"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    }
+  ],
+  "claim_boundary": {
+    "transport_and_separation_control_only": true,
+    "v1_retired_before_real_bundle_arrival": true,
+    "salted_commitments_hide_identity_only_subject_to_secret_salt_and_canonicalization_quality": true,
+    "independent_source_provenance_not_yet_proved": true,
+    "corpus_diversity_not_yet_revealed_or_verified": true,
+    "P2_not_advanced": true,
+    "P6_not_advanced": true,
+    "validation_v7_source_runtime_graph_shape_or_outcome_accessed": false,
+    "prospective_trial_authorized": false,
+    "prospective_trial_executed": false
+  }
+}

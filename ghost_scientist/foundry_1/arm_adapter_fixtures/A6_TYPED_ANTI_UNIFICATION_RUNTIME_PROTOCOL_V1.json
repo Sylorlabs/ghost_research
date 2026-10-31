@@ -1,0 +1,131 @@
+{
+  "version": "FOUNDRY_A6_TYPED_ANTI_UNIFICATION_RUNTIME_PROTOCOL_V1",
+  "status": "PREFROZEN_POST_REACHABILITY_PRODUCTION_MOUNT",
+  "frozen_before_mount_or_contract_runner_implementation_or_execution": true,
+  "arm_id": "A6",
+  "classification": "ADAPTED_BABBLE_ISAMORE_STYLE_TYPED_ANTI_UNIFICATION_TOOL",
+  "mount_id": "CALIBRATION_23_A6_TYPED_LINEAR_RELU_TOOL_V1",
+  "selected_candidate": {
+    "pattern_sha256": "1e98cc9eb3e3a7fb7a428708caae15963e3a37ad076b52674aa2eb916c5c791e",
+    "operator_nodes": 2,
+    "distinct_metavariables": 3,
+    "matches": 12,
+    "matching_artifacts": 10,
+    "semantics": "aten.relu.default(aten.linear.default(?0, ?1, ?2))"
+  },
+  "surface": {
+    "graphs": 23,
+    "call_function_invocations": 337,
+    "historically_unsupported_or_failed": 1,
+    "eligible_graphs": 10,
+    "eligible_tool_sites": 12,
+    "whole_graph_invocations_per_artifact": 3,
+    "whole_graph_executions": 69,
+    "transformed_whole_graph_executions": 69,
+    "tool_direct_uses": 36,
+    "base_contract_pairs": 23
+  },
+  "tool_construction": {
+    "derive_only_from_frozen_selected_pattern": true,
+    "replace_each_complete_selected_match": true,
+    "generated_callable_takes_the_three_typed_metavariables": true,
+    "generated_callable_executes_both_frozen_operator_nodes": true,
+    "primary_and_independent_match_set_agreement": true,
+    "primary_and_independent_transformed_graph_audit": true,
+    "unmatched_artifacts_execute_reference_graph_through_the_same_adapter": true,
+    "library_retained_across_artifacts": true
+  },
+  "runtime_correctness": {
+    "reference_export_and_transformed_graph_compared": true,
+    "primary_and_independent_output_comparators": true,
+    "maximum_absolute_error": 0.00001,
+    "dtype_shape_layout_stride_alias_and_storage_checks": true,
+    "three_individual_invocation_receipts_per_artifact": true
+  },
+  "accounting": {
+    "reachability_candidate_generation_cpu_charged_once": true,
+    "single_shared_process_tree_resource_receipt": true,
+    "resource_receipt_multiplier": 1,
+    "cost_ledger_fields_match_arm_adapter_contract": true,
+    "hostile_contract_mutations_rejected_twice": 22
+  },
+  "acceptance": {
+    "all_23_graph_rows_pass": true,
+    "all_69_transformed_or_fallback_whole_graph_executions_pass": true,
+    "exact_12_site_10_artifact_match_set": true,
+    "exactly_36_direct_tool_uses": true,
+    "all_23_primary_contract_pairs_accept": true,
+    "all_23_independent_contract_pairs_accept": true,
+    "all_22_hostile_contract_mutations_rejected_by_both": true,
+    "complete_process_tree_cpu_rss_wall_and_reaping": true,
+    "integration_advances_exactly_from_8_to_9_of_10": true
+  },
+  "resource_limits": {
+    "wall_seconds": 150,
+    "cpu_seconds": 125,
+    "rss_kib": 4500000
+  },
+  "provider_records": [
+    {
+      "path": "results/phase149_a6_typed_anti_unification_reachability.json",
+      "sha256": "9487e560fe138f2940a9908f3ad924f1524ad472e85ac1dd660951dedcdfd961"
+    },
+    {
+      "path": "results/a6_typed_anti_unification_reachability_v1_freeze.json",
+      "sha256": "38ebff46e527e0766979d6c3ced365b5227e33f203f27c59c8bcd335f529c484"
+    },
+    {
+      "path": "arm_adapter_fixtures/A6_TYPED_ANTI_UNIFICATION_REACHABILITY_PROTOCOL_V1.json",
+      "sha256": "d6d111095244ee6bf4556f51806c72a0025c32cf3464b6d7eb1aeeeb40d1bac3"
+    },
+    {
+      "path": "a6_typed_anti_unification.py",
+      "sha256": "c9a59482b92681335ca0d5b648e17485d85886cfa8d79d3d167a915718c0922b"
+    },
+    {
+      "path": "independent_a6_typed_anti_unification.py",
+      "sha256": "cc304dc904f2e04e06f51f4235887a53a51d35adcf67108fa0f03fd000e39358"
+    },
+    {
+      "path": "ARM_ADAPTER_CONTRACT_V1.json",
+      "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"
+    },
+    {
+      "path": "arm_adapter_contract.py",
+      "sha256": "ac7eb5e7a00813cd2ee722059bf5265b0e270f3e56efae0325e337136eca1a5e"
+    },
+    {
+      "path": "independent_arm_adapter_contract.py",
+      "sha256": "cc2ccece0b76d33b9fb933eb8547d66b46be788f9f1146cc2d6fb3180e6b2173"
+    },
+    {
+      "path": "phase63_pareto_motif_calibration.py",
+      "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"
+    },
+    {
+      "path": "resource_meter_v2.py",
+      "sha256": "aa217ccdf30c3c5626bf0e93185a03ef4e919dfbd6511ef005fd174391d8165d"
+    },
+    {
+      "path": "results/forged_diversity_tools.json",
+      "sha256": "64abcef88f8c4f152e39db684e8bd1a7f24fdf25928a24d411d15d8499d46f5b"
+    },
+    {
+      "path": "independent_framework_runtime.py",
+      "sha256": "d7ceddb6046105eb93c27b5bd8480ac08b3f5acdca2cad1538c89352f6dcb53f"
+    }
+  ],
+  "claim_boundary": {
+    "adapted_not_source_faithful_Babble_or_ISAMORE": true,
+    "typed_anti_unification_constructed_one_reusable_tool": true,
+    "real_selected_matches_replaced": true,
+    "transformed_whole_graphs_executed": true,
+    "not_hardware_selection": true,
+    "not_heldout_transfer": true,
+    "fixed_portfolio_not_beaten": true,
+    "production_integrated_arms_before_pass": 8,
+    "production_integrated_arms_after_pass": 9,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false,
+    "prospective_trial_authorized": false
+  }
+}

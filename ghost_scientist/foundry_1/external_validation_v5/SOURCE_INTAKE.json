@@ -1,0 +1,84 @@
+{
+  "version": "FOUNDRY_EXTERNAL_VALIDATION_SOURCE_INTAKE_V5",
+  "selected_utc_date": "2026-07-30",
+  "selection_boundary": {
+    "candidate_typed_records_constructed": false,
+    "candidate_or_fixed_execution_observed": false,
+    "validation_graphs_exported_or_inspected": false,
+    "validation_runtime_executed": false
+  },
+  "selection_rule": {
+    "calibration_repositories_excluded": [
+      "DSE-MSU/DeepRobust",
+      "pytorch/examples",
+      "sunlabuiuc/PyHealth"
+    ],
+    "minimum_distinct_repositories": 4,
+    "minimum_distinct_semantic_domains": 4,
+    "model_requirements": [
+      "public immutable upstream commit",
+      "explicit redistributable license at the same commit",
+      "CPU-executable using installed torch alone",
+      "no Transformer or attention architecture",
+      "selected from documented source semantics without candidate matching"
+    ]
+  },
+  "sources": [
+    {
+      "repository": "jcjohnson/pytorch-examples",
+      "commit": "0003fcdc606a79951e53bf8f46f8574fa4739f23",
+      "path": "nn/two_layer_net_nn.py",
+      "blob_sha1": "ec4f897060772107c8db794c711ca8f81e346188",
+      "license_path": "LICENSE",
+      "license_blob_sha1": "95b8118fa0233f329d645b2ac305ae0a27d85142",
+      "license": "MIT",
+      "semantic_domain": "regression",
+      "family": "two_layer_nonlinear_regression",
+      "local_adaptation": "batch size reduced from 64 to 8; dimensions, layer order, and operators unchanged"
+    },
+    {
+      "repository": "pytorch/tutorials",
+      "commit": "d708b542ba4e7bc277c93b9ee90c01685302b51e",
+      "path": "beginner_source/blitz/neural_networks_tutorial.py",
+      "blob_sha1": "ae29411beccdf8da58345de288689d2197422de9",
+      "license_path": "LICENSE",
+      "license_blob_sha1": "338dffbfe74250782ba30466dc9f6a7aed0f3187",
+      "license": "BSD-3-Clause",
+      "semantic_domain": "image_classification",
+      "family": "lenet_image_classification",
+      "local_adaptation": "Net class dataflow unchanged; deterministic batch size 2 supplied"
+    },
+    {
+      "repository": "yunjey/pytorch-tutorial",
+      "commit": "0500d3df5a2a8080ccfccbc00aca0eacc21818db",
+      "path": "tutorials/02-intermediate/language_model/main.py",
+      "blob_sha1": "ef135bb7f99a47be88827eb1c09252451c394e5e",
+      "license_path": "LICENSE",
+      "license_blob_sha1": "8864d4a39633c1bcb33a8983d146d0b6390ed3d0",
+      "license": "MIT",
+      "semantic_domain": "sequence_language_modeling",
+      "family": "lstm_language_model",
+      "local_adaptation": "constructor dimensions reduced for bounded CPU execution; embedding-LSTM-reshape-linear dataflow unchanged"
+    },
+    {
+      "repository": "udacity/deep-learning-v2-pytorch",
+      "commit": "c9404fc86181fc3f0906b368697268257f348535",
+      "path": "autoencoder/linear-autoencoder/Simple_Autoencoder_Solution.ipynb",
+      "blob_sha1": "44288d2f68706945c8587498e592b2a2a5465bcb",
+      "source_cell_index": 7,
+      "license_path": "LICENSE",
+      "license_blob_sha1": "ee6ffb92f5074d17f346935b47613fb9917f1343",
+      "license": "MIT",
+      "semantic_domain": "representation_learning",
+      "family": "linear_image_autoencoder",
+      "local_adaptation": "Autoencoder class and encoding dimension 32 unchanged; deterministic batch size 8 supplied"
+    }
+  ],
+  "excluded_after_source_review": [
+    {
+      "repository": "tkipf/pygcn",
+      "commit": "1600b5b748b3976413d1e307540ccc62605b4d6d",
+      "reason": "no license file or license statement found at the pinned revision"
+    }
+  ]
+}

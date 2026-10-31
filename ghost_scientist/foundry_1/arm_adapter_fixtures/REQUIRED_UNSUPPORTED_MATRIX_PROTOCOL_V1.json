@@ -1,0 +1,54 @@
+{
+  "version": "FOUNDRY_REQUIRED_UNSUPPORTED_MATRIX_PROTOCOL_V1",
+  "status": "PREFROZEN_FAIL_CLOSED_REQUIRED_ARM_OUTCOME_AUDIT",
+  "frozen_before_matrix_execution": true,
+  "arms": ["A1", "A6", "A7", "A8"],
+  "artifacts_per_arm": 23,
+  "total_artifact_outcomes": 92,
+  "outcome_status": "REQUIRED_UNSUPPORTED",
+  "rules": [
+    "Authenticate every existing compatibility, control, route, and partial-boundary result before constructing the matrix.",
+    "Use the same 23 complete calibration graph identities for every arm and preserve the one historically unsupported graph outside this matrix.",
+    "A1 remains unsupported because its direct runtime covers only 4 of 23 complete graphs and zero nonreference constructor patterns.",
+    "A6 remains unsupported because the Babble core is partial and the defining top-level ISAMORE route lacks exact recursive source, published inputs, and inseparable hardware-aware selection.",
+    "A7 remains unsupported because the existing five-operator Boolean domain covers zero of 337 framework calls and a tensor SynthLanguage would be new research construction.",
+    "A8 remains unsupported because no official EggMind repository was discovered and the paper-derived EqSatL boundary explicitly does not satisfy A8.",
+    "Every unsupported artifact must still receive a strict common-contract output, explicit CPU allocation, hash-bound process resource projection, and provenance.",
+    "Unsupported outputs must have no invocation or tool receipts, no retained state, false correctness and alias claims, and natural reaped resource accounting.",
+    "One complete matrix audit process receipt is referenced by all 92 outputs and charged once; its measured CPU is allocated exactly once across four arm-leading artifacts.",
+    "A REQUIRED_UNSUPPORTED output completes resource accounting only. It never makes an arm conformant, production-integrated, numerically correct, or eligible to authorize a prospective trial.",
+    "Unknown fields, missing or duplicate arm-artifact pairs, changed evidence reasons, PASS relabeling, omitted or duplicated CPU, changed receipt identity, validation access, prospective claims, or integration inflation fail closed."
+  ],
+  "expected_reasons": {
+    "A1": "INCOMPLETE_IR_SURFACE",
+    "A6": "TOP_LEVEL_ISAMORE_CONTROL_UNAVAILABLE",
+    "A7": "NEW_TENSOR_SYNTH_LANGUAGE_REQUIRED",
+    "A8": "UPSTREAM_EGGMIND_NOT_DISCOVERED_PARTIAL_BOUNDARY_ONLY"
+  },
+  "provider_records": [
+    {"path": "results/phase93_a1_ir_compatibility_audit.json", "sha256": "deb2a4e68d57954a7ff50095b7fc6d24e7c96585deeecf3f1f7a6caadea49a26"},
+    {"path": "results/phase94_a1_ir_compatibility_resource_audit.json", "sha256": "6586578c8db0cb3be03af3839f85e63ec9bc7fefc60cb4f7f09dd831de2d3ae6"},
+    {"path": "results/phase41_babble_source_control.json", "sha256": "810e98b78dbbc0a4ed63ad1ff6fe787b72c4483051135387e2d2a60ac497b87d"},
+    {"path": "results/phase42_babble_source_resource_audit.json", "sha256": "417cc681b6e195c27a17b4cfdde44d29bafc09f2b3c72d48397a061e1c8bd7b8"},
+    {"path": "results/phase51_control_four_route_audit.json", "sha256": "14d721dec1268c212d8a85b412555632f3f92d1f8c76bb00553714d724e50ebe"},
+    {"path": "results/phase52_isamore_reduced_route_audit.json", "sha256": "18e04366f1c4e3b997e7d3722a3bf2987f235a58fcb2f35c6b2705d63ae6b3ad"},
+    {"path": "results/phase105_a7_enumo_compatibility_audit.json", "sha256": "eaafbbea62280447a8dafb5cf70e9fbcaea6653a8ca07660a0c243d0048a3928"},
+    {"path": "results/phase106_a7_enumo_compatibility_resource_audit.json", "sha256": "ad4d71d677f3cfc3901b5b7ed46b019cfd0bd332dd5cc27dd9e354f95f3953bd"},
+    {"path": "results/phase70_eggmind_source_route_audit.json", "sha256": "720e0f8c872e491e9a6971f217140f994f305a5c36e5718fd0840ac8e0a740bc"},
+    {"path": "results/phase71_eggmind_adapted_boundary_conformance.json", "sha256": "78fada4408d9f7075551e06f20189960a6acc9172d9d637b0710e2f46899c032"},
+    {"path": "phase63_pareto_motif_calibration.py", "sha256": "2aa136b82d18288e40a8bf6f217175e1725a6bf1dc44cc95992f4e53661fb741"},
+    {"path": "ARM_ADAPTER_CONTRACT_V1.json", "sha256": "5da4f0969781fbcc4d1de35eea2add16846eee279eeda6d97cf0b1b6bbd1e6de"},
+    {"path": "arm_adapter_contract.py", "sha256": "ac7eb5e7a00813cd2ee722059bf5265b0e270f3e56efae0325e337136eca1a5e"},
+    {"path": "independent_arm_adapter_contract.py", "sha256": "cc2ccece0b76d33b9fb933eb8547d66b46be788f9f1146cc2d6fb3180e6b2173"},
+    {"path": "results/pareto_remediation_v12_freeze.json", "sha256": "d736bfb43a8bd7504ae41212244c7b323f107900a65b6c22069e0999ed1e120c"}
+  ],
+  "claim_boundary": {
+    "all_four_outcomes_are_required_unsupported": true,
+    "all_four_arms_remain_nonconformant": true,
+    "all_four_arms_remain_nonintegrated": true,
+    "production_integrated_arms_after_matrix": 6,
+    "P3_may_advance_only_after_strict_batches_and_resource_gate": true,
+    "prospective_trial_authorized": false,
+    "validation_v6_source_runtime_graph_or_outcome_accessed": false
+  }
+}

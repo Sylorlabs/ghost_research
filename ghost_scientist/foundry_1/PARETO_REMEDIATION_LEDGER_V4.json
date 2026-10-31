@@ -1,0 +1,55 @@
+{
+  "version": "FOUNDRY_PARETO_REMEDIATION_LEDGER_V4",
+  "parent_freeze": "results/pareto_remediation_v3_freeze.json",
+  "heldout_policy": {
+    "validation_v6_manifest_only_previously_read": true,
+    "validation_v6_source_runtime_or_graph_read": false,
+    "validation_v6_imported": false,
+    "validation_v6_executed": false
+  },
+  "iterations": [
+    {
+      "phase": 83,
+      "objective": "Define and independently verify one evaluator-owned transport and accounting contract for all required arms.",
+      "result": "results/phase83_arm_adapter_contract_conformance.json",
+      "outcome": "CONTRACT_PASS_WITH_NINE_HOSTILE_REJECTIONS",
+      "scientific_effect": "The contract binds artifact identity, three executions, cost decomposition, resource receipts, correctness, provenance, state-reset semantics, and fail-closed statuses without claiming incomplete adapters."
+    },
+    {
+      "phase": 84,
+      "objective": "Meter the complete dual-verifier contract conformance path.",
+      "result": "results/phase84_arm_adapter_contract_resource_audit.json",
+      "outcome": "CONTRACT_RESOURCE_PASS",
+      "scientific_effect": "Contract verification is resource-visible; this does not meter or integrate the eight missing arm implementations."
+    }
+  ],
+  "adapter_progress": {
+    "required_arms_named": 10,
+    "strict_parsers": 2,
+    "hostile_mutations_rejected_twice": 9,
+    "production_integrated_arms": 2,
+    "missing_adapter_implementations": [
+      "A1",
+      "A3",
+      "A4",
+      "A5",
+      "A6",
+      "A7",
+      "A8",
+      "A9"
+    ],
+    "P3_complete": false
+  },
+  "authorization_effect": {
+    "current_prerequisites_passed": 4,
+    "current_prerequisites_required": 6,
+    "current_active_stop_conditions": 1,
+    "prospective_trial_authorized": false,
+    "next_required_work": [
+      "implement A3 and A9 state-reset adapters against an evaluator-owned typed graph artifact",
+      "adapt A1, A4, A5, and A7 without weakening their defining behavior",
+      "keep A6 and A8 fail-closed until their full control implementations exist",
+      "process-tree meter every required adapter path under identical declared ceilings"
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "version": "FOUNDRY_POLYMORPHIC_PROSPECTIVE_PROTOCOL_V1",
+  "classification": "PROSPECTIVE_EVIDENCE_CONSTRAINED_TYPE_GENERALIZATION",
+  "source_tools": {
+    "path": "results/forged_semantic_tools.json",
+    "result_freeze": "results/semantic_result_v1_freeze.json",
+    "tools": 3
+  },
+  "constraint_inference": {
+    "script": "phase29_polymorphic_semantic_forge.py",
+    "evidence": "all supported prospective-v2.2 calibration graphs",
+    "unit": "observed tensor signature at a concrete ATen target and argument, keyword, or output position",
+    "input_rule": "intersection of observed signatures across every position where an external input is used",
+    "output_rule": "observed signatures for the node target output",
+    "llm_calls": 0,
+    "manual_type_widenings": 0,
+    "unobserved_signatures_forbidden": true,
+    "validation_access_forbidden": true
+  },
+  "validation": {
+    "freeze": "results/external_validation_v4_freeze.json",
+    "runtime": "external_validation_v4_runtime.py",
+    "seed": 3226935334,
+    "families": 4,
+    "repositories": 3,
+    "validation_v3_reused": false,
+    "fixed_portfolio": "ATEN_FIXED_PORTFOLIO_V2.json",
+    "evaluator": "phase30_independent_polymorphic_evaluator.py"
+  },
+  "component_pass": {
+    "four_families_executed": true,
+    "six_hostile_mutations_rejected": true,
+    "all_replays_exact_with_tolerance": 1e-6,
+    "minimum_matched_families": 2,
+    "minimum_distinct_matched_tools": 2,
+    "candidate_benefit_at_least_fixed": true,
+    "candidate_total_cost_below_fixed": true,
+    "causal_removal_loses_all_matches": true
+  },
+  "native_admission": {
+    "script": "phase31_polymorphic_native_dedup.py",
+    "typing_generalization_does_not_create_runtime_lowering": true,
+    "exact_stock_decomposition_rejects_runtime_novelty": true,
+    "compiler_equality_is_additional_duplicate_evidence": true
+  },
+  "resources": {
+    "script": "phase32_polymorphic_resource_audit.py",
+    "forge": {"wall_seconds": 90, "cpu_seconds": 75, "rss_kib": 3000000},
+    "evaluator": {"wall_seconds": 120, "cpu_seconds": 100, "rss_kib": 4000000},
+    "native_audit": {"wall_seconds": 240, "cpu_seconds": 200, "rss_kib": 4500000}
+  },
+  "failure_policy": {
+    "no_outcome_driven_intervention": true,
+    "zero_or_narrow_transfer": "VALID_NEGATIVE",
+    "unobserved_constraint_signature": "FAIL",
+    "resource_limit": "FAIL"
+  },
+  "boundary": {
+    "can_test_evidence_justified_type_generalization": true,
+    "cannot_complete_external_control_conformance": true,
+    "cannot_admit_stock_composites_as_runtime_inventions": true,
+    "cannot_authorize_full_foundry_v6_trial": true
+  }
+}

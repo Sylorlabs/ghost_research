@@ -1,0 +1,48 @@
+[package]
+name = "isamore"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+babble = { path = "./babble" }
+babble-experiments = { path = "./babble/experiments" }
+enumo = { path = "./enumo" }
+estimator = { path = "./estimator" }
+anyhow = { version = "1.0.95", features = ["backtrace"] }
+clap = { version = "4", features = ["derive"] }
+egg = { git = "https://github.com/isamore-group/egg", branch = "main", features = [
+  "serde-1",
+  "lp",
+] }
+itertools = "0.14.0"
+ordered-float = { version = "5.0.0", features = ["serde"] }
+serde = { version = "1.0.217", features = ["derive"] }
+strum = { version = "0.27.0", features = ["derive"] }
+thiserror = "2.0.11"
+indexmap = "2.7.1"
+csv = "1"
+ron = "0.7"
+time = { version = "0.3", features = ["formatting"] }
+env_logger = "0.11.6"
+log = "0.4.26"
+pest = "2.6"
+pest_derive = "2.6"
+graphviz-rust = "0.8.0"
+colored = "3.0.0"
+chrono = "0.4.40"
+kiddo = "5.0.3"
+pest_consume = "1.1.3"
+rand = "0.9.0"
+z3 = "0.10.0"
+rustc-hash = "2.1.1"
+toml = "0.7"
+serde_json = "1.0"
+lexpr = "0.2.7"
+indicatif = "0.17.7"
+crossbeam = "0.8.2"
+regex = "1.10"
+libc = "0.2"
+
+
+[profile.dev]
+overflow-checks = false

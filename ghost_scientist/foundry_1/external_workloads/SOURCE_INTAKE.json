@@ -1,0 +1,50 @@
+{
+  "version": "FOUNDRY_EXTERNAL_APPLICATION_SOURCE_INTAKE_V1",
+  "repository": "pytorch/examples",
+  "commit": "acc295dc7b90714f1bf47f06004fc19a7fe235c4",
+  "license": {
+    "path": "LICENSE",
+    "blob_sha": "1ba2484d4697a92afd0bf6be291eca930315534c",
+    "snapshot": "LICENSE.pytorch-examples"
+  },
+  "workloads": [
+    {
+      "family": "image_classification",
+      "path": "mnist/main.py",
+      "blob_sha": "dee5a384cb2c43acf7c7ce8e521330ccd01c6e92",
+      "snapshot": "mnist_model.py",
+      "entrypoint": "Net.forward",
+      "model_only_excerpt": true
+    },
+    {
+      "family": "variational_autoencoding",
+      "path": "vae/main.py",
+      "blob_sha": "63909658102e8f7e0ab7f2ee12d229841cc45e02",
+      "snapshot": "vae_model.py",
+      "entrypoint": "VAE.forward",
+      "model_only_excerpt": true
+    },
+    {
+      "family": "time_series_recurrence",
+      "path": "time_sequence_prediction/train.py",
+      "blob_sha": "2ccc85dc5a8f340c632bfa307e7b049d9fc2286e",
+      "snapshot": "sequence_model.py",
+      "entrypoint": "Sequence.forward",
+      "model_only_excerpt": true
+    },
+    {
+      "family": "image_super_resolution",
+      "path": "super_resolution/model.py",
+      "blob_sha": "f7aab498a62b3419de494f61204303f0ebb03fb0",
+      "snapshot": "super_resolution_model.py",
+      "entrypoint": "Net.forward",
+      "model_only_excerpt": false
+    }
+  ],
+  "boundary": {
+    "transformer_or_attention_workload": false,
+    "model_definitions_upstream_authored": true,
+    "input_shapes_harness_selected": true,
+    "deployment_demand_trace": false
+  }
+}

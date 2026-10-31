@@ -1,0 +1,47 @@
+{
+  "version": "FOUNDRY_EXTERNAL_VALIDATION_INTAKE_V1",
+  "repository": "pytorch/examples",
+  "commit": "acc295dc7b90714f1bf47f06004fc19a7fe235c4",
+  "selection_time_boundary": "before_aten_tool_mining",
+  "workloads": [
+    {
+      "family": "polynomial_regression",
+      "path": "regression/main.py",
+      "blob_sha": "cb41ad70eca2387eff4535a85f791b10726c2d25",
+      "snapshot": "regression_model.py",
+      "entrypoint": "PolynomialRegressor.forward",
+      "adaptation": "upstream feature construction wrapped as a module"
+    },
+    {
+      "family": "actor_critic_control",
+      "path": "reinforcement_learning/actor_critic.py",
+      "blob_sha": "c9cf3b9c61f1987177b1960d63511e0ca53e9793",
+      "snapshot": "actor_critic_model.py",
+      "entrypoint": "Policy.forward",
+      "adaptation": "model-only excerpt"
+    },
+    {
+      "family": "adversarial_image_generation",
+      "path": "dcgan/main.py",
+      "blob_sha": "b150174ca228175d8bc97dba6dbdb3791d55e32b",
+      "snapshot": "dcgan_model.py",
+      "entrypoint": "Discriminator.forward",
+      "adaptation": "model-only excerpt with upstream default dimensions"
+    },
+    {
+      "family": "convolutional_style_transfer",
+      "path": "fast_neural_style/neural_style/transformer_net.py",
+      "blob_sha": "2cb06971d281d616417e8d2551bb45e78e99eb2f",
+      "snapshot": "neural_style_model.py",
+      "entrypoint": "TransformerNet.forward",
+      "adaptation": "full model snapshot"
+    }
+  ],
+  "boundary": {
+    "transformer_architecture": false,
+    "attention_operation": false,
+    "validation_execution_observed": false,
+    "aten_forge_output_observed": false,
+    "input_shapes_harness_selected": true
+  }
+}

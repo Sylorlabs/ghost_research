@@ -1,0 +1,39 @@
+{
+  "schema": "FOUNDRY_LOCAL_TRACE_BYTE_PROTOCOL_V1",
+  "frozen_before_local_provenance_audit": true,
+  "upstream": {
+    "repository": "alibaba/clusterdata",
+    "commit": "0d0f3f1efdbf1add6a7bcc63676eafbd1eb11f71",
+    "records": [
+      {
+        "local_path": "external_traces/source/alibaba_clusterdata_ROOT_README.md",
+        "upstream_path": "README.md",
+        "git_blob_sha1": "92f3f20f0740979e8da493fb29b65c87fc5ce235"
+      },
+      {
+        "local_path": "external_traces/source/alibaba_GenTD26_README.md",
+        "upstream_path": "cluster-trace-v2026-GenAI/README.md",
+        "git_blob_sha1": "a2891c8fcd4b70357370004f33c5a00a72c67050"
+      },
+      {
+        "local_path": "external_traces/source/alibaba_lora_request_trace.csv",
+        "upstream_path": "cluster-trace-v2026-GenAI/lora_request_trace.csv",
+        "git_blob_sha1": "db8d3cfaea62e7086aff40e98ab6446619d9e5ce"
+      }
+    ]
+  },
+  "required_checks": [
+    "Recompute Git blob SHA-1 from local bytes, including the blob header.",
+    "Record SHA-256 and byte length for every local record.",
+    "Require the trace documentation to describe the data as real production.",
+    "Require the root README to grant use for research or study.",
+    "Preserve the earlier intake's nonexistent LICENSE-path error as a provenance correction."
+  ],
+  "provenance_correction": {
+    "earlier_claim": "external_traces/INVOCATION_TRACE_INTAKE_V1.json named LICENSE as license_path",
+    "finding": "No LICENSE file exists at the pinned repository revision.",
+    "replacement_evidence": "The pinned root README says the trace may be used for research or study.",
+    "classification": "RESEARCH_USE_GRANT_NOT_STANDARD_LICENSE_FILE"
+  },
+  "validation_v6_access_allowed": false
+}
